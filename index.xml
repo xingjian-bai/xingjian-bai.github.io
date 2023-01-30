@@ -1,0 +1,95 @@
+<?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>小雪豹的山洞</title>
+    <link>https://xingjian-bai.github.io/</link>
+    <description>Recent content on 小雪豹的山洞</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 30 Jan 2023 14:38:35 +0000</lastBuildDate>
+    
+        <atom:link href="https://xingjian-bai.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Blog Instructions</title>
+        <link>https://xingjian-bai.github.io/posts/blog-instructions/</link>
+        <pubDate>Mon, 30 Jan 2023 14:38:35 +0000</pubDate>
+        
+        <guid>https://xingjian-bai.github.io/posts/blog-instructions/</guid>
+        <description>小雪豹的山洞 https://xingjian-bai.github.io/posts/blog-instructions/ -&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo new posts/my-first-post.md
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# do some edits&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://xingjian-bai.github.io/posts/blog-instructions/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>WiDS2023 初探索</title>
+        <link>https://xingjian-bai.github.io/posts/wids_begin/</link>
+        <pubDate>Sat, 07 Jan 2023 00:29:22 +0800</pubDate>
+        
+        <guid>https://xingjian-bai.github.io/posts/wids_begin/</guid>
+        <description>小雪豹的山洞 https://xingjian-bai.github.io/posts/wids_begin/ -&lt;h2 id=&#34;环境配置&#34;&gt;环境配置&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;本地建立git库，上传github合作&lt;/li&gt;
+&lt;li&gt;conda管理python环境，env name = wids
+&lt;ul&gt;
+&lt;li&gt;用environment.yml记录&lt;/li&gt;
+&lt;li&gt;dabl: 数据预处理工具，和pandas对接&lt;/li&gt;
+&lt;li&gt;ipykernel: 用于支持jupyter&lt;/li&gt;
+&lt;li&gt;kaggle&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;kaggle competitions submit -f FILE_NAME -m MESSAGE widsdatathon2023
+kaggle competitions leaderboard widsdatathon2023 -s
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;题目理解&#34;&gt;题目理解&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;是阉割版的时序预测问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;特征中有大量时序信息（待进一步观察）&lt;/li&gt;
+&lt;li&gt;每个数据点的时间线都比较短（似乎只给了14天的数据）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;特征工程很重要&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;几个教程里都提到这是第一步&lt;/li&gt;
+&lt;li&gt;将时间（周期性信号）做特殊建模很重要&lt;/li&gt;
+&lt;li&gt;可以去除无效信号（和目标信号做相关性分析？&lt;a href=&#34;&#34;&gt;某个教程&lt;/a&gt;中有提到）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;几个教程都提到，&lt;strong&gt;训练数据与测试数据的分布不一致&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;具体意思是？教程里的测试数据难道不是自己split出来的？&lt;/li&gt;
+&lt;li&gt;如何处理分布不一致的问题？&lt;/li&gt;
+&lt;li&gt;增加模型鲁棒性？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;数据来源透明；可以用新的数据做数据增强。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+- https://xingjian-bai.github.io/posts/wids_begin/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>My First Post</title>
+        <link>https://xingjian-bai.github.io/posts/my-first-post/</link>
+        <pubDate>Fri, 06 Jan 2023 17:32:21 +0800</pubDate>
+        
+        <guid>https://xingjian-bai.github.io/posts/my-first-post/</guid>
+        <description>小雪豹的山洞 https://xingjian-bai.github.io/posts/my-first-post/ -&lt;p&gt;Hello, world!&lt;/p&gt;
+- https://xingjian-bai.github.io/posts/my-first-post/ - </description>
+        </item>
+    
+    
+  </channel>
+</rss> 

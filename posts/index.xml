@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on 小雪豹的山洞</title>
+    <link>https://xingjian-bai.github.io/posts/</link>
+    <description>Recent content in Posts on 小雪豹的山洞</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 30 Jan 2023 14:38:35 +0000</lastBuildDate><atom:link href="https://xingjian-bai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Blog Instructions</title>
+      <link>https://xingjian-bai.github.io/posts/blog-instructions/</link>
+      <pubDate>Mon, 30 Jan 2023 14:38:35 +0000</pubDate>
+      
+      <guid>https://xingjian-bai.github.io/posts/blog-instructions/</guid>
+      <description>hugo new posts/my-first-post.md # do some edits hugo </description>
+    </item>
+    
+    <item>
+      <title>WiDS2023 初探索</title>
+      <link>https://xingjian-bai.github.io/posts/wids_begin/</link>
+      <pubDate>Sat, 07 Jan 2023 00:29:22 +0800</pubDate>
+      
+      <guid>https://xingjian-bai.github.io/posts/wids_begin/</guid>
+      <description>环境配置 本地建立git库，上传github合作 conda管理python环境，env name = wids 用environment.yml记录 dabl: 数据预处理工具，和pandas对接 ipykernel: 用于支持jupyter kaggle kaggle competitions submit -f FILE_NAME -m MESSAGE widsdatathon2023 kaggle competitions leaderboard widsdatathon2023 -s 题目理解 是阉割版的时序预测问题
+特征中有大量时序信息（待进一步观察） 每个数据点的时间线都比较短（似乎只给了14天的数据） 特征工程很重要
+几个教程里都提到这是第一步 将时间（周期性信号）做特殊建模很重要 可以去除无效信号（和目标信号做相关性分析？某个教程中有提到） 几个教程都提到，训练数据与测试数据的分布不一致
+具体意思是？教程里的测试数据难道不是自己split出来的？ 如何处理分布不一致的问题？ 增加模型鲁棒性？ 数据来源透明；可以用新的数据做数据增强。</description>
+    </item>
+    
+    <item>
+      <title>My First Post</title>
+      <link>https://xingjian-bai.github.io/posts/my-first-post/</link>
+      <pubDate>Fri, 06 Jan 2023 17:32:21 +0800</pubDate>
+      
+      <guid>https://xingjian-bai.github.io/posts/my-first-post/</guid>
+      <description>Hello, world!</description>
+    </item>
+    
+  </channel>
+</rss>
