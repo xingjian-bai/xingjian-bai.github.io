@@ -1,14 +1,100 @@
 <?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>小雪豹的山洞</title>
+    <title>小雪豹山洞</title>
     <link>https://xingjian-bai.github.io/</link>
-    <description>Recent content on 小雪豹的山洞</description>
+    <description>Recent content on 小雪豹山洞</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 30 Jan 2023 14:38:35 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 31 Jan 2023 08:30:25 +0000</lastBuildDate>
     
         <atom:link href="https://xingjian-bai.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Github simplest guidelines</title>
+        <link>https://xingjian-bai.github.io/posts/github_guideline/</link>
+        <pubDate>Tue, 31 Jan 2023 08:30:25 +0000</pubDate>
+        
+        <guid>https://xingjian-bai.github.io/posts/github_guideline/</guid>
+        <description>小雪豹山洞 https://xingjian-bai.github.io/posts/github_guideline/ -&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&#34;general-guidelines&#34;&gt;General Guidelines&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Git的报错信息很informative
+&lt;ul&gt;
+&lt;li&gt;copy然后问chatGPT一般都可以得到解决方案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Git背后的逻辑很intuitive
+&lt;ul&gt;
+&lt;li&gt;一些高级的情况如rebase，merge，都是在处理真实存在的代码冲突&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Git的branching system是最强大的地方
+&lt;ul&gt;
+&lt;li&gt;“平行宇宙”&lt;/li&gt;
+&lt;li&gt;TBA&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;push上传文件&#34;&gt;Push：上传文件&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;在本地git中记录修改的文件&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;git add [file name]&lt;/code&gt; 记录一个文件的修改&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;git rm [file name]&lt;/code&gt; 记录一个文件的删除&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;git add.&lt;/code&gt; 记录所有文件的修改&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在本地git中记录一次commit&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;commit像是一次“修改报告”，包含：
+&lt;ul&gt;
+&lt;li&gt;很多文件的修改信息。本地和在线都可以清楚的看到。&lt;/li&gt;
+&lt;li&gt;一个commit message。说明本次commit的作用。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git commit -m &amp;quot;some message&amp;quot;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将本地git的commits全部上传到github&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;注意！此时本地的repo必须和github repo的最新版进行过同步 (pull)，不然不可以上传。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;git push&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;如果上面的指令报错，可以试试&lt;code&gt;git push origin main&lt;/code&gt;
+&lt;ul&gt;
+&lt;li&gt;这一句指令点明了push上去的branch&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+- https://xingjian-bai.github.io/posts/github_guideline/ - </description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Interesting_slang</title>
+        <link>https://xingjian-bai.github.io/posts/interesting_slang/</link>
+        <pubDate>Mon, 30 Jan 2023 17:44:15 +0000</pubDate>
+        
+        <guid>https://xingjian-bai.github.io/posts/interesting_slang/</guid>
+        <description>小雪豹山洞 https://xingjian-bai.github.io/posts/interesting_slang/ -&lt;blockquote&gt;
+&lt;p&gt;the joy wore thin&lt;/p&gt;
+&lt;/blockquote&gt;
+- https://xingjian-bai.github.io/posts/interesting_slang/ - </description>
+        </item>
     
     
     
@@ -18,7 +104,7 @@
         <pubDate>Mon, 30 Jan 2023 14:38:35 +0000</pubDate>
         
         <guid>https://xingjian-bai.github.io/posts/blog-instructions/</guid>
-        <description>小雪豹的山洞 https://xingjian-bai.github.io/posts/blog-instructions/ -&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo new posts/my-first-post.md
+        <description>小雪豹山洞 https://xingjian-bai.github.io/posts/blog-instructions/ -&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo new posts/my-first-post.md
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# do some edits&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hugo
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://xingjian-bai.github.io/posts/blog-instructions/ - </description>
@@ -32,7 +118,7 @@
         <pubDate>Sat, 07 Jan 2023 00:29:22 +0800</pubDate>
         
         <guid>https://xingjian-bai.github.io/posts/wids_begin/</guid>
-        <description>小雪豹的山洞 https://xingjian-bai.github.io/posts/wids_begin/ -&lt;h2 id=&#34;环境配置&#34;&gt;环境配置&lt;/h2&gt;
+        <description>小雪豹山洞 https://xingjian-bai.github.io/posts/wids_begin/ -&lt;h2 id=&#34;环境配置&#34;&gt;环境配置&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;本地建立git库，上传github合作&lt;/li&gt;
 &lt;li&gt;conda管理python环境，env name = wids
@@ -86,7 +172,7 @@ kaggle competitions leaderboard widsdatathon2023 -s
         <pubDate>Fri, 06 Jan 2023 17:32:21 +0800</pubDate>
         
         <guid>https://xingjian-bai.github.io/posts/my-first-post/</guid>
-        <description>小雪豹的山洞 https://xingjian-bai.github.io/posts/my-first-post/ -&lt;p&gt;Hello, world!&lt;/p&gt;
+        <description>小雪豹山洞 https://xingjian-bai.github.io/posts/my-first-post/ -&lt;p&gt;Hello, world!&lt;/p&gt;
 - https://xingjian-bai.github.io/posts/my-first-post/ - </description>
         </item>
     

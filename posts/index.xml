@@ -1,12 +1,37 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on 小雪豹的山洞</title>
+    <title>Posts on 小雪豹山洞</title>
     <link>https://xingjian-bai.github.io/posts/</link>
-    <description>Recent content in Posts on 小雪豹的山洞</description>
+    <description>Recent content in Posts on 小雪豹山洞</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 30 Jan 2023 14:38:35 +0000</lastBuildDate><atom:link href="https://xingjian-bai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 31 Jan 2023 08:30:25 +0000</lastBuildDate><atom:link href="https://xingjian-bai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Github simplest guidelines</title>
+      <link>https://xingjian-bai.github.io/posts/github_guideline/</link>
+      <pubDate>Tue, 31 Jan 2023 08:30:25 +0000</pubDate>
+      
+      <guid>https://xingjian-bai.github.io/posts/github_guideline/</guid>
+      <description>[TOC]
+General Guidelines Git的报错信息很informative copy然后问chatGPT一般都可以得到解决方案 Git背后的逻辑很intuitive 一些高级的情况如rebase，merge，都是在处理真实存在的代码冲突 Git的branching system是最强大的地方 “平行宇宙” TBA Push：上传文件 在本地git中记录修改的文件
+git add [file name] 记录一个文件的修改
+git rm [file name] 记录一个文件的删除
+git add. 记录所有文件的修改
+在本地git中记录一次commit
+commit像是一次“修改报告”，包含： 很多文件的修改信息。本地和在线都可以清楚的看到。 一个commit message。说明本次commit的作用。 git commit -m &amp;quot;some message&amp;quot; 将本地git的commits全部上传到github
+注意！此时本地的repo必须和github repo的最新版进行过同步 (pull)，不然不可以上传。 git push 如果上面的指令报错，可以试试git push origin main 这一句指令点明了push上去的branch </description>
+    </item>
+    
+    <item>
+      <title>Interesting_slang</title>
+      <link>https://xingjian-bai.github.io/posts/interesting_slang/</link>
+      <pubDate>Mon, 30 Jan 2023 17:44:15 +0000</pubDate>
+      
+      <guid>https://xingjian-bai.github.io/posts/interesting_slang/</guid>
+      <description>the joy wore thin</description>
+    </item>
+    
     <item>
       <title>Blog Instructions</title>
       <link>https://xingjian-bai.github.io/posts/blog-instructions/</link>
