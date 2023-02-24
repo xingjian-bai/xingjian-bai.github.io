@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>Github simplest guidelines</title>
+<title>Tmux_skills</title>
 
 
 
@@ -177,8 +177,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#general-guidelines" onclick="onNavClick(`#general-guidelines-nav`)" id="general-guidelines-nav">
-									General Guidelines
+								<a href="#session" onclick="onNavClick(`#session-nav`)" id="session-nav">
+									Session
 								</a>
 							</li>
 						
@@ -195,8 +195,26 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#push%e4%b8%8a%e4%bc%a0%e6%96%87%e4%bb%b6" onclick="onNavClick(`#push上传文件-nav`)" id="push上传文件-nav">
-									Push：上传文件
+								<a href="#windows" onclick="onNavClick(`#windows-nav`)" id="windows-nav">
+									Windows
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#panes" onclick="onNavClick(`#panes-nav`)" id="panes-nav">
+									Panes
 								</a>
 							</li>
 						
@@ -305,8 +323,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#general-guidelines" onclick="onNavClick(`#general-guidelines-nav`)" id="general-guidelines-nav">
-									General Guidelines
+								<a href="#session" onclick="onNavClick(`#session-nav`)" id="session-nav">
+									Session
 								</a>
 							</li>
 						
@@ -323,8 +341,26 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#push%e4%b8%8a%e4%bc%a0%e6%96%87%e4%bb%b6" onclick="onNavClick(`#push上传文件-nav`)" id="push上传文件-nav">
-									Push：上传文件
+								<a href="#windows" onclick="onNavClick(`#windows-nav`)" id="windows-nav">
+									Windows
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#panes" onclick="onNavClick(`#panes-nav`)" id="panes-nav">
+									Panes
 								</a>
 							</li>
 						
@@ -387,12 +423,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
             >
                 <div class="post-title">
-                    Github simplest guidelines
+                    Tmux_skills
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2023-01-31 08:30
+                            2023-02-03 10:52
                         </time>
                         
 
@@ -408,71 +444,41 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 <div class="post-body" v-pre>
                 
-                    <p>[TOC]</p>
-<h2 id="general-guidelines">General Guidelines</h2>
-<ul>
-<li>Git的报错信息很informative
-<ul>
-<li>copy然后问chatGPT一般都可以得到解决方案</li>
-</ul>
-</li>
-<li>Git背后的逻辑很intuitive
-<ul>
-<li>一些高级的情况如rebase，merge，都是在处理真实存在的代码冲突</li>
-</ul>
-</li>
-<li>Git的branching system是最强大的地方
-<ul>
-<li>“平行宇宙”</li>
-<li>TBA</li>
-</ul>
-</li>
-</ul>
-<h2 id="push上传文件">Push：上传文件</h2>
-<ol>
-<li>
-<p>在本地git中记录修改的文件</p>
-<ul>
-<li>
-<p><code>git add [file name]</code> 记录一个文件的修改</p>
-</li>
-<li>
-<p><code>git rm [file name]</code> 记录一个文件的删除</p>
-</li>
-<li>
-<p><code>git add .</code> 记录所有文件的修改</p>
-</li>
-</ul>
-</li>
-<li>
-<p>在本地git中记录一次commit</p>
-<ul>
-<li>commit像是一次“修改报告”，包含：
-<ul>
-<li>很多文件的修改信息。本地和在线都可以清楚的看到。</li>
-<li>一个commit message。说明本次commit的作用。</li>
-</ul>
-</li>
-<li><code>git commit -m &quot;some message&quot;</code></li>
-</ul>
-</li>
-<li>
-<p>将本地git的commits全部上传到github</p>
-<ul>
-<li>注意！此时本地的repo必须和github repo的最新版进行过同步 (pull)，不然不可以上传。</li>
-<li><code>git push</code></li>
-<li>如果上面的指令报错，可以试试<code>git push origin main</code>
-<ul>
-<li>这一句指令点明了push上去的branch</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-
+                    <h2 id="session">Session</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tmux new -s &lt;session-name&gt;
+</span></span><span style="display:flex;"><span>tmux detach
+</span></span><span style="display:flex;"><span>tmux ls
+</span></span><span style="display:flex;"><span>tmux attach -t &lt;session-name&gt;
+</span></span><span style="display:flex;"><span>tmux kill-session -t &lt;session-name&gt;
+</span></span><span style="display:flex;"><span>tmux switch -t &lt;session-name&gt;
+</span></span><span style="display:flex;"><span>tmux rename-session -t <span style="color:#ae81ff">0</span> &lt;new-name&gt;
+</span></span></code></pre></div><h2 id="windows">Windows</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 新建一个指定名称的窗口</span>
+</span></span><span style="display:flex;"><span>$ tmux new-window -n &lt;window-name&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 切换到指定编号的窗口</span>
+</span></span><span style="display:flex;"><span>$ tmux <span style="color:#66d9ef">select</span>-window -t &lt;window-number&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 切换到指定名称的窗口</span>
+</span></span><span style="display:flex;"><span>$ tmux <span style="color:#66d9ef">select</span>-window -t &lt;window-name&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ tmux rename-window &lt;new-name&gt;
+</span></span></code></pre></div><h2 id="panes">Panes</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 划分上下两个窗格</span>
+</span></span><span style="display:flex;"><span>$ tmux split-window
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 划分左右两个窗格</span>
+</span></span><span style="display:flex;"><span>$ tmux split-window -h
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 当前窗格上移</span>
+</span></span><span style="display:flex;"><span>$ tmux swap-pane -U
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 当前窗格下移</span>
+</span></span><span style="display:flex;"><span>$ tmux swap-pane -D
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2023-01-31</p>
+		    <p style="color:#777;">Last modified on 2023-02-03</p>
                     
                 </div>
             </div>
@@ -481,14 +487,14 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/posts/tmux_skills/">
-			Next<br>Tmux_skills
+                <a class="newer-posts">
+			Next<br>No newer posts.
                 </a>
                 
                 
                 
-                <a class="older-posts" href="/posts/interesting_slang/">
-			Previous<br>Interesting_slang
+                <a class="older-posts" href="/posts/github_guideline/">
+			Previous<br>Github simplest guidelines
                 </a>
                 
             </nav>
