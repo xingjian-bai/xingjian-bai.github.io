@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>Tmux_skills</title>
+<title>Tips for making Slides in Latex</title>
 
 
 
@@ -177,8 +177,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#session" onclick="onNavClick(`#session-nav`)" id="session-nav">
-									Session
+								<a href="#structure" onclick="onNavClick(`#structure-nav`)" id="structure-nav">
+									Structure
 								</a>
 							</li>
 						
@@ -195,8 +195,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#windows" onclick="onNavClick(`#windows-nav`)" id="windows-nav">
-									Windows
+								<a href="#slide" onclick="onNavClick(`#slide-nav`)" id="slide-nav">
+									Slide
 								</a>
 							</li>
 						
@@ -213,8 +213,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#panes" onclick="onNavClick(`#panes-nav`)" id="panes-nav">
-									Panes
+								<a href="#section" onclick="onNavClick(`#section-nav`)" id="section-nav">
+									Section
 								</a>
 							</li>
 						
@@ -323,8 +323,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#session" onclick="onNavClick(`#session-nav`)" id="session-nav">
-									Session
+								<a href="#structure" onclick="onNavClick(`#structure-nav`)" id="structure-nav">
+									Structure
 								</a>
 							</li>
 						
@@ -341,8 +341,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#windows" onclick="onNavClick(`#windows-nav`)" id="windows-nav">
-									Windows
+								<a href="#slide" onclick="onNavClick(`#slide-nav`)" id="slide-nav">
+									Slide
 								</a>
 							</li>
 						
@@ -359,8 +359,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#panes" onclick="onNavClick(`#panes-nav`)" id="panes-nav">
-									Panes
+								<a href="#section" onclick="onNavClick(`#section-nav`)" id="section-nav">
+									Section
 								</a>
 							</li>
 						
@@ -423,12 +423,12 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
             >
                 <div class="post-title">
-                    Tmux_skills
+                    Tips for making Slides in Latex
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2023-02-03 10:52
+                            2023-03-02 14:38
                         </time>
                         
 
@@ -444,41 +444,79 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                 <div class="post-body" v-pre>
                 
-                    <h2 id="session">Session</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>tmux new -s &lt;session-name&gt;
-</span></span><span style="display:flex;"><span>tmux detach
-</span></span><span style="display:flex;"><span>tmux ls
-</span></span><span style="display:flex;"><span>tmux attach -t &lt;session-name&gt;
-</span></span><span style="display:flex;"><span>tmux kill-session -t &lt;session-name&gt;
-</span></span><span style="display:flex;"><span>tmux switch -t &lt;session-name&gt;
-</span></span><span style="display:flex;"><span>tmux rename-session -t <span style="color:#ae81ff">0</span> &lt;new-name&gt;
-</span></span></code></pre></div><h2 id="windows">Windows</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 新建一个指定名称的窗口</span>
-</span></span><span style="display:flex;"><span>$ tmux new-window -n &lt;window-name&gt;
+                    <h2 id="structure">Structure</h2>
+<ul>
+<li>Title</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{frame}{Table of Contents}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\title</span>{Introduction of Denoising Diffusion Probabilistic Models}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\institute</span>{University of Oxford}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\author</span>{Qianwei Jia}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\titlepage</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{frame}
+</span></span></code></pre></div><ul>
+<li>ToC</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{frame}{Table of Contents}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\tableofcontents</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{frame}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 切换到指定编号的窗口</span>
-</span></span><span style="display:flex;"><span>$ tmux <span style="color:#66d9ef">select</span>-window -t &lt;window-number&gt;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\AtBeginSection</span><span style="color:#a6e22e">[]</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">\begin</span>{frame}
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">\frametitle</span>{Table of Contents}
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">\tableofcontents</span><span style="color:#a6e22e">[currentsection]</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">\end</span>{frame}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ul>
+<li>Sections, frames</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\section</span>{Title}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 切换到指定名称的窗口</span>
-</span></span><span style="display:flex;"><span>$ tmux <span style="color:#66d9ef">select</span>-window -t &lt;window-name&gt;
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>$ tmux rename-window &lt;new-name&gt;
-</span></span></code></pre></div><h2 id="panes">Panes</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 划分上下两个窗格</span>
-</span></span><span style="display:flex;"><span>$ tmux split-window
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 划分左右两个窗格</span>
-</span></span><span style="display:flex;"><span>$ tmux split-window -h
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 当前窗格上移</span>
-</span></span><span style="display:flex;"><span>$ tmux swap-pane -U
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># 当前窗格下移</span>
-</span></span><span style="display:flex;"><span>$ tmux swap-pane -D
-</span></span></code></pre></div>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{frame}{Title}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{frame}
+</span></span></code></pre></div><h2 id="slide">Slide</h2>
+<ul>
+<li>Block</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{block}{Loss Function}
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">$</span>...<span style="color:#e6db74">$</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{block}
+</span></span></code></pre></div><ul>
+<li>List</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{itemize}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{itemize}
+</span></span></code></pre></div><ul>
+<li>Alertblock</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{alertblock}{Remark}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{alertblock}
+</span></span></code></pre></div><ul>
+<li>exampleblock</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{exampleblock}{Remark}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{exampleblock}
+</span></span></code></pre></div><ul>
+<li>grphics</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\includegraphics</span><span style="color:#a6e22e">[scale = 0.3]</span>{zero1.png}  
+</span></span></code></pre></div><h2 id="section">Section</h2>
+<ul>
+<li>Pause <code>\pause</code></li>
+<li>centering <code>\centering</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-latex" data-lang="latex"><span style="display:flex;"><span><span style="color:#66d9ef">\begin</span>{center}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">\includegraphics</span><span style="color:#a6e22e">[scale = 0.3]</span>{zero1.png}  
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">\includegraphics</span><span style="color:#a6e22e">[scale = 0.3]</span>{zero2.png}  
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">\end</span>{center}
+</span></span></code></pre></div><ul>
+<li></li>
+</ul>
+
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2023-02-03</p>
+		    <p style="color:#777;">Last modified on 2023-03-02</p>
                     
                 </div>
             </div>
@@ -487,14 +525,14 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/posts/latex_slides/">
-			Next<br>Tips for making Slides in Latex
+                <a class="newer-posts">
+			Next<br>No newer posts.
                 </a>
                 
                 
                 
-                <a class="older-posts" href="/posts/github_guideline/">
-			Previous<br>Github simplest guidelines
+                <a class="older-posts" href="/posts/tmux_skills/">
+			Previous<br>Tmux_skills
                 </a>
                 
             </nav>
