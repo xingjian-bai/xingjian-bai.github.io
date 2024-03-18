@@ -1,0 +1,14 @@
+- title: "Fixed Point Diffusion Models"
+  authors: "Xingjian Bai and Luke Melas-Kyriazi"
+  conference: "CVPR 2024"
+  link: "https://arxiv.org/abs/2401.08741"
+
+- title: "Sorting with Predictions"
+  authors: "Xingjian Bai and Christian Coester"
+  conference: "NeurIPS 2023"
+  link: "https://arxiv.org/abs/2311.00749"
+
+- title: "Wasserstein Distributional Robustness of Neural Networks"
+  authors: "Xingjian Bai, Guangyi He, Yifan Jiang, and Jan Obloj"
+  conference: "NeurIPS 2023"
+  link: "https://arxiv.org/abs/2306.09844"

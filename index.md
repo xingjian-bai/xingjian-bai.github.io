@@ -7,14 +7,11 @@ layout: page
 <img src="https://xingjianbai.com/xingjian.jpg" class="floatpic" width="360" height="480">
 
 <!-- I am a senior undergrad majoring in **EECS** at Fuzhou University and Maynooth University (Combined degrees). Currently, I serve as a research assistant at the IIoT-Lab, advised by [Prof. Zhezhuang Xu](https://www.researchgate.net/profile/Zhezhuang-Xu) and [Dr. Meng Yuan](https://www.researchgate.net/profile/Meng-Yuan-4). I also spent a lovely summer research program with [Prof. Pietro Liò's team](https://www.cl.cam.ac.uk/~pl219/) at Cambridge University. Recently, I have been selected as an **AAAI UC Scholar**. I will be attending AAAI-24 in person, please feel free to chat with me! -->
+I am a final-year undergraduate student at Oxford, where my research has focused on [learning-augmented algorithm](https://algorithms-with-predictions.github.io/) and theory-inspired machine learning models.
+I am fascinated by the elegant theories underlying classic algorithms, and the potential of enhancing the reasoning abilities and theoretical soundness of current machine learning models.
+The fundamental motivation behind my work is to develop automated decision-making systems with human-level cognitive abilities, so they can be used to advance our understanding of intelligence and contribute to the development of other sciences.
 
-
-I am a final-year undergraduate student at Oxford. 
-My research has focused on [learning-augmented algorithm](https://algorithms-with-predictions.github.io/) and theory-inspired machine learning models.
-I am attracted by the elegant theories of classic algorithms, and how we can enhance the reasoning abilities and theoretical soundness of current machine learning models.
-The fundamental motivation behind my work has been to develop automated decision-making systems with human-level thinking abilities, and then using them to advance our understanding of intelligence as well as the development of othse sciences.
-
-At Oxford, I have been fortunate to work with Prof. [Jan Obloj](https://www.maths.ox.ac.uk/people/jan.obloj), Prof. [Christian Coester](https://www.cs.ox.ac.uk/people/christian.coester/), Prof. [Christian Rupprecht](https://chrirupp.github.io/), and [Luke Melas-Kyriazi](https://lukemelas.github.io/). I have also spent a memorable summer at Stanford, working with Prof. [Jiajun Wu](https://jiajunwu.com/), Dr. [Weiyu Liu](http://weiyuliu.com/), and [Joy Hsu](https://web.stanford.edu/~joycj/).
+During my time at Oxford, I have had the privilege of working with Prof. [Jan Obloj](https://www.maths.ox.ac.uk/people/jan.obloj), Prof. [Christian Coester](https://www.cs.ox.ac.uk/people/christian.coester/), Prof. [Christian Rupprecht](https://chrirupp.github.io/), and [Luke Melas-Kyriazi](https://lukemelas.github.io/). Additionally, I have spent an enriching summer at Stanford, working with Prof. [Jiajun Wu](https://jiajunwu.com/), Dr. [Weiyu Liu](http://weiyuliu.com/), and [Joy Hsu](https://web.stanford.edu/~joycj/).
 
 ## Academic Background
 
@@ -22,7 +19,7 @@ At Oxford, I have been fortunate to work with Prof. [Jan Obloj](https://www.math
 
 <!-- - **Sep 2024 - Sep 2025：**Cambridge University (MPhil, EE) -->
 <!-- - **Sep 2020 - June 2024:** Maynooth University (BSc, EECS) -->
-- **Sep 2020 - June 2024:** Oxford University
+- **Oct 2020 - June 2024:** Oxford University
 <!-- - **June 2022 - Nov 2022:** Cambridge University (Intern) -->
 
 ---
