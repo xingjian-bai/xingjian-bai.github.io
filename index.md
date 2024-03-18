@@ -2,16 +2,19 @@
 layout: page
 ---
 
-# About Me
+# Xingjian Bai (白行健)
 
-<!-- <img src="https://caihanlin.com/caihanlin.jpg" class="floatpic" width="360" height="480"> -->
+<img src="https://xingjianbai.com/xingjian.jpg" class="floatpic" width="360" height="480">
 
-Here is **Xingjian Bai (白行健)**.
-
-I am a senior undergrad at the University of Oxford.
 <!-- I am a senior undergrad majoring in **EECS** at Fuzhou University and Maynooth University (Combined degrees). Currently, I serve as a research assistant at the IIoT-Lab, advised by [Prof. Zhezhuang Xu](https://www.researchgate.net/profile/Zhezhuang-Xu) and [Dr. Meng Yuan](https://www.researchgate.net/profile/Meng-Yuan-4). I also spent a lovely summer research program with [Prof. Pietro Liò's team](https://www.cl.cam.ac.uk/~pl219/) at Cambridge University. Recently, I have been selected as an **AAAI UC Scholar**. I will be attending AAAI-24 in person, please feel free to chat with me! -->
 
-<!-- If you are interested in any aspect of me, I would love to chat and collaborate, please email me at - *hanlin[dot]cai[at]ieee[dot]org* -->
+
+I am a final-year undergraduate student at Oxford. 
+My research has focused on [learning-augmented algorithm](https://algorithms-with-predictions.github.io/) and theory-inspired machine learning models.
+I am attracted by the elegant theories of classic algorithms, and how we can enhance the reasoning abilities and theoretical soundness of current machine learning models.
+The fundamental motivation behind my work has been to develop automated decision-making systems with human-level thinking abilities, and then using them to advance our understanding of intelligence as well as the development of othse sciences.
+
+At Oxford, I have been fortunate to work with Prof. [Jan Obloj](https://www.maths.ox.ac.uk/people/jan.obloj), Prof. [Christian Coester](https://www.cs.ox.ac.uk/people/christian.coester/), Prof. [Christian Rupprecht](https://chrirupp.github.io/), and [Luke Melas-Kyriazi](https://lukemelas.github.io/). I have also spent a memorable summer at Stanford, working with Prof. [Jiajun Wu](https://jiajunwu.com/), Dr. [Weiyu Liu](http://weiyuliu.com/), and [Joy Hsu](https://web.stanford.edu/~joycj/).
 
 ## Academic Background
 
