@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Unsupervised Learning of Probably Symmetric Deformable 3D Objects from Images in the Wild. We propose a method to learn weakly symmetric deformable 3D object categories from raw single-view images, without ground-truth 3D, multiple views, 2D/3D keypoints, prior shape models or any other supervision.">
+    <meta name="author" content="Shangzhe Wu">
+
+    <meta property="og:title"              content="Unsupervised Learning of Probably Symmetric Deformable 3D Objects from Images in the Wild" />
+    <meta property="og:description"        content="We propose a method to learn weakly symmetric deformable 3D object categories from raw single-view images, without ground-truth 3D, multiple views, 2D/3D keypoints, prior shape models or any other supervision." />
+    <meta property="og:image"              content="https://elliottwu.com/projects/20_unsup3d/img/preview_image.png" />
+    <meta property="og:image:width"        content="1280" />
+    <meta property="og:image:height"       content="720" />
+    <meta property="twitter:card"          content="summary" />
+    <meta property="twitter:title"         content="Unsupervised Learning of Probably Symmetric Deformable 3D Objects from Images in the Wild" />
+    <meta property="twitter:description"   content="We propose a method to learn weakly symmetric deformable 3D object categories from raw single-view images, without ground-truth 3D, multiple views, 2D/3D keypoints, prior shape models or any other supervision." />
+    <meta property="twitter:image"         content="https://elliottwu.com/projects/20_unsup3d/img/preview_image.png" />
+
+    <title>Unsupervised 3D - Shangzhe Wu</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+    <link href="../../vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../css/creative.min.css" rel="stylesheet">
+    <link href="../../css/footer.css" rel="stylesheet">
+    <link href="../../css/academicons.css" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/jpeg" href="../../img/about_me/icon.jpg"/>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HL04349CRC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-HL04349CRC');
+    </script>
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="https://elliottwu.com/index.html">Elliott Wu</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="https://elliottwu.com/index.html#about">About Me</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="https://elliottwu.com/index.html#publication">Publications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="https://elliottwu.com/index.html#office-hours">Office Hours</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="container" id="body">
+      <div class="container">
+        <center>
+          <hr class="light my-4">
+          <h2 class="section-heading text-dark mb-3" style="font-size: calc(14px + 1vw);"><b>Unsupervised Learning of Probably Symmetric Deformable 3D Objects from Images in the Wild</b></h2>
+          <h3 class="text-dark" style="font-size: calc(12px + 0.5vw);">IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) 2020</h3>
+          <h3 class="text-dark mb-4" style="font-size: calc(12px + 0.5vw);"><a href="http://cvpr2020.thecvf.com/node/817#best-paper-award" style="color:#e64a41"><b><i>Best Paper Award</i></b></a></h3>
+          <div class="row mb-2">
+            <div class="col-md-1"></div>
+            <div class="col-auto col-md-3" style="margin: 0 auto;">
+              <p class="text-dark mb-1"><a class="text-dark" href="https://elliottwu.com/" style="font-size: calc(10px + 0.4vw);">Shangzhe Wu</a></p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">Oxford VGG</p>
+            </div>
+            <div class="col-auto col-md-3" style="margin: 0 auto;">
+              <p class="text-dark mb-1"><a class="text-dark" href="https://chrirupp.github.io/" style="font-size: calc(10px + 0.4vw);">Christian Rupprecht</a></p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">Oxford VGG</p>
+            </div>
+            <div class="col-auto col-md-3" style="margin: 0 auto;">
+              <p class="text-dark mb-1"><a class="text-dark" href="http://www.robots.ox.ac.uk/~vedaldi/" style="font-size: calc(10px + 0.4vw);">Andrea Vedaldi</a></p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">Oxford VGG</p>
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <a class="btn btn-light sr-button mr-1 mb-1" href="http://www.robots.ox.ac.uk/~vgg/blog/unsupervised-learning-of-probably-symmetric-deformable-3d-objects-from-images-in-the-wild.html" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Demo</p></a>
+              <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/1911.11130" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Paper</p></a>
+              <a class="btn btn-light sr-button mr-1 mb-1" href="https://www.robots.ox.ac.uk/~vgg/publications/2021/Wu21b/wu21b.pdf" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Paper (TPAMI)</p></a>
+              <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/elliottwu/unsup3d" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Code</p></a>
+              <a class="btn btn-light sr-button mr-1 mb-1" href="#bibtex" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Bibtex</p></a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+              <iframe width="960" height="540" src="https://www.youtube.com/embed/p3KB3eIQw24" style="max-width: 100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+              <hr class="light my-3">
+              <p class="text-dark mb-3" style="font-size: calc(15px + 0.6vw);">Abstract</p>
+              <p class="text-dark mb-4" style="font-size: calc(10px + 0.4vw);" align="justify">
+                  We propose a method to learn 3D deformable object categories from <b>raw single-view images</b>, <b>without external supervision</b>. The method is based on an autoencoder that factors each input image into depth, albedo, viewpoint and illumination. In order to disentangle these components without supervision, we use the fact that many object categories have, at least in principle, a symmetric structure. We show that reasoning about illumination allows us to exploit the underlying object symmetry even if the appearance is not symmetric due to shading. Furthermore, we model objects that are probably, but not certainly, symmetric by predicting a symmetry probability map, learned end-to-end with the other components of the model. Our experiments show that this method can recover very accurately the 3D shape of human faces, cat faces and cars from single-view images, without any supervision or a prior shape model. On benchmarks, we demonstrate superior accuracy compared to another method that uses supervision at the level of 2D image correspondences.
+              </p>
+
+              <hr class="light my-3">
+              <p class="text-dark mb-3" style="font-size: calc(15px + 0.6vw);">Results</p>
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Reconstructing human faces</p>
+              <video autoplay loop muted playsinline width="800" style="max-width: 100%">
+                <source src="img/face.mp4" type="video/mp4" alt="Face results">
+              </video>
+              <hr class="light my-3">
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Reconstructing face paintings</p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">(model trained on CelebA real faces without fine-tuning)</p>
+              <video autoplay loop muted playsinline width="800" style="max-width: 100%">
+                <source src="img/paint.mp4" type="video/mp4" alt="Face painting results">
+              </video>
+              <hr class="light my-3">
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Reconstructing abstract faces</p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">(model trained on CelebA real faces without fine-tuning)</p>
+              <video autoplay loop muted playsinline width="800" style="max-width: 100%">
+                <source src="img/abstract.mp4" type="video/mp4" alt="Abstract face results">
+              </video>
+              <hr class="light my-3">
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Reconstructing cat faces</p>
+              <video autoplay loop muted playsinline width="800" style="max-width: 100%">
+                <source src="img/cat.mp4" type="video/mp4" alt="Cat face results">
+              </video>
+              <hr class="light my-3">
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Reconstructing synthetic cars</p>
+              <video autoplay loop muted playsinline width="800" style="max-width: 100%">
+                <source src="img/car.mp4" type="video/mp4" alt="Synthetic car results">
+              </video>
+              <hr class="light my-3">
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Re-lighting effects</p>
+              <video autoplay loop muted playsinline width="800" style="max-width: 100%">
+                <source src="img/relight.mp4" type="video/mp4" alt="Re-lighting results">
+              </video>
+              <hr class="light my-3">
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Visualizing symmetry planes</p>
+                <img src="img/symline.jpg" alt="Symmetry plane" width="800" style="max-width: 100%">
+              <hr class="light my-3">
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Visualizing asymmetry</p>
+                <img src="img/viz_asym.jpg" alt="Visualizing asymmetry" width="800" style="max-width: 100%">
+              <hr class="light my-3">
+
+              <p class="text-dark" style="font-size: calc(12px + 0.48vw);">Results on video frames from VoxCeleb</p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">(applying model trained on CelebA faces frame-by-frame without fine-tuning)</p>
+              <div class="row mb-2">
+                <div class="col-md-6">
+                  <video controls autoplay loop muted playsinline width="500" style="max-width: 100%">
+                    <source src="img/voxceleb1.mp4" type="video/mp4" alt="VoxCeleb results 1">
+                  </video>
+                </div>
+                <div class="col-md-6">
+                  <video controls autoplay loop muted playsinline width="500" style="max-width: 100%">
+                    <source src="img/voxceleb2.mp4" type="video/mp4" alt="VoxCeleb results 2">
+                  </video>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-md-6">
+                  <video controls autoplay loop muted playsinline width="500" style="max-width: 100%">
+                    <source src="img/voxceleb3.mp4" type="video/mp4" alt="VoxCeleb results 3">
+                  </video>
+                </div>
+                <div class="col-md-6">
+                  <video controls autoplay loop muted playsinline width="500" style="max-width: 100%">
+                    <source src="img/voxceleb4.mp4" type="video/mp4" alt="VoxCeleb results 4">
+                  </video>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-md-6">
+                  <video controls autoplay loop muted playsinline width="500" style="max-width: 100%">
+                    <source src="img/voxceleb5.mp4" type="video/mp4" alt="VoxCeleb results 5">
+                  </video>
+                </div>
+                <div class="col-md-6">
+                  <video controls autoplay loop muted playsinline width="500" style="max-width: 100%">
+                    <source src="img/voxceleb6.mp4" type="video/mp4" alt="VoxCeleb results 6">
+                  </video>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-md-6">
+                  <video controls autoplay loop muted playsinline width="500" style="max-width: 100%">
+                    <source src="img/voxceleb7.mp4" type="video/mp4" alt="VoxCeleb results 7">
+                  </video>
+                </div>
+                <div class="col-md-6">
+                  <video controls autoplay loop muted playsinline width="500" style="max-width: 100%">
+                    <source src="img/voxceleb8.mp4" type="video/mp4" alt="VoxCeleb results 8">
+                  </video>
+                </div>
+              </div>
+              <hr class="light my-3">
+
+              <hr class="light my-3">
+              <p class="text-dark mb-1" style="font-size: calc(15px + 0.6vw);">Citation</p>
+              <code class="codebox" id="bibtex"><pre>
+@InProceedings{wu2020unsup3d,
+  author    = {Shangzhe Wu and Christian Rupprecht and Andrea Vedaldi},
+  title     = {Unsupervised Learning of Probably Symmetric Deformable 3D Objects from Images in the Wild},
+  booktitle = {CVPR},
+  year      = {2020}
+}</pre></code>
+              <hr class="light my-3">
+              <p class="text-dark mb-3" style="font-size: calc(15px + 0.6vw);">Acknowledgement</p>
+              <p class="text-dark mb-4" style="font-size: calc(10px + 0.4vw);" align="justify">
+                  We are indebted to the members of Visual Geometry Group for insightful discussions and suggestions, in particular, Sophia Koepke, Gül Varol, Erika Lu, Olivia Wiles, Iro Laina, Dan Xu, Fatma Güney, Tengda Han and Andrew Zisserman. We would also like to thank Abhishek Dutta, Ernesto Coto and João Henriques for their assistance in setting up the demo website. We are also grateful to Soumyadip Sengupta for sharing with us the code to generate synthetic face datasets, and to Mihir Sahasrabudhe for sending us the reconstruction results of Lifting AutoEncoders. This work is jointly supported by Facebook Research and ERC Horizon 2020 research and innovation programme IDIU 638009.
+              </p>
+
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+
+        </center>
+      </div>
+    </section>
+
+    <section class="bg-dark" style="padding: 1em">
+      <center>
+        <div class="footer-social-icons">
+          <ul class="social-icons">
+            <li><a href="https://github.com/elliottwu" title="GitHub" class="social-icon"> <i class="fa fa-github"></i></a></li>
+            <li><a href="https://scholar.google.com/citations?user=36NmvrMAAAAJ&hl=en" title="Google Scholar" class="social-icon"> <i class="fa ai ai-google-scholar"></i></a></li>
+            <li><a href="https://twitter.com/elliottszwu" title="Twitter" class="social-icon"> <i class="fa fa-twitter"></i></a></li>
+            <li><a href="https://elliottwu.com/cv_szwu.pdf" title="CV" class="social-icon"> <i class="fa ai ai-cv"></i></a></li>
+          </ul>
+        </div>
+      </center>
+    </section>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../vendor/scrollreveal/scrollreveal.min.js"></script>
+    <script src="../../vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="../../js/creative.min.js"></script>
+
+  </body>
+
+</html>

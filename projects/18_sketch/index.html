@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Image Generation from Sketch Constraint Using Contextual GAN. In this paper we investigate image generation guided by hand sketch. We propose to use sketch as weak constraint, where the output edges do not necessarily follow the input edges.">
+    <meta name="author" content="Shangzhe Wu">
+
+    <title>Sketch - Shangzhe Wu</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+    <link href="../../vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../../css/creative.min.css" rel="stylesheet">
+    <link href="../../css/footer.css" rel="stylesheet">
+    <link href="../../css/academicons.css" rel="stylesheet">
+
+    <link rel="shortcut icon" type="image/jpeg" href="../../img/about_me/icon.jpg"/>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HL04349CRC"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-HL04349CRC');
+    </script>
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="https://elliottwu.com/index.html">Elliott Wu</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="https://elliottwu.com/index.html#about">About Me</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="https://elliottwu.com/index.html#publication">Publications</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="https://elliottwu.com/index.html#office-hours">Office Hours</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="container" id="body">
+      <div class="container">
+        <center>
+          <hr class="light my-4">
+          <h2 class="section-heading text-dark mb-3" style="font-size: calc(14px + 1vw);"><b>Image Generation from Sketch Constraint Using Contextual GAN</b></h2>
+          <h3 class="text-dark mb-4" style="font-size: calc(12px + 0.5vw);">European Conference on Computer Vision (ECCV) 2018</h3>
+          <div class="row mb-2">
+            <div class="col-md-1"></div>
+            <div class="col-auto col-md-2" style="margin: 0 auto;">
+              <p class="text-dark mb-1"><a class="text-dark" href="https://home.cse.ust.hk/~yluaw/" style="font-size: calc(10px + 0.4vw);">Yongyi Lu</a></p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">HKUST</p>
+            </div>
+            <div class="col-auto col-md-2" style="margin: 0 auto;">
+              <p class="text-dark mb-1"><a class="text-dark" href="https://elliottwu.com/" style="font-size: calc(10px + 0.4vw);">Shangzhe Wu</a></p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">HKUST</p>
+            </div>
+            <div class="col-auto col-md-2" style="margin: 0 auto;">
+              <p class="text-dark mb-1"><a class="text-dark" href="https://www.cse.ust.hk/admin/people/faculty/profile/yuwing" style="font-size: calc(10px + 0.4vw);">Yu-Wing Tai</a></p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">Tencent Youtu</p>
+            </div>
+            <div class="col-auto col-md-2" style="margin: 0 auto;">
+              <p class="text-dark mb-1"><a class="text-dark" href="http://www.cs.ust.hk/~cktang/" style="font-size: calc(10px + 0.4vw);">Chi-Keung Tang</a></p>
+              <p class="text-dark" style="font-size: calc(10px + 0.4vw);">HKUST</p>
+            </div>
+            <div class="col-md-1"></div>
+          </div>
+
+          <div class="row mb-4">
+            <div class="col-md-12">
+              <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/1711.08972" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Paper</p></a>
+              <a class="btn btn-light sr-button mr-1 mb-1" href="#bibtex" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Bibtex</p></a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <img src="img/sketch_teaser.jpg" alt="Sketch teaser" style="max-width: 100%;">
+                <hr class="light my-3">
+                <p class="text-dark mb-3" style="font-size: calc(15px + 0.6vw);">Abstract</p>
+                <p class="text-dark mb-4" style="font-size: calc(10px + 0.4vw);" align="justify">
+                  In this paper we investigate image generation guided by hand sketch. When the input sketch is badly drawn, the output of common <a class="text-dark" href="https://phillipi.github.io/pix2pix/"><i>image-to-image translation</i></a> follows the input edges due to the hard condition imposed by the translation process. Instead, we propose to use sketch as weak constraint, where the output edges do not necessarily follow the input edges. We address this problem using a novel <b>joint image completion</b> approach, where the sketch provides the image context for completing, or generating the output image. We train a generated adversarial network, i.e, <b>contextual GAN</b> to learn the joint distribution of sketch and the corresponding image by using joint images. Our contextual GAN has several advantages. First, the simple joint image representation allows for simple and effective learning of joint distribution in the same image-sketch space, which avoids complicated issues in crossdomain learning. Second, while the output is related to its input overall, the generated features exhibit more freedom in appearance and do not strictly align with the input features as previous conditional GANs do. Third, from the joint image’s point of view, image and sketch are of no difference, thus exactly the same deep joint image completion network can be used for image-to-sketch generation. Experiments evaluated on three different datasets show that our contextual GAN can generate more realistic images than state-of-the-art conditional GANs on challenging inputs and generalize well on common categories.
+                </p>
+                <p class="text-dark mb-1" style="font-size: calc(15px + 0.6vw);">Citation</p>
+                <code class="codebox" id="bibtex"><pre>
+@InProceedings{lu2018sketch,
+  author    = {Lu, Yongyi and Wu, Shangzhe and Tai, Yu-Wing and Tang, Chi-Keung},
+  title     = {Image Generation from Sketch Constraint Using Contextual GAN},
+  booktitle = {ECCV},
+  year      = {2018}
+}</pre></code>
+            </div>
+            <div class="col-md-2"></div>
+          </div>
+        </center>
+      </div>
+    </section>
+
+    <section class="bg-dark" style="padding: 1em">
+      <center>
+        <div class="footer-social-icons">
+          <ul class="social-icons">
+            <li><a href="https://github.com/elliottwu" title="GitHub" class="social-icon"> <i class="fa fa-github"></i></a></li>
+            <li><a href="https://scholar.google.com/citations?user=36NmvrMAAAAJ&hl=en" title="Google Scholar" class="social-icon"> <i class="fa ai ai-google-scholar"></i></a></li>
+            <li><a href="https://twitter.com/elliottszwu" title="Twitter" class="social-icon"> <i class="fa fa-twitter"></i></a></li>
+            <li><a href="https://elliottwu.com/cv_szwu.pdf" title="CV" class="social-icon"> <i class="fa ai ai-cv"></i></a></li>
+          </ul>
+        </div>
+      </center>
+    </section>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../vendor/scrollreveal/scrollreveal.min.js"></script>
+    <script src="../../vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="../../js/creative.min.js"></script>
+
+  </body>
+
+</html>
