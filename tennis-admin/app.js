@@ -1,6 +1,6 @@
 /**
- * Tennis Court Booking Admin Dashboard
- * Modern UI with Calendar, History, and Stats
+ * TENNIS.SYS // Command Center
+ * Futuristic Cyberpunk Dashboard
  */
 
 // ==================== Configuration ====================
@@ -11,9 +11,9 @@ const CONFIG = {
     CONTROL_FILE: 'tennis-admin/control.json',
     REFRESH_INTERVAL: 5 * 60 * 1000,
     USERS: {
-        'xbai02b': { name: 'Xingjian Bai', short: 'Xingjian', color: 'xbai' },
-        'yangb': { name: 'Yang Liu', short: 'Yang', color: 'yang' },
-        'zwang43b': { name: 'Zekai Wang', short: 'Zekai', color: 'zekai' }
+        'xbai02b': { name: 'Xingjian Bai', short: 'XB', color: 'xbai', initial: 'X' },
+        'yangb': { name: 'Yang Liu', short: 'YL', color: 'yang', initial: 'Y' },
+        'zwang43b': { name: 'Zekai Wang', short: 'ZW', color: 'zekai', initial: 'Z' }
     }
 };
 
@@ -28,6 +28,262 @@ let state = {
 
 let pendingAction = null;
 let refreshTimer = null;
+let terminalHistory = [];
+
+// ==================== Initialization ====================
+document.addEventListener('DOMContentLoaded', () => {
+    initParticles();
+    initNavigation();
+    initClock();
+    initTerminal();
+    refreshData();
+    startAutoRefresh();
+});
+
+// ==================== Particle Effects ====================
+function initParticles() {
+    const container = document.getElementById('particles');
+    if (!container) return;
+
+    const particleCount = 50;
+    for (let i = 0; i < particleCount; i++) {
+        createParticle(container, i);
+    }
+}
+
+function createParticle(container, index) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.animationDelay = `${(index / 50) * 15}s`;
+    particle.style.opacity = Math.random() * 0.5 + 0.2;
+
+    const colors = ['#00f0ff', '#ff00aa', '#00ff88'];
+    particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+    particle.style.boxShadow = `0 0 6px ${particle.style.background}`;
+
+    container.appendChild(particle);
+}
+
+// ==================== Clock ====================
+function initClock() {
+    updateClock();
+    setInterval(updateClock, 1000);
+}
+
+function updateClock() {
+    const now = new Date();
+    const dateEl = document.getElementById('current-date');
+    const timeEl = document.getElementById('current-time');
+
+    if (dateEl) {
+        dateEl.textContent = now.toLocaleDateString('en-US', {
+            weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+        }).toUpperCase();
+    }
+    if (timeEl) {
+        timeEl.textContent = now.toLocaleTimeString('en-US', {
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+        });
+    }
+}
+
+// ==================== Navigation ====================
+function initNavigation() {
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const page = item.dataset.page;
+            switchPage(page);
+        });
+    });
+}
+
+function switchPage(pageName) {
+    // Update nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.page === pageName);
+    });
+
+    // Update pages
+    document.querySelectorAll('.page').forEach(page => {
+        page.classList.toggle('active', page.id === `page-${pageName}`);
+    });
+
+    // Update title
+    const titleText = document.querySelector('.title-text');
+    if (titleText) {
+        titleText.textContent = pageName.toUpperCase();
+    }
+
+    // Special handling for terminal page
+    if (pageName === 'terminal') {
+        runSystemStatus();
+    }
+}
+
+// ==================== Terminal ====================
+function initTerminal() {
+    const input = document.getElementById('terminal-input');
+    if (input) {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleTerminalInput(e);
+            }
+        });
+    }
+}
+
+function handleTerminalInput(event) {
+    if (event.key !== 'Enter') return;
+
+    const input = document.getElementById('terminal-input');
+    const command = input.value.trim();
+    input.value = '';
+
+    if (!command) return;
+
+    terminalHistory.push(command);
+    addTerminalLine(command, 'command');
+    processCommand(command);
+}
+
+function addTerminalLine(text, type = 'output') {
+    const terminal = document.getElementById('terminal-output');
+    if (!terminal) return;
+
+    const line = document.createElement('div');
+    line.className = 'terminal-line';
+
+    if (type === 'command') {
+        line.innerHTML = `<span class="prompt">root@tennis.sys:~$</span> <span class="command">${escapeHtml(text)}</span>`;
+    } else {
+        line.innerHTML = `<span class="${type}">${text}</span>`;
+    }
+
+    terminal.appendChild(line);
+    terminal.scrollTop = terminal.scrollHeight;
+}
+
+function processCommand(cmd) {
+    const parts = cmd.toLowerCase().split(' ');
+    const command = parts[0];
+
+    switch (command) {
+        case 'help':
+            addTerminalLine('Available commands:', 'info');
+            addTerminalLine('  status          - Show system status', 'output');
+            addTerminalLine('  reservations    - List all reservations', 'output');
+            addTerminalLine('  users           - Show user status', 'output');
+            addTerminalLine('  sync            - Force data sync', 'output');
+            addTerminalLine('  clear           - Clear terminal', 'output');
+            addTerminalLine('  about           - System information', 'output');
+            break;
+
+        case 'status':
+        case 'system_status':
+            runSystemStatus();
+            break;
+
+        case 'reservations':
+        case 'ls':
+            listReservations();
+            break;
+
+        case 'users':
+            showUserStatus();
+            break;
+
+        case 'sync':
+        case 'refresh':
+            addTerminalLine('Initiating data sync...', 'info');
+            refreshData().then(() => {
+                addTerminalLine('Sync complete.', 'success');
+            });
+            break;
+
+        case 'clear':
+            const terminal = document.getElementById('terminal-output');
+            if (terminal) terminal.innerHTML = '';
+            break;
+
+        case 'about':
+            addTerminalLine('TENNIS.SYS v2.0.0-CYBER', 'info');
+            addTerminalLine('MIT Recreation Court Booking System', 'output');
+            addTerminalLine('Booking windows: 00:00 / 06:00 EST', 'output');
+            addTerminalLine('Parallel threads: 3', 'output');
+            break;
+
+        case 'matrix':
+            addTerminalLine('Wake up, Neo...', 'success');
+            break;
+
+        default:
+            addTerminalLine(`Command not found: ${command}`, 'error');
+            addTerminalLine('Type "help" for available commands', 'output');
+    }
+}
+
+function runSystemStatus() {
+    if (!state.status) {
+        addTerminalLine('No data loaded. Running sync...', 'info');
+        return;
+    }
+
+    const lastSync = state.status.last_sync ? new Date(state.status.last_sync).toLocaleString() : 'Unknown';
+    const reservations = state.status.reservations || [];
+    const scriptStatus = state.status.script_status || {};
+
+    addTerminalLine('=== SYSTEM STATUS ===', 'info');
+    addTerminalLine(`Last sync: ${lastSync}`, 'output');
+    addTerminalLine(`Active reservations: ${reservations.length}`, 'output');
+
+    let running = 0;
+    Object.entries(scriptStatus).forEach(([user, status]) => {
+        if (status.running) running++;
+    });
+    addTerminalLine(`Active bots: ${running}/3`, running === 3 ? 'success' : 'output');
+    addTerminalLine('===================', 'info');
+}
+
+function listReservations() {
+    if (!state.status || !state.status.reservations) {
+        addTerminalLine('No reservations data available', 'error');
+        return;
+    }
+
+    const reservations = state.status.reservations;
+    addTerminalLine(`Found ${reservations.length} reservation(s):`, 'info');
+
+    reservations.forEach((res, i) => {
+        const user = CONFIG.USERS[res.user]?.short || res.user;
+        addTerminalLine(`  [${i + 1}] ${res.date} ${res.time} - ${res.court} (${user})`, 'output');
+    });
+}
+
+function showUserStatus() {
+    if (!state.status || !state.status.script_status) {
+        addTerminalLine('No user data available', 'error');
+        return;
+    }
+
+    addTerminalLine('=== AGENT STATUS ===', 'info');
+    Object.entries(state.status.script_status).forEach(([userId, status]) => {
+        const user = CONFIG.USERS[userId];
+        if (!user) return;
+
+        const statusText = status.paused ? 'PAUSED' : (status.running ? 'RUNNING' : 'STOPPED');
+        const statusClass = status.paused ? 'output' : (status.running ? 'success' : 'error');
+        addTerminalLine(`  ${user.name}: ${statusText}`, statusClass);
+    });
+    addTerminalLine('====================', 'info');
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 
 // ==================== Utility Functions ====================
 function formatDate(dateStr) {
@@ -100,7 +356,7 @@ async function fetchGitHubFile(path) {
             sha: data.sha
         };
     } catch (error) {
-        console.error(`Error fetching ${path}:`, error);
+        console.error('Error fetching GitHub file:', error);
         return null;
     }
 }
@@ -123,77 +379,94 @@ async function updateGitHubFile(path, content, sha, message) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                message: message,
+                message,
                 content: btoa(JSON.stringify(content, null, 2)),
-                sha: sha
+                sha
             })
         });
 
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.message || 'Failed to update file');
-        }
+        if (!response.ok) throw new Error(`GitHub API error: ${response.status}`);
         return true;
     } catch (error) {
-        console.error(`Error updating ${path}:`, error);
-        alert(`Error: ${error.message}`);
+        console.error('Error updating GitHub file:', error);
         return false;
     }
 }
 
 // ==================== Data Loading ====================
-async function loadData() {
-    const [statusResult, controlResult] = await Promise.all([
-        fetchGitHubFile(CONFIG.STATUS_FILE),
-        fetchGitHubFile(CONFIG.CONTROL_FILE)
-    ]);
+async function refreshData() {
+    updateSyncStatus('syncing');
 
-    if (statusResult) {
-        state.status = statusResult.content;
-        state.statusSha = statusResult.sha;
+    try {
+        const [statusResult, controlResult] = await Promise.all([
+            fetchGitHubFile(CONFIG.STATUS_FILE),
+            fetchGitHubFile(CONFIG.CONTROL_FILE)
+        ]);
+
+        if (statusResult) {
+            state.status = statusResult.content;
+            state.statusSha = statusResult.sha;
+        }
+
+        if (controlResult) {
+            state.control = controlResult.content;
+            state.controlSha = controlResult.sha;
+        }
+
+        renderDashboard();
+        updateSyncStatus('synced');
+        updateLastSync();
+
+    } catch (error) {
+        console.error('Error refreshing data:', error);
+        updateSyncStatus('error');
     }
+}
 
-    if (controlResult) {
-        state.control = controlResult.content;
-        state.controlSha = controlResult.sha;
-    } else {
-        state.control = { users: {}, cancellations: {} };
-        Object.keys(CONFIG.USERS).forEach(id => {
-            state.control.users[id] = { paused: false };
+function updateSyncStatus(status) {
+    const syncText = document.getElementById('sync-text');
+    if (syncText) {
+        const texts = { syncing: 'SYNCING...', synced: 'SYNCED', error: 'ERROR' };
+        syncText.textContent = texts[status] || 'SYNCED';
+    }
+}
+
+function updateLastSync() {
+    const lastSync = document.getElementById('last-sync');
+    if (lastSync) {
+        lastSync.textContent = new Date().toLocaleTimeString('en-US', {
+            hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
         });
     }
 }
 
-async function refreshData() {
-    const refreshBtn = document.querySelector('.fa-sync-alt');
-    if (refreshBtn) refreshBtn.classList.add('fa-spin');
+function startAutoRefresh() {
+    if (refreshTimer) clearInterval(refreshTimer);
+    const interval = parseInt(localStorage.getItem('refresh_interval')) || CONFIG.REFRESH_INTERVAL;
+    if (interval > 0) {
+        refreshTimer = setInterval(refreshData, interval);
+    }
+}
 
-    await loadData();
-    renderAll();
-
-    if (refreshBtn) refreshBtn.classList.remove('fa-spin');
-    document.getElementById('last-sync').textContent = `Last: ${formatTime(new Date())}`;
+function updateRefreshInterval() {
+    const select = document.getElementById('refresh-interval');
+    if (select) {
+        localStorage.setItem('refresh_interval', select.value);
+        startAutoRefresh();
+    }
 }
 
 // ==================== Rendering ====================
-function renderAll() {
+function renderDashboard() {
+    if (!state.status) return;
+
     renderStats();
-    renderUserCards();
     renderUpcomingReservations();
+    renderUserCards();
     renderMiniCalendar();
     renderRecentActivity();
     renderFullCalendar();
     renderHistory();
-    updateCurrentDate();
-}
-
-function updateCurrentDate() {
-    const dateEl = document.getElementById('current-date');
-    if (dateEl) {
-        dateEl.textContent = new Date().toLocaleDateString('en-US', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
-    }
 }
 
 function renderStats() {
@@ -201,9 +474,13 @@ function renderStats() {
 
     const bookings = state.status.bookings || [];
     const reservations = state.status.reservations || [];
+    const scriptStatus = state.status.script_status || {};
 
     // Upcoming count
-    document.getElementById('stat-upcoming').textContent = reservations.length;
+    const upcomingEl = document.getElementById('stat-upcoming');
+    if (upcomingEl) {
+        upcomingEl.innerHTML = `<span class="value-num">${reservations.length}</span>`;
+    }
 
     // This week's successful bookings
     const now = new Date();
@@ -212,54 +489,32 @@ function renderStats() {
         const bookingTime = new Date(b.timestamp);
         return b.success && bookingTime >= weekAgo;
     }).length;
-    document.getElementById('stat-success').textContent = thisWeekSuccess;
+
+    const successEl = document.getElementById('stat-success');
+    if (successEl) {
+        successEl.innerHTML = `<span class="value-num">${thisWeekSuccess}</span>`;
+    }
 
     // Success rate
     const recentBookings = bookings.slice(0, 50);
     const successCount = recentBookings.filter(b => b.success).length;
     const rate = recentBookings.length > 0 ? Math.round((successCount / recentBookings.length) * 100) : 0;
-    document.getElementById('stat-rate').textContent = `${rate}%`;
+
+    const rateEl = document.getElementById('stat-rate');
+    if (rateEl) {
+        rateEl.innerHTML = `<span class="value-num">${rate}</span><span class="value-unit">%</span>`;
+    }
 
     // Active bots
-    const scriptStatus = state.status.script_status || {};
-    const activeCount = Object.values(scriptStatus).filter(s => s.running && !s.paused).length;
-    const totalCount = Object.keys(CONFIG.USERS).length;
-    document.getElementById('stat-active').textContent = `${activeCount}/${totalCount}`;
-}
-
-function renderUserCards() {
-    const container = document.getElementById('user-cards');
-    if (!container) return;
-
-    const scriptStatus = state.status?.script_status || {};
-    const controlUsers = state.control?.users || {};
-
-    let html = '';
-    Object.entries(CONFIG.USERS).forEach(([userId, userInfo]) => {
-        const status = scriptStatus[userId] || {};
-        const control = controlUsers[userId] || {};
-        const isPaused = control.paused || false;
-        const isRunning = status.running && !isPaused;
-
-        html += `
-            <div class="user-card ${userInfo.color} ${isPaused ? 'paused' : ''}">
-                <div class="user-card-info">
-                    <span class="user-card-name">${userInfo.name}</span>
-                    <span class="user-card-status">
-                        <span class="dot ${isRunning ? 'running' : 'paused'}"></span>
-                        ${isPaused ? 'Paused' : (status.running ? 'Running' : 'Stopped')}
-                    </span>
-                </div>
-                <button class="btn btn-sm ${isPaused ? 'btn-primary' : 'btn-secondary'}"
-                        onclick="togglePause('${userId}', ${!isPaused})">
-                    <i class="fas fa-${isPaused ? 'play' : 'pause'}"></i>
-                    ${isPaused ? 'Resume' : 'Pause'}
-                </button>
-            </div>
-        `;
+    let activeCount = 0;
+    Object.values(scriptStatus).forEach(status => {
+        if (status.running && !status.paused) activeCount++;
     });
 
-    container.innerHTML = html;
+    const activeEl = document.getElementById('stat-active');
+    if (activeEl) {
+        activeEl.innerHTML = `<span class="value-num">${activeCount}</span><span class="value-unit">/3</span>`;
+    }
 }
 
 function renderUpcomingReservations() {
@@ -271,20 +526,22 @@ function renderUpcomingReservations() {
     if (reservations.length === 0) {
         container.innerHTML = `
             <div class="empty-state">
-                <i class="fas fa-calendar-times"></i>
-                <p>No upcoming reservations</p>
+                <i class="fas fa-satellite"></i>
+                <p>NO ACTIVE RESERVATIONS</p>
             </div>
         `;
         return;
     }
 
     let html = '';
-    reservations.slice(0, 5).forEach(res => {
+    reservations.forEach(res => {
         const userClass = getUserClass(res.user);
+        const userColor = userClass === 'xbai' ? '#00f0ff' : (userClass === 'yang' ? '#ff00aa' : '#00ff88');
+
         html += `
-            <div class="reservation-item">
+            <div class="reservation-item" style="--user-color: ${userColor}">
                 <div class="reservation-main">
-                    <span class="reservation-date">${res.weekday || ''} ${res.date} at ${res.time}</span>
+                    <span class="reservation-date">${res.weekday || ''} ${res.date} @ ${res.time}</span>
                     <div class="reservation-details">
                         <span>${res.court || 'Court TBD'}</span>
                         <span class="reservation-user">
@@ -293,9 +550,45 @@ function renderUpcomingReservations() {
                         </span>
                     </div>
                 </div>
-                <button class="btn btn-sm btn-danger" onclick="requestCancel('${res.user}', '${res.reservation_id}', '${res.date} ${res.time}')">
+                <button class="btn-cyber btn-sm danger" onclick="requestCancel('${res.user}', '${res.reservation_id}', '${res.date} ${res.time}')">
                     <i class="fas fa-times"></i>
                 </button>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function renderUserCards() {
+    const container = document.getElementById('user-cards');
+    if (!container) return;
+
+    const scriptStatus = state.status?.script_status || {};
+
+    let html = '';
+    Object.entries(CONFIG.USERS).forEach(([userId, user]) => {
+        const status = scriptStatus[userId] || {};
+        const isRunning = status.running && !status.paused;
+        const isPaused = status.paused;
+
+        const statusClass = isPaused ? 'paused' : (isRunning ? 'running' : 'stopped');
+        const statusText = isPaused ? 'PAUSED' : (isRunning ? 'RUNNING' : 'STOPPED');
+
+        html += `
+            <div class="user-card ${user.color}">
+                <div class="user-info">
+                    <div class="user-avatar">${user.initial}</div>
+                    <div class="user-details">
+                        <span class="user-name">${user.name}</span>
+                        <span class="user-status ${statusClass}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="user-controls">
+                    <button class="btn-icon ${isRunning ? 'active' : ''}" onclick="togglePause('${userId}')" title="${isPaused ? 'Resume' : 'Pause'}">
+                        <i class="fas fa-${isPaused ? 'play' : 'pause'}"></i>
+                    </button>
+                </div>
             </div>
         `;
     });
@@ -311,7 +604,6 @@ function renderMiniCalendar() {
     const bookings = state.status?.bookings || [];
     const reservations = state.status?.reservations || [];
 
-    // Group bookings by date
     const bookingsByDate = {};
     [...bookings.filter(b => b.success), ...reservations].forEach(b => {
         const date = b.booking_date || b.date;
@@ -319,7 +611,7 @@ function renderMiniCalendar() {
         bookingsByDate[date].push(b);
     });
 
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
     let html = '';
     weekDates.forEach(date => {
@@ -329,12 +621,12 @@ function renderMiniCalendar() {
 
         html += `
             <div class="mini-cal-day ${todayClass}">
-                <div class="day-name">${dayNames[date.getDay()]}</div>
-                <div class="day-num">${date.getDate()}</div>
-                <div class="day-bookings">
+                <span class="day-name">${dayNames[date.getDay()]}</span>
+                <span class="day-num">${date.getDate()}</span>
+                <div class="day-dots">
                     ${dayBookings.slice(0, 3).map(b => {
                         const userClass = getUserClass(b.user);
-                        return `<span class="booking-dot" style="background: var(--user-${userClass})"></span>`;
+                        return `<span class="day-dot user-dot ${userClass}"></span>`;
                     }).join('')}
                 </div>
             </div>
@@ -351,33 +643,38 @@ function renderRecentActivity() {
     const bookings = state.status?.bookings || [];
 
     if (bookings.length === 0) {
-        container.innerHTML = '<div class="empty-state"><p>No recent activity</p></div>';
+        container.innerHTML = '<div class="empty-state"><p>NO ACTIVITY DATA</p></div>';
         return;
     }
 
     let html = '';
-    bookings.slice(0, 10).forEach(b => {
-        const iconClass = b.success ? 'success' : 'failed';
-        const icon = b.success ? 'check' : 'times';
-        const userName = getUserShortName(b.user);
-        const action = b.success ? 'Booked' : 'Failed to book';
+    bookings.slice(0, 8).forEach(booking => {
+        const time = new Date(booking.timestamp).toLocaleTimeString('en-US', {
+            hour: '2-digit', minute: '2-digit', hour12: false
+        });
+        const statusClass = booking.success ? 'success' : 'failed';
+        const statusIcon = booking.success ? 'check' : 'times';
 
         html += `
             <div class="activity-item">
-                <div class="activity-icon ${iconClass}">
-                    <i class="fas fa-${icon}"></i>
-                </div>
-                <div class="activity-content">
-                    <div class="activity-text">
-                        <strong>${userName}</strong> ${action} ${b.booking_date} ${b.booking_hour}:00
-                    </div>
-                    <div class="activity-time">${formatTime(b.timestamp)}</div>
-                </div>
+                <span class="activity-time">${time}</span>
+                <span class="activity-content">
+                    <span class="activity-user">${getUserShortName(booking.user)}</span>
+                    <span class="activity-action">attempted ${booking.booking_date} ${booking.booking_hour}:00</span>
+                    <span class="activity-status ${statusClass}">
+                        <i class="fas fa-${statusIcon}"></i>
+                    </span>
+                </span>
             </div>
         `;
     });
 
     container.innerHTML = html;
+}
+
+function changeWeek(delta) {
+    state.currentWeekOffset += delta;
+    renderFullCalendar();
 }
 
 function renderFullCalendar() {
@@ -388,7 +685,6 @@ function renderFullCalendar() {
     const bookings = state.status?.bookings || [];
     const reservations = state.status?.reservations || [];
 
-    // Update week title
     const weekTitle = document.getElementById('calendar-week-title');
     if (weekTitle) {
         const startDate = weekDates[0];
@@ -396,7 +692,6 @@ function renderFullCalendar() {
         weekTitle.textContent = `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
     }
 
-    // Group bookings by date and hour
     const bookingMap = {};
     [...bookings.filter(b => b.success), ...reservations].forEach(b => {
         const date = b.booking_date || b.date;
@@ -406,210 +701,189 @@ function renderFullCalendar() {
         bookingMap[key].push(b);
     });
 
-    const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
     const hours = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
 
-    // Header row
     let html = '<div class="cal-header"></div>';
     weekDates.forEach(date => {
         const todayClass = isToday(date) ? 'today' : '';
         html += `<div class="cal-header ${todayClass}">${dayNames[date.getDay()]}<br>${date.getDate()}</div>`;
     });
 
-    // Time rows
     hours.forEach(hour => {
-        html += `<div class="cal-time">${hour}:00</div>`;
-
+        html += `<div class="cal-hour">${hour}:00</div>`;
         weekDates.forEach(date => {
             const dateStr = date.toISOString().split('T')[0];
             const key = `${dateStr}-${hour}`;
             const cellBookings = bookingMap[key] || [];
+            const todayClass = isToday(date) ? 'today' : '';
 
-            html += `<div class="cal-cell">`;
+            html += `<div class="cal-cell ${todayClass}">`;
             cellBookings.forEach(b => {
                 const userClass = getUserClass(b.user);
                 html += `<div class="cal-booking ${userClass}">${getUserShortName(b.user)}</div>`;
             });
-            html += `</div>`;
+            html += '</div>';
         });
     });
 
     container.innerHTML = html;
 }
 
-function changeWeek(offset) {
-    state.currentWeekOffset += offset;
-    renderFullCalendar();
+function filterHistory() {
+    renderHistory();
 }
 
 function renderHistory() {
     const bookings = state.status?.bookings || [];
-
-    // Stats
-    const total = bookings.length;
-    const success = bookings.filter(b => b.success).length;
-    const failed = total - success;
-
-    document.getElementById('history-total').textContent = total;
-    document.getElementById('history-success').textContent = success;
-    document.getElementById('history-failed').textContent = failed;
-
-    // Heatmap
-    renderHeatmap(bookings);
-
-    // Table
-    renderHistoryTable(bookings);
-}
-
-function renderHeatmap(bookings) {
-    const container = document.getElementById('booking-heatmap');
-    if (!container) return;
-
-    const hourCounts = {};
-    for (let h = 13; h <= 22; h++) hourCounts[h] = 0;
-
-    bookings.filter(b => b.success).forEach(b => {
-        const hour = b.booking_hour;
-        if (hourCounts[hour] !== undefined) hourCounts[hour]++;
-    });
-
-    const maxCount = Math.max(...Object.values(hourCounts), 1);
-
-    let html = '';
-    for (let h = 13; h <= 22; h++) {
-        const count = hourCounts[h];
-        const level = count === 0 ? 0 : Math.ceil((count / maxCount) * 5);
-        html += `<div class="heatmap-cell level-${level}" title="${h}:00 - ${count} bookings">${h}:00</div>`;
-    }
-
-    container.innerHTML = html;
-}
-
-function renderHistoryTable(bookings) {
-    const container = document.getElementById('history-table-body');
-    if (!container) return;
-
     const userFilter = document.getElementById('history-user-filter')?.value || 'all';
     const statusFilter = document.getElementById('history-status-filter')?.value || 'all';
 
     let filtered = bookings;
+
     if (userFilter !== 'all') {
         filtered = filtered.filter(b => b.user === userFilter);
     }
+
     if (statusFilter === 'success') {
         filtered = filtered.filter(b => b.success);
     } else if (statusFilter === 'failed') {
         filtered = filtered.filter(b => !b.success);
     }
 
+    const successCount = filtered.filter(b => b.success).length;
+    const failedCount = filtered.filter(b => !b.success).length;
+
+    document.getElementById('history-total').textContent = filtered.length;
+    document.getElementById('history-success').textContent = successCount;
+    document.getElementById('history-failed').textContent = failedCount;
+
+    renderHeatmap(filtered);
+    renderHistoryTable(filtered);
+}
+
+function renderHeatmap(bookings) {
+    const container = document.getElementById('booking-heatmap');
+    if (!container) return;
+
+    const dayNames = ['', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+    const hours = [13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+
+    const heatData = {};
+    bookings.filter(b => b.success).forEach(b => {
+        const date = new Date(b.booking_date || b.timestamp);
+        const day = date.getDay();
+        const hour = b.booking_hour;
+        const key = `${day}-${hour}`;
+        heatData[key] = (heatData[key] || 0) + 1;
+    });
+
+    let html = '<div class="heatmap-label"></div>';
+    for (let d = 0; d <= 6; d++) {
+        html += `<div class="heatmap-label">${dayNames[d + 1]}</div>`;
+    }
+
+    hours.forEach(hour => {
+        html += `<div class="heatmap-label">${hour}:00</div>`;
+        for (let d = 0; d <= 6; d++) {
+            const key = `${d}-${hour}`;
+            const count = heatData[key] || 0;
+            const level = count === 0 ? '' : (count <= 2 ? 'level-1' : (count <= 4 ? 'level-2' : (count <= 6 ? 'level-3' : 'level-4')));
+            html += `<div class="heatmap-cell ${level}" title="${count} bookings">${count || ''}</div>`;
+        }
+    });
+
+    container.innerHTML = html;
+}
+
+function renderHistoryTable(bookings) {
+    const tbody = document.getElementById('history-table-body');
+    if (!tbody) return;
+
     let html = '';
-    filtered.slice(0, 50).forEach(b => {
+    bookings.slice(0, 50).forEach(b => {
+        const time = new Date(b.timestamp).toLocaleString('en-US', {
+            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
         const statusClass = b.success ? 'success' : 'failed';
-        const statusText = b.success ? 'Success' : 'Failed';
-        const courtNum = b.court_id ? `Court ${{'45':1,'46':2,'47':3,'48':4}[b.court_id] || b.court_id}` : '-';
+        const statusText = b.success ? 'SUCCESS' : 'FAILED';
 
         html += `
             <tr>
-                <td>${formatTime(b.timestamp)}</td>
+                <td>${time}</td>
                 <td>${getUserShortName(b.user)}</td>
                 <td>${b.booking_date}</td>
                 <td>${b.booking_hour}:00</td>
-                <td>${courtNum}</td>
+                <td>${b.court_id || '-'}</td>
                 <td><span class="status-badge ${statusClass}">${statusText}</span></td>
             </tr>
         `;
     });
 
-    container.innerHTML = html || '<tr><td colspan="6" style="text-align:center;padding:20px;">No matching records</td></tr>';
-}
-
-function filterHistory() {
-    const bookings = state.status?.bookings || [];
-    renderHistoryTable(bookings);
+    tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center">No data</td></tr>';
 }
 
 // ==================== Actions ====================
-async function togglePause(userId, pause) {
-    const action = pause ? 'pause' : 'resume';
-    const userName = getUserName(userId);
+async function togglePause(userId) {
+    if (!state.control || !state.controlSha) {
+        showTokenModal();
+        return;
+    }
 
-    showConfirmModal(
-        `${pause ? 'Pause' : 'Resume'} ${userName}?`,
-        `Are you sure you want to ${action} automatic booking for ${userName}?`,
-        async () => {
-            if (!state.control.users[userId]) {
-                state.control.users[userId] = {};
-            }
-            state.control.users[userId].paused = pause;
-            state.control.last_updated = new Date().toISOString();
+    const currentPaused = state.control.users?.[userId]?.paused || false;
+    const newPaused = !currentPaused;
 
-            const success = await updateGitHubFile(
-                CONFIG.CONTROL_FILE,
-                state.control,
-                state.controlSha,
-                `${action} booking for ${userId}`
-            );
+    state.control.users = state.control.users || {};
+    state.control.users[userId] = state.control.users[userId] || {};
+    state.control.users[userId].paused = newPaused;
+    state.control.last_updated = new Date().toISOString();
 
-            if (success) {
-                await refreshData();
-            }
-        }
+    const success = await updateGitHubFile(
+        CONFIG.CONTROL_FILE,
+        state.control,
+        state.controlSha,
+        `${newPaused ? 'Pause' : 'Resume'} ${userId}`
     );
+
+    if (success) {
+        await refreshData();
+    }
 }
 
-async function requestCancel(userId, reservationId, description) {
-    showConfirmModal(
-        'Cancel Reservation?',
-        `Are you sure you want to cancel: ${description}?`,
-        async () => {
-            if (!state.control.cancellations[userId]) {
-                state.control.cancellations[userId] = [];
-            }
-            state.control.cancellations[userId].push({
-                reservation_id: reservationId,
-                description: description,
-                requested_at: new Date().toISOString()
-            });
-            state.control.last_updated = new Date().toISOString();
-
-            const success = await updateGitHubFile(
-                CONFIG.CONTROL_FILE,
-                state.control,
-                state.controlSha,
-                `Request cancel: ${description}`
-            );
-
-            if (success) {
-                alert('Cancellation request submitted.');
-                await refreshData();
-            }
-        }
-    );
+function requestCancel(user, reservationId, description) {
+    pendingAction = { type: 'cancel', user, reservationId };
+    document.getElementById('confirm-title').innerHTML = '<i class="fas fa-exclamation-triangle"></i> CANCEL RESERVATION';
+    document.getElementById('confirm-message').textContent = `Cancel ${description} for ${getUserName(user)}?`;
+    document.getElementById('confirm-modal').classList.add('active');
 }
 
-// ==================== Navigation ====================
-function setupNavigation() {
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', (e) => {
-            e.preventDefault();
-            const page = item.dataset.page;
+async function confirmAction() {
+    if (!pendingAction) return;
 
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
+    if (pendingAction.type === 'cancel') {
+        // Add to cancellation queue
+        state.control.cancellations = state.control.cancellations || {};
+        state.control.cancellations[pendingAction.user] = state.control.cancellations[pendingAction.user] || [];
+        state.control.cancellations[pendingAction.user].push(pendingAction.reservationId);
+        state.control.last_updated = new Date().toISOString();
 
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(`page-${page}`).classList.add('active');
+        await updateGitHubFile(
+            CONFIG.CONTROL_FILE,
+            state.control,
+            state.controlSha,
+            `Request cancel: ${pendingAction.reservationId}`
+        );
 
-            document.getElementById('page-title').textContent =
-                page.charAt(0).toUpperCase() + page.slice(1);
-        });
-    });
+        await refreshData();
+    }
+
+    closeConfirmModal();
+    pendingAction = null;
 }
 
 // ==================== Modals ====================
 function showTokenModal() {
     document.getElementById('token-modal').classList.add('active');
-    document.getElementById('github-token-input').value = getGitHubToken() || '';
 }
 
 function closeTokenModal() {
@@ -629,49 +903,17 @@ function saveTokenFromSettings() {
     const token = document.getElementById('settings-token').value.trim();
     if (token) {
         setGitHubToken(token);
-        alert('Token saved!');
+        refreshData();
     }
-}
-
-function showConfirmModal(title, message, onConfirm) {
-    document.getElementById('confirm-title').textContent = title;
-    document.getElementById('confirm-message').textContent = message;
-    pendingAction = onConfirm;
-    document.getElementById('confirm-modal').classList.add('active');
 }
 
 function closeConfirmModal() {
     document.getElementById('confirm-modal').classList.remove('active');
-    pendingAction = null;
 }
 
-function confirmAction() {
-    if (pendingAction) pendingAction();
-    closeConfirmModal();
-}
-
-// ==================== Settings ====================
-function updateRefreshInterval() {
-    const interval = parseInt(document.getElementById('refresh-interval').value);
-
-    if (refreshTimer) clearInterval(refreshTimer);
-
-    if (interval > 0) {
-        refreshTimer = setInterval(refreshData, interval);
-    }
-}
-
-// ==================== Initialization ====================
-document.addEventListener('DOMContentLoaded', () => {
-    setupNavigation();
-    refreshData();
-
-    // Start auto-refresh
-    refreshTimer = setInterval(refreshData, CONFIG.REFRESH_INTERVAL);
-
-    // Load saved token to settings
-    const savedToken = getGitHubToken();
-    if (savedToken) {
-        document.getElementById('settings-token').value = savedToken;
+// Close modals on backdrop click
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('modal-backdrop')) {
+        e.target.closest('.modal').classList.remove('active');
     }
 });

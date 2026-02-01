@@ -3,42 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tennis Court Booking Dashboard</title>
+    <title>TENNIS.SYS // Command Center</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Animated Background -->
+    <div class="bg-effects">
+        <div class="grid-overlay"></div>
+        <div class="scan-line"></div>
+        <div class="particles" id="particles"></div>
+        <div class="glow-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+    </div>
+
     <div class="app">
         <!-- Sidebar -->
         <aside class="sidebar">
             <div class="logo">
-                <i class="fas fa-table-tennis-paddle-ball"></i>
-                <span>Tennis Admin</span>
+                <div class="logo-icon">
+                    <i class="fas fa-table-tennis-paddle-ball"></i>
+                    <div class="logo-pulse"></div>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-main">TENNIS</span>
+                    <span class="logo-sub">.SYS</span>
+                </div>
             </div>
+
+            <div class="system-status">
+                <div class="status-indicator online">
+                    <span class="status-dot"></span>
+                    <span class="status-text">SYSTEM ONLINE</span>
+                </div>
+            </div>
+
             <nav class="nav-menu">
                 <a href="#" class="nav-item active" data-page="overview">
-                    <i class="fas fa-home"></i>
-                    <span>Overview</span>
+                    <div class="nav-icon"><i class="fas fa-th-large"></i></div>
+                    <span class="nav-text">Overview</span>
+                    <div class="nav-indicator"></div>
                 </a>
                 <a href="#" class="nav-item" data-page="calendar">
-                    <i class="fas fa-calendar-alt"></i>
-                    <span>Calendar</span>
+                    <div class="nav-icon"><i class="fas fa-calendar-alt"></i></div>
+                    <span class="nav-text">Calendar</span>
+                    <div class="nav-indicator"></div>
                 </a>
                 <a href="#" class="nav-item" data-page="history">
-                    <i class="fas fa-history"></i>
-                    <span>History</span>
+                    <div class="nav-icon"><i class="fas fa-database"></i></div>
+                    <span class="nav-text">History</span>
+                    <div class="nav-indicator"></div>
+                </a>
+                <a href="#" class="nav-item" data-page="terminal">
+                    <div class="nav-icon"><i class="fas fa-terminal"></i></div>
+                    <span class="nav-text">Terminal</span>
+                    <div class="nav-indicator"></div>
                 </a>
                 <a href="#" class="nav-item" data-page="settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
+                    <div class="nav-icon"><i class="fas fa-sliders-h"></i></div>
+                    <span class="nav-text">Config</span>
+                    <div class="nav-indicator"></div>
                 </a>
             </nav>
+
             <div class="sidebar-footer">
                 <div class="sync-status">
-                    <span class="sync-dot"></span>
-                    <span id="sync-text">Synced</span>
+                    <div class="sync-animation">
+                        <div class="sync-ring"></div>
+                        <div class="sync-ring"></div>
+                        <div class="sync-ring"></div>
+                    </div>
+                    <span id="sync-text">SYNCED</span>
                 </div>
-                <small id="last-sync">--</small>
+                <div class="last-sync-time">
+                    <i class="fas fa-clock"></i>
+                    <span id="last-sync">--:--:--</span>
+                </div>
             </div>
         </aside>
 
@@ -47,14 +91,29 @@
             <!-- Header -->
             <header class="header">
                 <div class="header-left">
-                    <h1 id="page-title">Overview</h1>
-                    <span class="header-date" id="current-date"></span>
+                    <h1 id="page-title">
+                        <span class="title-bracket">[</span>
+                        <span class="title-text">OVERVIEW</span>
+                        <span class="title-bracket">]</span>
+                    </h1>
+                    <div class="header-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-microchip"></i>
+                            <span id="current-date"></span>
+                        </span>
+                        <span class="meta-divider">//</span>
+                        <span class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="current-time"></span>
+                        </span>
+                    </div>
                 </div>
                 <div class="header-right">
-                    <button class="btn btn-icon" onclick="refreshData()" title="Refresh">
+                    <button class="btn-cyber" onclick="refreshData()" title="Refresh Data">
                         <i class="fas fa-sync-alt"></i>
+                        <span>SYNC</span>
                     </button>
-                    <button class="btn btn-icon" onclick="showTokenModal()" title="Settings">
+                    <button class="btn-cyber secondary" onclick="showTokenModal()" title="Configure Token">
                         <i class="fas fa-key"></i>
                     </button>
                 </div>
@@ -62,65 +121,104 @@
 
             <!-- Page: Overview -->
             <div id="page-overview" class="page active">
-                <!-- Stats Cards -->
+                <!-- Stats Grid -->
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon upcoming">
-                            <i class="fas fa-calendar-check"></i>
+                    <div class="stat-card" data-type="upcoming">
+                        <div class="stat-bg"></div>
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-value" id="stat-upcoming">
+                                    <span class="value-num">0</span>
+                                </span>
+                                <span class="stat-label">UPCOMING</span>
+                            </div>
                         </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="stat-upcoming">0</span>
-                            <span class="stat-label">Upcoming</span>
-                        </div>
+                        <div class="stat-glow"></div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon success">
-                            <i class="fas fa-trophy"></i>
+
+                    <div class="stat-card" data-type="success">
+                        <div class="stat-bg"></div>
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-value" id="stat-success">
+                                    <span class="value-num">0</span>
+                                </span>
+                                <span class="stat-label">THIS WEEK</span>
+                            </div>
                         </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="stat-success">0</span>
-                            <span class="stat-label">This Week</span>
-                        </div>
+                        <div class="stat-glow"></div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon rate">
-                            <i class="fas fa-percentage"></i>
+
+                    <div class="stat-card" data-type="rate">
+                        <div class="stat-bg"></div>
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-value" id="stat-rate">
+                                    <span class="value-num">0</span>
+                                    <span class="value-unit">%</span>
+                                </span>
+                                <span class="stat-label">SUCCESS RATE</span>
+                            </div>
                         </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="stat-rate">0%</span>
-                            <span class="stat-label">Success Rate</span>
-                        </div>
+                        <div class="stat-glow"></div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-icon active">
-                            <i class="fas fa-robot"></i>
+
+                    <div class="stat-card" data-type="bots">
+                        <div class="stat-bg"></div>
+                        <div class="stat-content">
+                            <div class="stat-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="stat-data">
+                                <span class="stat-value" id="stat-active">
+                                    <span class="value-num">0</span>
+                                    <span class="value-unit">/3</span>
+                                </span>
+                                <span class="stat-label">ACTIVE BOTS</span>
+                            </div>
                         </div>
-                        <div class="stat-info">
-                            <span class="stat-value" id="stat-active">0/3</span>
-                            <span class="stat-label">Active Bots</span>
-                        </div>
+                        <div class="stat-glow"></div>
                     </div>
                 </div>
 
                 <!-- Main Grid -->
                 <div class="overview-grid">
                     <!-- Upcoming Reservations -->
-                    <section class="card upcoming-card">
+                    <section class="card glass-card upcoming-card">
                         <div class="card-header">
-                            <h2><i class="fas fa-calendar-day"></i> Upcoming Reservations</h2>
+                            <div class="card-title">
+                                <i class="fas fa-satellite-dish"></i>
+                                <span>ACTIVE RESERVATIONS</span>
+                            </div>
+                            <div class="card-status live">
+                                <span class="pulse"></span>
+                                LIVE
+                            </div>
                         </div>
                         <div class="card-body" id="upcoming-reservations">
-                            <div class="empty-state">
-                                <i class="fas fa-calendar-times"></i>
-                                <p>No upcoming reservations</p>
+                            <div class="loading-state">
+                                <div class="loader"></div>
+                                <p>LOADING DATA...</p>
                             </div>
                         </div>
                     </section>
 
                     <!-- User Status Cards -->
-                    <section class="card users-card">
+                    <section class="card glass-card users-card">
                         <div class="card-header">
-                            <h2><i class="fas fa-users"></i> Users</h2>
+                            <div class="card-title">
+                                <i class="fas fa-users-cog"></i>
+                                <span>AGENT STATUS</span>
+                            </div>
                         </div>
                         <div class="card-body" id="user-cards">
                             <!-- Populated by JS -->
@@ -128,9 +226,12 @@
                     </section>
 
                     <!-- Weekly Mini Calendar -->
-                    <section class="card calendar-card">
+                    <section class="card glass-card calendar-card">
                         <div class="card-header">
-                            <h2><i class="fas fa-calendar-week"></i> This Week</h2>
+                            <div class="card-title">
+                                <i class="fas fa-th"></i>
+                                <span>WEEK MATRIX</span>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="mini-calendar" id="mini-calendar">
@@ -139,12 +240,15 @@
                         </div>
                     </section>
 
-                    <!-- Recent Activity -->
-                    <section class="card activity-card">
+                    <!-- Activity Feed -->
+                    <section class="card glass-card activity-card">
                         <div class="card-header">
-                            <h2><i class="fas fa-stream"></i> Recent Activity</h2>
+                            <div class="card-title">
+                                <i class="fas fa-stream"></i>
+                                <span>ACTIVITY LOG</span>
+                            </div>
                         </div>
-                        <div class="card-body" id="recent-activity">
+                        <div class="card-body terminal-style" id="recent-activity">
                             <!-- Populated by JS -->
                         </div>
                     </section>
@@ -154,61 +258,83 @@
             <!-- Page: Calendar -->
             <div id="page-calendar" class="page">
                 <div class="calendar-controls">
-                    <button class="btn btn-secondary" onclick="changeWeek(-1)">
-                        <i class="fas fa-chevron-left"></i> Previous
+                    <button class="btn-cyber" onclick="changeWeek(-1)">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>PREV</span>
                     </button>
-                    <h2 id="calendar-week-title">Week of Jan 1</h2>
-                    <button class="btn btn-secondary" onclick="changeWeek(1)">
-                        Next <i class="fas fa-chevron-right"></i>
+                    <div class="week-display">
+                        <span class="week-label">WEEK OF</span>
+                        <h2 id="calendar-week-title">--</h2>
+                    </div>
+                    <button class="btn-cyber" onclick="changeWeek(1)">
+                        <span>NEXT</span>
+                        <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
                 <div class="full-calendar" id="full-calendar">
                     <!-- Populated by JS -->
                 </div>
                 <div class="calendar-legend">
-                    <span class="legend-item"><span class="legend-dot xbai"></span> Xingjian</span>
-                    <span class="legend-item"><span class="legend-dot yang"></span> Yang</span>
-                    <span class="legend-item"><span class="legend-dot zekai"></span> Zekai</span>
+                    <div class="legend-item">
+                        <span class="legend-dot xbai"></span>
+                        <span>XINGJIAN</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot yang"></span>
+                        <span>YANG</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot zekai"></span>
+                        <span>ZEKAI</span>
+                    </div>
                 </div>
             </div>
 
             <!-- Page: History -->
             <div id="page-history" class="page">
-                <div class="history-filters">
-                    <select id="history-user-filter" onchange="filterHistory()">
-                        <option value="all">All Users</option>
-                        <option value="xbai02b">Xingjian Bai</option>
-                        <option value="yangb">Yang Liu</option>
-                        <option value="zwang43b">Zekai Wang</option>
-                    </select>
-                    <select id="history-status-filter" onchange="filterHistory()">
-                        <option value="all">All Status</option>
-                        <option value="success">Success Only</option>
-                        <option value="failed">Failed Only</option>
-                    </select>
+                <div class="history-controls">
+                    <div class="filter-group">
+                        <label>USER:</label>
+                        <select id="history-user-filter" class="cyber-select" onchange="filterHistory()">
+                            <option value="all">ALL USERS</option>
+                            <option value="xbai02b">XINGJIAN</option>
+                            <option value="yangb">YANG</option>
+                            <option value="zwang43b">ZEKAI</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>STATUS:</label>
+                        <select id="history-status-filter" class="cyber-select" onchange="filterHistory()">
+                            <option value="all">ALL STATUS</option>
+                            <option value="success">SUCCESS</option>
+                            <option value="failed">FAILED</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Stats Summary -->
                 <div class="history-stats">
                     <div class="history-stat">
                         <span class="history-stat-value" id="history-total">0</span>
-                        <span class="history-stat-label">Total Attempts</span>
+                        <span class="history-stat-label">TOTAL OPS</span>
                     </div>
                     <div class="history-stat success">
                         <span class="history-stat-value" id="history-success">0</span>
-                        <span class="history-stat-label">Successful</span>
+                        <span class="history-stat-label">SUCCESS</span>
                     </div>
                     <div class="history-stat failed">
                         <span class="history-stat-value" id="history-failed">0</span>
-                        <span class="history-stat-label">Failed</span>
+                        <span class="history-stat-label">FAILED</span>
                     </div>
                 </div>
 
-                <!-- Booking Heatmap -->
-                <section class="card">
+                <!-- Heatmap -->
+                <section class="card glass-card">
                     <div class="card-header">
-                        <h2><i class="fas fa-fire"></i> Booking Heatmap</h2>
-                        <small>Successful bookings by hour</small>
+                        <div class="card-title">
+                            <i class="fas fa-fire-alt"></i>
+                            <span>BOOKING HEATMAP</span>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="heatmap" id="booking-heatmap">
@@ -218,21 +344,24 @@
                 </section>
 
                 <!-- History Table -->
-                <section class="card">
+                <section class="card glass-card">
                     <div class="card-header">
-                        <h2><i class="fas fa-list"></i> Booking History</h2>
+                        <div class="card-title">
+                            <i class="fas fa-list-ul"></i>
+                            <span>OPERATION LOG</span>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <div class="history-table-wrapper">
-                            <table class="history-table">
+                        <div class="table-wrapper">
+                            <table class="cyber-table">
                                 <thead>
                                     <tr>
-                                        <th>Time</th>
-                                        <th>User</th>
-                                        <th>Date</th>
-                                        <th>Hour</th>
-                                        <th>Court</th>
-                                        <th>Status</th>
+                                        <th>TIMESTAMP</th>
+                                        <th>AGENT</th>
+                                        <th>TARGET DATE</th>
+                                        <th>HOUR</th>
+                                        <th>COURT</th>
+                                        <th>STATUS</th>
                                     </tr>
                                 </thead>
                                 <tbody id="history-table-body">
@@ -244,50 +373,101 @@
                 </section>
             </div>
 
-            <!-- Page: Settings -->
-            <div id="page-settings" class="page">
-                <section class="card">
+            <!-- Page: Terminal -->
+            <div id="page-terminal" class="page">
+                <section class="card glass-card terminal-card">
                     <div class="card-header">
-                        <h2><i class="fas fa-key"></i> GitHub Token</h2>
+                        <div class="card-title">
+                            <i class="fas fa-terminal"></i>
+                            <span>SYSTEM TERMINAL</span>
+                        </div>
+                        <div class="terminal-controls">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <p class="settings-desc">Required for controlling booking scripts (pause/resume/cancel).</p>
+                        <div class="terminal" id="terminal-output">
+                            <div class="terminal-line">
+                                <span class="prompt">root@tennis.sys:~$</span>
+                                <span class="command">system_status --all</span>
+                            </div>
+                        </div>
+                        <div class="terminal-input-wrapper">
+                            <span class="prompt">root@tennis.sys:~$</span>
+                            <input type="text" id="terminal-input" class="terminal-input" placeholder="Enter command..." onkeypress="handleTerminalInput(event)">
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Page: Settings -->
+            <div id="page-settings" class="page">
+                <section class="card glass-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-key"></i>
+                            <span>AUTHENTICATION</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="settings-desc">GitHub Personal Access Token for write operations.</p>
                         <div class="settings-row">
-                            <input type="password" id="settings-token" placeholder="ghp_xxxxxxxxxxxx">
-                            <button class="btn btn-primary" onclick="saveTokenFromSettings()">Save</button>
+                            <input type="password" id="settings-token" class="cyber-input" placeholder="ghp_xxxxxxxxxxxx">
+                            <button class="btn-cyber" onclick="saveTokenFromSettings()">SAVE</button>
                         </div>
                         <p class="settings-hint">
                             <i class="fas fa-info-circle"></i>
-                            Get token from <a href="https://github.com/settings/tokens" target="_blank">GitHub Settings</a>
+                            Generate at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a>
                         </p>
                     </div>
                 </section>
 
-                <section class="card">
+                <section class="card glass-card">
                     <div class="card-header">
-                        <h2><i class="fas fa-clock"></i> Auto Refresh</h2>
+                        <div class="card-title">
+                            <i class="fas fa-sync"></i>
+                            <span>AUTO REFRESH</span>
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="settings-row">
-                            <label>Refresh interval:</label>
-                            <select id="refresh-interval" onchange="updateRefreshInterval()">
-                                <option value="60000">1 minute</option>
-                                <option value="300000" selected>5 minutes</option>
-                                <option value="600000">10 minutes</option>
-                                <option value="0">Manual only</option>
+                            <label>Refresh Interval:</label>
+                            <select id="refresh-interval" class="cyber-select" onchange="updateRefreshInterval()">
+                                <option value="60000">1 MIN</option>
+                                <option value="300000" selected>5 MIN</option>
+                                <option value="600000">10 MIN</option>
+                                <option value="0">MANUAL</option>
                             </select>
                         </div>
                     </div>
                 </section>
 
-                <section class="card">
+                <section class="card glass-card">
                     <div class="card-header">
-                        <h2><i class="fas fa-info-circle"></i> About</h2>
+                        <div class="card-title">
+                            <i class="fas fa-info-circle"></i>
+                            <span>SYSTEM INFO</span>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p>MIT Tennis Court Booking System</p>
-                        <p><small>Automated booking at midnight & 6 AM Eastern</small></p>
-                        <p><small>3 parallel threads for maximum success rate</small></p>
+                    <div class="card-body system-info">
+                        <div class="info-row">
+                            <span class="info-label">VERSION</span>
+                            <span class="info-value">2.0.0-CYBER</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">CODENAME</span>
+                            <span class="info-value">QUANTUM</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">BOOKING WINDOWS</span>
+                            <span class="info-value">00:00 / 06:00 EST</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">PARALLEL THREADS</span>
+                            <span class="info-value">3</span>
+                        </div>
                     </div>
                 </section>
             </div>
@@ -296,34 +476,36 @@
 
     <!-- Modals -->
     <div id="token-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content glass-card">
             <div class="modal-header">
-                <h3><i class="fas fa-key"></i> GitHub Token Required</h3>
+                <h3><i class="fas fa-key"></i> AUTHENTICATION REQUIRED</h3>
                 <button class="modal-close" onclick="closeTokenModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <p>Enter your GitHub Personal Access Token to control booking scripts.</p>
-                <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx">
+                <p>Enter GitHub Personal Access Token for write access.</p>
+                <input type="password" id="github-token-input" class="cyber-input" placeholder="ghp_xxxxxxxxxxxx">
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeTokenModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="saveToken()">Save Token</button>
+                <button class="btn-cyber secondary" onclick="closeTokenModal()">CANCEL</button>
+                <button class="btn-cyber" onclick="saveToken()">AUTHENTICATE</button>
             </div>
         </div>
     </div>
 
     <div id="confirm-modal" class="modal">
-        <div class="modal-content">
+        <div class="modal-backdrop"></div>
+        <div class="modal-content glass-card">
             <div class="modal-header">
-                <h3 id="confirm-title">Confirm Action</h3>
+                <h3 id="confirm-title"><i class="fas fa-exclamation-triangle"></i> CONFIRM ACTION</h3>
                 <button class="modal-close" onclick="closeConfirmModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <p id="confirm-message">Are you sure?</p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
-                <button class="btn btn-danger" id="confirm-btn" onclick="confirmAction()">Confirm</button>
+                <button class="btn-cyber secondary" onclick="closeConfirmModal()">ABORT</button>
+                <button class="btn-cyber danger" id="confirm-btn" onclick="confirmAction()">EXECUTE</button>
             </div>
         </div>
     </div>
