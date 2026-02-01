@@ -3,83 +3,327 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tennis Court Booking Admin</title>
+    <title>Tennis Court Booking Dashboard</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Tennis Court Booking Admin</h1>
-            <div class="status-bar">
-                <span id="last-updated">Last updated: --</span>
-                <span id="auto-refresh-status">Auto-refresh: ON</span>
-                <button id="refresh-btn" onclick="refreshData()">Refresh Now</button>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fas fa-table-tennis-paddle-ball"></i>
+                <span>Tennis Admin</span>
             </div>
-        </header>
-
-        <main>
-            <!-- User Status Section -->
-            <section class="section">
-                <h2>User Status</h2>
-                <div id="user-status" class="user-grid">
-                    <!-- Populated by JavaScript -->
-                    <div class="loading">Loading...</div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active" data-page="overview">
+                    <i class="fas fa-home"></i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="nav-item" data-page="calendar">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendar</span>
+                </a>
+                <a href="#" class="nav-item" data-page="history">
+                    <i class="fas fa-history"></i>
+                    <span>History</span>
+                </a>
+                <a href="#" class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sync-status">
+                    <span class="sync-dot"></span>
+                    <span id="sync-text">Synced</span>
                 </div>
-            </section>
+                <small id="last-sync">--</small>
+            </div>
+        </aside>
 
-            <!-- Current Reservations Section -->
-            <section class="section">
-                <h2>Current Reservations</h2>
-                <div id="reservations" class="reservations-list">
-                    <!-- Populated by JavaScript -->
-                    <div class="loading">Loading...</div>
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <h1 id="page-title">Overview</h1>
+                    <span class="header-date" id="current-date"></span>
                 </div>
-            </section>
+                <div class="header-right">
+                    <button class="btn btn-icon" onclick="refreshData()" title="Refresh">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button class="btn btn-icon" onclick="showTokenModal()" title="Settings">
+                        <i class="fas fa-key"></i>
+                    </button>
+                </div>
+            </header>
 
-            <!-- Recent Booking History Section -->
-            <section class="section">
-                <h2>Recent Booking History</h2>
-                <div id="booking-history" class="history-list">
-                    <!-- Populated by JavaScript -->
-                    <div class="loading">Loading...</div>
+            <!-- Page: Overview -->
+            <div id="page-overview" class="page active">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon upcoming">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-upcoming">0</span>
+                            <span class="stat-label">Upcoming</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon success">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-success">0</span>
+                            <span class="stat-label">This Week</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon rate">
+                            <i class="fas fa-percentage"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-rate">0%</span>
+                            <span class="stat-label">Success Rate</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon active">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="stat-active">0/3</span>
+                            <span class="stat-label">Active Bots</span>
+                        </div>
+                    </div>
                 </div>
-            </section>
 
-            <!-- Pending Actions Section -->
-            <section class="section">
-                <h2>Pending Actions</h2>
-                <div id="pending-actions" class="actions-list">
-                    <p class="empty-state">No pending actions</p>
+                <!-- Main Grid -->
+                <div class="overview-grid">
+                    <!-- Upcoming Reservations -->
+                    <section class="card upcoming-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-calendar-day"></i> Upcoming Reservations</h2>
+                        </div>
+                        <div class="card-body" id="upcoming-reservations">
+                            <div class="empty-state">
+                                <i class="fas fa-calendar-times"></i>
+                                <p>No upcoming reservations</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- User Status Cards -->
+                    <section class="card users-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-users"></i> Users</h2>
+                        </div>
+                        <div class="card-body" id="user-cards">
+                            <!-- Populated by JS -->
+                        </div>
+                    </section>
+
+                    <!-- Weekly Mini Calendar -->
+                    <section class="card calendar-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-calendar-week"></i> This Week</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="mini-calendar" id="mini-calendar">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Recent Activity -->
+                    <section class="card activity-card">
+                        <div class="card-header">
+                            <h2><i class="fas fa-stream"></i> Recent Activity</h2>
+                        </div>
+                        <div class="card-body" id="recent-activity">
+                            <!-- Populated by JS -->
+                        </div>
+                    </section>
                 </div>
-            </section>
+            </div>
+
+            <!-- Page: Calendar -->
+            <div id="page-calendar" class="page">
+                <div class="calendar-controls">
+                    <button class="btn btn-secondary" onclick="changeWeek(-1)">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <h2 id="calendar-week-title">Week of Jan 1</h2>
+                    <button class="btn btn-secondary" onclick="changeWeek(1)">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="full-calendar" id="full-calendar">
+                    <!-- Populated by JS -->
+                </div>
+                <div class="calendar-legend">
+                    <span class="legend-item"><span class="legend-dot xbai"></span> Xingjian</span>
+                    <span class="legend-item"><span class="legend-dot yang"></span> Yang</span>
+                    <span class="legend-item"><span class="legend-dot zekai"></span> Zekai</span>
+                </div>
+            </div>
+
+            <!-- Page: History -->
+            <div id="page-history" class="page">
+                <div class="history-filters">
+                    <select id="history-user-filter" onchange="filterHistory()">
+                        <option value="all">All Users</option>
+                        <option value="xbai02b">Xingjian Bai</option>
+                        <option value="yangb">Yang Liu</option>
+                        <option value="zwang43b">Zekai Wang</option>
+                    </select>
+                    <select id="history-status-filter" onchange="filterHistory()">
+                        <option value="all">All Status</option>
+                        <option value="success">Success Only</option>
+                        <option value="failed">Failed Only</option>
+                    </select>
+                </div>
+
+                <!-- Stats Summary -->
+                <div class="history-stats">
+                    <div class="history-stat">
+                        <span class="history-stat-value" id="history-total">0</span>
+                        <span class="history-stat-label">Total Attempts</span>
+                    </div>
+                    <div class="history-stat success">
+                        <span class="history-stat-value" id="history-success">0</span>
+                        <span class="history-stat-label">Successful</span>
+                    </div>
+                    <div class="history-stat failed">
+                        <span class="history-stat-value" id="history-failed">0</span>
+                        <span class="history-stat-label">Failed</span>
+                    </div>
+                </div>
+
+                <!-- Booking Heatmap -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-fire"></i> Booking Heatmap</h2>
+                        <small>Successful bookings by hour</small>
+                    </div>
+                    <div class="card-body">
+                        <div class="heatmap" id="booking-heatmap">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- History Table -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-list"></i> Booking History</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="history-table-wrapper">
+                            <table class="history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                        <th>Hour</th>
+                                        <th>Court</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-table-body">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Page: Settings -->
+            <div id="page-settings" class="page">
+                <section class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-key"></i> GitHub Token</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="settings-desc">Required for controlling booking scripts (pause/resume/cancel).</p>
+                        <div class="settings-row">
+                            <input type="password" id="settings-token" placeholder="ghp_xxxxxxxxxxxx">
+                            <button class="btn btn-primary" onclick="saveTokenFromSettings()">Save</button>
+                        </div>
+                        <p class="settings-hint">
+                            <i class="fas fa-info-circle"></i>
+                            Get token from <a href="https://github.com/settings/tokens" target="_blank">GitHub Settings</a>
+                        </p>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-clock"></i> Auto Refresh</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="settings-row">
+                            <label>Refresh interval:</label>
+                            <select id="refresh-interval" onchange="updateRefreshInterval()">
+                                <option value="60000">1 minute</option>
+                                <option value="300000" selected>5 minutes</option>
+                                <option value="600000">10 minutes</option>
+                                <option value="0">Manual only</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-info-circle"></i> About</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>MIT Tennis Court Booking System</p>
+                        <p><small>Automated booking at midnight & 6 AM Eastern</small></p>
+                        <p><small>3 parallel threads for maximum success rate</small></p>
+                    </div>
+                </section>
+            </div>
         </main>
-
-        <footer>
-            <p>MIT Tennis Court Booking System</p>
-        </footer>
     </div>
 
-    <!-- GitHub Token Modal -->
-    <div id="token-modal" class="modal" style="display: none;">
+    <!-- Modals -->
+    <div id="token-modal" class="modal">
         <div class="modal-content">
-            <h3>Enter GitHub Token</h3>
-            <p>A GitHub Personal Access Token is required to control the booking system.</p>
-            <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx">
-            <div class="modal-buttons">
-                <button onclick="saveToken()">Save</button>
-                <button onclick="closeTokenModal()">Cancel</button>
+            <div class="modal-header">
+                <h3><i class="fas fa-key"></i> GitHub Token Required</h3>
+                <button class="modal-close" onclick="closeTokenModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Enter your GitHub Personal Access Token to control booking scripts.</p>
+                <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTokenModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveToken()">Save Token</button>
             </div>
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirm-modal" class="modal" style="display: none;">
+    <div id="confirm-modal" class="modal">
         <div class="modal-content">
-            <h3 id="confirm-title">Confirm Action</h3>
-            <p id="confirm-message">Are you sure?</p>
-            <div class="modal-buttons">
-                <button id="confirm-yes" onclick="confirmAction()">Yes</button>
-                <button onclick="closeConfirmModal()">Cancel</button>
+            <div class="modal-header">
+                <h3 id="confirm-title">Confirm Action</h3>
+                <button class="modal-close" onclick="closeConfirmModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message">Are you sure?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+                <button class="btn btn-danger" id="confirm-btn" onclick="confirmAction()">Confirm</button>
             </div>
         </div>
     </div>
