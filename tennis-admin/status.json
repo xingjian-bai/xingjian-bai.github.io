@@ -1,29 +1,23 @@
 {
-  "last_sync": "2026-02-01T18:39:32.821238",
+  "last_sync": "2026-02-01T18:52:00.423633",
   "script_status": {
     "xbai02b": {
       "running": true,
       "pid": 2897796,
-      "last_seen": "2026-02-01T18:39:16.581321",
+      "last_seen": "2026-02-01T18:51:47.445403",
       "paused": false
     },
     "yangb": {
       "running": true,
       "pid": 2898012,
-      "last_seen": "2026-02-01T18:39:16.581334",
+      "last_seen": "2026-02-01T18:51:47.445417",
       "paused": false
     },
     "zwang43b": {
       "running": true,
       "pid": 2898013,
-      "last_seen": "2026-02-01T18:39:16.581336",
+      "last_seen": "2026-02-01T18:51:47.445420",
       "paused": false
-    },
-    "ShivamDuggal4b": {
-      "running": false,
-      "pid": null,
-      "last_seen": null,
-      "paused": true
     }
   },
   "reservations": [
