@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tennis Court Booking Admin</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tennis Court Booking Admin</h1>
+            <div class="status-bar">
+                <span id="last-updated">Last updated: --</span>
+                <span id="auto-refresh-status">Auto-refresh: ON</span>
+                <button id="refresh-btn" onclick="refreshData()">Refresh Now</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- User Status Section -->
+            <section class="section">
+                <h2>User Status</h2>
+                <div id="user-status" class="user-grid">
+                    <!-- Populated by JavaScript -->
+                    <div class="loading">Loading...</div>
+                </div>
+            </section>
+
+            <!-- Current Reservations Section -->
+            <section class="section">
+                <h2>Current Reservations</h2>
+                <div id="reservations" class="reservations-list">
+                    <!-- Populated by JavaScript -->
+                    <div class="loading">Loading...</div>
+                </div>
+            </section>
+
+            <!-- Recent Booking History Section -->
+            <section class="section">
+                <h2>Recent Booking History</h2>
+                <div id="booking-history" class="history-list">
+                    <!-- Populated by JavaScript -->
+                    <div class="loading">Loading...</div>
+                </div>
+            </section>
+
+            <!-- Pending Actions Section -->
+            <section class="section">
+                <h2>Pending Actions</h2>
+                <div id="pending-actions" class="actions-list">
+                    <p class="empty-state">No pending actions</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>MIT Tennis Court Booking System</p>
+        </footer>
+    </div>
+
+    <!-- GitHub Token Modal -->
+    <div id="token-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Enter GitHub Token</h3>
+            <p>A GitHub Personal Access Token is required to control the booking system.</p>
+            <input type="password" id="github-token-input" placeholder="ghp_xxxxxxxxxxxx">
+            <div class="modal-buttons">
+                <button onclick="saveToken()">Save</button>
+                <button onclick="closeTokenModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3 id="confirm-title">Confirm Action</h3>
+            <p id="confirm-message">Are you sure?</p>
+            <div class="modal-buttons">
+                <button id="confirm-yes" onclick="confirmAction()">Yes</button>
+                <button onclick="closeConfirmModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

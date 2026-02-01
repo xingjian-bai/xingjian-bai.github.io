@@ -1,0 +1,27 @@
+{
+  "last_sync": null,
+  "script_status": {
+    "xbai02b": {
+      "running": true,
+      "pid": null,
+      "last_seen": null
+    },
+    "yangb": {
+      "running": true,
+      "pid": null,
+      "last_seen": null
+    },
+    "zwang43b": {
+      "running": true,
+      "pid": null,
+      "last_seen": null
+    },
+    "ShivamDuggal4b": {
+      "running": false,
+      "pid": null,
+      "last_seen": null
+    }
+  },
+  "reservations": [],
+  "bookings": []
+}
