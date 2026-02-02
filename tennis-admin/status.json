@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-02-02T09:37:25.318973",
+  "last_sync": "2026-02-02T10:33:21.025981",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         3170225,
         3170230
       ],
-      "last_seen": "2026-02-02T09:37:08.765413",
+      "last_seen": "2026-02-02T10:32:59.101255",
       "paused": false
     },
     "yangb": {
@@ -20,7 +20,7 @@
         3170240,
         3170257
       ],
-      "last_seen": "2026-02-02T09:37:08.765419",
+      "last_seen": "2026-02-02T10:32:59.101260",
       "paused": false
     },
     "zwang43b": {
@@ -31,11 +31,31 @@
         3170284,
         3170294
       ],
-      "last_seen": "2026-02-02T09:37:08.765424",
+      "last_seen": "2026-02-02T10:32:59.101264",
       "paused": false
     }
   },
   "total_copies": 9,
+  "users": [
+    {
+      "name": "xbai02b",
+      "status": "RUNNING",
+      "instances": 3,
+      "paused": false
+    },
+    {
+      "name": "yangb",
+      "status": "RUNNING",
+      "instances": 3,
+      "paused": false
+    },
+    {
+      "name": "zwang43b",
+      "status": "RUNNING",
+      "instances": 3,
+      "paused": false
+    }
+  ],
   "reservations": [
     {
       "date": "2026-02-02",
