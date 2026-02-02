@@ -1093,6 +1093,48 @@ body {
     color: var(--red);
 }
 
+.activity-status.pending {
+    color: var(--yellow);
+}
+
+/* ==================== Mission Queue ==================== */
+.mission-header {
+    padding: 8px 0;
+    margin-bottom: 8px;
+}
+
+.mission-header .next-window,
+.mission-header .target-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+    font-size: 11px;
+}
+
+.mission-header .next-window {
+    color: var(--cyan);
+}
+
+.mission-header .target-date {
+    color: var(--magenta);
+}
+
+.mission-header strong {
+    color: var(--text-primary);
+}
+
+.mission-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+    margin: 8px 0;
+}
+
+.activity-item .activity-user {
+    min-width: 30px;
+    font-weight: bold;
+}
+
 /* ==================== Full Calendar ==================== */
 .calendar-controls {
     display: flex;

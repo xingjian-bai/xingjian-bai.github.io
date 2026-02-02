@@ -651,36 +651,58 @@ function renderRecentActivity() {
     const container = document.getElementById('recent-activity');
     if (!container) return;
 
-    // Show upcoming reservations (MISSION QUEUE) instead of booking attempts
-    const reservations = state.status?.reservations || [];
+    // Show NEXT BOOKING WINDOW and planned attempts
+    const nextBooking = state.status?.next_booking;
 
-    if (reservations.length === 0) {
-        container.innerHTML = '<div class="empty-state"><i class="fas fa-satellite-dish"></i><p>NO SCHEDULED MISSIONS</p></div>';
+    if (!nextBooking || !nextBooking.planned_attempts || nextBooking.planned_attempts.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-satellite-dish"></i><p>NO PLANNED MISSIONS</p></div>';
         return;
     }
 
-    // Sort by date and time
-    const sorted = [...reservations].sort((a, b) => {
-        const dateA = `${a.date} ${a.time}`;
-        const dateB = `${b.date} ${b.time}`;
-        return dateA.localeCompare(dateB);
+    // Header showing next window
+    const windowDate = new Date(nextBooking.next_window);
+    const windowStr = windowDate.toLocaleString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
     });
 
-    let html = '';
-    sorted.slice(0, 8).forEach(res => {
-        const date = new Date(res.date + 'T' + res.time);
-        const dateStr = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-        const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
-        const userClass = getUserClass(res.user);
+    let html = `
+        <div class="mission-header">
+            <div class="next-window">
+                <i class="fas fa-clock"></i>
+                <span>NEXT WINDOW: <strong>${windowStr}</strong></span>
+            </div>
+            <div class="target-date">
+                <i class="fas fa-crosshairs"></i>
+                <span>TARGET: <strong>${nextBooking.target_date} (${nextBooking.target_weekday})</strong></span>
+            </div>
+        </div>
+        <div class="mission-divider"></div>
+    `;
+
+    // Group by user
+    const byUser = {};
+    nextBooking.planned_attempts.forEach(attempt => {
+        if (!byUser[attempt.user]) byUser[attempt.user] = [];
+        byUser[attempt.user].push(attempt);
+    });
+
+    Object.entries(byUser).forEach(([userId, attempts]) => {
+        const userClass = getUserClass(userId);
+        const userName = getUserShortName(userId);
+        const hours = attempts.map(a => `${a.hour}:00`).join(', ');
 
         html += `
             <div class="activity-item">
-                <span class="activity-time">${timeStr}</span>
+                <span class="activity-user ${userClass}">${userName}</span>
                 <span class="activity-content">
-                    <span class="activity-user ${userClass}">${getUserShortName(res.user)}</span>
-                    <span class="activity-action">${dateStr} · ${res.court || 'Court'}</span>
-                    <span class="activity-status success">
-                        <i class="fas fa-check-circle"></i>
+                    <span class="activity-action">Will try: ${hours}</span>
+                    <span class="activity-status pending">
+                        <i class="fas fa-hourglass-half"></i>
                     </span>
                 </span>
             </div>
