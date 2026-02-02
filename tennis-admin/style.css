@@ -1437,6 +1437,33 @@ body {
     color: var(--red);
 }
 
+/* Success row highlighting */
+.cyber-table tr.success-row {
+    background: rgba(0, 255, 136, 0.05);
+}
+
+.cyber-table tr.success-row:hover td {
+    background: rgba(0, 255, 136, 0.1);
+}
+
+/* Timestamp cell for successful bookings */
+.cyber-table .timestamp-cell {
+    font-family: var(--font-mono);
+    white-space: nowrap;
+}
+
+/* Timing badge showing seconds after hour */
+.timing-badge {
+    display: inline-block;
+    background: var(--cyan-dim);
+    color: var(--cyan);
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: bold;
+    margin-left: 4px;
+}
+
 /* ==================== Terminal Page ==================== */
 .terminal-card .card-body {
     padding: 0;

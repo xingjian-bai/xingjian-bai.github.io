@@ -842,15 +842,41 @@ function renderHistoryTable(bookings) {
 
     let html = '';
     bookings.slice(0, 50).forEach(b => {
-        const time = new Date(b.timestamp).toLocaleString('en-US', {
-            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
-        });
         const statusClass = b.success ? 'success' : 'failed';
         const statusText = b.success ? 'SUCCESS' : 'FAILED';
 
+        // For successful bookings, show PRECISE timestamp with seconds and milliseconds
+        let timeDisplay;
+        if (b.success) {
+            // Use timestamp_display if available (new format), otherwise parse timestamp
+            if (b.timestamp_display) {
+                timeDisplay = b.timestamp_display;
+            } else {
+                const ts = new Date(b.timestamp);
+                const ms = ts.getMilliseconds().toString().padStart(3, '0');
+                timeDisplay = ts.toLocaleString('en-US', {
+                    month: 'short', day: 'numeric',
+                    hour: '2-digit', minute: '2-digit', second: '2-digit',
+                    hour12: false
+                }) + '.' + ms;
+            }
+            // Also show seconds after hour for timing analysis
+            const secsAfter = b.seconds_after_hour;
+            if (secsAfter !== undefined) {
+                timeDisplay += ` <span class="timing-badge">+${secsAfter.toFixed(1)}s</span>`;
+            }
+        } else {
+            const ts = new Date(b.timestamp);
+            timeDisplay = ts.toLocaleString('en-US', {
+                month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+        }
+
+        const rowClass = b.success ? 'success-row' : '';
+
         html += `
-            <tr>
-                <td>${time}</td>
+            <tr class="${rowClass}">
+                <td class="timestamp-cell">${timeDisplay}</td>
                 <td>${getUserShortName(b.user)}</td>
                 <td>${b.booking_date}</td>
                 <td>${b.booking_hour}:00</td>
