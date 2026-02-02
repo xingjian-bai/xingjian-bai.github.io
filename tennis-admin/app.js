@@ -9,7 +9,7 @@ const CONFIG = {
     GITHUB_REPO: 'xingjian-bai.github.io',
     STATUS_FILE: 'tennis-admin/status.json',
     CONTROL_FILE: 'tennis-admin/control.json',
-    REFRESH_INTERVAL: 5 * 60 * 1000,
+    REFRESH_INTERVAL: 60 * 60 * 1000,  // 1 hour (also refreshes on page focus/visibility)
     USERS: {
         'xbai02b': { name: 'Xingjian Bai', short: 'XB', color: 'xbai', initial: 'X' },
         'yangb': { name: 'Yang Liu', short: 'YL', color: 'yang', initial: 'Y' },
@@ -38,7 +38,37 @@ document.addEventListener('DOMContentLoaded', () => {
     initTerminal();
     refreshData();
     startAutoRefresh();
+    initVisibilityRefresh();
 });
+
+// ==================== Visibility-based Refresh ====================
+// Refresh when user returns to page (tab becomes visible or window gains focus)
+function initVisibilityRefresh() {
+    let lastRefresh = Date.now();
+    const MIN_REFRESH_GAP = 30 * 1000;  // Don't refresh more than once per 30 seconds
+
+    // Refresh when tab becomes visible
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            const timeSinceLastRefresh = Date.now() - lastRefresh;
+            if (timeSinceLastRefresh > MIN_REFRESH_GAP) {
+                console.log('Tab visible - refreshing data');
+                lastRefresh = Date.now();
+                refreshData();
+            }
+        }
+    });
+
+    // Also refresh when window gains focus (clicking into the window)
+    window.addEventListener('focus', () => {
+        const timeSinceLastRefresh = Date.now() - lastRefresh;
+        if (timeSinceLastRefresh > MIN_REFRESH_GAP) {
+            console.log('Window focused - refreshing data');
+            lastRefresh = Date.now();
+            refreshData();
+        }
+    });
+}
 
 // ==================== Particle Effects ====================
 function initParticles() {
@@ -210,7 +240,7 @@ function processCommand(cmd) {
         case 'about':
             addTerminalLine('TENNIS.SYS v2.0.0-CYBER', 'info');
             addTerminalLine('MIT Recreation Court Booking System', 'output');
-            addTerminalLine('Booking windows: 00:00 / 06:00 EST', 'output');
+            addTerminalLine('Booking window: 06:00 EST only', 'output');
             addTerminalLine('Parallel threads: 3', 'output');
             break;
 
