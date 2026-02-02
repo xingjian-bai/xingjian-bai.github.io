@@ -858,7 +858,15 @@ body {
     font-size: 13px;
     font-weight: 500;
     color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.booked-at {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--green);
     margin-bottom: 6px;
+    opacity: 0.9;
 }
 
 .reservation-details {

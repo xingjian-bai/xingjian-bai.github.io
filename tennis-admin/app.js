@@ -542,6 +542,17 @@ function renderUpcomingReservations() {
     if (!container) return;
 
     const reservations = state.status?.reservations || [];
+    const bookings = state.status?.bookings || [];
+
+    // Build a map of successful bookings by user+date+hour for quick lookup
+    const bookingMap = {};
+    bookings.filter(b => b.success).forEach(b => {
+        const key = `${b.user}_${b.booking_date}_${b.booking_hour}`;
+        // Keep the earliest successful booking (in case of duplicates)
+        if (!bookingMap[key]) {
+            bookingMap[key] = b;
+        }
+    });
 
     if (reservations.length === 0) {
         container.innerHTML = `
@@ -558,10 +569,30 @@ function renderUpcomingReservations() {
         const userClass = getUserClass(res.user);
         const userColor = userClass === 'xbai' ? '#00f0ff' : (userClass === 'yang' ? '#ff00aa' : '#00ff88');
 
+        // Look up when this reservation was booked
+        const resHour = parseInt(res.time);  // "14:00" -> 14
+        const bookingKey = `${res.user}_${res.date}_${resHour}`;
+        const booking = bookingMap[bookingKey];
+
+        // Format booking timestamp with 0.01s precision
+        let bookedAtHtml = '';
+        if (booking && booking.timestamp) {
+            const ts = new Date(booking.timestamp);
+            const timeStr = ts.toLocaleTimeString('en-US', {
+                hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+            });
+            // Add centiseconds (0.01s precision)
+            const ms = ts.getMilliseconds();
+            const centiseconds = Math.floor(ms / 10).toString().padStart(2, '0');
+            const dateStr = ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            bookedAtHtml = `<div class="booked-at">Booked: ${dateStr} ${timeStr}.${centiseconds}</div>`;
+        }
+
         html += `
             <div class="reservation-item" style="--user-color: ${userColor}">
                 <div class="reservation-main">
                     <span class="reservation-date">${res.weekday || ''} ${res.date} @ ${res.time}</span>
+                    ${bookedAtHtml}
                     <div class="reservation-details">
                         <span>${res.court || 'Court TBD'}</span>
                         <span class="reservation-user">
