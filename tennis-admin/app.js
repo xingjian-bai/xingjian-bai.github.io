@@ -238,11 +238,12 @@ function runSystemStatus() {
     addTerminalLine(`Last sync: ${lastSync}`, 'output');
     addTerminalLine(`Active reservations: ${reservations.length}`, 'output');
 
-    let running = 0;
+    let runningCopies = 0;
     Object.entries(scriptStatus).forEach(([user, status]) => {
-        if (status.running) running++;
+        if (status.running) runningCopies += status.copies || 1;
     });
-    addTerminalLine(`Active bots: ${running}/3`, running === 3 ? 'success' : 'output');
+    const totalExpected = state.status.total_copies || 9;
+    addTerminalLine(`Active bots: ${runningCopies}/${totalExpected}`, runningCopies === totalExpected ? 'success' : 'output');
     addTerminalLine('===================', 'info');
 }
 
@@ -495,25 +496,35 @@ function renderStats() {
         successEl.innerHTML = `<span class="value-num">${thisWeekSuccess}</span>`;
     }
 
-    // Success rate
-    const recentBookings = bookings.slice(0, 50);
-    const successCount = recentBookings.filter(b => b.success).length;
-    const rate = recentBookings.length > 0 ? Math.round((successCount / recentBookings.length) * 100) : 0;
+    // Success rate - use pre-calculated stats from server if available
+    const stats = state.status.stats || {};
+    let rate;
+    if (stats.success_rate !== undefined) {
+        rate = stats.success_rate;
+    } else {
+        // Fallback: calculate from bookings
+        const recentBookings = bookings.slice(0, 100);
+        const successCount = recentBookings.filter(b => b.success).length;
+        rate = recentBookings.length > 0 ? Math.round((successCount / recentBookings.length) * 100) : 0;
+    }
 
     const rateEl = document.getElementById('stat-rate');
     if (rateEl) {
         rateEl.innerHTML = `<span class="value-num">${rate}</span><span class="value-unit">%</span>`;
     }
 
-    // Active bots
-    let activeCount = 0;
+    // Active bots - count total copies across all users
+    let activeCopies = 0;
+    let totalExpected = state.status.total_copies || 9; // Default to 9 (3 users × 3 copies)
     Object.values(scriptStatus).forEach(status => {
-        if (status.running && !status.paused) activeCount++;
+        if (status.running && !status.paused) {
+            activeCopies += status.copies || 1;
+        }
     });
 
     const activeEl = document.getElementById('stat-active');
     if (activeEl) {
-        activeEl.innerHTML = `<span class="value-num">${activeCount}</span><span class="value-unit">/3</span>`;
+        activeEl.innerHTML = `<span class="value-num">${activeCopies}</span><span class="value-unit">/${totalExpected}</span>`;
     }
 }
 
@@ -640,29 +651,36 @@ function renderRecentActivity() {
     const container = document.getElementById('recent-activity');
     if (!container) return;
 
-    const bookings = state.status?.bookings || [];
+    // Show upcoming reservations (MISSION QUEUE) instead of booking attempts
+    const reservations = state.status?.reservations || [];
 
-    if (bookings.length === 0) {
-        container.innerHTML = '<div class="empty-state"><p>NO ACTIVITY DATA</p></div>';
+    if (reservations.length === 0) {
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-satellite-dish"></i><p>NO SCHEDULED MISSIONS</p></div>';
         return;
     }
 
+    // Sort by date and time
+    const sorted = [...reservations].sort((a, b) => {
+        const dateA = `${a.date} ${a.time}`;
+        const dateB = `${b.date} ${b.time}`;
+        return dateA.localeCompare(dateB);
+    });
+
     let html = '';
-    bookings.slice(0, 8).forEach(booking => {
-        const time = new Date(booking.timestamp).toLocaleTimeString('en-US', {
-            hour: '2-digit', minute: '2-digit', hour12: false
-        });
-        const statusClass = booking.success ? 'success' : 'failed';
-        const statusIcon = booking.success ? 'check' : 'times';
+    sorted.slice(0, 8).forEach(res => {
+        const date = new Date(res.date + 'T' + res.time);
+        const dateStr = date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const userClass = getUserClass(res.user);
 
         html += `
             <div class="activity-item">
-                <span class="activity-time">${time}</span>
+                <span class="activity-time">${timeStr}</span>
                 <span class="activity-content">
-                    <span class="activity-user">${getUserShortName(booking.user)}</span>
-                    <span class="activity-action">attempted ${booking.booking_date} ${booking.booking_hour}:00</span>
-                    <span class="activity-status ${statusClass}">
-                        <i class="fas fa-${statusIcon}"></i>
+                    <span class="activity-user ${userClass}">${getUserShortName(res.user)}</span>
+                    <span class="activity-action">${dateStr} · ${res.court || 'Court'}</span>
+                    <span class="activity-status success">
+                        <i class="fas fa-check-circle"></i>
                     </span>
                 </span>
             </div>
