@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-02-02T10:33:21.025981",
+  "last_sync": "2026-02-02T10:34:35.959718",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         3170225,
         3170230
       ],
-      "last_seen": "2026-02-02T10:32:59.101255",
+      "last_seen": "2026-02-02T10:34:19.275953",
       "paused": false
     },
     "yangb": {
@@ -20,7 +20,7 @@
         3170240,
         3170257
       ],
-      "last_seen": "2026-02-02T10:32:59.101260",
+      "last_seen": "2026-02-02T10:34:19.275958",
       "paused": false
     },
     "zwang43b": {
@@ -31,7 +31,7 @@
         3170284,
         3170294
       ],
-      "last_seen": "2026-02-02T10:32:59.101264",
+      "last_seen": "2026-02-02T10:34:19.275962",
       "paused": false
     }
   },
@@ -1324,8 +1324,8 @@
     ]
   },
   "stats": {
-    "total_attempts": 50,
-    "successful_attempts": 0,
-    "success_rate": 0.0
+    "total_attempts": 12987,
+    "successful_attempts": 79,
+    "success_rate": 0.0061
   }
 }
