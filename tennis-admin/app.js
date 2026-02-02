@@ -545,9 +545,18 @@ function renderUpcomingReservations() {
     const bookings = state.status?.bookings || [];
 
     // Build a map of successful bookings by user+date+hour for quick lookup
+    // Use time_slot (actual confirmed time) if available, otherwise fall back to booking_date
     const bookingMap = {};
     bookings.filter(b => b.success).forEach(b => {
-        const key = `${b.user}_${b.booking_date}_${b.booking_hour}`;
+        // Extract actual date/hour from time_slot if available (more accurate than booking_date)
+        let actualDate = b.booking_date;
+        let actualHour = b.booking_hour;
+        if (b.time_slot) {
+            const ts = new Date(b.time_slot);
+            actualDate = formatDateStr(ts);  // Use local date formatting
+            actualHour = ts.getHours();
+        }
+        const key = `${b.user}_${actualDate}_${actualHour}`;
         // Keep the earliest successful booking (in case of duplicates)
         if (!bookingMap[key]) {
             bookingMap[key] = b;
@@ -657,7 +666,13 @@ function renderMiniCalendar() {
 
     const bookingsByDate = {};
     [...bookings.filter(b => b.success), ...reservations].forEach(b => {
-        const date = b.booking_date || b.date;
+        // For bookings, use time_slot (actual confirmed time) if available
+        let date;
+        if (b.time_slot) {
+            date = formatDateStr(new Date(b.time_slot));
+        } else {
+            date = b.booking_date || b.date;
+        }
         if (!bookingsByDate[date]) bookingsByDate[date] = [];
         bookingsByDate[date].push(b);
     });
@@ -774,8 +789,16 @@ function renderFullCalendar() {
 
     const bookingMap = {};
     [...bookings.filter(b => b.success), ...reservations].forEach(b => {
-        const date = b.booking_date || b.date;
-        const hour = b.booking_hour || parseInt(b.time);
+        // For bookings, use time_slot (actual confirmed time) if available
+        let date, hour;
+        if (b.time_slot) {
+            const ts = new Date(b.time_slot);
+            date = formatDateStr(ts);
+            hour = ts.getHours();
+        } else {
+            date = b.booking_date || b.date;
+            hour = b.booking_hour || parseInt(b.time);
+        }
         const key = `${date}-${hour}`;
         if (!bookingMap[key]) bookingMap[key] = [];
         bookingMap[key].push(b);
@@ -851,9 +874,17 @@ function renderHeatmap(bookings) {
 
     const heatData = {};
     bookings.filter(b => b.success).forEach(b => {
-        const date = new Date(b.booking_date || b.timestamp);
-        const day = date.getDay();
-        const hour = b.booking_hour;
+        // Use time_slot (actual confirmed time) if available
+        let day, hour;
+        if (b.time_slot) {
+            const ts = new Date(b.time_slot);
+            day = ts.getDay();
+            hour = ts.getHours();
+        } else {
+            const date = new Date(b.booking_date || b.timestamp);
+            day = date.getDay();
+            hour = b.booking_hour;
+        }
         const key = `${day}-${hour}`;
         heatData[key] = (heatData[key] || 0) + 1;
     });
@@ -914,12 +945,21 @@ function renderHistoryTable(bookings) {
 
         const rowClass = b.success ? 'success-row' : '';
 
+        // Use time_slot (actual confirmed time) if available for date/hour display
+        let displayDate = b.booking_date;
+        let displayHour = b.booking_hour;
+        if (b.time_slot) {
+            const ts = new Date(b.time_slot);
+            displayDate = formatDateStr(ts);
+            displayHour = ts.getHours();
+        }
+
         html += `
             <tr class="${rowClass}">
                 <td class="timestamp-cell">${timeDisplay}</td>
                 <td>${getUserShortName(b.user)}</td>
-                <td>${b.booking_date}</td>
-                <td>${b.booking_hour}:00</td>
+                <td>${displayDate}</td>
+                <td>${displayHour}:00</td>
                 <td>${b.court_id || '-'}</td>
                 <td><span class="status-badge ${statusClass}">${statusText}</span></td>
             </tr>
