@@ -1472,6 +1472,23 @@ body {
     margin-left: 4px;
 }
 
+/* Response time column */
+.cyber-table .resp-cell {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+/* Strategy column (Thread/Phase/Attempt) */
+.cyber-table .strategy-cell {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--cyan);
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
 /* ==================== Terminal Page ==================== */
 .terminal-card .card-body {
     padding: 0;

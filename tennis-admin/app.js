@@ -984,19 +984,52 @@ function renderHistoryTable(bookings) {
             displayHour = ts.getHours();
         }
 
+        // Court display: prefer court_number (human-friendly), fallback to court_id
+        const courtDisplay = b.court_number || b.court_id || '-';
+
+        // Response time display
+        const respDisplay = b.response_time_ms ? `${b.response_time_ms}ms` : '-';
+
+        // Strategy display: phase + attempt number (e.g., "R#3" for rapid attempt 3)
+        let strategyDisplay = '-';
+        if (b.phase && b.attempt_number) {
+            const phaseCode = b.phase === 'rapid' ? 'R' : 'F';  // R for rapid, F for fallback
+            strategyDisplay = `T${b.thread_id || '?'} ${phaseCode}#${b.attempt_number}`;
+        }
+
+        // For failures, show error type as status tooltip or extra info
+        let statusHtml = `<span class="status-badge ${statusClass}">${statusText}</span>`;
+        if (!b.success && b.error_type) {
+            // Show abbreviated error type
+            const errorAbbrev = {
+                'no_availability': 'N/A',
+                'already_booked': 'DUP',
+                'auth_error': 'AUTH',
+                'rate_limit': 'RATE',
+                'timeout': 'T/O',
+                'network_error': 'NET',
+                'exception': 'ERR',
+                'unknown': '?'
+            };
+            const errCode = errorAbbrev[b.error_type] || b.error_type;
+            statusHtml = `<span class="status-badge ${statusClass}" title="${b.error_type}">${errCode}</span>`;
+        }
+
         html += `
             <tr class="${rowClass}">
                 <td class="timestamp-cell">${timeDisplay}</td>
                 <td>${getUserShortName(b.user)}</td>
                 <td>${displayDate}</td>
                 <td>${displayHour}:00</td>
-                <td>${b.court_id || '-'}</td>
-                <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                <td>${courtDisplay}</td>
+                <td class="resp-cell">${respDisplay}</td>
+                <td class="strategy-cell">${strategyDisplay}</td>
+                <td>${statusHtml}</td>
             </tr>
         `;
     });
 
-    tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center">No data</td></tr>';
+    tbody.innerHTML = html || '<tr><td colspan="8" style="text-align:center">No data</td></tr>';
 }
 
 // ==================== Actions ====================
