@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-02-01T19:12:44.600821",
+  "last_sync": "2026-02-01T19:14:43.770319",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         2940946,
         2940949
       ],
-      "last_seen": "2026-02-01T19:12:32.109139",
+      "last_seen": "2026-02-01T19:14:27.314499",
       "paused": false
     },
     "yangb": {
@@ -20,7 +20,7 @@
         2940955,
         2940957
       ],
-      "last_seen": "2026-02-01T19:12:32.109145",
+      "last_seen": "2026-02-01T19:14:27.314504",
       "paused": false
     },
     "zwang43b": {
@@ -31,7 +31,7 @@
         2940967,
         2940970
       ],
-      "last_seen": "2026-02-01T19:12:32.109149",
+      "last_seen": "2026-02-01T19:14:27.314509",
       "paused": false
     }
   },
@@ -681,6 +681,119 @@
       "weekday": "Tuesday"
     }
   ],
+  "next_booking": {
+    "next_window": "2026-02-02T00:00:00-05:00",
+    "next_window_display": "2026-02-02 00:00 EST",
+    "target_date": "2026-02-04",
+    "target_weekday": "Wednesday",
+    "planned_attempts": [
+      {
+        "user": "xbai02b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 18,
+        "time": "18:00"
+      },
+      {
+        "user": "xbai02b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 17,
+        "time": "17:00"
+      },
+      {
+        "user": "xbai02b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 16,
+        "time": "16:00"
+      },
+      {
+        "user": "xbai02b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 15,
+        "time": "15:00"
+      },
+      {
+        "user": "xbai02b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 14,
+        "time": "14:00"
+      },
+      {
+        "user": "yangb",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 17,
+        "time": "17:00"
+      },
+      {
+        "user": "yangb",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 16,
+        "time": "16:00"
+      },
+      {
+        "user": "yangb",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 18,
+        "time": "18:00"
+      },
+      {
+        "user": "yangb",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 15,
+        "time": "15:00"
+      },
+      {
+        "user": "yangb",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 14,
+        "time": "14:00"
+      },
+      {
+        "user": "zwang43b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 16,
+        "time": "16:00"
+      },
+      {
+        "user": "zwang43b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 17,
+        "time": "17:00"
+      },
+      {
+        "user": "zwang43b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 18,
+        "time": "18:00"
+      },
+      {
+        "user": "zwang43b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 15,
+        "time": "15:00"
+      },
+      {
+        "user": "zwang43b",
+        "date": "2026-02-04",
+        "weekday": "Wednesday",
+        "hour": 14,
+        "time": "14:00"
+      }
+    ]
+  },
   "stats": {
     "total_attempts": 50,
     "successful_attempts": 1,
