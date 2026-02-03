@@ -13,6 +13,10 @@
       "paused": true
     }
   },
-  "cancellations": {},
-  "last_updated": "2026-02-03T11:03:30.060355"
+  "cancellations": {
+    "xbai02b": [
+      "xbai02b_2026-02-03_1400"
+    ]
+  },
+  "last_updated": "2026-02-03T16:06:27.977Z"
 }
