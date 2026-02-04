@@ -386,22 +386,41 @@ async function fetchGitHubFile(path) {
         'Cache-Control': 'no-cache',
         'If-None-Match': ''  // Force bypass GitHub CDN cache
     };
-    if (token) headers['Authorization'] = `token ${token}`;
+    if (token) {
+        headers['Authorization'] = `token ${token}`;
+        console.log('[DEBUG] Using GitHub token for authentication');
+    } else {
+        console.log('[DEBUG] No GitHub token found, using unauthenticated access (rate limited to 60/hour)');
+    }
 
     try {
+        console.log('[DEBUG] Fetching:', url);
         const response = await fetch(url, { headers, cache: 'no-store' });
+        console.log('[DEBUG] Response status:', response.status);
+        
         if (!response.ok) {
-            if (response.status === 404) return null;
-            throw new Error(`GitHub API error: ${response.status}`);
+            if (response.status === 404) {
+                console.error('[ERROR] File not found:', path);
+                return null;
+            }
+            if (response.status === 403) {
+                console.error('[ERROR] Rate limited or forbidden. Try adding a GitHub token.');
+                throw new Error('GitHub API rate limit exceeded. Please add a GitHub token in Config page.');
+            }
+            throw new Error(`GitHub API error: ${response.status} ${response.statusText}`);
         }
         const data = await response.json();
+        console.log('[DEBUG] Data received, size:', data.content?.length || 0);
+        const content = JSON.parse(atob(data.content));
+        console.log('[DEBUG] Content parsed successfully');
         return {
-            content: JSON.parse(atob(data.content)),
+            content: content,
             sha: data.sha
         };
     } catch (error) {
-        console.error('Error fetching GitHub file:', error);
-        return null;
+        console.error('[ERROR] Error fetching GitHub file:', error.message);
+        console.error('[ERROR] Full error:', error);
+        throw error;  // Re-throw to be caught by refreshData
     }
 }
 
@@ -440,6 +459,7 @@ async function updateGitHubFile(path, content, sha, message) {
 // ==================== Data Loading ====================
 async function refreshData() {
     updateSyncStatus('syncing');
+    console.log('[DEBUG] refreshData started');
 
     try {
         const [statusResult, controlResult] = await Promise.all([
@@ -447,9 +467,16 @@ async function refreshData() {
             fetchGitHubFile(CONFIG.CONTROL_FILE)
         ]);
 
+        console.log('[DEBUG] statusResult:', statusResult ? 'received' : 'null');
+        console.log('[DEBUG] controlResult:', controlResult ? 'received' : 'null');
+
         if (statusResult) {
             state.status = statusResult.content;
             state.statusSha = statusResult.sha;
+            console.log('[DEBUG] status data loaded, reservations:', state.status.reservations?.length);
+        } else {
+            console.error('[ERROR] Failed to load status data');
+            showErrorMessage('Failed to load status data. Please check your network connection or GitHub token.');
         }
 
         if (controlResult) {
@@ -457,13 +484,30 @@ async function refreshData() {
             state.controlSha = controlResult.sha;
         }
 
+        console.log('[DEBUG] calling renderDashboard');
         renderDashboard();
         updateSyncStatus('synced');
         updateLastSync();
 
     } catch (error) {
-        console.error('Error refreshing data:', error);
+        console.error('[ERROR] Error refreshing data:', error);
         updateSyncStatus('error');
+        showErrorMessage(`Error loading data: ${error.message}`);
+    }
+}
+
+function showErrorMessage(message) {
+    const container = document.getElementById('upcoming-reservations');
+    if (container) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-triangle" style="color: #ff00aa;"></i>
+                <p style="color: #ff00aa;">${message}</p>
+                <p style="font-size: 0.9em; margin-top: 10px;">
+                    Try refreshing the page or check the browser console for details.
+                </p>
+            </div>
+        `;
     }
 }
 
