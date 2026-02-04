@@ -613,14 +613,17 @@ function renderUpcomingReservations() {
         const userColor = userClass === 'xbai' ? '#00f0ff' : (userClass === 'yang' ? '#ff00aa' : '#00ff88');
 
         // Look up when this reservation was booked
+        // First try booked_at from reservation (attached by sync_status.py from full history)
+        // Then fall back to bookingMap (from recent bookings in status.json)
         const resHour = parseInt(res.time);  // "14:00" -> 14
         const bookingKey = `${res.user}_${res.date}_${resHour}`;
         const booking = bookingMap[bookingKey];
+        const bookedTimestamp = res.booked_at || (booking && booking.timestamp);
 
         // Format booking timestamp with 0.01s precision
         let bookedAtHtml = '';
-        if (booking && booking.timestamp) {
-            const ts = new Date(booking.timestamp);
+        if (bookedTimestamp) {
+            const ts = new Date(bookedTimestamp);
             const timeStr = ts.toLocaleTimeString('en-US', {
                 hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
             });
