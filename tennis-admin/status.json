@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-02-04T11:18:56.235872",
+  "last_sync": "2026-02-04T11:24:59.207945",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         22000,
         22003
       ],
-      "last_seen": "2026-02-04T11:18:33.680482",
+      "last_seen": "2026-02-04T11:24:35.598775",
       "paused": false
     },
     "yangb": {
@@ -20,7 +20,7 @@
         22026,
         22029
       ],
-      "last_seen": "2026-02-04T11:18:33.680501",
+      "last_seen": "2026-02-04T11:24:35.598794",
       "paused": false
     },
     "zwang43b": {
@@ -31,7 +31,7 @@
         22058,
         22061
       ],
-      "last_seen": "2026-02-04T11:18:33.680532",
+      "last_seen": "2026-02-04T11:24:35.598825",
       "paused": false
     }
   },
@@ -65,7 +65,8 @@
       "weekday": "Wed",
       "cancel_id": "815777",
       "user": "yangb",
-      "reservation_id": "yangb_2026-02-04_1500"
+      "reservation_id": "yangb_2026-02-04_1500",
+      "booked_at": "2026-02-02T06:00:02.965845-05:00"
     },
     {
       "date": "2026-02-06",
@@ -75,7 +76,8 @@
       "weekday": "Fri",
       "cancel_id": "816462",
       "user": "zwang43b",
-      "reservation_id": "zwang43b_2026-02-06_1400"
+      "reservation_id": "zwang43b_2026-02-06_1400",
+      "booked_at": "2026-02-04T06:00:07.887332-05:00"
     },
     {
       "date": "2026-02-06",
@@ -85,7 +87,8 @@
       "weekday": "Fri",
       "cancel_id": "816446",
       "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-02-06_1500"
+      "reservation_id": "xbai02b_2026-02-06_1500",
+      "booked_at": "2026-02-04T06:00:05.527145-05:00"
     },
     {
       "date": "2026-02-06",
@@ -95,7 +98,8 @@
       "weekday": "Fri",
       "cancel_id": "816442",
       "user": "yangb",
-      "reservation_id": "yangb_2026-02-06_1500"
+      "reservation_id": "yangb_2026-02-06_1500",
+      "booked_at": "2026-02-04T06:00:03.330550-05:00"
     }
   ],
   "bookings": [
