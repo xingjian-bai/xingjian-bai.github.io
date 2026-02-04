@@ -381,11 +381,15 @@ async function fetchGitHubFile(path) {
     const url = `https://api.github.com/repos/${CONFIG.GITHUB_OWNER}/${CONFIG.GITHUB_REPO}/contents/${path}`;
     const token = getGitHubToken();
 
-    const headers = { 'Accept': 'application/vnd.github.v3+json' };
+    const headers = {
+        'Accept': 'application/vnd.github.v3+json',
+        'Cache-Control': 'no-cache',
+        'If-None-Match': ''  // Force bypass GitHub CDN cache
+    };
     if (token) headers['Authorization'] = `token ${token}`;
 
     try {
-        const response = await fetch(url, { headers });
+        const response = await fetch(url, { headers, cache: 'no-store' });
         if (!response.ok) {
             if (response.status === 404) return null;
             throw new Error(`GitHub API error: ${response.status}`);

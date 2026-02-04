@@ -71,7 +71,7 @@
             </nav>
 
             <div class="sidebar-footer">
-                <div class="sync-status">
+                <div class="sync-status" onclick="refreshData()" style="cursor: pointer;" title="Click to sync">
                     <div class="sync-animation">
                         <div class="sync-ring"></div>
                         <div class="sync-ring"></div>
@@ -79,7 +79,7 @@
                     </div>
                     <span id="sync-text">SYNCED</span>
                 </div>
-                <div class="last-sync-time">
+                <div class="last-sync-time" onclick="refreshData()" style="cursor: pointer;" title="Click to sync">
                     <i class="fas fa-clock"></i>
                     <span id="last-sync">--:--:--</span>
                 </div>
