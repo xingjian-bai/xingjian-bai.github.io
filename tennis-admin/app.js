@@ -388,10 +388,9 @@ async function fetchGitHubFile(path) {
     const url = `https://api.github.com/repos/${CONFIG.GITHUB_OWNER}/${CONFIG.GITHUB_REPO}/contents/${path}`;
     const token = getGitHubToken();
 
+    // Only use headers that are CORS-safe for GitHub API
     const headers = {
-        'Accept': 'application/vnd.github.v3+json',
-        'Cache-Control': 'no-cache',
-        'If-None-Match': ''  // Force bypass GitHub CDN cache
+        'Accept': 'application/vnd.github.v3+json'
     };
     if (token) {
         headers['Authorization'] = `token ${token}`;
@@ -403,7 +402,13 @@ async function fetchGitHubFile(path) {
 
     try {
         console.log('[DEBUG] Fetching:', url);
-        const response = await fetch(url, { headers, cache: 'no-store' });
+        // Use cache: 'no-store' in fetch options instead of Cache-Control header
+        // to avoid CORS preflight issues
+        const response = await fetch(url, { 
+            headers, 
+            cache: 'no-store',
+            mode: 'cors'
+        });
         console.log('[DEBUG] Response status:', response.status);
         
         if (!response.ok) {
