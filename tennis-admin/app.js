@@ -7,9 +7,10 @@
 const CONFIG = {
     GITHUB_OWNER: 'xingjian-bai',
     GITHUB_REPO: 'xingjian-bai.github.io',
+    PAGES_BASE: 'https://xingjianbai.com',
     STATUS_FILE: 'tennis-admin/status.json',
     CONTROL_FILE: 'tennis-admin/control.json',
-    REFRESH_INTERVAL: 60 * 60 * 1000,  // 1 hour (also refreshes on page focus/visibility)
+    REFRESH_INTERVAL: 5 * 60 * 1000,  // 5 minutes (reads from Pages, no rate limit)
     USERS: {
         'xbai02b': { name: 'Xingjian Bai', short: 'XB', color: 'xbai', initial: 'X' },
         'yangb': { name: 'Yang Liu', short: 'YL', color: 'yang', initial: 'Y' },
@@ -437,6 +438,38 @@ async function fetchGitHubFile(path) {
     }
 }
 
+async function fetchPageFile(path) {
+    // Read directly from GitHub Pages - NO rate limit, fast
+    const url = `${CONFIG.PAGES_BASE}/${path}?t=${Date.now()}`;
+    try {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) return null;
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching page file:', error);
+        return null;
+    }
+}
+
+async function fetchGitHubFileSha(path) {
+    // Fetch SHA only via GitHub API - used before WRITE operations
+    const url = `https://api.github.com/repos/${CONFIG.GITHUB_OWNER}/${CONFIG.GITHUB_REPO}/contents/${path}`;
+    const token = getGitHubToken();
+    if (!token) return null;
+    try {
+        const response = await fetch(url, {
+            headers: { 'Accept': 'application/vnd.github.v3+json', 'Authorization': `token ${token}` },
+            cache: 'no-store'
+        });
+        if (!response.ok) return null;
+        const data = await response.json();
+        return data.sha;
+    } catch (error) {
+        console.error('Error fetching SHA:', error);
+        return null;
+    }
+}
+
 async function updateGitHubFile(path, content, sha, message) {
     const token = getGitHubToken();
     if (!token) {
@@ -475,29 +508,23 @@ async function refreshData() {
     console.log('[DEBUG] refreshData started');
 
     try {
-        const [statusResult, controlResult] = await Promise.all([
-            fetchGitHubFile(CONFIG.STATUS_FILE),
-            fetchGitHubFile(CONFIG.CONTROL_FILE)
+        // Read from GitHub Pages directly - no API rate limit, fast
+        const [statusData, controlData] = await Promise.all([
+            fetchPageFile(CONFIG.STATUS_FILE),
+            fetchPageFile(CONFIG.CONTROL_FILE)
         ]);
 
-        console.log('[DEBUG] statusResult:', statusResult ? 'received' : 'null');
-        console.log('[DEBUG] controlResult:', controlResult ? 'received' : 'null');
-
-        if (statusResult) {
-            state.status = statusResult.content;
-            state.statusSha = statusResult.sha;
-            console.log('[DEBUG] status data loaded, reservations:', state.status.reservations?.length);
+        if (statusData) {
+            state.status = statusData;
         } else {
             console.error('[ERROR] Failed to load status data');
-            showErrorMessage('Failed to load status data. Please check your network connection or GitHub token.');
+            showErrorMessage('Failed to load status data. Please check your network connection.');
         }
 
-        if (controlResult) {
-            state.control = controlResult.content;
-            state.controlSha = controlResult.sha;
+        if (controlData) {
+            state.control = controlData;
         }
 
-        console.log('[DEBUG] calling renderDashboard');
         renderDashboard();
         updateSyncStatus('synced');
         updateLastSync();
@@ -1098,7 +1125,14 @@ function renderHistoryTable(bookings) {
 
 // ==================== Actions ====================
 async function togglePause(userId) {
-    if (!state.control || !state.controlSha) {
+    if (!state.control) {
+        showTokenModal();
+        return;
+    }
+
+    // Fetch SHA from GitHub API right before writing
+    const sha = await fetchGitHubFileSha(CONFIG.CONTROL_FILE);
+    if (!sha) {
         showTokenModal();
         return;
     }
@@ -1114,7 +1148,7 @@ async function togglePause(userId) {
     const success = await updateGitHubFile(
         CONFIG.CONTROL_FILE,
         state.control,
-        state.controlSha,
+        sha,
         `${newPaused ? 'Pause' : 'Resume'} ${userId}`
     );
 
@@ -1134,6 +1168,15 @@ async function confirmAction() {
     if (!pendingAction) return;
 
     if (pendingAction.type === 'cancel') {
+        // Fetch SHA from GitHub API right before writing
+        const sha = await fetchGitHubFileSha(CONFIG.CONTROL_FILE);
+        if (!sha) {
+            showTokenModal();
+            closeConfirmModal();
+            pendingAction = null;
+            return;
+        }
+
         // Add to cancellation queue
         state.control.cancellations = state.control.cancellations || {};
         state.control.cancellations[pendingAction.user] = state.control.cancellations[pendingAction.user] || [];
@@ -1143,7 +1186,7 @@ async function confirmAction() {
         await updateGitHubFile(
             CONFIG.CONTROL_FILE,
             state.control,
-            state.controlSha,
+            sha,
             `Request cancel: ${pendingAction.reservationId}`
         );
 
