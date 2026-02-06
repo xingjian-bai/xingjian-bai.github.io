@@ -329,15 +329,15 @@ function formatTime(timestamp) {
 }
 
 function getWeekDates(offset = 0) {
+    // Start from today + offset*7 days (rolling 7-day window)
     const now = new Date();
-    const dayOfWeek = now.getDay();
-    const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - dayOfWeek + (offset * 7));
+    const start = new Date(now);
+    start.setDate(now.getDate() + (offset * 7));
 
     const dates = [];
     for (let i = 0; i < 7; i++) {
-        const date = new Date(startOfWeek);
-        date.setDate(startOfWeek.getDate() + i);
+        const date = new Date(start);
+        date.setDate(start.getDate() + i);
         dates.push(date);
     }
     return dates;
