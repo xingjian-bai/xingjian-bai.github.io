@@ -1,37 +1,37 @@
 {
-  "last_sync": "2026-02-07T10:33:09.355826",
+  "last_sync": "2026-02-07T10:40:19.935585",
   "script_status": {
     "xbai02b": {
       "running": true,
       "copies": 3,
       "pids": [
-        423050,
-        423053,
-        423072
+        515651,
+        515653,
+        515655
       ],
-      "last_seen": "2026-02-07T10:32:46.402305",
+      "last_seen": "2026-02-07T10:40:03.671448",
       "paused": false
     },
     "yangb": {
       "running": true,
       "copies": 3,
       "pids": [
-        423075,
-        423100,
-        423102
+        515662,
+        515664,
+        515667
       ],
-      "last_seen": "2026-02-07T10:32:46.402331",
+      "last_seen": "2026-02-07T10:40:03.671473",
       "paused": false
     },
     "zwang43b": {
       "running": true,
       "copies": 3,
       "pids": [
-        423105,
-        423108,
-        423112
+        515682,
+        515691,
+        515696
       ],
-      "last_seen": "2026-02-07T10:32:46.402351",
+      "last_seen": "2026-02-07T10:40:03.671498",
       "paused": false
     }
   },
@@ -1340,8 +1340,8 @@
     ]
   },
   "stats": {
-    "total_attempts": 13581,
-    "successful_attempts": 94,
-    "success_rate": 0.0069
+    "total_attempts": 13572,
+    "successful_attempts": 88,
+    "success_rate": 0.0065
   }
 }
