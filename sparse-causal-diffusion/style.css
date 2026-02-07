@@ -42,11 +42,33 @@ header {
 
 .authors {
     font-size: 1.1rem;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
 .author {
     margin: 0 10px;
+    white-space: nowrap;
+}
+
+.author sup {
+    font-size: 0.75em;
+    margin-left: 2px;
+}
+
+.affiliations {
+    font-size: 0.95rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.affiliation {
+    margin: 0 15px;
+    display: inline-block;
+}
+
+.affiliation sup {
+    font-size: 0.8em;
+    margin-right: 2px;
 }
 
 .links {
@@ -310,6 +332,28 @@ footer {
 @media (max-width: 768px) {
     .title {
         font-size: 1.8rem;
+    }
+
+    .authors {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .author {
+        margin: 5px;
+    }
+
+    .affiliations {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .affiliation {
+        margin: 2px;
     }
 
     .video-grid {
