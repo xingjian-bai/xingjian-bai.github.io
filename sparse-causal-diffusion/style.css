@@ -115,16 +115,20 @@ h2 {
 /* Teaser Figure */
 .figure {
     text-align: center;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .figure img {
+    display: block;
     width: 100%;
-    max-width: 900px;
+    height: auto;
     border-radius: 8px;
+    margin: 0 auto;
 }
 
 .figure figcaption {
-    max-width: 900px;
     margin: 15px auto 0;
     font-size: 0.95rem;
     color: #4a5568;
