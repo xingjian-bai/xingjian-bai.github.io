@@ -112,6 +112,36 @@ h2 {
     color: #2d3748;
 }
 
+/* Teaser Figure */
+.figure {
+    text-align: center;
+}
+
+.figure img {
+    width: 100%;
+    max-width: 900px;
+    border-radius: 8px;
+}
+
+.figure figcaption {
+    max-width: 900px;
+    margin: 15px auto 0;
+    font-size: 0.95rem;
+    color: #4a5568;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.fig-blue {
+    color: #3182ce;
+    font-weight: 600;
+}
+
+.fig-red {
+    color: #e53e3e;
+    font-weight: 600;
+}
+
 /* Abstract */
 .abstract {
     background: #f7fafc;
