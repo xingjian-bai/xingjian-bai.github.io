@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-02-10T05:50:22.712177",
+  "last_sync": "2026-02-10T06:00:24.682510",
   "script_status": {
     "xbai02b": {
       "running": false,
@@ -1193,113 +1193,113 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-02-10T06:00:00-05:00",
-    "next_window_display": "2026-02-10 06:00 EST",
-    "target_date": "2026-02-12",
-    "target_weekday": "Thursday",
+    "next_window": "2026-02-11T06:00:00-05:00",
+    "next_window_display": "2026-02-11 06:00 EST",
+    "target_date": "2026-02-13",
+    "target_weekday": "Friday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 22,
         "time": "22:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 22,
         "time": "22:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-12",
-        "weekday": "Thursday",
+        "date": "2026-02-13",
+        "weekday": "Friday",
         "hour": 22,
         "time": "22:00"
       }
