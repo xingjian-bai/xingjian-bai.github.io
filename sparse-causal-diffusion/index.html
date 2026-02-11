@@ -54,6 +54,48 @@
             </figcaption>
         </section>
 
+        <!-- Observation 1 -->
+        <section class="observation">
+            <h2>Observation 1: Redundant Computation Across Denoising Steps</h2>
+            <p class="observation-text">
+                When generating a frame, early and middle layers of video diffusion models produce nearly identical features across the entire diffusion trajectory. As shown in the cosine similarity matrices below, the 15th-layer features remain highly correlated across all 50 denoising steps. PCA visualizations further confirm that these layers capture global layout and motion from context frames, yet redundantly recompute them at every denoising step. This suggests that early-layer computation can be amortized and shared across steps without loss of information.
+            </p>
+            <div class="observation-figure">
+                <img src="obs1_redundancy.jpg" alt="Cosine similarity matrices and PCA patterns showing redundant computation across denoising steps in early layers.">
+                <figcaption><strong>(a)</strong> Cosine similarity of 15th-layer features across 50 denoising steps. <strong>(b)</strong> PCA patterns of 15th-layer features remain stable across the diffusion process.</figcaption>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- Observation 2 -->
+        <section class="observation">
+            <h2>Observation 2: Sparse Cross-Frame Attention in Deep Layers</h2>
+            <p class="observation-text">
+                Deeper layers exhibit a markedly different behavior: they barely attend to past frames. Despite being trained with dense causal attention masks, the cross-frame attention weights in deeper layers become increasingly sparse with depth. Layers 28 and 29 focus almost exclusively on intra-frame tokens, performing per-frame rendering rather than temporal reasoning. This natural emergence of temporal sparsity motivates a clean architectural separation between cross-frame reasoning and per-frame denoising.
+            </p>
+            <div class="observation-figure">
+                <img src="obs2_attention.jpg" alt="Attention weight visualizations showing sparse cross-frame attention in deep layers.">
+                <figcaption>Attention weight maps across layers. Early layers (0&ndash;10) attend broadly to context frames, while deep layers (20&ndash;29) exhibit sparse cross-frame connections and focus on intra-frame rendering.</figcaption>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
+        <!-- Separable Causal Diffusion -->
+        <section class="observation">
+            <h2>Separable Causal Diffusion</h2>
+            <p class="observation-text">
+                Motivated by these observations, we propose Separable Causal Diffusion (SCD), which explicitly decouples temporal reasoning from iterative denoising. An autoregressive causal encoder operates <em>once per frame</em>, replacing the redundant early layers and producing a compact temporal context&mdash;analogous to the backbone of autoregressive language models. A lightweight diffusion decoder then renders each frame independently, conditioned on this context, with <em>no access</em> to past frames. This separation allows the encoder to be made larger without increasing per-step cost, while the decoder remains efficient across multiple denoising steps.
+            </p>
+            <div class="observation-figure">
+                <img src="scd_architecture.jpg" alt="Architecture diagram of Separable Causal Diffusion showing the causal encoder and frame-wise diffusion decoder." class="architecture-img">
+                <figcaption>The SCD architecture. A causal encoder (<span class="fig-blue">blue</span>, &times;1) summarizes temporal context once per frame. A frame-wise diffusion decoder (<span class="fig-red">red</span>, &times;T) renders each frame through iterative denoising, conditioned on the causal context.</figcaption>
+            </div>
+        </section>
+
+        <hr class="section-divider">
+
         <!-- Video Gallery -->
         <section class="video-gallery">
             <h2>Generated Video Samples</h2>

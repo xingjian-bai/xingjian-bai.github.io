@@ -146,6 +146,57 @@ h2 {
     font-weight: 600;
 }
 
+/* Observations */
+.observation {
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.observation h2 {
+    text-align: center;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+}
+
+.observation-text {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: #4a5568;
+    text-align: justify;
+    margin-bottom: 30px;
+}
+
+.observation-figure {
+    text-align: center;
+}
+
+.observation-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+}
+
+.observation-figure .architecture-img {
+    max-width: 500px;
+}
+
+.observation-figure figcaption {
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: #718096;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.section-divider {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 50px auto;
+    max-width: 900px;
+}
+
 /* Abstract */
 .abstract {
     background: #f7fafc;
