@@ -1,37 +1,37 @@
 {
-  "last_sync": "2026-02-15T15:20:21.604452",
+  "last_sync": "2026-02-15T15:30:21.977319",
   "script_status": {
     "xbai02b": {
       "running": true,
       "copies": 3,
       "pids": [
-        322667,
-        322669,
-        322671
+        4516,
+        4518,
+        4521
       ],
-      "last_seen": "2026-02-15T15:20:03.663535",
+      "last_seen": "2026-02-15T15:30:04.293091",
       "paused": false
     },
     "yangb": {
       "running": true,
       "copies": 3,
       "pids": [
-        322691,
-        322693,
-        322713
+        4524,
+        4528,
+        4531
       ],
-      "last_seen": "2026-02-15T15:20:03.663564",
+      "last_seen": "2026-02-15T15:30:04.293122",
       "paused": false
     },
     "zwang43b": {
       "running": true,
       "copies": 3,
       "pids": [
-        322716,
-        322722,
-        322740
+        4534,
+        4536,
+        4538
       ],
-      "last_seen": "2026-02-15T15:20:03.663600",
+      "last_seen": "2026-02-15T15:30:04.293148",
       "paused": false
     }
   },
@@ -57,17 +57,6 @@
     }
   ],
   "reservations": [
-    {
-      "date": "2026-02-15",
-      "time": "17:00",
-      "court": "Bubble Court 2",
-      "activity": "Tennis Reservation (Bubble Court 2)",
-      "weekday": "Sun",
-      "cancel_id": "819575",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-02-15_1700",
-      "booked_at": "2026-02-13T06:00:07.839216-05:00"
-    },
     {
       "date": "2026-02-16",
       "time": "14:00",
