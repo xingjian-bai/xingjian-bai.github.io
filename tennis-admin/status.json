@@ -1,37 +1,37 @@
 {
-  "last_sync": "2026-02-18T10:00:22.693631",
+  "last_sync": "2026-02-18T10:00:27.522312",
   "script_status": {
     "xbai02b": {
       "running": true,
       "copies": 3,
       "pids": [
-        4516,
-        4518,
-        4521
+        322667,
+        322669,
+        322671
       ],
-      "last_seen": "2026-02-18T10:00:03.845086",
+      "last_seen": "2026-02-18T10:00:06.708208",
       "paused": false
     },
     "yangb": {
       "running": true,
       "copies": 3,
       "pids": [
-        4524,
-        4528,
-        4531
+        322691,
+        322693,
+        322713
       ],
-      "last_seen": "2026-02-18T10:00:03.845127",
+      "last_seen": "2026-02-18T10:00:06.708238",
       "paused": false
     },
     "zwang43b": {
       "running": true,
       "copies": 3,
       "pids": [
-        4534,
-        4536,
-        4538
+        322716,
+        322722,
+        322740
       ],
-      "last_seen": "2026-02-18T10:00:03.845147",
+      "last_seen": "2026-02-18T10:00:06.708266",
       "paused": false
     }
   },
@@ -71,6 +71,17 @@
     {
       "date": "2026-02-18",
       "time": "15:00",
+      "court": "Bubble Court 2",
+      "activity": "Tennis Reservation (Bubble Court 2)",
+      "weekday": "Wed",
+      "cancel_id": "820545",
+      "user": "yangb",
+      "reservation_id": "yangb_2026-02-18_1500",
+      "booked_at": "2026-02-16T06:00:08.828717-05:00"
+    },
+    {
+      "date": "2026-02-18",
+      "time": "15:00",
       "court": "Bubble Court 1",
       "activity": "Tennis Reservation (Bubble Court 1)",
       "weekday": "Wed",
@@ -88,6 +99,17 @@
       "user": "xbai02b",
       "reservation_id": "xbai02b_2026-02-19_1400",
       "booked_at": "2026-02-17T06:00:10.165191-05:00"
+    },
+    {
+      "date": "2026-02-19",
+      "time": "15:00",
+      "court": "Bubble Court 3",
+      "activity": "Tennis Reservation (Bubble Court 3)",
+      "weekday": "Thu",
+      "cancel_id": "820982",
+      "user": "yangb",
+      "reservation_id": "yangb_2026-02-19_1500",
+      "booked_at": "2026-02-17T06:00:06.428286-05:00"
     },
     {
       "date": "2026-02-19",
