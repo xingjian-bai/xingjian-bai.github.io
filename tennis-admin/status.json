@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-02-19T12:00:25.000909",
+  "last_sync": "2026-02-19T12:10:22.540590",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         322669,
         322671
       ],
-      "last_seen": "2026-02-19T12:00:03.533303",
+      "last_seen": "2026-02-19T12:10:04.487499",
       "paused": false
     },
     "yangb": {
@@ -20,7 +20,7 @@
         322693,
         322713
       ],
-      "last_seen": "2026-02-19T12:00:03.533333",
+      "last_seen": "2026-02-19T12:10:04.487542",
       "paused": false
     },
     "zwang43b": {
@@ -31,7 +31,7 @@
         322722,
         322740
       ],
-      "last_seen": "2026-02-19T12:00:03.533403",
+      "last_seen": "2026-02-19T12:10:04.487569",
       "paused": false
     }
   },
@@ -57,50 +57,6 @@
     }
   ],
   "reservations": [
-    {
-      "date": "2026-02-19",
-      "time": "14:00",
-      "court": "Bubble Court 2",
-      "activity": "Tennis Reservation (Bubble Court 2)",
-      "weekday": "Thu",
-      "cancel_id": "820998",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-02-19_1400",
-      "booked_at": "2026-02-17T06:00:10.165191-05:00"
-    },
-    {
-      "date": "2026-02-19",
-      "time": "15:00",
-      "court": "Bubble Court 3",
-      "activity": "Tennis Reservation (Bubble Court 3)",
-      "weekday": "Thu",
-      "cancel_id": "820982",
-      "user": "yangb",
-      "reservation_id": "yangb_2026-02-19_1500",
-      "booked_at": "2026-02-17T06:00:06.428286-05:00"
-    },
-    {
-      "date": "2026-02-19",
-      "time": "15:00",
-      "court": "Bubble Court 4",
-      "activity": "Tennis Reservation (Bubble Court 4)",
-      "weekday": "Thu",
-      "cancel_id": "821016",
-      "user": "zwang43b",
-      "reservation_id": "zwang43b_2026-02-19_1500",
-      "booked_at": "2026-02-17T06:00:11.029604-05:00"
-    },
-    {
-      "date": "2026-02-21",
-      "time": "17:00",
-      "court": "Bubble Court 3",
-      "activity": "Tennis Reservation (Bubble Court 3)",
-      "weekday": "Sat",
-      "cancel_id": "822249",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-02-21_1700",
-      "booked_at": "2026-02-19T06:00:04.998951-05:00"
-    },
     {
       "date": "2026-02-21",
       "time": "17:00",
