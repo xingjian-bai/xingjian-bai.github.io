@@ -1,37 +1,37 @@
 {
-  "last_sync": "2026-02-21T05:50:20.733751",
+  "last_sync": "2026-02-21T06:00:21.008813",
   "script_status": {
     "xbai02b": {
       "running": true,
       "copies": 3,
       "pids": [
-        322667,
-        322669,
-        322671
+        4516,
+        4518,
+        4521
       ],
-      "last_seen": "2026-02-21T05:50:03.252184",
+      "last_seen": "2026-02-21T06:00:03.233845",
       "paused": false
     },
     "yangb": {
       "running": true,
       "copies": 3,
       "pids": [
-        322691,
-        322693,
-        322713
+        4524,
+        4528,
+        4531
       ],
-      "last_seen": "2026-02-21T05:50:03.252211",
+      "last_seen": "2026-02-21T06:00:03.233864",
       "paused": false
     },
     "zwang43b": {
       "running": true,
       "copies": 3,
       "pids": [
-        322716,
-        322722,
-        322740
+        4534,
+        4536,
+        4538
       ],
-      "last_seen": "2026-02-21T05:50:03.252236",
+      "last_seen": "2026-02-21T06:00:03.233882",
       "paused": false
     }
   },
@@ -100,6 +100,36 @@
       "user": "xbai02b",
       "reservation_id": "xbai02b_2026-02-22_1700",
       "booked_at": "2026-02-20T06:00:08.565257-05:00"
+    },
+    {
+      "date": "2026-02-23",
+      "time": "14:00",
+      "court": "Bubble Court 2",
+      "activity": "Tennis Reservation (Bubble Court 2)",
+      "weekday": "Mon",
+      "cancel_id": "823287",
+      "user": "xbai02b",
+      "reservation_id": "xbai02b_2026-02-23_1400"
+    },
+    {
+      "date": "2026-02-23",
+      "time": "14:00",
+      "court": "Bubble Court 3",
+      "activity": "Tennis Reservation (Bubble Court 3)",
+      "weekday": "Mon",
+      "cancel_id": "823310",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-02-23_1400"
+    },
+    {
+      "date": "2026-02-23",
+      "time": "14:00",
+      "court": "Bubble Court 4",
+      "activity": "Tennis Reservation (Bubble Court 4)",
+      "weekday": "Mon",
+      "cancel_id": "823313",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-02-23_1400"
     }
   ],
   "bookings": [
@@ -1205,113 +1235,113 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-02-21T06:00:00-05:00",
-    "next_window_display": "2026-02-21 06:00 EST",
-    "target_date": "2026-02-23",
-    "target_weekday": "Monday",
+    "next_window": "2026-02-22T06:00:00-05:00",
+    "next_window_display": "2026-02-22 06:00 EST",
+    "target_date": "2026-02-24",
+    "target_weekday": "Tuesday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 22,
         "time": "22:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "yangb",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 22,
         "time": "22:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-02-23",
-        "weekday": "Monday",
+        "date": "2026-02-24",
+        "weekday": "Tuesday",
         "hour": 22,
         "time": "22:00"
       }
