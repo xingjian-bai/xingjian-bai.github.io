@@ -1,2 +1,4 @@
 .DS_Store
-
+gpu-cluster-monitor/data/launchd_stdout.log
+gpu-cluster-monitor/data/launchd_stderr.log
+.gpu-monitor-hourly.lock/
