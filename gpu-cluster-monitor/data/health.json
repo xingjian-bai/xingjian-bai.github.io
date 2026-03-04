@@ -1,9 +1,9 @@
 {
-  "generated_at": "2026-03-04T22:46:20Z",
+  "generated_at": "2026-03-04T22:48:47Z",
   "status": "ok",
   "message": null,
   "latest_hour": "2026-03-04T22:00:00Z",
-  "latest_captured_at": "2026-03-04T22:46:20Z",
+  "latest_captured_at": "2026-03-04T22:48:47Z",
   "snapshot_count": 433,
   "is_stale": false,
   "quality": {
