@@ -1,0 +1,64 @@
+name: GPU Monitor Hourly
+
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: gpu-monitor-hourly
+  cancel-in-progress: false
+
+jobs:
+  update-gpu-monitor:
+    # Adobe Pluto CLI access typically requires an internal/self-hosted runner.
+    runs-on: self-hosted
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Update monitor data
+        env:
+          PLUTO_CLI_CMD: ${{ vars.PLUTO_CLI_CMD }}
+          SQLITE_PATH: ${{ vars.GPU_MONITOR_SQLITE_PATH }}
+        run: |
+          set -euo pipefail
+          ARGS=("--allow-fetch-failure" "--fetch-retries" "4" "--retry-delay-seconds" "15")
+          if [[ -n "${PLUTO_CLI_CMD:-}" ]]; then
+            ARGS+=("--pluto-cmd" "${PLUTO_CLI_CMD}")
+          fi
+          if [[ -n "${SQLITE_PATH:-}" ]]; then
+            ARGS+=("--seed-sqlite" "${SQLITE_PATH}")
+          fi
+          for attempt in 1 2 3; do
+            if python3 tools/gpu_monitor/update_gpu_usage.py "${ARGS[@]}"; then
+              exit 0
+            fi
+            if [[ "${attempt}" != "3" ]]; then
+              echo "Updater failed on attempt ${attempt}; retrying in 30s"
+              sleep 30
+            fi
+          done
+          echo "Updater failed after retries"
+          exit 1
+
+      - name: Commit and push if changed
+        run: |
+          set -euo pipefail
+          if [[ -n "$(git status --porcelain gpu-cluster-monitor/data)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add gpu-cluster-monitor/data/snapshots.json gpu-cluster-monitor/data/aggregates.json gpu-cluster-monitor/data/health.json
+            git commit -m "chore(gpu-monitor): hourly snapshot $(date -u +'%Y-%m-%dT%H:00:00Z')"
+            git push
+          else
+            echo "No monitor data change."
+          fi
