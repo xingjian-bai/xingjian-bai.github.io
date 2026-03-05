@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-05T02:49:14Z",
+  "generated_at": "2026-03-05T03:19:47Z",
   "version": 1,
-  "snapshot_count": 437,
+  "snapshot_count": 438,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -24,10 +24,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 1966.56,
-        "A100_40GB": 2359.44
+        "A100": 1317.46,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6747.76,
+      "total_hourly_cost": 5320.17,
       "projects_top": []
     },
     {
@@ -51,10 +51,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 2785.96,
-        "A100_40GB": 2359.44
+        "A100": 1866.4,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 7567.16,
+      "total_hourly_cost": 5869.11,
       "projects_top": []
     },
     {
@@ -78,10 +78,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 3277.6,
-        "A100_40GB": 2359.44
+        "A100": 2195.76,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 8058.8,
+      "total_hourly_cost": 6198.47,
       "projects_top": []
     },
     {
@@ -105,10 +105,10 @@
       },
       "hourly_cost": {
         "H100": 3082.24,
-        "A100": 3277.6,
-        "A100_40GB": 2359.44
+        "A100": 2195.76,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 8719.28,
+      "total_hourly_cost": 6858.95,
       "projects_top": []
     },
     {
@@ -132,10 +132,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 2949.84,
-        "A100_40GB": 2359.44
+        "A100": 1976.19,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 7290.72,
+      "total_hourly_cost": 5538.58,
       "projects_top": []
     },
     {
@@ -159,10 +159,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 2949.84,
-        "A100_40GB": 2359.44
+        "A100": 1976.19,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 7731.04,
+      "total_hourly_cost": 5978.9,
       "projects_top": []
     },
     {
@@ -186,10 +186,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 2458.2,
-        "A100_40GB": 2359.44
+        "A100": 1646.82,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6799.08,
+      "total_hourly_cost": 5209.21,
       "projects_top": []
     },
     {
@@ -213,10 +213,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 2294.32,
-        "A100_40GB": 2359.44
+        "A100": 1537.03,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6635.2,
+      "total_hourly_cost": 5099.42,
       "projects_top": []
     },
     {
@@ -240,10 +240,10 @@
       },
       "hourly_cost": {
         "H100": 1761.28,
-        "A100": 1638.8,
-        "A100_40GB": 2359.44
+        "A100": 1097.88,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 5759.52,
+      "total_hourly_cost": 4440.11,
       "projects_top": []
     },
     {
@@ -267,10 +267,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 2130.44,
-        "A100_40GB": 2359.44
+        "A100": 1427.25,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6471.32,
+      "total_hourly_cost": 4989.64,
       "projects_top": []
     },
     {
@@ -294,10 +294,10 @@
       },
       "hourly_cost": {
         "H100": 2201.6,
-        "A100": 1966.56,
-        "A100_40GB": 2359.44
+        "A100": 1317.46,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6527.6,
+      "total_hourly_cost": 5100.01,
       "projects_top": []
     },
     {
@@ -321,10 +321,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 1966.56,
-        "A100_40GB": 2359.44
+        "A100": 1317.46,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6747.76,
+      "total_hourly_cost": 5320.17,
       "projects_top": []
     },
     {
@@ -348,10 +348,10 @@
       },
       "hourly_cost": {
         "H100": 2862.08,
-        "A100": 1311.04,
-        "A100_40GB": 2359.44
+        "A100": 878.31,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6532.56,
+      "total_hourly_cost": 5321.34,
       "projects_top": []
     },
     {
@@ -375,10 +375,10 @@
       },
       "hourly_cost": {
         "H100": 2862.08,
-        "A100": 1147.16,
-        "A100_40GB": 2359.44
+        "A100": 768.52,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6368.68,
+      "total_hourly_cost": 5211.55,
       "projects_top": []
     },
     {
@@ -402,10 +402,10 @@
       },
       "hourly_cost": {
         "H100": 2641.92,
-        "A100": 1802.68,
-        "A100_40GB": 2359.44
+        "A100": 1207.67,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6804.04,
+      "total_hourly_cost": 5430.54,
       "projects_top": []
     },
     {
@@ -429,10 +429,10 @@
       },
       "hourly_cost": {
         "H100": 2201.6,
-        "A100": 1966.56,
-        "A100_40GB": 2359.44
+        "A100": 1317.46,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6527.6,
+      "total_hourly_cost": 5100.01,
       "projects_top": []
     },
     {
@@ -456,10 +456,10 @@
       },
       "hourly_cost": {
         "H100": 1541.12,
-        "A100": 2130.44,
-        "A100_40GB": 2359.44
+        "A100": 1427.25,
+        "A100_40GB": 1580.95
       },
-      "total_hourly_cost": 6031.0,
+      "total_hourly_cost": 4549.32,
       "projects_top": []
     },
     {
@@ -483,10 +483,10 @@
       },
       "hourly_cost": {
         "H100": 1541.12,
-        "A100": 1802.68,
+        "A100": 1207.67,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 3343.8,
+      "total_hourly_cost": 2748.79,
       "projects_top": []
     },
     {
@@ -510,10 +510,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 3605.36,
-        "A100_40GB": 1310.8
+        "A100": 2415.34,
+        "A100_40GB": 878.31
       },
-      "total_hourly_cost": 7337.92,
+      "total_hourly_cost": 5715.41,
       "projects_top": []
     },
     {
@@ -537,10 +537,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 4097.0,
-        "A100_40GB": 1310.8
+        "A100": 2744.7,
+        "A100_40GB": 878.31
       },
-      "total_hourly_cost": 7829.56,
+      "total_hourly_cost": 6044.77,
       "projects_top": []
     },
     {
@@ -564,10 +564,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 3441.48,
+        "A100": 2305.55,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 5863.24,
+      "total_hourly_cost": 4727.31,
       "projects_top": []
     },
     {
@@ -591,10 +591,10 @@
       },
       "hourly_cost": {
         "H100": 2201.6,
-        "A100": 3113.72,
+        "A100": 2085.98,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 5315.32,
+      "total_hourly_cost": 4287.58,
       "projects_top": []
     },
     {
@@ -618,10 +618,10 @@
       },
       "hourly_cost": {
         "H100": 2641.92,
-        "A100": 3113.72,
+        "A100": 2085.98,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 5755.64,
+      "total_hourly_cost": 4727.9,
       "projects_top": []
     },
     {
@@ -645,10 +645,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 1966.56,
-        "A100_40GB": 262.16
+        "A100": 1317.46,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 4650.48,
+      "total_hourly_cost": 3914.88,
       "projects_top": []
     },
     {
@@ -672,10 +672,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 3277.6,
-        "A100_40GB": 262.16
+        "A100": 2195.76,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 5521.2,
+      "total_hourly_cost": 4352.86,
       "projects_top": []
     },
     {
@@ -699,10 +699,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 3277.6,
-        "A100_40GB": 262.16
+        "A100": 2195.76,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 5521.2,
+      "total_hourly_cost": 4352.86,
       "projects_top": []
     },
     {
@@ -726,10 +726,10 @@
       },
       "hourly_cost": {
         "H100": 1761.28,
-        "A100": 3605.36,
-        "A100_40GB": 262.16
+        "A100": 2415.34,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 5628.8,
+      "total_hourly_cost": 4352.28,
       "projects_top": []
     },
     {
@@ -753,10 +753,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 3605.36,
-        "A100_40GB": 262.16
+        "A100": 2415.34,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 4748.16,
+      "total_hourly_cost": 3471.64,
       "projects_top": []
     },
     {
@@ -780,10 +780,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 3605.36,
-        "A100_40GB": 262.16
+        "A100": 2415.34,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 4748.16,
+      "total_hourly_cost": 3471.64,
       "projects_top": []
     },
     {
@@ -807,10 +807,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 3605.36,
-        "A100_40GB": 524.32
+        "A100": 2415.34,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 6111.12,
+      "total_hourly_cost": 4748.1,
       "projects_top": []
     },
     {
@@ -834,10 +834,10 @@
       },
       "hourly_cost": {
         "H100": 1761.28,
-        "A100": 3441.48,
-        "A100_40GB": 524.32
+        "A100": 2305.55,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 5727.08,
+      "total_hourly_cost": 4418.15,
       "projects_top": []
     },
     {
@@ -861,10 +861,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 2949.84,
-        "A100_40GB": 524.32
+        "A100": 1976.19,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 5455.6,
+      "total_hourly_cost": 4308.95,
       "projects_top": []
     },
     {
@@ -888,10 +888,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 2458.2,
-        "A100_40GB": 524.32
+        "A100": 1646.82,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 3863.16,
+      "total_hourly_cost": 2878.78,
       "projects_top": []
     },
     {
@@ -915,10 +915,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 2785.96,
-        "A100_40GB": 524.32
+        "A100": 1866.4,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 4190.92,
+      "total_hourly_cost": 3098.36,
       "projects_top": []
     },
     {
@@ -942,10 +942,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 2130.44,
+        "A100": 1427.25,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 3231.24,
+      "total_hourly_cost": 2528.05,
       "projects_top": []
     },
     {
@@ -969,10 +969,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 2130.44,
+        "A100": 1427.25,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 3231.24,
+      "total_hourly_cost": 2528.05,
       "projects_top": []
     },
     {
@@ -996,10 +996,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 2130.44,
+        "A100": 1427.25,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 3231.24,
+      "total_hourly_cost": 2528.05,
       "projects_top": []
     },
     {
@@ -1023,10 +1023,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 2458.2,
+        "A100": 1646.82,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 3779.16,
+      "total_hourly_cost": 2967.78,
       "projects_top": []
     },
     {
@@ -1050,10 +1050,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 2130.44,
+        "A100": 1427.25,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 3451.4,
+      "total_hourly_cost": 2748.21,
       "projects_top": []
     },
     {
@@ -1077,10 +1077,10 @@
       },
       "hourly_cost": {
         "H100": 1761.28,
-        "A100": 2130.44,
-        "A100_40GB": 524.32
+        "A100": 1427.25,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 4416.04,
+      "total_hourly_cost": 3539.85,
       "projects_top": []
     },
     {
@@ -1104,10 +1104,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 3113.72,
-        "A100_40GB": 262.16
+        "A100": 2085.98,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 4696.84,
+      "total_hourly_cost": 3582.6,
       "projects_top": []
     },
     {
@@ -1131,10 +1131,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 2785.96,
-        "A100_40GB": 262.16
+        "A100": 1866.4,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 4148.92,
+      "total_hourly_cost": 3142.86,
       "projects_top": []
     },
     {
@@ -1158,10 +1158,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2468.12,
+      "total_hourly_cost": 2089.48,
       "projects_top": []
     },
     {
@@ -1185,10 +1185,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2468.12,
+      "total_hourly_cost": 2089.48,
       "projects_top": []
     },
     {
@@ -1212,10 +1212,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 655.52,
-        "A100_40GB": 262.16
+        "A100": 439.15,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 3339.44,
+      "total_hourly_cost": 3036.57,
       "projects_top": []
     },
     {
@@ -1239,10 +1239,10 @@
       },
       "hourly_cost": {
         "H100": 1981.44,
-        "A100": 983.28,
-        "A100_40GB": 262.16
+        "A100": 658.73,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 3226.88,
+      "total_hourly_cost": 2815.83,
       "projects_top": []
     },
     {
@@ -1266,10 +1266,10 @@
       },
       "hourly_cost": {
         "H100": 1761.28,
-        "A100": 983.28,
-        "A100_40GB": 524.32
+        "A100": 658.73,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 3268.88,
+      "total_hourly_cost": 2771.33,
       "projects_top": []
     },
     {
@@ -1293,10 +1293,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 655.52,
-        "A100_40GB": 262.16
+        "A100": 439.15,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 1798.32,
+      "total_hourly_cost": 1495.45,
       "projects_top": []
     },
     {
@@ -1320,10 +1320,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 1311.04,
-        "A100_40GB": 524.32
+        "A100": 878.31,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 3156.32,
+      "total_hourly_cost": 2550.59,
       "projects_top": []
     },
     {
@@ -1347,10 +1347,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 983.28,
-        "A100_40GB": 917.56
+        "A100": 658.73,
+        "A100_40GB": 614.81
       },
-      "total_hourly_cost": 2781.48,
+      "total_hourly_cost": 2154.18,
       "projects_top": []
     },
     {
@@ -1374,10 +1374,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
-        "A100_40GB": 1179.72
+        "A100": 658.73,
+        "A100_40GB": 790.48
       },
-      "total_hourly_cost": 3483.96,
+      "total_hourly_cost": 2770.17,
       "projects_top": []
     },
     {
@@ -1401,10 +1401,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
-        "A100_40GB": 262.16
+        "A100": 658.73,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 2566.4,
+      "total_hourly_cost": 2155.35,
       "projects_top": []
     },
     {
@@ -1428,10 +1428,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 819.4,
-        "A100_40GB": 262.16
+        "A100": 548.94,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 2402.52,
+      "total_hourly_cost": 2045.56,
       "projects_top": []
     },
     {
@@ -1455,10 +1455,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 819.4,
-        "A100_40GB": 524.32
+        "A100": 548.94,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 2664.68,
+      "total_hourly_cost": 2221.22,
       "projects_top": []
     },
     {
@@ -1482,10 +1482,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1474.92,
-        "A100_40GB": 524.32
+        "A100": 988.09,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 3100.04,
+      "total_hourly_cost": 2440.21,
       "projects_top": []
     },
     {
@@ -1509,10 +1509,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 1474.92,
-        "A100_40GB": 524.32
+        "A100": 988.09,
+        "A100_40GB": 351.32
       },
-      "total_hourly_cost": 2879.88,
+      "total_hourly_cost": 2220.05,
       "projects_top": []
     },
     {
@@ -1536,10 +1536,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1311.04,
+        "A100": 878.31,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2411.84,
+      "total_hourly_cost": 1979.11,
       "projects_top": []
     },
     {
@@ -1563,10 +1563,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1311.04,
+        "A100": 878.31,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2411.84,
+      "total_hourly_cost": 1979.11,
       "projects_top": []
     },
     {
@@ -1590,10 +1590,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1756.32,
+      "total_hourly_cost": 1539.95,
       "projects_top": []
     },
     {
@@ -1617,10 +1617,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1756.32,
+      "total_hourly_cost": 1539.95,
       "projects_top": []
     },
     {
@@ -1644,10 +1644,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1756.32,
+      "total_hourly_cost": 1539.95,
       "projects_top": []
     },
     {
@@ -1671,10 +1671,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1311.04,
+        "A100": 878.31,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2411.84,
+      "total_hourly_cost": 1979.11,
       "projects_top": []
     },
     {
@@ -1698,10 +1698,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 655.52,
-        "A100_40GB": 262.16
+        "A100": 439.15,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 2238.64,
+      "total_hourly_cost": 1935.77,
       "projects_top": []
     },
     {
@@ -1725,10 +1725,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 655.52,
-        "A100_40GB": 262.16
+        "A100": 439.15,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 2018.48,
+      "total_hourly_cost": 1715.61,
       "projects_top": []
     },
     {
@@ -1752,10 +1752,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 983.28,
-        "A100_40GB": 262.16
+        "A100": 658.73,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 2126.08,
+      "total_hourly_cost": 1715.03,
       "projects_top": []
     },
     {
@@ -1779,10 +1779,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 983.28,
-        "A100_40GB": 262.16
+        "A100": 658.73,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 2126.08,
+      "total_hourly_cost": 1715.03,
       "projects_top": []
     },
     {
@@ -1806,10 +1806,10 @@
       },
       "hourly_cost": {
         "H100": 880.64,
-        "A100": 983.28,
-        "A100_40GB": 262.16
+        "A100": 658.73,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 2126.08,
+      "total_hourly_cost": 1715.03,
       "projects_top": []
     },
     {
@@ -1833,10 +1833,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 983.28,
-        "A100_40GB": 262.16
+        "A100": 658.73,
+        "A100_40GB": 175.66
       },
-      "total_hourly_cost": 2346.24,
+      "total_hourly_cost": 1935.19,
       "projects_top": []
     },
     {
@@ -1860,10 +1860,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1756.32,
+      "total_hourly_cost": 1539.95,
       "projects_top": []
     },
     {
@@ -1887,10 +1887,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1756.32,
+      "total_hourly_cost": 1539.95,
       "projects_top": []
     },
     {
@@ -1914,10 +1914,10 @@
       },
       "hourly_cost": {
         "H100": 1541.12,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2196.64,
+      "total_hourly_cost": 1980.27,
       "projects_top": []
     },
     {
@@ -1941,10 +1941,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1095.84,
+      "total_hourly_cost": 879.47,
       "projects_top": []
     },
     {
@@ -1968,10 +1968,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1976.48,
+      "total_hourly_cost": 1760.11,
       "projects_top": []
     },
     {
@@ -2022,10 +2022,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1095.84,
+      "total_hourly_cost": 879.47,
       "projects_top": []
     },
     {
@@ -2049,10 +2049,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -2076,10 +2076,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -2103,10 +2103,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1423.6,
+      "total_hourly_cost": 1099.05,
       "projects_top": []
     },
     {
@@ -2130,10 +2130,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1423.6,
+      "total_hourly_cost": 1099.05,
       "projects_top": []
     },
     {
@@ -2157,10 +2157,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2184,10 +2184,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2211,10 +2211,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2238,10 +2238,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2265,10 +2265,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2292,10 +2292,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2319,10 +2319,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2346,10 +2346,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2373,10 +2373,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2400,10 +2400,10 @@
       },
       "hourly_cost": {
         "H100": 1320.96,
-        "A100": 983.28,
+        "A100": 658.73,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2304.24,
+      "total_hourly_cost": 1979.69,
       "projects_top": []
     },
     {
@@ -2427,10 +2427,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -2454,10 +2454,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1311.04,
+        "A100": 878.31,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1751.36,
+      "total_hourly_cost": 1318.63,
       "projects_top": []
     },
     {
@@ -2481,10 +2481,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2508,10 +2508,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2535,10 +2535,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2562,10 +2562,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2589,10 +2589,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2616,10 +2616,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2643,10 +2643,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2670,10 +2670,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2697,10 +2697,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2724,10 +2724,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2751,10 +2751,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2778,10 +2778,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2805,10 +2805,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2832,10 +2832,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2859,10 +2859,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2886,10 +2886,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2913,10 +2913,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2940,10 +2940,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2967,10 +2967,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -2994,10 +2994,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3021,10 +3021,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3048,10 +3048,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3075,10 +3075,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3102,10 +3102,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3129,10 +3129,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3156,10 +3156,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3183,10 +3183,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3210,10 +3210,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3237,10 +3237,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3264,10 +3264,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3291,10 +3291,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3318,10 +3318,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3345,10 +3345,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3372,10 +3372,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3399,10 +3399,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3426,10 +3426,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3453,10 +3453,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3480,10 +3480,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3507,10 +3507,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3534,10 +3534,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3561,10 +3561,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3588,10 +3588,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3615,10 +3615,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3642,10 +3642,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3669,10 +3669,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1966.56,
+        "A100": 1317.46,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2406.88,
+      "total_hourly_cost": 1757.78,
       "projects_top": []
     },
     {
@@ -3723,10 +3723,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -3750,10 +3750,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -3777,10 +3777,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -3804,10 +3804,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -3831,10 +3831,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -3858,10 +3858,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -3885,10 +3885,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -3912,10 +3912,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -3939,10 +3939,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -3966,10 +3966,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -3993,10 +3993,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4020,10 +4020,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4047,10 +4047,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4074,10 +4074,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4101,10 +4101,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4128,10 +4128,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4155,10 +4155,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4182,10 +4182,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4209,10 +4209,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4236,10 +4236,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4263,10 +4263,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4290,10 +4290,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4317,10 +4317,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4344,10 +4344,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4371,10 +4371,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4398,10 +4398,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4425,10 +4425,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4452,10 +4452,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4479,10 +4479,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4506,10 +4506,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4533,10 +4533,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4560,10 +4560,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4587,10 +4587,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4614,10 +4614,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4641,10 +4641,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4668,10 +4668,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4695,10 +4695,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4722,10 +4722,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4749,10 +4749,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4776,10 +4776,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4803,10 +4803,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4830,10 +4830,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4857,10 +4857,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4884,10 +4884,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4911,10 +4911,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4938,10 +4938,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4965,10 +4965,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -4992,10 +4992,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -5019,10 +5019,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -5046,10 +5046,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -5073,10 +5073,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -5100,10 +5100,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 40.97,
+        "A100": 27.45,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 40.97,
+      "total_hourly_cost": 27.45,
       "projects_top": []
     },
     {
@@ -5127,10 +5127,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 327.76,
+        "A100": 219.58,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 327.76,
+      "total_hourly_cost": 219.58,
       "projects_top": []
     },
     {
@@ -5154,10 +5154,10 @@
       },
       "hourly_cost": {
         "H100": 1761.28,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2908.44,
+      "total_hourly_cost": 2529.8,
       "projects_top": []
     },
     {
@@ -5181,10 +5181,10 @@
       },
       "hourly_cost": {
         "H100": 2201.6,
-        "A100": 1474.92,
+        "A100": 988.09,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 3676.52,
+      "total_hourly_cost": 3189.69,
       "projects_top": []
     },
     {
@@ -5208,10 +5208,10 @@
       },
       "hourly_cost": {
         "H100": 2201.6,
-        "A100": 1802.68,
+        "A100": 1207.67,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 4004.28,
+      "total_hourly_cost": 3409.27,
       "projects_top": []
     },
     {
@@ -5235,10 +5235,10 @@
       },
       "hourly_cost": {
         "H100": 2201.6,
-        "A100": 1802.68,
+        "A100": 1207.67,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 4004.28,
+      "total_hourly_cost": 3409.27,
       "projects_top": []
     },
     {
@@ -5262,10 +5262,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 1802.68,
+        "A100": 1207.67,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 4224.44,
+      "total_hourly_cost": 3629.43,
       "projects_top": []
     },
     {
@@ -5289,10 +5289,10 @@
       },
       "hourly_cost": {
         "H100": 2421.76,
-        "A100": 1802.68,
+        "A100": 1207.67,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 4224.44,
+      "total_hourly_cost": 3629.43,
       "projects_top": []
     },
     {
@@ -5316,10 +5316,10 @@
       },
       "hourly_cost": {
         "H100": 1541.12,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2688.28,
+      "total_hourly_cost": 2309.64,
       "projects_top": []
     },
     {
@@ -5343,10 +5343,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5370,10 +5370,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5397,10 +5397,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5424,10 +5424,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5451,10 +5451,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5478,10 +5478,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5505,10 +5505,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5532,10 +5532,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5559,10 +5559,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5586,10 +5586,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5613,10 +5613,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5640,10 +5640,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5667,10 +5667,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5694,10 +5694,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5721,10 +5721,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5748,10 +5748,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5775,10 +5775,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5802,10 +5802,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5829,10 +5829,10 @@
       },
       "hourly_cost": {
         "H100": 1100.8,
-        "A100": 1147.16,
+        "A100": 768.52,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 2247.96,
+      "total_hourly_cost": 1869.32,
       "projects_top": []
     },
     {
@@ -5856,10 +5856,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -5883,10 +5883,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -5910,10 +5910,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -5937,10 +5937,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -5964,10 +5964,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -5991,10 +5991,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6018,10 +6018,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6045,10 +6045,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6072,10 +6072,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6099,10 +6099,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6126,10 +6126,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6153,10 +6153,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6180,10 +6180,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6207,10 +6207,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6234,10 +6234,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6261,10 +6261,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6288,10 +6288,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6315,10 +6315,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6342,10 +6342,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6369,10 +6369,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6396,10 +6396,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6423,10 +6423,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6450,10 +6450,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6477,10 +6477,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6504,10 +6504,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6531,10 +6531,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6558,10 +6558,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 655.52,
+      "total_hourly_cost": 439.15,
       "projects_top": []
     },
     {
@@ -6585,10 +6585,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6612,10 +6612,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6639,10 +6639,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6666,10 +6666,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6693,10 +6693,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6720,10 +6720,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6747,10 +6747,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6774,10 +6774,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6801,10 +6801,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6828,10 +6828,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6855,10 +6855,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6882,10 +6882,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6909,10 +6909,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6936,10 +6936,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6963,10 +6963,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -6990,10 +6990,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -7017,10 +7017,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -7044,10 +7044,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -7071,10 +7071,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -7098,10 +7098,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -7125,10 +7125,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -7152,10 +7152,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -7179,10 +7179,10 @@
       },
       "hourly_cost": {
         "H100": 55.04,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 710.56,
+      "total_hourly_cost": 494.19,
       "projects_top": []
     },
     {
@@ -7206,10 +7206,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 1311.04,
-        "A100_40GB": 2621.6
+        "A100": 878.31,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4428.0,
+      "total_hourly_cost": 3130.28,
       "projects_top": []
     },
     {
@@ -7233,10 +7233,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 2294.32,
-        "A100_40GB": 2621.6
+        "A100": 1537.03,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 5411.28,
+      "total_hourly_cost": 3789.0,
       "projects_top": []
     },
     {
@@ -7260,10 +7260,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 2622.08,
-        "A100_40GB": 2621.6
+        "A100": 1756.61,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 5739.04,
+      "total_hourly_cost": 4008.58,
       "projects_top": []
     },
     {
@@ -7287,10 +7287,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 2622.08,
-        "A100_40GB": 2621.6
+        "A100": 1756.61,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 5739.04,
+      "total_hourly_cost": 4008.58,
       "projects_top": []
     },
     {
@@ -7314,10 +7314,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 2622.08,
-        "A100_40GB": 2621.6
+        "A100": 1756.61,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 5739.04,
+      "total_hourly_cost": 4008.58,
       "projects_top": []
     },
     {
@@ -7341,10 +7341,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 2622.08,
-        "A100_40GB": 2621.6
+        "A100": 1756.61,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 5739.04,
+      "total_hourly_cost": 4008.58,
       "projects_top": []
     },
     {
@@ -7368,10 +7368,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 2622.08,
-        "A100_40GB": 2621.6
+        "A100": 1756.61,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 5739.04,
+      "total_hourly_cost": 4008.58,
       "projects_top": []
     },
     {
@@ -7395,10 +7395,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 1311.04,
-        "A100_40GB": 2621.6
+        "A100": 878.31,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4428.0,
+      "total_hourly_cost": 3130.28,
       "projects_top": []
     },
     {
@@ -7422,10 +7422,10 @@
       },
       "hourly_cost": {
         "H100": 495.36,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4755.76,
+      "total_hourly_cost": 3349.85,
       "projects_top": []
     },
     {
@@ -7449,10 +7449,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7476,10 +7476,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7503,10 +7503,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7530,10 +7530,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7557,10 +7557,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7584,10 +7584,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7611,10 +7611,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7638,10 +7638,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7665,10 +7665,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7692,10 +7692,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7719,10 +7719,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7746,10 +7746,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7773,10 +7773,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7800,10 +7800,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7827,10 +7827,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7854,10 +7854,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7881,10 +7881,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7908,10 +7908,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7935,10 +7935,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7962,10 +7962,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -7989,10 +7989,10 @@
       },
       "hourly_cost": {
         "H100": 715.52,
-        "A100": 1638.8,
-        "A100_40GB": 2621.6
+        "A100": 1097.88,
+        "A100_40GB": 1756.61
       },
-      "total_hourly_cost": 4975.92,
+      "total_hourly_cost": 3570.01,
       "projects_top": []
     },
     {
@@ -8016,10 +8016,10 @@
       },
       "hourly_cost": {
         "H100": 110.08,
-        "A100": 655.52,
+        "A100": 439.15,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 765.6,
+      "total_hourly_cost": 549.23,
       "projects_top": []
     },
     {
@@ -8043,10 +8043,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -8070,10 +8070,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -8097,10 +8097,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8124,10 +8124,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8151,10 +8151,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8178,10 +8178,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8205,10 +8205,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8232,10 +8232,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8259,10 +8259,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8286,10 +8286,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8313,10 +8313,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8340,10 +8340,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8367,10 +8367,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8394,10 +8394,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8421,10 +8421,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8448,10 +8448,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8475,10 +8475,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8502,10 +8502,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8529,10 +8529,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8556,10 +8556,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8583,10 +8583,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8610,10 +8610,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8637,10 +8637,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8664,10 +8664,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8691,10 +8691,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8718,10 +8718,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8745,10 +8745,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8772,10 +8772,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8799,10 +8799,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8826,10 +8826,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8853,10 +8853,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8880,10 +8880,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8907,10 +8907,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8934,10 +8934,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8961,10 +8961,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -8988,10 +8988,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9015,10 +9015,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9042,10 +9042,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9069,10 +9069,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9096,10 +9096,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9123,10 +9123,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9150,10 +9150,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9177,10 +9177,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9204,10 +9204,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9231,10 +9231,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9258,10 +9258,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9285,10 +9285,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9312,10 +9312,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9339,10 +9339,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 573.58,
+        "A100": 384.26,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 573.58,
+      "total_hourly_cost": 384.26,
       "projects_top": []
     },
     {
@@ -9366,10 +9366,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 81.94,
+        "A100": 54.89,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 81.94,
+      "total_hourly_cost": 54.89,
       "projects_top": []
     },
     {
@@ -9393,10 +9393,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 629.86,
+      "total_hourly_cost": 494.63,
       "projects_top": []
     },
     {
@@ -9420,10 +9420,10 @@
       },
       "hourly_cost": {
         "H100": 275.2,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 684.9,
+      "total_hourly_cost": 549.67,
       "projects_top": []
     },
     {
@@ -9447,10 +9447,10 @@
       },
       "hourly_cost": {
         "H100": 275.2,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1012.66,
+      "total_hourly_cost": 769.25,
       "projects_top": []
     },
     {
@@ -9474,10 +9474,10 @@
       },
       "hourly_cost": {
         "H100": 275.2,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1012.66,
+      "total_hourly_cost": 769.25,
       "projects_top": []
     },
     {
@@ -9501,10 +9501,10 @@
       },
       "hourly_cost": {
         "H100": 275.2,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1012.66,
+      "total_hourly_cost": 769.25,
       "projects_top": []
     },
     {
@@ -9528,10 +9528,10 @@
       },
       "hourly_cost": {
         "H100": 275.2,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1012.66,
+      "total_hourly_cost": 769.25,
       "projects_top": []
     },
     {
@@ -9555,10 +9555,10 @@
       },
       "hourly_cost": {
         "H100": 275.2,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1012.66,
+      "total_hourly_cost": 769.25,
       "projects_top": []
     },
     {
@@ -9582,10 +9582,10 @@
       },
       "hourly_cost": {
         "H100": 275.2,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1012.66,
+      "total_hourly_cost": 769.25,
       "projects_top": []
     },
     {
@@ -9609,10 +9609,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 737.46,
+      "total_hourly_cost": 494.05,
       "projects_top": []
     },
     {
@@ -9636,10 +9636,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9663,10 +9663,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9690,10 +9690,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9717,10 +9717,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9744,10 +9744,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9771,10 +9771,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9798,10 +9798,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9825,10 +9825,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9852,10 +9852,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9879,10 +9879,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9906,10 +9906,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9933,10 +9933,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9960,10 +9960,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -9987,10 +9987,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10014,10 +10014,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10041,10 +10041,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10068,10 +10068,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10095,10 +10095,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10122,10 +10122,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10149,10 +10149,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10176,10 +10176,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10203,10 +10203,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10230,10 +10230,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10257,10 +10257,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10284,10 +10284,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10311,10 +10311,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10338,10 +10338,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10365,10 +10365,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10392,10 +10392,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10419,10 +10419,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10446,10 +10446,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10473,10 +10473,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10500,10 +10500,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10527,10 +10527,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10554,10 +10554,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10581,10 +10581,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10608,10 +10608,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10635,10 +10635,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10662,10 +10662,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10689,10 +10689,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10716,10 +10716,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10743,10 +10743,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10770,10 +10770,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10797,10 +10797,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10824,10 +10824,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10851,10 +10851,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10878,10 +10878,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10905,10 +10905,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10932,10 +10932,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10959,10 +10959,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 409.7,
+      "total_hourly_cost": 274.47,
       "projects_top": []
     },
     {
@@ -10986,10 +10986,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 327.76,
+        "A100": 219.58,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 327.76,
+      "total_hourly_cost": 219.58,
       "projects_top": []
     },
     {
@@ -11013,10 +11013,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 327.76,
+        "A100": 219.58,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 327.76,
+      "total_hourly_cost": 219.58,
       "projects_top": []
     },
     {
@@ -11040,10 +11040,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 327.76,
+        "A100": 219.58,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 327.76,
+      "total_hourly_cost": 219.58,
       "projects_top": []
     },
     {
@@ -11067,10 +11067,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 327.76,
+        "A100": 219.58,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 327.76,
+      "total_hourly_cost": 219.58,
       "projects_top": []
     },
     {
@@ -11094,10 +11094,10 @@
       },
       "hourly_cost": {
         "H100": 0.0,
-        "A100": 327.76,
+        "A100": 219.58,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 327.76,
+      "total_hourly_cost": 219.58,
       "projects_top": []
     },
     {
@@ -11121,10 +11121,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 629.86,
+      "total_hourly_cost": 494.63,
       "projects_top": []
     },
     {
@@ -11148,10 +11148,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 850.02,
+      "total_hourly_cost": 714.79,
       "projects_top": []
     },
     {
@@ -11175,10 +11175,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 850.02,
+      "total_hourly_cost": 714.79,
       "projects_top": []
     },
     {
@@ -11202,10 +11202,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 629.86,
+      "total_hourly_cost": 494.63,
       "projects_top": []
     },
     {
@@ -11229,10 +11229,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 629.86,
+      "total_hourly_cost": 494.63,
       "projects_top": []
     },
     {
@@ -11256,10 +11256,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 409.7,
+        "A100": 274.47,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 629.86,
+      "total_hourly_cost": 494.63,
       "projects_top": []
     },
     {
@@ -11283,10 +11283,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11310,10 +11310,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11337,10 +11337,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11364,10 +11364,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11391,10 +11391,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11418,10 +11418,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11445,10 +11445,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11472,10 +11472,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11499,10 +11499,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11526,10 +11526,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11553,10 +11553,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11580,10 +11580,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11607,10 +11607,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11634,10 +11634,10 @@
       },
       "hourly_cost": {
         "H100": 220.16,
-        "A100": 737.46,
+        "A100": 494.05,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 957.62,
+      "total_hourly_cost": 714.21,
       "projects_top": []
     },
     {
@@ -11661,10 +11661,10 @@
       },
       "hourly_cost": {
         "H100": 440.32,
-        "A100": 1474.92,
+        "A100": 988.1,
         "A100_40GB": 0.0
       },
-      "total_hourly_cost": 1915.24,
+      "total_hourly_cost": 1428.42,
       "projects_top": []
     },
     {
@@ -11842,6 +11842,33 @@
         }
       ],
       "based_on_hour": "2026-03-05T01:00:00Z"
+    },
+    {
+      "hour": "2026-03-05T03:00:00Z",
+      "captured_at": "2026-03-05T03:19:47Z",
+      "source": "sqlite_live",
+      "fetch_ok": true,
+      "estimated": false,
+      "error": null,
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 4,
+        "A100": 18,
+        "A100_40GB": 0
+      },
+      "gpus": {
+        "H100": 32,
+        "A100": 144,
+        "A100_40GB": 0
+      },
+      "hourly_cost": {
+        "H100": 220.16,
+        "A100": 494.05,
+        "A100_40GB": 0.0
+      },
+      "total_hourly_cost": 714.21,
+      "projects_top": []
     }
   ]
 }
