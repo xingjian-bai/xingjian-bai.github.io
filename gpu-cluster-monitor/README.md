@@ -3,6 +3,7 @@
 This dashboard is intentionally **not linked** from the homepage navigation.
 Access it directly via:
 
+- `https://xingjianbai.com/gpu-cluster-monitor/`
 - `https://xingjian-bai.github.io/gpu-cluster-monitor/`
 
 ## What It Tracks
@@ -76,10 +77,23 @@ This workflow is configured for `self-hosted` runners, since Pluto CLI typically
 
 ## Cost Model
 
+Market-price definition:
+
+- AWS EC2 On-Demand public pricing in `us-east-1`
+- Filters: `OperatingSystem=Linux`, `Tenancy=Shared`, `CapacityStatus=Used`, `OnDemand`
+- Reference publication used for pinned rates: `2026-03-04T22:42:40Z`
+
 Node-level costs:
 
-- `H100`: `$55.04/hour`
-- `A100`: `$40.97/hour`
-- `A100-40GB`: `$32.77/hour`
+- `H100` (`p5.48xlarge`): `$55.04/hour` (`$6.88/GPU-hour`)
+- `A100` (`p4de.24xlarge`): `$27.44705/hour` (`$3.43088/GPU-hour`)
+- `A100-40GB` (`p4d.24xlarge`): `$21.957642/hour` (`$2.74471/GPU-hour`)
 
-Cost is computed from active **nodes** each hour.
+Authentic source links:
+
+- https://aws.amazon.com/ec2/pricing/on-demand/
+- https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/us-east-1/index.csv
+- https://aws.amazon.com/ec2/instance-types/p5/
+- https://aws.amazon.com/ec2/instance-types/p4/
+
+Cost is computed from active **nodes** each hour, then accumulated into daily/weekly/monthly and all-time metrics.

@@ -30,13 +30,6 @@ const fmtHour = new Intl.DateTimeFormat("en-US", {
   hour12: false
 });
 
-const fmtDateOnly = new Intl.DateTimeFormat("en-US", {
-  timeZone: "UTC",
-  year: "numeric",
-  month: "short",
-  day: "2-digit"
-});
-
 function toDate(value) {
   return new Date(value);
 }
@@ -66,8 +59,7 @@ function formatCurrency(value) {
 }
 
 function formatHour(value) {
-  const d = toDate(value);
-  return `${fmtHour.format(d)} UTC`;
+  return `${fmtHour.format(toDate(value))} UTC`;
 }
 
 function parseSnapshots(doc) {
@@ -107,9 +99,7 @@ function getRangeSnapshots() {
 }
 
 function renderMeta() {
-  const aggregates = state.aggregates;
-  const latest = aggregates?.latest || null;
-
+  const latest = state.aggregates?.latest || null;
   const lastHourEl = document.getElementById("meta-last-hour");
   const updatedEl = document.getElementById("meta-updated-at");
   const qualityEl = document.getElementById("meta-quality");
@@ -122,11 +112,11 @@ function renderMeta() {
   }
 
   lastHourEl.textContent = formatHour(latest.hour);
-  updatedEl.textContent = formatHour(aggregates.generated_at);
+  updatedEl.textContent = formatHour(state.aggregates.generated_at);
 
-  const coverage = aggregates.quality?.coverage_pct ?? 0;
-  const observed = aggregates.quality?.observed_hours ?? 0;
-  const total = (aggregates.quality?.observed_hours ?? 0) + (aggregates.quality?.estimated_hours ?? 0);
+  const coverage = state.aggregates.quality?.coverage_pct ?? 0;
+  const observed = state.aggregates.quality?.observed_hours ?? 0;
+  const total = observed + (state.aggregates.quality?.estimated_hours ?? 0);
   qualityEl.textContent = `${formatDecimal(coverage, 1)}% observed (${observed}/${total})`;
 }
 
@@ -153,20 +143,53 @@ function renderHealth() {
     pill.textContent = "Unknown";
   }
 
-  const stale = Boolean(aggregates.is_stale);
-  const staleSuffix = stale ? " Data is stale." : "";
+  const staleSuffix = aggregates.is_stale ? " Data is stale." : "";
   messageEl.textContent = health.message
     ? `${health.message}${staleSuffix}`
     : `Latest hour: ${health.latest_hour ? formatHour(health.latest_hour) : "n/a"}.${staleSuffix}`;
 }
 
+function renderPricing() {
+  const pricing = state.aggregates?.pricing || null;
+  const defEl = document.getElementById("pricing-definition");
+  const body = document.getElementById("pricing-table-body");
+  const links = document.getElementById("pricing-source-links");
+
+  if (!pricing || !pricing.instances) {
+    defEl.textContent = "Pricing data unavailable.";
+    body.innerHTML = '<tr><td colspan="5" class="muted-cell">No pricing model provided.</td></tr>';
+    links.innerHTML = "";
+    return;
+  }
+
+  const refStamp = pricing.reference_publication_utc ? `Reference publication: ${pricing.reference_publication_utc}.` : "";
+  defEl.textContent = `${pricing.market_price_definition} ${refStamp}`;
+
+  body.innerHTML = GPU_TYPES.map((gpuType) => {
+    const row = pricing.instances[gpuType] || {};
+    return `
+      <tr>
+        <td class="${GPU_META[gpuType].cssClass}">${GPU_META[gpuType].label}</td>
+        <td class="mono">${row.instance_type || "-"}</td>
+        <td class="mono">${formatCurrency(row.node_hourly_usd || 0)}</td>
+        <td class="mono">${formatCurrency(row.gpu_hourly_usd || 0)}</td>
+        <td>${pricing.name || "-"}</td>
+      </tr>
+    `;
+  }).join("");
+
+  const src = Array.isArray(pricing.source_links) ? pricing.source_links : [];
+  links.innerHTML = src.map((item) => (
+    `<li><a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.label}</a></li>`
+  )).join("");
+}
+
 function buildKpiCards() {
-  const ag = state.aggregates || {};
-  const kpis = ag.kpis || {};
-  const rolling24 = ag.rolling?.["24h"] || {};
-  const rolling7d = ag.rolling?.["7d"] || {};
-  const rolling30d = ag.rolling?.["30d"] || {};
-  const quality = ag.quality || {};
+  const kpis = state.aggregates?.kpis || {};
+  const rolling24 = state.aggregates?.rolling?.["24h"] || {};
+  const rolling7d = state.aggregates?.rolling?.["7d"] || {};
+  const rolling30d = state.aggregates?.rolling?.["30d"] || {};
+  const quality = state.aggregates?.quality || {};
 
   return [
     {
@@ -215,28 +238,24 @@ function buildKpiCards() {
 function renderKpis() {
   const container = document.getElementById("kpi-grid");
   const cards = buildKpiCards();
-  container.innerHTML = cards
-    .map(
-      (card) => `
-      <article class="kpi-card">
-        <div class="kpi-title">${card.title}</div>
-        <div class="kpi-value">${card.value}</div>
-        <div class="kpi-sub">${card.sub}</div>
-      </article>
-    `
-    )
-    .join("");
+  container.innerHTML = cards.map((card) => `
+    <article class="kpi-card">
+      <div class="kpi-title">${card.title}</div>
+      <div class="kpi-value">${card.value}</div>
+      <div class="kpi-sub">${card.sub}</div>
+    </article>
+  `).join("");
 }
 
-function buildRollingCards() {
+function renderRollingCards() {
   const rolling = state.aggregates?.rolling || {};
   const items = [
     { key: "24h", label: "Last 24 Hours" },
     { key: "7d", label: "Last 7 Days" },
     { key: "30d", label: "Last 30 Days" }
   ];
-
-  return items.map((item) => {
+  const container = document.getElementById("rolling-cards");
+  container.innerHTML = items.map((item) => {
     const value = rolling[item.key] || {};
     return `
       <article class="rolling-card">
@@ -245,19 +264,21 @@ function buildRollingCards() {
         <small>${formatInteger(value.total_gpu_hours || 0)} GPU-hours | ${formatInteger(value.total_node_hours || 0)} node-hours</small>
       </article>
     `;
-  });
-}
-
-function renderRollingCards() {
-  const container = document.getElementById("rolling-cards");
-  container.innerHTML = buildRollingCards().join("");
+  }).join("");
 }
 
 function upsertChart(chartKey, canvasId, config) {
-  if (state.charts[chartKey]) {
-    state.charts[chartKey].data = config.data;
-    state.charts[chartKey].options = config.options;
-    state.charts[chartKey].update();
+  const existing = state.charts[chartKey];
+  if (existing) {
+    if (config.type && existing.config.type !== config.type) {
+      existing.destroy();
+      const ctx = document.getElementById(canvasId).getContext("2d");
+      state.charts[chartKey] = new Chart(ctx, config);
+      return;
+    }
+    existing.data = config.data;
+    existing.options = config.options;
+    existing.update();
     return;
   }
   const ctx = document.getElementById(canvasId).getContext("2d");
@@ -271,10 +292,7 @@ function baseChartOptions({ stacked = false, yLabel = "" } = {}) {
     interaction: { mode: "index", intersect: false },
     plugins: {
       legend: {
-        labels: {
-          boxWidth: 12,
-          usePointStyle: true
-        }
+        labels: { boxWidth: 12, usePointStyle: true }
       },
       tooltip: {
         callbacks: {
@@ -291,22 +309,13 @@ function baseChartOptions({ stacked = false, yLabel = "" } = {}) {
     scales: {
       x: {
         stacked,
-        ticks: {
-          maxTicksLimit: 12
-        },
-        grid: {
-          color: "rgba(25, 60, 100, 0.08)"
-        }
+        ticks: { maxTicksLimit: 12 },
+        grid: { color: "rgba(25, 60, 100, 0.08)" }
       },
       y: {
         stacked,
-        title: {
-          display: Boolean(yLabel),
-          text: yLabel
-        },
-        grid: {
-          color: "rgba(25, 60, 100, 0.08)"
-        }
+        title: { display: Boolean(yLabel), text: yLabel },
+        grid: { color: "rgba(25, 60, 100, 0.08)" }
       }
     }
   };
@@ -338,29 +347,30 @@ function renderHourlyCostChart() {
   const labels = snapshots.map((s) => fmtHour.format(toDate(s.hour)));
   const estimated = snapshots.map((s) => (s.estimated ? Number(s.total_hourly_cost || 0) : null));
 
-  const datasets = [
-    {
-      label: "Hourly Cost",
-      data: snapshots.map((s) => Number(s.total_hourly_cost || 0)),
-      borderColor: "#1c63d5",
-      backgroundColor: "rgba(28, 99, 213, 0.15)",
-      tension: 0.2,
-      fill: true,
-      pointRadius: 0
-    },
-    {
-      label: "Estimated Snapshot",
-      data: estimated,
-      borderColor: "#e58a00",
-      backgroundColor: "#e58a00",
-      showLine: false,
-      pointRadius: 3
-    }
-  ];
-
   upsertChart("hourlyCost", "hourly-cost-chart", {
     type: "line",
-    data: { labels, datasets },
+    data: {
+      labels,
+      datasets: [
+        {
+          label: "Hourly Cost",
+          data: snapshots.map((s) => Number(s.total_hourly_cost || 0)),
+          borderColor: "#1c63d5",
+          backgroundColor: "rgba(28, 99, 213, 0.15)",
+          tension: 0.2,
+          fill: true,
+          pointRadius: 0
+        },
+        {
+          label: "Estimated Snapshot",
+          data: estimated,
+          borderColor: "#e58a00",
+          backgroundColor: "#e58a00",
+          showLine: false,
+          pointRadius: 3
+        }
+      ]
+    },
     options: baseChartOptions({ yLabel: "USD" })
   });
 }
@@ -414,9 +424,6 @@ function formatPeriodLabel(periodKey) {
   if (state.period === "daily") {
     return periodKey.slice(5);
   }
-  if (state.period === "weekly") {
-    return periodKey;
-  }
   return periodKey;
 }
 
@@ -462,6 +469,7 @@ function renderPeriodChart() {
   document.getElementById("period-chart-subtitle").textContent = `${prettyPeriod} totals by GPU type · ${prettyMetric}`;
 
   upsertChart("period", "period-chart", {
+    type: "bar",
     data: { labels, datasets },
     options: baseChartOptions({ stacked: true, yLabel: unitLabel })
   });
@@ -470,7 +478,6 @@ function renderPeriodChart() {
 function renderCostShareChart() {
   const costByType = state.aggregates?.all_time?.cost_by_type || {};
   const data = GPU_TYPES.map((gpuType) => Number(costByType[gpuType] || 0));
-
   upsertChart("costShare", "cost-share-chart", {
     type: "doughnut",
     data: {
@@ -513,18 +520,15 @@ function statusTag(snapshot) {
 function renderRecentTable() {
   const tbody = document.getElementById("recent-hours-body");
   const rows = [...state.snapshots].slice(-48).reverse();
-
   if (!rows.length) {
     tbody.innerHTML = '<tr><td colspan="8" class="muted-cell">No snapshots yet.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = rows
-    .map((snapshot) => {
-      const nodesTotal = sumValues(snapshot.nodes);
-      const gpusTotal = sumValues(snapshot.gpus);
-
-      return `
+  tbody.innerHTML = rows.map((snapshot) => {
+    const nodesTotal = sumValues(snapshot.nodes);
+    const gpusTotal = sumValues(snapshot.gpus);
+    return `
       <tr>
         <td class="mono">${formatHour(snapshot.hour)}</td>
         <td>${statusTag(snapshot)}</td>
@@ -536,13 +540,13 @@ function renderRecentTable() {
         <td class="mono">${formatCurrency(snapshot.total_hourly_cost || 0)}</td>
       </tr>
     `;
-    })
-    .join("");
+  }).join("");
 }
 
 function renderAll() {
   renderMeta();
   renderHealth();
+  renderPricing();
   renderKpis();
   renderRollingCards();
   renderGpuUsageChart();
@@ -578,7 +582,12 @@ function bindControls() {
     });
   });
 
-  document.getElementById("period-metric").addEventListener("change", (event) => {
+  const metricSelect = document.getElementById("period-metric");
+  metricSelect.addEventListener("change", (event) => {
+    state.periodMetric = event.target.value;
+    renderPeriodChart();
+  });
+  metricSelect.addEventListener("input", (event) => {
     state.periodMetric = event.target.value;
     renderPeriodChart();
   });

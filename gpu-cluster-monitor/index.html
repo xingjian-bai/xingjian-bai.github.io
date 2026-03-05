@@ -72,6 +72,33 @@
 
     <section id="kpi-grid" class="kpi-grid"></section>
 
+    <section class="panel pricing-panel">
+      <header class="panel-header">
+        <h2>Market Price Model</h2>
+        <p id="pricing-definition">Loading pricing basis...</p>
+      </header>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>GPU Type</th>
+              <th>Mapped Instance</th>
+              <th>Node Price (USD/h)</th>
+              <th>GPU Price (USD/h)</th>
+              <th>Pricing Basis</th>
+            </tr>
+          </thead>
+          <tbody id="pricing-table-body">
+            <tr><td colspan="5" class="muted-cell">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pricing-links">
+        <span>Authentic Sources:</span>
+        <ul id="pricing-source-links"></ul>
+      </div>
+    </section>
+
     <section class="chart-grid">
       <article class="panel panel-wide">
         <header class="panel-header">
@@ -162,7 +189,7 @@
       <h2>Methodology</h2>
       <ul>
         <li>Each UTC hour has a single canonical snapshot.</li>
-        <li>Cost is node-based with AWS on-demand references: H100=$55.04/h, A100=$40.97/h, A100-40GB=$32.77/h.</li>
+        <li>Cost is node-based and uses a documented market-price reference model shown above.</li>
         <li>Estimated snapshots are explicitly marked when live collection fails.</li>
         <li>Daily/weekly/monthly accumulators are computed from hourly snapshots and exposed as static JSON.</li>
       </ul>

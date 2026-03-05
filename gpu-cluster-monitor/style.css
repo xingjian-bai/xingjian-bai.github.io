@@ -363,6 +363,32 @@ tbody tr:hover {
   text-align: center;
 }
 
+.pricing-panel .table-wrap {
+  margin-top: 12px;
+}
+
+.pricing-links {
+  margin-top: 10px;
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.pricing-links ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.pricing-links a {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.pricing-links a:hover {
+  text-decoration: underline;
+}
+
 .notes ul {
   margin: 8px 0 0;
   padding-left: 16px;

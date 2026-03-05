@@ -32,10 +32,46 @@ from pathlib import Path
 from typing import Any
 
 GPU_TYPES = ("H100", "A100", "A100_40GB")
+GPU_INSTANCE_TYPES = {
+    "H100": "p5.48xlarge",
+    "A100": "p4de.24xlarge",
+    "A100_40GB": "p4d.24xlarge",
+}
+GPUS_PER_NODE = 8
 NODE_HOURLY_COSTS = {
-    "H100": 55.04,
-    "A100": 40.97,
-    "A100_40GB": 32.77,
+    # Market-price reference model:
+    # AWS EC2 public price list, us-east-1, Linux, Shared tenancy, CapacityStatus=Used, OnDemand.
+    # Source publication used to pin these rates: 2026-03-04T22:42:40Z.
+    "H100": 55.04,       # p5.48xlarge
+    "A100": 27.44705,    # p4de.24xlarge
+    "A100_40GB": 21.957642,  # p4d.24xlarge
+}
+PRICING_MODEL = {
+    "name": "AWS EC2 On-Demand Linux Shared (US East / N. Virginia)",
+    "market_price_definition": (
+        "Per-node hourly rate from AWS EC2 public price list "
+        "(OnDemand + OperatingSystem=Linux + Tenancy=Shared + CapacityStatus=Used + Location=US East (N. Virginia))."
+    ),
+    "currency": "USD",
+    "reference_publication_utc": "2026-03-04T22:42:40Z",
+    "source_links": [
+        {
+            "label": "AWS EC2 On-Demand Pricing",
+            "url": "https://aws.amazon.com/ec2/pricing/on-demand/",
+        },
+        {
+            "label": "AWS EC2 Public Price List (AmazonEC2 us-east-1 CSV)",
+            "url": "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/us-east-1/index.csv",
+        },
+        {
+            "label": "AWS P5 Instance Family (H100)",
+            "url": "https://aws.amazon.com/ec2/instance-types/p5/",
+        },
+        {
+            "label": "AWS P4 Instance Family (A100)",
+            "url": "https://aws.amazon.com/ec2/instance-types/p4/",
+        },
+    ],
 }
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -412,9 +448,9 @@ def load_seed_snapshots_from_sqlite(sqlite_path: Path) -> list[dict[str, Any]]:
             num_nodes = safe_int(row["num_nodes"])
             num_gpus = safe_int(row["num_gpus"])
             num_jobs = safe_int(row["num_jobs"])
-            row_hourly_cost = float(row["hourly_cost"] if row["hourly_cost"] is not None else 0.0)
-            if row_hourly_cost == 0.0 and num_nodes > 0:
-                row_hourly_cost = num_nodes * NODE_HOURLY_COSTS[gpu_type]
+            # Recompute from nodes using the current pricing model so historical
+            # data is consistent even if upstream DB used older rates.
+            row_hourly_cost = num_nodes * NODE_HOURLY_COSTS[gpu_type]
 
             snapshot = rows_by_hour[hour_key]
             snapshot["nodes"][gpu_type] += num_nodes
@@ -620,6 +656,20 @@ def build_aggregates_document(
     generated_at: dt.datetime,
     stale_after_hours: int,
 ) -> dict[str, Any]:
+    pricing_instances = {
+        gpu_type: {
+            "instance_type": GPU_INSTANCE_TYPES[gpu_type],
+            "gpus_per_node": GPUS_PER_NODE,
+            "node_hourly_usd": round2(NODE_HOURLY_COSTS[gpu_type]),
+            "gpu_hourly_usd": round2(NODE_HOURLY_COSTS[gpu_type] / GPUS_PER_NODE),
+        }
+        for gpu_type in GPU_TYPES
+    }
+    pricing_payload = {
+        **PRICING_MODEL,
+        "instances": pricing_instances,
+    }
+
     if not snapshots:
         return {
             "generated_at": iso_utc(generated_at),
@@ -639,6 +689,7 @@ def build_aggregates_document(
                 "7d": aggregate_snapshot_list([]),
                 "30d": aggregate_snapshot_list([]),
             },
+            "pricing": pricing_payload,
             "all_time": aggregate_snapshot_list([]),
             "daily": [],
             "weekly": [],
@@ -690,6 +741,7 @@ def build_aggregates_document(
             "7d": rolling_7d,
             "30d": rolling_30d,
         },
+        "pricing": pricing_payload,
         "all_time": all_time,
         "daily": daily,
         "weekly": weekly,
