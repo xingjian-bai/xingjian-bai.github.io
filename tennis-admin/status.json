@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-03-05T16:20:22.183264",
+  "last_sync": "2026-03-05T16:30:25.264891",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         7987,
         7989
       ],
-      "last_seen": "2026-03-05T16:20:03.888045",
+      "last_seen": "2026-03-05T16:30:06.413826",
       "paused": false
     },
     "yangb": {
@@ -24,7 +24,7 @@
         7999,
         8001
       ],
-      "last_seen": "2026-03-05T16:20:03.888086",
+      "last_seen": "2026-03-05T16:30:06.413869",
       "paused": false
     },
     "zwang43b": {
@@ -37,7 +37,7 @@
         8012,
         8015
       ],
-      "last_seen": "2026-03-05T16:20:03.888143",
+      "last_seen": "2026-03-05T16:30:06.413909",
       "paused": false
     }
   },
@@ -1233,8 +1233,8 @@
         "user": "yangb",
         "date": "2026-03-08",
         "weekday": "Sunday",
-        "hour": 15,
-        "time": "15:00"
+        "hour": 18,
+        "time": "18:00"
       },
       {
         "user": "yangb",
@@ -1254,15 +1254,15 @@
         "user": "yangb",
         "date": "2026-03-08",
         "weekday": "Sunday",
-        "hour": 14,
-        "time": "14:00"
+        "hour": 15,
+        "time": "15:00"
       },
       {
         "user": "yangb",
         "date": "2026-03-08",
         "weekday": "Sunday",
-        "hour": 22,
-        "time": "22:00"
+        "hour": 14,
+        "time": "14:00"
       },
       {
         "user": "zwang43b",
