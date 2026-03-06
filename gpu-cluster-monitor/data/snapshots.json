@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-05T22:58:24Z",
+  "generated_at": "2026-03-06T00:13:31Z",
   "version": 1,
-  "snapshot_count": 457,
+  "snapshot_count": 459,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -12552,6 +12552,78 @@
           "hourly_cost": 2198.12
         }
       ]
+    },
+    {
+      "hour": "2026-03-05T23:00:00Z",
+      "captured_at": "2026-03-06T00:13:31Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled from previous hour due missing data collection run",
+      "jobs_total": 10,
+      "jobs_tracked": 10,
+      "nodes": {
+        "H100": 16,
+        "A100": 48,
+        "A100_40GB": 0
+      },
+      "gpus": {
+        "H100": 128,
+        "A100": 384,
+        "A100_40GB": 0
+      },
+      "hourly_cost": {
+        "H100": 880.64,
+        "A100": 1317.46,
+        "A100_40GB": 0.0
+      },
+      "total_hourly_cost": 2198.1,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 10,
+          "nodes": 64,
+          "gpus": 512,
+          "hourly_cost": 2198.12
+        }
+      ],
+      "based_on_hour": "2026-03-05T22:00:00Z"
+    },
+    {
+      "hour": "2026-03-06T00:00:00Z",
+      "captured_at": "2026-03-06T00:13:31Z",
+      "source": "estimated_fetch_failure",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Pluto command failed: /Users/xingjianb/miniforge3/bin/python -m colligo.pluto.sdk.cli job list --status running | ",
+      "jobs_total": 10,
+      "jobs_tracked": 10,
+      "nodes": {
+        "H100": 16,
+        "A100": 48,
+        "A100_40GB": 0
+      },
+      "gpus": {
+        "H100": 128,
+        "A100": 384,
+        "A100_40GB": 0
+      },
+      "hourly_cost": {
+        "H100": 880.64,
+        "A100": 1317.46,
+        "A100_40GB": 0.0
+      },
+      "total_hourly_cost": 2198.1,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 10,
+          "nodes": 64,
+          "gpus": 512,
+          "hourly_cost": 2198.12
+        }
+      ],
+      "based_on_hour": "2026-03-05T23:00:00Z"
     }
   ]
 }

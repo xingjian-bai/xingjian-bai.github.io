@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-03-05T22:58:24Z",
-  "status": "ok",
-  "message": null,
-  "latest_hour": "2026-03-05T22:00:00Z",
-  "latest_captured_at": "2026-03-05T22:58:24Z",
-  "snapshot_count": 457,
+  "generated_at": "2026-03-06T00:13:31Z",
+  "status": "degraded",
+  "message": "Pluto command failed: /Users/xingjianb/miniforge3/bin/python -m colligo.pluto.sdk.cli job list --status running | ",
+  "latest_hour": "2026-03-06T00:00:00Z",
+  "latest_captured_at": "2026-03-06T00:13:31Z",
+  "snapshot_count": 459,
   "is_stale": false,
   "quality": {
     "observed_hours": 446,
-    "estimated_hours": 11,
-    "coverage_pct": 97.59
+    "estimated_hours": 13,
+    "coverage_pct": 97.17
   }
 }
