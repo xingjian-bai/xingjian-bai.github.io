@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-03-06T08:15:46Z",
-  "status": "ok",
-  "message": null,
-  "latest_hour": "2026-03-06T08:00:00Z",
-  "latest_captured_at": "2026-03-06T08:15:46Z",
-  "snapshot_count": 467,
+  "generated_at": "2026-03-06T09:15:52Z",
+  "status": "degraded",
+  "message": "Command '['/Users/xingjianb/miniforge3/bin/python', '-m', 'colligo.pluto.sdk.cli', 'job', 'list', '--status', 'running']' timed out after 90 seconds",
+  "latest_hour": "2026-03-06T09:00:00Z",
+  "latest_captured_at": "2026-03-06T09:15:52Z",
+  "snapshot_count": 468,
   "is_stale": false,
   "quality": {
     "observed_hours": 453,
-    "estimated_hours": 14,
-    "coverage_pct": 97.0
+    "estimated_hours": 15,
+    "coverage_pct": 96.79
   }
 }
