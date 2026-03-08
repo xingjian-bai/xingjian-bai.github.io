@@ -58,6 +58,19 @@ function formatCurrency(value) {
   }).format(Number(value || 0));
 }
 
+function formatCurrencyCompact(value) {
+  const num = Number(value || 0);
+  if (num >= 1000) {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0
+    }).format(num);
+  }
+  return formatCurrency(num);
+}
+
 function formatHour(value) {
   return `${fmtHour.format(toDate(value))} UTC`;
 }
@@ -184,53 +197,79 @@ function renderPricing() {
   )).join("");
 }
 
+function computePeriodDelta(periodArray) {
+  if (!periodArray || periodArray.length < 2) return null;
+  const cur = periodArray[periodArray.length - 1];
+  const prev = periodArray[periodArray.length - 2];
+  const curHours = cur?.hours || 0;
+  const prevHours = prev?.hours || 0;
+  if (curHours < 6 || prevHours < 6) return null;
+  const curRate = (cur?.total_cost || 0) / curHours;
+  const prevRate = (prev?.total_cost || 0) / prevHours;
+  if (!prevRate) return null;
+  return ((curRate - prevRate) / prevRate) * 100;
+}
+
+function formatDeltaHtml(pct) {
+  if (pct === null || pct === undefined) return "";
+  const cls = pct > 0 ? "delta-up" : pct < 0 ? "delta-down" : "delta-flat";
+  const arrow = pct > 0 ? "\u2191" : pct < 0 ? "\u2193" : "";
+  const sign = pct >= 0 ? "+" : "";
+  let label;
+  if (Math.abs(pct) > 999) {
+    label = `${sign}999%+`;
+  } else if (Math.abs(pct) >= 100) {
+    label = `${sign}${Math.round(pct)}%`;
+  } else {
+    label = `${sign}${pct.toFixed(1)}%`;
+  }
+  return `<span class="kpi-delta ${cls}">${arrow}${label}</span>`;
+}
+
 function buildKpiCards() {
   const kpis = state.aggregates?.kpis || {};
   const rolling24 = state.aggregates?.rolling?.["24h"] || {};
   const rolling7d = state.aggregates?.rolling?.["7d"] || {};
   const rolling30d = state.aggregates?.rolling?.["30d"] || {};
-  const quality = state.aggregates?.quality || {};
+  const daily = state.aggregates?.daily || [];
+  const weekly = state.aggregates?.weekly || [];
+  const monthly = state.aggregates?.monthly || [];
 
   return [
     {
       title: "Current GPUs",
       value: formatInteger(kpis.current_gpus_total || 0),
-      sub: `Nodes: ${formatInteger(kpis.current_nodes_total || 0)}`
+      sub: `Nodes: ${formatInteger(kpis.current_nodes_total || 0)}`,
+      wide: true
     },
     {
       title: "Current Hourly Cost",
-      value: formatCurrency(kpis.current_hourly_cost || 0),
-      sub: "Based on active nodes now"
+      value: formatCurrencyCompact(kpis.current_hourly_cost || 0),
+      sub: "Based on active nodes now",
+      wide: true
     },
     {
       title: "24h Total Cost",
-      value: formatCurrency(rolling24.total_cost || 0),
-      sub: `${formatInteger(rolling24.hours || 0)} hourly points`
+      value: formatCurrencyCompact(rolling24.total_cost || 0),
+      delta: computePeriodDelta(daily),
+      sub: `${formatInteger(rolling24.hours || 0)} hourly snapshots`
     },
     {
-      title: "7d Total Cost",
-      value: formatCurrency(rolling7d.total_cost || 0),
-      sub: `${formatInteger(rolling7d.hours || 0)} hourly points`
+      title: "Weekly Total Cost",
+      value: formatCurrencyCompact(rolling7d.total_cost || 0),
+      delta: computePeriodDelta(weekly),
+      sub: `${formatInteger(rolling7d.hours || 0)} hourly snapshots`
     },
     {
-      title: "30d Total Cost",
-      value: formatCurrency(rolling30d.total_cost || 0),
-      sub: `${formatInteger(rolling30d.hours || 0)} hourly points`
+      title: "Monthly Total Cost",
+      value: formatCurrencyCompact(rolling30d.total_cost || 0),
+      delta: computePeriodDelta(monthly),
+      sub: `${formatInteger(rolling30d.hours || 0)} hourly snapshots`
     },
     {
       title: "All-Time Cost",
-      value: formatCurrency(kpis.all_time_total_cost || 0),
-      sub: "Accumulator from hourly snapshots"
-    },
-    {
-      title: "All-Time GPU-Hours",
-      value: formatInteger(kpis.all_time_total_gpu_hours || 0),
-      sub: "Summed over H100/A100/A100-40GB"
-    },
-    {
-      title: "Observed Coverage",
-      value: `${formatDecimal(quality.coverage_pct || 0, 1)}%`,
-      sub: `Observed=${formatInteger(quality.observed_hours || 0)} | Estimated=${formatInteger(quality.estimated_hours || 0)}`
+      value: formatCurrencyCompact(kpis.all_time_total_cost || 0),
+      sub: "Accumulated from all hourly snapshots"
     }
   ];
 }
@@ -239,8 +278,8 @@ function renderKpis() {
   const container = document.getElementById("kpi-grid");
   const cards = buildKpiCards();
   container.innerHTML = cards.map((card) => `
-    <article class="kpi-card">
-      <div class="kpi-title">${card.title}</div>
+    <article class="kpi-card${card.wide ? " kpi-wide" : ""}">
+      <div class="kpi-title">${card.title}${card.delta != null ? formatDeltaHtml(card.delta) : ""}</div>
       <div class="kpi-value">${card.value}</div>
       <div class="kpi-sub">${card.sub}</div>
     </article>
@@ -268,18 +307,8 @@ function renderRollingCards() {
 }
 
 function upsertChart(chartKey, canvasId, config) {
-  const existing = state.charts[chartKey];
-  if (existing) {
-    if (config.type && existing.config.type !== config.type) {
-      existing.destroy();
-      const ctx = document.getElementById(canvasId).getContext("2d");
-      state.charts[chartKey] = new Chart(ctx, config);
-      return;
-    }
-    existing.data = config.data;
-    existing.options = config.options;
-    existing.update();
-    return;
+  if (state.charts[chartKey]) {
+    state.charts[chartKey].destroy();
   }
   const ctx = document.getElementById(canvasId).getContext("2d");
   state.charts[chartKey] = new Chart(ctx, config);
@@ -289,6 +318,7 @@ function baseChartOptions({ stacked = false, yLabel = "" } = {}) {
   return {
     responsive: true,
     maintainAspectRatio: false,
+    animation: { duration: 300 },
     interaction: { mode: "index", intersect: false },
     plugins: {
       legend: {
@@ -334,6 +364,13 @@ function renderGpuUsageChart() {
     stack: "gpu",
     pointRadius: 0
   }));
+
+  const quality = state.aggregates?.quality || {};
+  const coverage = quality.coverage_pct ?? 0;
+  const observed = quality.observed_hours ?? 0;
+  const estimated = quality.estimated_hours ?? 0;
+  document.getElementById("gpu-usage-subtitle").textContent =
+    `Stacked by GPU type \u00b7 ${formatDecimal(coverage, 1)}% observed (${observed} obs / ${estimated} est)`;
 
   upsertChart("gpuUsage", "gpu-usage-chart", {
     type: "line",
@@ -466,7 +503,7 @@ function renderPeriodChart() {
 
   const prettyPeriod = state.period[0].toUpperCase() + state.period.slice(1);
   const prettyMetric = state.periodMetric === "cost" ? "Total Cost (USD)" : state.periodMetric === "gpu_hours" ? "GPU-Hours" : "Node-Hours";
-  document.getElementById("period-chart-subtitle").textContent = `${prettyPeriod} totals by GPU type · ${prettyMetric}`;
+  document.getElementById("period-chart-subtitle").textContent = `${prettyPeriod} totals by GPU type \u00b7 ${prettyMetric}`;
 
   upsertChart("period", "period-chart", {
     type: "bar",
@@ -583,19 +620,17 @@ function bindControls() {
   });
 
   const metricSelect = document.getElementById("period-metric");
-  metricSelect.addEventListener("change", (event) => {
-    state.periodMetric = event.target.value;
-    renderPeriodChart();
-  });
-  metricSelect.addEventListener("input", (event) => {
-    state.periodMetric = event.target.value;
-    renderPeriodChart();
-  });
+  if (metricSelect) {
+    metricSelect.addEventListener("change", () => {
+      state.periodMetric = metricSelect.value;
+      renderPeriodChart();
+    });
+  }
 
   document.getElementById("refresh-now").addEventListener("click", async () => {
     const refreshButton = document.getElementById("refresh-now");
     refreshButton.disabled = true;
-    refreshButton.textContent = "Refreshing...";
+    refreshButton.textContent = "Refreshing\u2026";
     try {
       await loadData();
       renderAll();

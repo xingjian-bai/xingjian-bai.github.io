@@ -329,6 +329,7 @@ def build_estimated_snapshot_from_previous(
     captured_at: dt.datetime,
     error_message: str,
     source: str = "estimated_from_previous",
+    decay_factor: float = 1.0,
 ) -> dict[str, Any]:
     if previous_snapshot:
         snapshot = copy.deepcopy(previous_snapshot)
@@ -339,6 +340,14 @@ def build_estimated_snapshot_from_previous(
         snapshot["estimated"] = True
         snapshot["error"] = error_message
         snapshot["based_on_hour"] = previous_snapshot.get("hour")
+        if decay_factor != 1.0:
+            for gpu_type in GPU_TYPES:
+                snapshot["nodes"][gpu_type] = round2(snapshot["nodes"][gpu_type] * decay_factor)
+                snapshot["gpus"][gpu_type] = round2(snapshot["gpus"][gpu_type] * decay_factor)
+                snapshot["hourly_cost"][gpu_type] = round2(snapshot["nodes"][gpu_type] * NODE_HOURLY_COSTS[gpu_type])
+            snapshot["total_hourly_cost"] = round2(
+                sum(snapshot["hourly_cost"][gpu_type] for gpu_type in GPU_TYPES)
+            )
         return snapshot
 
     empty_metrics = {gpu_type: 0 for gpu_type in GPU_TYPES}
@@ -392,8 +401,9 @@ def build_gap_fill_snapshots(
             previous_snapshot=previous,
             snapshot_hour=current_hour,
             captured_at=generated_at,
-            error_message="Gap-filled from previous hour due missing data collection run",
+            error_message="Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
             source="estimated_gap_fill",
+            decay_factor=0.9,
         )
         snapshots.append(estimated)
         previous = estimated
@@ -927,6 +937,7 @@ def main() -> int:
             captured_at=generated_at,
             error_message=error_message,
             source="estimated_fetch_failure",
+            decay_factor=0.9,
         )
         print(f"WARNING: live fetch failed, wrote estimated snapshot. reason={error_message}")
 

@@ -213,6 +213,10 @@ h1 {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
+.kpi-wide {
+  grid-column: span 2;
+}
+
 .kpi-card {
   background: var(--card);
   border: 1px solid var(--line);
@@ -230,6 +234,35 @@ h1 {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.kpi-delta {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.delta-up {
+  color: #b5200a;
+  background: #fdecef;
+}
+
+.delta-down {
+  color: #08775f;
+  background: #e6f7f2;
+}
+
+.delta-flat {
+  color: var(--muted);
+  background: var(--bg-soft);
 }
 
 .kpi-value {
@@ -425,6 +458,10 @@ tbody tr:hover {
 @media (max-width: 1200px) {
   .kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kpi-wide {
+    grid-column: span 1;
   }
 }
 
