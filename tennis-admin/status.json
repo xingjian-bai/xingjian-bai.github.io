@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-03-08T01:50:21.941420",
+  "last_sync": "2026-03-08T03:00:21.167761",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         7987,
         7989
       ],
-      "last_seen": "2026-03-08T01:50:04.087944",
+      "last_seen": "2026-03-08T03:00:04.263135",
       "paused": false
     },
     "yangb": {
@@ -24,7 +24,7 @@
         7999,
         8001
       ],
-      "last_seen": "2026-03-08T01:50:04.087977",
+      "last_seen": "2026-03-08T03:00:04.263212",
       "paused": false
     },
     "zwang43b": {
@@ -37,7 +37,7 @@
         8012,
         8015
       ],
-      "last_seen": "2026-03-08T01:50:04.088045",
+      "last_seen": "2026-03-08T03:00:04.263249",
       "paused": false
     }
   },
@@ -1197,8 +1197,8 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-03-08T06:00:00-05:00",
-    "next_window_display": "2026-03-08 06:00 EST",
+    "next_window": "2026-03-08T06:00:00-04:00",
+    "next_window_display": "2026-03-08 06:00 EDT",
     "target_date": "2026-03-10",
     "target_weekday": "Tuesday",
     "planned_attempts": [
