@@ -646,6 +646,23 @@ function renderCostShareChart() {
   const costByType = state.aggregates?.all_time?.cost_by_type || {};
   const data = GPU_TYPES.map((gpuType) => Number(costByType[gpuType] || 0));
   const total = data.reduce((a, b) => a + b, 0);
+  const subtitle = document.getElementById("cost-share-subtitle");
+  if (subtitle) {
+    subtitle.textContent = `Total: ${formatCurrencyCompact(total)}`;
+  }
+  const breakdown = document.getElementById("cost-share-breakdown");
+  if (breakdown) {
+    breakdown.innerHTML = GPU_TYPES.map((gpuType, i) => {
+      const pct = total > 0 ? ((data[i] / total) * 100).toFixed(1) : 0;
+      return `<div class="cost-breakdown-item">
+        <span class="gpu-dot" style="background:${GPU_META[gpuType].color}"></span>
+        <span class="${GPU_META[gpuType].cssClass}">${GPU_META[gpuType].label}</span>
+        <span class="mono">${formatCurrencyCompact(data[i])}</span>
+        <span class="muted">${pct}%</span>
+      </div>`;
+    }).join("");
+  }
+
   upsertChart("costShare", "cost-share-chart", {
     type: "doughnut",
     data: {

@@ -629,6 +629,35 @@ tbody tr:hover {
   margin-top: 2px;
 }
 
+.chart-wrap-donut {
+  height: 220px;
+}
+
+.cost-breakdown {
+  display: grid;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.cost-breakdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.cost-breakdown-item .mono {
+  margin-left: auto;
+  font-size: 12px;
+}
+
+.cost-breakdown-item .muted {
+  color: var(--muted);
+  font-size: 11px;
+  min-width: 40px;
+  text-align: right;
+}
+
 .gpu-dot {
   display: inline-block;
   width: 8px;
