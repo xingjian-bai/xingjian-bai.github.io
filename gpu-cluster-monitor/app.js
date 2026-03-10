@@ -608,11 +608,14 @@ function renderPeriodChart() {
   datasets.push({
     label: "Total",
     data: totalData,
-    borderColor: "#15243b",
-    backgroundColor: "#15243b",
-    pointRadius: 2,
+    borderColor: "#0f172a",
+    backgroundColor: "#0f172a",
+    pointRadius: 3,
+    pointStyle: "circle",
     fill: false,
-    tension: 0.2,
+    tension: 0.25,
+    borderWidth: 2,
+    borderDash: [4, 2],
     type: "line",
     yAxisID: "y"
   });

@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Real-time GPU cluster utilization monitoring with cost analytics for H100, A100, and A100-40GB instances">
   <title>GPU Cluster Monitor</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,7 +43,7 @@
       <p id="health-message">Reading monitor data...</p>
       <div class="refresh-group">
         <span id="last-refreshed" class="last-refreshed"></span>
-        <button id="refresh-now" class="refresh-btn" type="button">
+        <button id="refresh-now" class="refresh-btn" type="button" title="Refresh data (R)">
           <svg class="refresh-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="23 4 23 10 17 10"></polyline>
             <polyline points="1 20 1 14 7 14"></polyline>

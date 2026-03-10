@@ -250,6 +250,7 @@ h1 {
   background: var(--bg);
   color: var(--ink);
   padding: 7px 14px;
+  font-family: inherit;
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
@@ -405,7 +406,11 @@ h1 {
 
 .chart-wrap {
   margin-top: 10px;
-  height: 320px;
+  height: 300px;
+}
+
+.panel-wide .chart-wrap {
+  height: 340px;
 }
 
 .rolling-cards {
