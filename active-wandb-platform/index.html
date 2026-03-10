@@ -240,6 +240,7 @@ body {
   font-size: 13px;
   line-height: 1.8;
   color: var(--text);
+  word-break: break-word;
 }
 .project-insight .label {
   font-size: 11px;
@@ -513,6 +514,33 @@ body {
 .detail-pane { display: none; }
 .detail-pane.active { display: block; }
 
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.filter-bar .filter-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.filter-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 3px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+.filter-toggle:hover { border-color: var(--text-dim); color: var(--text); }
+.filter-toggle.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(88,166,255,0.3); }
+
 /* Footer */
 .footer {
   text-align: center;
@@ -568,6 +596,7 @@ const SIGNAL_LABELS = {
 };
 
 let dashboardData = null;
+let filters = { hideResolved: false, hideDead: false };
 
 // --- localStorage annotation store ---
 const ANNOTATIONS_KEY = 'exp-monitor-annotations';
@@ -715,6 +744,11 @@ function render() {
       </div>
     </div>
     <div class="signal-bar">${signalChips}</div>
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-toggle${filters.hideResolved ? ' active' : ''}" onclick="toggleFilter('hideResolved')">Hide Resolved</button>
+      <button class="filter-toggle${filters.hideDead ? ' active' : ''}" onclick="toggleFilter('hideDead')">Hide Dead</button>
+    </div>
     ${attentionBanner}
     <div class="global-summary">
       <div class="label">Overview</div>
@@ -784,6 +818,10 @@ function renderRun(r, pi, ri) {
   const id = `run-${pi}-${ri}`;
   const safeId = sanitizeId(r.id);
   const ann = getRunAnnotation(safeId);
+
+  // Apply filters
+  if (filters.hideResolved && ann.status === 'resolved') return '';
+  if (filters.hideDead && r.signal === 'dead') return '';
   const annClass = ann.status === 'resolved' ? ' user-resolved' : (ann.status === 'flagged' ? ' user-flagged' : (ann.note ? ' user-noted' : ''));
 
   // Top metrics
@@ -966,6 +1004,11 @@ function drawSparklines(container) {
 
     canvas.dataset.drawn = '1';
   });
+}
+
+function toggleFilter(key) {
+  filters[key] = !filters[key];
+  render();
 }
 
 async function refreshData() {
