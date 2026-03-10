@@ -229,6 +229,22 @@ function formatDeltaHtml(pct) {
   return `<span class="kpi-delta ${cls}">${arrow}${label}</span>`;
 }
 
+function gpuBreakdownHtml() {
+  const latest = state.aggregates?.latest || {};
+  const gpus = latest.gpus || {};
+  return GPU_TYPES.filter((t) => gpus[t]).map((t) =>
+    `<span class="kpi-chip" style="color:${GPU_META[t].color}">${GPU_META[t].label}: ${formatInteger(gpus[t])}</span>`
+  ).join(" ");
+}
+
+function costBreakdownHtml() {
+  const latest = state.aggregates?.latest || {};
+  const cost = latest.hourly_cost || {};
+  return GPU_TYPES.filter((t) => cost[t]).map((t) =>
+    `<span class="kpi-chip" style="color:${GPU_META[t].color}">${GPU_META[t].label}: ${formatCurrency(cost[t])}</span>`
+  ).join(" ");
+}
+
 function buildKpiCards() {
   const kpis = state.aggregates?.kpis || {};
   const rolling24 = state.aggregates?.rolling?.["24h"] || {};
@@ -242,13 +258,15 @@ function buildKpiCards() {
     {
       title: "Current GPUs",
       value: formatInteger(kpis.current_gpus_total || 0),
-      sub: `Nodes: ${formatInteger(kpis.current_nodes_total || 0)}`,
+      sub: `${formatInteger(kpis.current_nodes_total || 0)} nodes`,
+      extra: gpuBreakdownHtml(),
       wide: true
     },
     {
       title: "Current Hourly Cost",
       value: formatCurrencyCompact(kpis.current_hourly_cost || 0),
       sub: "Based on active nodes now",
+      extra: costBreakdownHtml(),
       wide: true
     },
     {
@@ -285,6 +303,7 @@ function renderKpis() {
       <div class="kpi-title">${card.title}${card.delta != null ? formatDeltaHtml(card.delta) : ""}</div>
       <div class="kpi-value">${card.value}</div>
       <div class="kpi-sub">${card.sub}</div>
+      ${card.extra ? `<div class="kpi-extra">${card.extra}</div>` : ""}
     </article>
   `).join("");
 }
@@ -562,6 +581,7 @@ function renderPeriodChart() {
 function renderCostShareChart() {
   const costByType = state.aggregates?.all_time?.cost_by_type || {};
   const data = GPU_TYPES.map((gpuType) => Number(costByType[gpuType] || 0));
+  const total = data.reduce((a, b) => a + b, 0);
   upsertChart("costShare", "cost-share-chart", {
     type: "doughnut",
     data: {
@@ -569,20 +589,35 @@ function renderCostShareChart() {
       datasets: [
         {
           data,
-          backgroundColor: GPU_TYPES.map((gpuType) => GPU_META[gpuType].color),
-          borderWidth: 1
+          backgroundColor: GPU_TYPES.map((gpuType) => `${GPU_META[gpuType].color}dd`),
+          hoverBackgroundColor: GPU_TYPES.map((gpuType) => GPU_META[gpuType].color),
+          borderWidth: 2,
+          borderColor: "#ffffff"
         }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      cutout: "62%",
       plugins: {
-        legend: { position: "bottom" },
+        legend: {
+          position: "bottom",
+          labels: {
+            padding: 16,
+            usePointStyle: true,
+            pointStyle: "circle",
+            font: { family: "'Space Grotesk', sans-serif", size: 12 }
+          }
+        },
         tooltip: {
+          backgroundColor: "rgba(15, 23, 42, 0.9)",
+          cornerRadius: 8,
+          bodyFont: { family: "'IBM Plex Mono', monospace", size: 12 },
           callbacks: {
             label(context) {
-              return `${context.label}: ${formatCurrency(context.raw)}`;
+              const pct = total > 0 ? ((context.raw / total) * 100).toFixed(1) : 0;
+              return ` ${context.label}: ${formatCurrency(context.raw)} (${pct}%)`;
             }
           }
         }
