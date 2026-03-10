@@ -84,6 +84,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
+  align-content: center;
 }
 
 .meta-item {
@@ -184,12 +185,13 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 10px;
   padding: 7px 14px;
-  background: #f7faff;
+  background: var(--bg);
   color: var(--ink);
+  font-family: inherit;
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all var(--transition);
 }
 
 .refresh-btn:hover {

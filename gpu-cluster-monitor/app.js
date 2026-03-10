@@ -600,6 +600,8 @@ function renderPeriodChart() {
     backgroundColor: `${GPU_META[gpuType].color}cc`,
     borderColor: GPU_META[gpuType].color,
     borderWidth: 1,
+    borderRadius: 3,
+    borderSkipped: false,
     stack: "total",
     type: "bar"
   }));
