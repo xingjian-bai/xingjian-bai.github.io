@@ -19,8 +19,14 @@
   --transition: 0.15s ease;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -46,6 +52,7 @@ body {
   gap: 20px;
   padding: 28px;
   border: 1px solid var(--line);
+  border-top: 3px solid var(--blue);
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
@@ -111,11 +118,24 @@ h1 {
 
 .health-pill {
   border-radius: 999px;
-  padding: 4px 12px;
+  padding: 4px 12px 4px 10px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.health-pill::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
 }
 
 .health-ok {
@@ -557,6 +577,15 @@ tbody tr:hover {
 
 .notes li + li {
   margin-top: 2px;
+}
+
+.gpu-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-right: 2px;
 }
 
 .value-h100 {

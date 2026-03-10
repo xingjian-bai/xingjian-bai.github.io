@@ -184,7 +184,7 @@ function renderPricing() {
     const row = pricing.instances[gpuType] || {};
     return `
       <tr>
-        <td class="${GPU_META[gpuType].cssClass}">${GPU_META[gpuType].label}</td>
+        <td><span class="gpu-dot" style="background:${GPU_META[gpuType].color}"></span> <span class="${GPU_META[gpuType].cssClass}">${GPU_META[gpuType].label}</span></td>
         <td class="mono">${row.instance_type || "-"}</td>
         <td class="mono">${formatCurrency(row.node_hourly_usd || 0)}</td>
         <td class="mono">${formatCurrency(row.gpu_hourly_usd || 0)}</td>
