@@ -184,7 +184,7 @@ function renderPricing() {
 
   if (!pricing || !pricing.instances) {
     defEl.textContent = "Pricing data unavailable.";
-    body.innerHTML = '<tr><td colspan="5" class="muted-cell">No pricing model provided.</td></tr>';
+    body.innerHTML = '<tr><td colspan="6" class="muted-cell">No pricing model provided.</td></tr>';
     links.innerHTML = "";
     return;
   }
@@ -198,6 +198,7 @@ function renderPricing() {
       <tr>
         <td><span class="gpu-dot" style="background:${GPU_META[gpuType].color}"></span> <span class="${GPU_META[gpuType].cssClass}">${GPU_META[gpuType].label}</span></td>
         <td class="mono">${row.instance_type || "-"}</td>
+        <td class="mono">${row.gpus_per_node || 8}</td>
         <td class="mono">${formatCurrency(row.node_hourly_usd || 0)}</td>
         <td class="mono">${formatCurrency(row.gpu_hourly_usd || 0)}</td>
         <td>${pricing.name || "-"}</td>
@@ -436,8 +437,9 @@ function renderGpuUsageChart() {
   const coverage = quality.coverage_pct ?? 0;
   const observed = quality.observed_hours ?? 0;
   const estimated = quality.estimated_hours ?? 0;
+  const rangeLabel = state.rangeHours <= 24 ? "24h" : state.rangeHours <= 168 ? "7d" : state.rangeHours <= 720 ? "30d" : "90d";
   document.getElementById("gpu-usage-subtitle").textContent =
-    `Stacked by GPU type \u00b7 ${formatDecimal(coverage, 1)}% observed (${observed} obs / ${estimated} est)`;
+    `${rangeLabel} window \u00b7 ${formatDecimal(coverage, 1)}% observed (${observed} obs / ${estimated} est)`;
 
   upsertChart("gpuUsage", "gpu-usage-chart", {
     type: "line",
