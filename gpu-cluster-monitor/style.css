@@ -626,6 +626,40 @@ tbody tr:hover {
   font-weight: 600;
 }
 
+.top-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.project-chip {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: border-color var(--transition);
+}
+
+.project-chip:hover {
+  border-color: var(--blue);
+}
+
+.project-name {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 6px;
+  word-break: break-all;
+}
+
+.project-stats {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
 .table-scroll {
   max-height: 520px;
   overflow-y: auto;

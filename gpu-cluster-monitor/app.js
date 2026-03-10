@@ -701,6 +701,28 @@ function renderRecentTable() {
   }).join("");
 }
 
+function renderTopProjects() {
+  const projects = state.aggregates?.latest?.projects_top || [];
+  const container = document.getElementById("top-projects-grid");
+  const section = document.getElementById("top-projects");
+  if (!projects.length) {
+    section.style.display = "none";
+    return;
+  }
+  section.style.display = "";
+  const top5 = projects.slice(0, 5);
+  container.innerHTML = top5.map((p) => `
+    <article class="project-chip">
+      <div class="project-name">${p.project}</div>
+      <div class="project-stats">
+        <span>${formatInteger(p.jobs)} jobs</span>
+        <span>${formatInteger(p.gpus)} GPUs</span>
+        <span>${formatCurrencyCompact(p.hourly_cost)}/h</span>
+      </div>
+    </article>
+  `).join("");
+}
+
 function updateLastRefreshed() {
   const el = document.getElementById("last-refreshed");
   if (el) {
@@ -714,6 +736,7 @@ function renderAll() {
   renderHealth();
   renderPricing();
   renderKpis();
+  renderTopProjects();
   renderRollingCards();
   renderGpuUsageChart();
   renderHourlyCostChart();
@@ -825,3 +848,9 @@ async function bootstrap() {
 }
 
 document.addEventListener("DOMContentLoaded", bootstrap);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "r" && !e.ctrlKey && !e.metaKey && !e.altKey && e.target === document.body) {
+    document.getElementById("refresh-now").click();
+  }
+});
