@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-10T11:35:19Z",
+  "generated_at": "2026-03-10T12:36:14Z",
   "version": 1,
-  "snapshot_count": 566,
+  "snapshot_count": 567,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -16423,6 +16423,42 @@
         }
       ],
       "based_on_hour": "2026-03-10T10:00:00Z"
+    },
+    {
+      "hour": "2026-03-10T12:00:00Z",
+      "captured_at": "2026-03-10T12:36:14Z",
+      "source": "estimated_fetch_failure",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Pluto command failed: /Users/xingjianb/miniforge3/bin/python -m colligo.pluto.sdk.cli job list --status running | ",
+      "jobs_total": 15,
+      "jobs_tracked": 15,
+      "nodes": {
+        "H100": 2.52,
+        "A100": 7.53,
+        "A100_40GB": 27.61
+      },
+      "gpus": {
+        "H100": 20.09,
+        "A100": 60.26,
+        "A100_40GB": 220.92
+      },
+      "hourly_cost": {
+        "H100": 138.7,
+        "A100": 206.68,
+        "A100_40GB": 606.25
+      },
+      "total_hourly_cost": 951.63,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 15,
+          "nodes": 120,
+          "gpus": 960,
+          "hourly_cost": 3031.31
+        }
+      ],
+      "based_on_hour": "2026-03-10T11:00:00Z"
     }
   ]
 }
