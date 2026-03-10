@@ -527,6 +527,15 @@ tbody tr:hover {
   text-align: center;
 }
 
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.muted-cell {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
 .pricing-panel .panel-header p {
   font-size: 11px;
   line-height: 1.5;

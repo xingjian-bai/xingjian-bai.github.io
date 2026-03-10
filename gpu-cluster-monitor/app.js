@@ -328,11 +328,13 @@ function renderRollingCards() {
   const container = document.getElementById("rolling-cards");
   container.innerHTML = items.map((item) => {
     const value = rolling[item.key] || {};
+    const hours = value.hours || 1;
+    const avgHourly = (value.total_cost || 0) / hours;
     return `
       <article class="rolling-card">
         <span>${item.label}</span>
         <strong>${formatCurrency(value.total_cost || 0)}</strong>
-        <small>${formatInteger(value.total_gpu_hours || 0)} GPU-hours | ${formatInteger(value.total_node_hours || 0)} node-hours</small>
+        <small>avg ${formatCurrency(avgHourly)}/h &middot; ${formatInteger(value.total_gpu_hours || 0)} GPU-h &middot; ${formatInteger(hours)} snapshots</small>
       </article>
     `;
   }).join("");
@@ -452,15 +454,17 @@ function renderHourlyCostChart() {
   }));
 
   const estimatedData = snapshots.map((s) => (s.estimated ? Number(s.total_hourly_cost || 0) : null));
-  datasets.push({
-    label: "Estimated",
-    data: estimatedData,
-    borderColor: "#ef4444",
-    backgroundColor: "#ef4444",
-    showLine: false,
-    pointRadius: 3,
-    pointStyle: "triangle"
-  });
+  if (estimatedData.some((v) => v !== null)) {
+    datasets.push({
+      label: "Estimated",
+      data: estimatedData,
+      borderColor: "#ef4444",
+      backgroundColor: "#ef4444",
+      showLine: false,
+      pointRadius: 3,
+      pointStyle: "triangle"
+    });
+  }
 
   upsertChart("hourlyCost", "hourly-cost-chart", {
     type: "line",
