@@ -159,9 +159,21 @@ function renderHealth() {
   }
 
   const staleSuffix = aggregates.is_stale ? " Data is stale." : "";
+  let ageSuffix = "";
+  if (health.latest_hour) {
+    const ageMs = Date.now() - new Date(health.latest_hour).getTime();
+    const ageHours = Math.floor(ageMs / 3600000);
+    if (ageHours <= 1) {
+      ageSuffix = " (< 1h ago)";
+    } else if (ageHours < 24) {
+      ageSuffix = ` (${ageHours}h ago)`;
+    } else {
+      ageSuffix = ` (${Math.floor(ageHours / 24)}d ${ageHours % 24}h ago)`;
+    }
+  }
   messageEl.textContent = health.message
-    ? `${health.message}${staleSuffix}`
-    : `Latest hour: ${health.latest_hour ? formatHour(health.latest_hour) : "n/a"}.${staleSuffix}`;
+    ? `${health.message}${ageSuffix}${staleSuffix}`
+    : `Latest hour: ${health.latest_hour ? formatHour(health.latest_hour) : "n/a"}${ageSuffix}${staleSuffix}`;
 }
 
 function renderPricing() {
@@ -468,44 +480,53 @@ const fmtDay = new Intl.DateTimeFormat("en-US", {
 function renderCumulativeCostChart() {
   const useAll = state.cumulativeRange === "all";
   const snapshots = useAll ? state.snapshots : getRangeSnapshots();
+  const useDayLabels = useAll || snapshots.length > 168;
 
-  let running = 0;
+  const running = {};
+  GPU_TYPES.forEach((t) => { running[t] = 0; });
+
   const raw = snapshots.map((s) => {
-    running += Number(s.total_hourly_cost || 0);
-    return { hour: s.hour, cost: Number(running.toFixed(2)) };
+    const entry = { hour: s.hour };
+    GPU_TYPES.forEach((t) => {
+      running[t] += Number(s.hourly_cost?.[t] || 0);
+      entry[t] = Number(running[t].toFixed(2));
+    });
+    return entry;
   });
 
-  let labels, values;
-  if (useAll || snapshots.length > 168) {
+  let labels, gpuData;
+  if (useDayLabels) {
     const byDay = new Map();
     for (const entry of raw) {
       const dayKey = fmtDay.format(toDate(entry.hour));
-      byDay.set(dayKey, entry.cost);
+      byDay.set(dayKey, entry);
     }
     labels = [...byDay.keys()];
-    values = [...byDay.values()];
+    const dayEntries = [...byDay.values()];
+    gpuData = {};
+    GPU_TYPES.forEach((t) => { gpuData[t] = dayEntries.map((e) => e[t]); });
   } else {
     labels = raw.map((e) => fmtHour.format(toDate(e.hour)));
-    values = raw.map((e) => e.cost);
+    gpuData = {};
+    GPU_TYPES.forEach((t) => { gpuData[t] = raw.map((e) => e[t]); });
   }
+
+  const datasets = GPU_TYPES.map((gpuType) => ({
+    label: GPU_META[gpuType].label,
+    data: gpuData[gpuType],
+    borderColor: GPU_META[gpuType].color,
+    backgroundColor: `${GPU_META[gpuType].color}20`,
+    tension: 0.18,
+    fill: true,
+    pointRadius: 0,
+    borderWidth: 1.5,
+    stack: "cum"
+  }));
 
   upsertChart("cumulativeCost", "cumulative-cost-chart", {
     type: "line",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "Cumulative Cost",
-          data: values,
-          borderColor: "#0f9b8e",
-          backgroundColor: "rgba(15, 155, 142, 0.1)",
-          tension: 0.18,
-          fill: true,
-          pointRadius: 0
-        }
-      ]
-    },
-    options: baseChartOptions({ yLabel: "USD" })
+    data: { labels, datasets },
+    options: baseChartOptions({ stacked: true, yLabel: "USD" })
   });
 }
 

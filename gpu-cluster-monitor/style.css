@@ -491,8 +491,12 @@ tbody tr {
   transition: background var(--transition);
 }
 
+tbody tr:nth-child(even) {
+  background: #fafbfd;
+}
+
 tbody tr:hover {
-  background: #f8fafc;
+  background: #f1f5f9;
 }
 
 .mono {
