@@ -603,6 +603,14 @@ function renderRecentTable() {
   }).join("");
 }
 
+function updateLastRefreshed() {
+  const el = document.getElementById("last-refreshed");
+  if (el) {
+    const now = new Date();
+    el.textContent = `Fetched ${fmtHour.format(now)} local`;
+  }
+}
+
 function renderAll() {
   renderMeta();
   renderHealth();
@@ -660,17 +668,21 @@ function bindControls() {
 
   document.getElementById("refresh-now").addEventListener("click", async () => {
     const refreshButton = document.getElementById("refresh-now");
+    const refreshLabel = refreshButton.querySelector(".refresh-label");
     refreshButton.disabled = true;
-    refreshButton.textContent = "Refreshing\u2026";
+    refreshButton.classList.add("is-spinning");
+    refreshLabel.textContent = "Refreshing\u2026";
     try {
       await loadData();
       renderAll();
+      updateLastRefreshed();
     } catch (err) {
       console.error(err);
       document.getElementById("health-message").textContent = `Refresh failed: ${err.message}`;
     } finally {
       refreshButton.disabled = false;
-      refreshButton.textContent = "Refresh";
+      refreshButton.classList.remove("is-spinning");
+      refreshLabel.textContent = "Refresh";
     }
   });
 }
@@ -680,6 +692,7 @@ async function bootstrap() {
   try {
     await loadData();
     renderAll();
+    updateLastRefreshed();
   } catch (err) {
     console.error(err);
     const pill = document.getElementById("health-pill");
@@ -694,6 +707,7 @@ async function bootstrap() {
     try {
       await loadData();
       renderAll();
+      updateLastRefreshed();
     } catch (err) {
       console.error("Auto-refresh failed", err);
     }
