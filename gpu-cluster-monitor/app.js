@@ -16,6 +16,7 @@ const state = {
   period: "daily",
   periodMetric: "cost",
   cumulativeRange: "window",
+  tableRows: 24,
   snapshots: [],
   aggregates: null,
   health: null,
@@ -602,7 +603,11 @@ function statusTag(snapshot) {
 
 function renderRecentTable() {
   const tbody = document.getElementById("recent-hours-body");
-  const rows = [...state.snapshots].slice(-48).reverse();
+  const subtitle = document.getElementById("recent-table-subtitle");
+  const rows = [...state.snapshots].slice(-state.tableRows).reverse();
+  if (subtitle) {
+    subtitle.textContent = `Latest ${rows.length} hours with status and totals`;
+  }
   if (!rows.length) {
     tbody.innerHTML = '<tr><td colspan="8" class="muted-cell">No snapshots yet.</td></tr>';
     return;
@@ -646,6 +651,10 @@ function renderAll() {
   renderPeriodChart();
   renderCostShareChart();
   renderRecentTable();
+  const footerCount = document.getElementById("footer-snapshot-count");
+  if (footerCount) {
+    footerCount.textContent = formatInteger(state.snapshots.length);
+  }
 }
 
 function setActiveButton(groupId, dataKey, value) {
@@ -680,6 +689,14 @@ function bindControls() {
       renderPeriodChart();
     });
   }
+
+  document.querySelectorAll("#table-row-controls button").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.tableRows = Number(button.dataset.rows);
+      setActiveButton("table-row-controls", "rows", state.tableRows);
+      renderRecentTable();
+    });
+  });
 
   document.querySelectorAll("#cumulative-range-controls button").forEach((button) => {
     button.addEventListener("click", () => {

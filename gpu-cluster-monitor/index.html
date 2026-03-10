@@ -176,10 +176,19 @@
 
     <section class="panel table-panel">
       <header class="panel-header">
-        <h2>Recent Hourly Snapshots</h2>
-        <p>Latest 48 hours with status and totals</p>
+        <div class="panel-header-row">
+          <div>
+            <h2>Recent Hourly Snapshots</h2>
+            <p id="recent-table-subtitle">Latest 48 hours with status and totals</p>
+          </div>
+          <div id="table-row-controls" class="button-group button-group-sm">
+            <button type="button" data-rows="24" class="is-active">24H</button>
+            <button type="button" data-rows="48">48H</button>
+            <button type="button" data-rows="168">7D</button>
+          </div>
+        </div>
       </header>
-      <div class="table-wrap">
+      <div class="table-wrap table-scroll">
         <table>
           <thead>
             <tr>
@@ -187,9 +196,9 @@
               <th>Status</th>
               <th>Nodes</th>
               <th>GPUs</th>
-              <th>H100 GPUs</th>
-              <th>A100 GPUs</th>
-              <th>A100-40GB GPUs</th>
+              <th>H100</th>
+              <th>A100</th>
+              <th>A100-40GB</th>
               <th>Hourly Cost</th>
             </tr>
           </thead>
@@ -209,6 +218,10 @@
         <li>Daily/weekly/monthly accumulators are computed from hourly snapshots and exposed as static JSON.</li>
       </ul>
     </section>
+
+    <footer class="footer">
+      <p>GPU Cluster Monitor &middot; Data auto-refreshes every 5 minutes &middot; <span id="footer-snapshot-count">-</span> total snapshots</p>
+    </footer>
   </main>
 
   <script src="./app.js"></script>
