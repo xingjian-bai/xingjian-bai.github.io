@@ -320,20 +320,30 @@ function baseChartOptions({ stacked = false, yLabel = "" } = {}) {
   return {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 300 },
+    animation: { duration: 350, easing: "easeOutQuart" },
     interaction: { mode: "index", intersect: false },
     plugins: {
       legend: {
-        labels: { boxWidth: 12, usePointStyle: true }
+        labels: {
+          boxWidth: 10,
+          usePointStyle: true,
+          padding: 16,
+          font: { family: "'Space Grotesk', sans-serif", size: 12 }
+        }
       },
       tooltip: {
+        backgroundColor: "rgba(15, 23, 42, 0.9)",
+        titleFont: { family: "'Space Grotesk', sans-serif", size: 12, weight: "600" },
+        bodyFont: { family: "'IBM Plex Mono', monospace", size: 12 },
+        padding: { top: 8, bottom: 8, left: 12, right: 12 },
+        cornerRadius: 8,
         callbacks: {
           label(context) {
             const raw = Number(context.raw || 0);
             if (yLabel === "USD") {
-              return `${context.dataset.label}: ${formatCurrency(raw)}`;
+              return ` ${context.dataset.label}: ${formatCurrency(raw)}`;
             }
-            return `${context.dataset.label}: ${formatDecimal(raw, 2)}`;
+            return ` ${context.dataset.label}: ${formatDecimal(raw, 2)}`;
           }
         }
       }
@@ -341,13 +351,26 @@ function baseChartOptions({ stacked = false, yLabel = "" } = {}) {
     scales: {
       x: {
         stacked,
-        ticks: { maxTicksLimit: 12 },
-        grid: { color: "rgba(25, 60, 100, 0.08)" }
+        ticks: {
+          maxTicksLimit: 12,
+          font: { family: "'Space Grotesk', sans-serif", size: 11 },
+          color: "#94a3b8"
+        },
+        grid: { color: "rgba(226, 232, 240, 0.6)", drawBorder: false }
       },
       y: {
         stacked,
-        title: { display: Boolean(yLabel), text: yLabel },
-        grid: { color: "rgba(25, 60, 100, 0.08)" }
+        title: {
+          display: Boolean(yLabel),
+          text: yLabel,
+          font: { family: "'Space Grotesk', sans-serif", size: 12, weight: "500" },
+          color: "#94a3b8"
+        },
+        ticks: {
+          font: { family: "'IBM Plex Mono', monospace", size: 11 },
+          color: "#94a3b8"
+        },
+        grid: { color: "rgba(226, 232, 240, 0.6)", drawBorder: false }
       }
     }
   };

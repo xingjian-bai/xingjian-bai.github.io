@@ -333,9 +333,11 @@ h1 {
 }
 
 .kpi-value {
-  font-size: clamp(1.2rem, 2.2vw, 1.85rem);
-  line-height: 1.1;
-  font-weight: 700;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(1.15rem, 2vw, 1.7rem);
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .kpi-sub {
@@ -346,7 +348,7 @@ h1 {
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 14px;
 }
 
 .panel {
@@ -559,14 +561,17 @@ tbody tr:hover {
 
 .value-h100 {
   color: var(--h100);
+  font-weight: 600;
 }
 
 .value-a100 {
   color: var(--a100);
+  font-weight: 600;
 }
 
 .value-a100-40 {
   color: var(--a100-40);
+  font-weight: 600;
 }
 
 @keyframes rise-in {
