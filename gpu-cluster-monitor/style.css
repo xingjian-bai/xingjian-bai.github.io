@@ -43,7 +43,7 @@ body {
   margin: 0 auto;
   padding: 24px 20px 60px;
   display: grid;
-  gap: 14px;
+  gap: 16px;
 }
 
 .hero {
@@ -377,6 +377,15 @@ h1 {
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  padding: 4px 0;
+}
+
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -389,6 +398,7 @@ h1 {
   background: var(--card);
   padding: 20px;
   box-shadow: var(--shadow);
+  overflow: hidden;
 }
 
 .panel-wide {
@@ -397,7 +407,8 @@ h1 {
 
 .panel-header h2 {
   margin: 0;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
 }
 
 .panel-header p {
