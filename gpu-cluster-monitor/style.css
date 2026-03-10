@@ -707,6 +707,18 @@ tbody tr:hover {
   margin: 0;
 }
 
+kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 1px 0 var(--line);
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;

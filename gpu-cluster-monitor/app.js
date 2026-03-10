@@ -463,6 +463,13 @@ function renderHourlyCostChart() {
   }));
 
   const estimatedData = snapshots.map((s) => (s.estimated ? Number(s.total_hourly_cost || 0) : null));
+  const estCount = estimatedData.filter((v) => v !== null).length;
+  const costSubtitle = document.getElementById("hourly-cost-subtitle");
+  if (costSubtitle) {
+    costSubtitle.textContent = estCount > 0
+      ? `Stacked by GPU type \u00b7 ${estCount} estimated snapshot${estCount > 1 ? "s" : ""}`
+      : "Stacked by GPU type";
+  }
   if (estimatedData.some((v) => v !== null)) {
     datasets.push({
       label: "Estimated",
