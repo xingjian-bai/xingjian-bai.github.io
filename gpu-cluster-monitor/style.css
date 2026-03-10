@@ -527,8 +527,18 @@ tbody tr:hover {
   text-align: center;
 }
 
+.pricing-panel .panel-header p {
+  font-size: 11px;
+  line-height: 1.5;
+  max-width: 80ch;
+}
+
 .pricing-panel .table-wrap {
   margin-top: 12px;
+}
+
+.pricing-panel table {
+  min-width: 680px;
 }
 
 .pricing-sources {

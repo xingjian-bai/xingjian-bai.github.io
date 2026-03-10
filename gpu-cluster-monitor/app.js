@@ -300,7 +300,7 @@ function buildKpiCards() {
     {
       title: "All-Time Cost",
       value: formatCurrencyCompact(kpis.all_time_total_cost || 0),
-      sub: "Accumulated from all hourly snapshots"
+      sub: `${formatInteger(state.snapshots.length)} snapshots over ${Math.ceil(state.snapshots.length / 24)} days`
     }
   ];
 }
@@ -551,9 +551,16 @@ function extractPeriodValue(row, gpuType) {
   return Number(row.node_hours?.[gpuType] || 0);
 }
 
+const fmtPeriodDay = new Intl.DateTimeFormat("en-US", {
+  timeZone: "UTC",
+  month: "short",
+  day: "numeric"
+});
+
 function formatPeriodLabel(periodKey) {
   if (state.period === "daily") {
-    return periodKey.slice(5);
+    const d = new Date(periodKey + "T00:00:00Z");
+    return isNaN(d.getTime()) ? periodKey.slice(5) : fmtPeriodDay.format(d);
   }
   return periodKey;
 }
