@@ -93,10 +93,7 @@
           </tbody>
         </table>
       </div>
-      <div class="pricing-links">
-        <span>Authentic Sources:</span>
-        <ul id="pricing-source-links"></ul>
-      </div>
+      <p class="pricing-sources" id="pricing-source-links">Loading sources...</p>
     </section>
 
     <section class="chart-grid">
@@ -122,8 +119,16 @@
 
       <article class="panel">
         <header class="panel-header">
-          <h2>Cumulative Cost</h2>
-          <p>Accumulated cost over selected window</p>
+          <div class="panel-header-row">
+            <div>
+              <h2>Cumulative Cost</h2>
+              <p>Accumulated cost over selected window</p>
+            </div>
+            <div id="cumulative-range-controls" class="button-group button-group-sm">
+              <button type="button" data-cum-range="window" class="is-active">Window</button>
+              <button type="button" data-cum-range="all">All Data</button>
+            </div>
+          </div>
         </header>
         <div class="chart-wrap">
           <canvas id="cumulative-cost-chart"></canvas>

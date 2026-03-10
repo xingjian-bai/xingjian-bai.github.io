@@ -15,6 +15,7 @@ const state = {
   rangeHours: 24,
   period: "daily",
   periodMetric: "cost",
+  cumulativeRange: "window",
   snapshots: [],
   aggregates: null,
   health: null,
@@ -192,9 +193,10 @@ function renderPricing() {
   }).join("");
 
   const src = Array.isArray(pricing.source_links) ? pricing.source_links : [];
-  links.innerHTML = src.map((item) => (
-    `<li><a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.label}</a></li>`
-  )).join("");
+  const linkHtml = src.map((item) => (
+    `<a href="${item.url}" target="_blank" rel="noopener noreferrer">${item.label}</a>`
+  )).join(' <span class="source-sep">\u00b7</span> ');
+  links.innerHTML = src.length ? `<span class="source-label">Authentic Sources:</span> ${linkHtml}` : "";
 }
 
 function computePeriodDelta(periodArray) {
@@ -412,14 +414,35 @@ function renderHourlyCostChart() {
   });
 }
 
+const fmtDay = new Intl.DateTimeFormat("en-US", {
+  timeZone: "UTC",
+  month: "short",
+  day: "2-digit"
+});
+
 function renderCumulativeCostChart() {
-  const snapshots = getRangeSnapshots();
-  const labels = snapshots.map((s) => fmtHour.format(toDate(s.hour)));
+  const useAll = state.cumulativeRange === "all";
+  const snapshots = useAll ? state.snapshots : getRangeSnapshots();
+
   let running = 0;
-  const values = snapshots.map((s) => {
+  const raw = snapshots.map((s) => {
     running += Number(s.total_hourly_cost || 0);
-    return Number(running.toFixed(2));
+    return { hour: s.hour, cost: Number(running.toFixed(2)) };
   });
+
+  let labels, values;
+  if (useAll || snapshots.length > 168) {
+    const byDay = new Map();
+    for (const entry of raw) {
+      const dayKey = fmtDay.format(toDate(entry.hour));
+      byDay.set(dayKey, entry.cost);
+    }
+    labels = [...byDay.keys()];
+    values = [...byDay.values()];
+  } else {
+    labels = raw.map((e) => fmtHour.format(toDate(e.hour)));
+    values = raw.map((e) => e.cost);
+  }
 
   upsertChart("cumulativeCost", "cumulative-cost-chart", {
     type: "line",
@@ -626,6 +649,14 @@ function bindControls() {
       renderPeriodChart();
     });
   }
+
+  document.querySelectorAll("#cumulative-range-controls button").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.cumulativeRange = button.dataset.cumRange;
+      setActiveButton("cumulative-range-controls", "cumRange", state.cumulativeRange);
+      renderCumulativeCostChart();
+    });
+  });
 
   document.getElementById("refresh-now").addEventListener("click", async () => {
     const refreshButton = document.getElementById("refresh-now");

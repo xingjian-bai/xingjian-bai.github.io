@@ -400,26 +400,43 @@ tbody tr:hover {
   margin-top: 12px;
 }
 
-.pricing-links {
-  margin-top: 10px;
-  display: grid;
-  gap: 6px;
+.pricing-sources {
+  margin: 10px 0 0;
+  font-size: 12px;
   color: var(--muted);
-  font-size: 13px;
+  line-height: 1.7;
 }
 
-.pricing-links ul {
-  margin: 0;
-  padding-left: 18px;
+.pricing-sources .source-label {
+  font-weight: 600;
+  color: var(--ink);
 }
 
-.pricing-links a {
+.pricing-sources a {
   color: var(--blue);
   text-decoration: none;
 }
 
-.pricing-links a:hover {
+.pricing-sources a:hover {
   text-decoration: underline;
+}
+
+.pricing-sources .source-sep {
+  color: var(--line);
+  margin: 0 2px;
+}
+
+.panel-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.button-group-sm button {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 8px;
 }
 
 .notes ul {
