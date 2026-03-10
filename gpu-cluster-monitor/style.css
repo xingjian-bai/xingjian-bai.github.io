@@ -290,11 +290,7 @@ h1 {
 .kpi-grid {
   display: grid;
   gap: 12px;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.kpi-wide {
-  grid-column: span 2;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .kpi-card {
@@ -650,10 +646,6 @@ tbody tr:hover {
 @media (max-width: 1200px) {
   .kpi-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .kpi-wide {
-    grid-column: span 1;
   }
 }
 

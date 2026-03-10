@@ -271,15 +271,13 @@ function buildKpiCards() {
       title: "Current GPUs",
       value: formatInteger(kpis.current_gpus_total || 0),
       sub: `${formatInteger(kpis.current_nodes_total || 0)} nodes`,
-      extra: gpuBreakdownHtml(),
-      wide: true
+      extra: gpuBreakdownHtml()
     },
     {
       title: "Current Hourly Cost",
       value: formatCurrencyCompact(kpis.current_hourly_cost || 0),
       sub: "Based on active nodes now",
-      extra: costBreakdownHtml(),
-      wide: true
+      extra: costBreakdownHtml()
     },
     {
       title: "24h Total Cost",
@@ -311,7 +309,7 @@ function renderKpis() {
   const container = document.getElementById("kpi-grid");
   const cards = buildKpiCards();
   container.innerHTML = cards.map((card) => `
-    <article class="kpi-card${card.wide ? " kpi-wide" : ""}">
+    <article class="kpi-card">
       <div class="kpi-title">${card.title}${card.delta != null ? formatDeltaHtml(card.delta) : ""}</div>
       <div class="kpi-value">${card.value}</div>
       <div class="kpi-sub">${card.sub}</div>
@@ -509,6 +507,13 @@ function renderCumulativeCostChart() {
     labels = raw.map((e) => fmtHour.format(toDate(e.hour)));
     gpuData = {};
     GPU_TYPES.forEach((t) => { gpuData[t] = raw.map((e) => e[t]); });
+  }
+
+  const totalCost = GPU_TYPES.reduce((sum, t) => sum + running[t], 0);
+  const subtitle = document.getElementById("cumulative-subtitle");
+  if (subtitle) {
+    const rangeLabel = useAll ? "all data" : `last ${state.rangeHours}h`;
+    subtitle.textContent = `${formatCurrencyCompact(totalCost)} accumulated over ${rangeLabel} \u00b7 ${labels.length} ${useDayLabels ? "days" : "hours"}`;
   }
 
   const datasets = GPU_TYPES.map((gpuType) => ({
