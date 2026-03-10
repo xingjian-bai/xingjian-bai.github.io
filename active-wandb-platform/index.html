@@ -10,18 +10,19 @@
   --bg-card: #161b22;
   --bg-card-hover: #1c2333;
   --border: #30363d;
-  --text: #e6edf3;
+  --text: #c9d1d9;
   --text-dim: #8b949e;
-  --text-bright: #ffffff;
+  --text-bright: #f0f6fc;
   --accent: #58a6ff;
+  --accent-dim: rgba(88,166,255,0.15);
   --signal-surprise: #f97316;
   --signal-surprise-bg: rgba(249,115,22,0.12);
   --signal-attention: #ef4444;
-  --signal-attention-bg: rgba(239,68,68,0.12);
+  --signal-attention-bg: rgba(239,68,68,0.10);
   --signal-best: #eab308;
-  --signal-best-bg: rgba(234,179,8,0.12);
+  --signal-best-bg: rgba(234,179,8,0.10);
   --signal-improving: #22c55e;
-  --signal-improving-bg: rgba(34,197,94,0.12);
+  --signal-improving-bg: rgba(34,197,94,0.10);
   --signal-degrading: #f97316;
   --signal-degrading-bg: rgba(249,115,22,0.08);
   --signal-on_track: #6366f1;
@@ -30,6 +31,7 @@
   --signal-dead-bg: rgba(107,114,128,0.08);
   --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
   --mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+  --radius: 10px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,22 +45,22 @@ body {
   min-height: 100vh;
 }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 24px 20px; }
+.container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
 
 /* Header */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--border);
 }
 .header h1 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--text-bright);
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
 }
 .header-right {
   display: flex;
@@ -73,7 +75,7 @@ body {
   background: transparent;
   border: 1px solid var(--border);
   color: var(--text-dim);
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: 6px;
   font-size: 12px;
   cursor: pointer;
@@ -92,7 +94,7 @@ body {
 /* Signal summary bar */
 .signal-bar {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 20px;
 }
@@ -100,7 +102,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
+  padding: 5px 14px;
   border-radius: 20px;
   font-size: 13px;
   font-weight: 500;
@@ -113,17 +115,17 @@ body {
 .signal-chip.degrading { background: var(--signal-degrading-bg); color: var(--signal-degrading); }
 .signal-chip.on_track { background: var(--signal-on_track-bg); color: var(--signal-on_track); }
 .signal-chip.dead { background: var(--signal-dead-bg); color: var(--signal-dead); }
-.signal-chip .count { font-weight: 700; font-size: 16px; }
+.signal-chip .count { font-weight: 700; font-size: 15px; }
 
 /* Global summary */
 .global-summary {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius);
   padding: 16px 20px;
   margin-bottom: 24px;
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 .global-summary .label {
   font-size: 11px;
@@ -134,12 +136,13 @@ body {
 }
 .attention-banner {
   background: var(--signal-attention-bg);
-  border: 1px solid rgba(239,68,68,0.3);
-  border-radius: 8px;
-  padding: 12px 20px;
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: var(--radius);
+  padding: 14px 20px;
   margin-bottom: 24px;
   color: var(--signal-attention);
   font-size: 13px;
+  line-height: 1.7;
 }
 .attention-banner .label {
   font-weight: 600;
@@ -150,10 +153,12 @@ body {
 .project {
   background: var(--bg-card);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  margin-bottom: 16px;
+  border-radius: var(--radius);
+  margin-bottom: 14px;
   overflow: hidden;
+  transition: border-color 0.2s;
 }
+.project:hover { border-color: #3d444d; }
 .project-header {
   display: flex;
   justify-content: space-between;
@@ -168,6 +173,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
 }
 .project-title h2 {
   font-size: 15px;
@@ -179,12 +185,33 @@ body {
   color: var(--text-dim);
   font-weight: 400;
 }
+/* Project-level signal badge */
+.project-signal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+.project-signal-badge.attention { background: var(--signal-attention-bg); color: var(--signal-attention); }
+.project-signal-badge.surprise { background: var(--signal-surprise-bg); color: var(--signal-surprise); }
+.project-signal-badge.best { background: var(--signal-best-bg); color: var(--signal-best); }
+.project-signal-badge.improving { background: var(--signal-improving-bg); color: var(--signal-improving); }
+.project-signal-badge.degrading { background: var(--signal-degrading-bg); color: var(--signal-degrading); }
+.project-signal-badge.on_track { background: var(--signal-on_track-bg); color: var(--signal-on_track); }
+.project-signal-badge.dead { background: var(--signal-dead-bg); color: var(--signal-dead); }
+
 .project-meta {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   font-size: 12px;
   color: var(--text-dim);
+  flex-shrink: 0;
 }
 .project-meta .active-badge {
   background: rgba(34,197,94,0.15);
@@ -196,7 +223,7 @@ body {
 .chevron {
   transition: transform 0.2s;
   color: var(--text-dim);
-  font-size: 12px;
+  font-size: 11px;
 }
 .project.open .chevron { transform: rotate(90deg); }
 
@@ -208,12 +235,11 @@ body {
 
 .project-insight {
   padding: 16px 20px;
-  background: rgba(88,166,255,0.04);
+  background: rgba(88,166,255,0.03);
   border-bottom: 1px solid var(--border);
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.8;
   color: var(--text);
-  white-space: pre-wrap;
 }
 .project-insight .label {
   font-size: 11px;
@@ -239,6 +265,11 @@ body {
   cursor: pointer;
 }
 .run-header:hover { background: var(--bg-card-hover); }
+
+/* Dimmed style for resolved/noted runs */
+.run.user-resolved { opacity: 0.45; }
+.run.user-noted { border-left: 3px solid var(--accent); }
+.run.user-flagged { border-left: 3px solid var(--signal-attention); }
 
 .run-signal {
   width: 10px;
@@ -273,7 +304,7 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 350px;
+  max-width: 400px;
 }
 .run-state {
   font-size: 11px;
@@ -301,6 +332,46 @@ body {
 }
 .run.open .run-details { display: block; }
 
+/* Run annotation buttons */
+.run-actions {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.run-action-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 3px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+.run-action-btn:hover { border-color: var(--text-dim); color: var(--text); }
+.run-action-btn.active-resolved { background: rgba(34,197,94,0.15); color: #22c55e; border-color: rgba(34,197,94,0.3); }
+.run-action-btn.active-flagged { background: var(--signal-attention-bg); color: var(--signal-attention); border-color: rgba(239,68,68,0.3); }
+.run-action-btn.active-noted { background: var(--accent-dim); color: var(--accent); border-color: rgba(88,166,255,0.3); }
+
+.run-note-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: var(--font);
+  margin-top: 6px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.run-note-input:focus { border-color: var(--accent); }
+.run-note-input::placeholder { color: var(--text-dim); }
+
 .insight-block {
   margin-bottom: 12px;
 }
@@ -314,40 +385,40 @@ body {
 }
 .insight-block .text {
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--text);
 }
 
 .metrics-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 8px;
   margin-bottom: 12px;
 }
 .metric-card {
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 8px 12px;
+  border-radius: 8px;
+  padding: 10px 14px;
 }
 .metric-card .name {
   font-size: 11px;
   color: var(--text-dim);
-  margin-bottom: 2px;
+  margin-bottom: 3px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .metric-card .value {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   font-family: var(--mono);
   color: var(--text-bright);
 }
 .metric-card canvas {
   width: 100%;
-  height: 30px;
-  margin-top: 4px;
+  height: 40px;
+  margin-top: 6px;
 }
 
 .wandb-link {
@@ -368,7 +439,7 @@ body {
   font-size: 11px;
   line-height: 1.5;
   color: var(--text-dim);
-  max-height: 300px;
+  max-height: 350px;
   overflow-y: auto;
   white-space: pre-wrap;
   word-break: break-all;
@@ -383,7 +454,7 @@ body {
   margin-bottom: 12px;
 }
 .config-table td {
-  padding: 3px 8px;
+  padding: 4px 10px;
   border-bottom: 1px solid rgba(48,54,61,0.5);
 }
 .config-table td:first-child {
@@ -442,6 +513,16 @@ body {
 .detail-pane { display: none; }
 .detail-pane.active { display: block; }
 
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 28px;
+  font-size: 11px;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .run-header { grid-template-columns: auto 1fr auto; }
@@ -449,6 +530,8 @@ body {
   .run-runtime { display: none; }
   .signal-bar { gap: 8px; }
   .signal-chip { padding: 4px 10px; font-size: 12px; }
+  .project-signal-badge { display: none; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
@@ -486,6 +569,68 @@ const SIGNAL_LABELS = {
 
 let dashboardData = null;
 
+// --- localStorage annotation store ---
+const ANNOTATIONS_KEY = 'exp-monitor-annotations';
+
+function loadAnnotations() {
+  try {
+    return JSON.parse(localStorage.getItem(ANNOTATIONS_KEY)) || {};
+  } catch { return {}; }
+}
+
+function saveAnnotations(annotations) {
+  try {
+    localStorage.setItem(ANNOTATIONS_KEY, JSON.stringify(annotations));
+  } catch (e) {
+    // localStorage may be full or unavailable (Safari private browsing)
+    console.warn('Failed to save annotations:', e.message);
+  }
+}
+
+function getRunAnnotation(runId) {
+  return loadAnnotations()[runId] || {};
+}
+
+function setRunAnnotation(runId, field, value) {
+  const all = loadAnnotations();
+  if (!all[runId]) all[runId] = {};
+  all[runId][field] = value;
+  // Clean up empty entries
+  if (!all[runId].status && !all[runId].note) delete all[runId];
+  saveAnnotations(all);
+}
+
+function toggleRunStatus(runId, status) {
+  const ann = getRunAnnotation(runId);
+  const newStatus = ann.status === status ? null : status;
+  setRunAnnotation(runId, 'status', newStatus);
+  // Re-render just this run's visual state
+  applyRunAnnotationVisuals(runId);
+}
+
+function applyRunAnnotationVisuals(runId) {
+  const el = document.querySelector(`[data-run-id="${runId}"]`);
+  if (!el) return;
+  const ann = getRunAnnotation(runId);
+  el.classList.remove('user-resolved', 'user-flagged', 'user-noted');
+  if (ann.status === 'resolved') el.classList.add('user-resolved');
+  if (ann.status === 'flagged') el.classList.add('user-flagged');
+  if (ann.note) el.classList.add('user-noted');
+
+  // Update button states
+  el.querySelectorAll('.run-action-btn').forEach(btn => {
+    btn.classList.remove('active-resolved', 'active-flagged', 'active-noted');
+    const action = btn.dataset.action;
+    if (action === ann.status) btn.classList.add(`active-${action}`);
+  });
+}
+
+function saveRunNote(runId, textarea) {
+  setRunAnnotation(runId, 'note', textarea.value.trim() || null);
+  applyRunAnnotationVisuals(runId);
+}
+
+// --- Data loading ---
 async function loadData() {
   try {
     const resp = await fetch('dashboard.json?t=' + Date.now());
@@ -531,11 +676,16 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+function sanitizeId(id) {
+  // W&B run IDs are alphanumeric, but sanitize defensively
+  return String(id).replace(/[^a-zA-Z0-9_-]/g, '');
+}
+
+// --- Rendering ---
 function render() {
   const d = dashboardData;
   const app = document.getElementById('app');
 
-  // Signal chips
   const signalOrder = ['attention', 'surprise', 'best', 'improving', 'degrading', 'on_track', 'dead'];
   const signalChips = signalOrder
     .filter(s => (d.signal_counts[s] || 0) > 0)
@@ -544,21 +694,23 @@ function render() {
       ${SIGNAL_ICONS[s]} ${SIGNAL_LABELS[s]}
     </div>`).join('');
 
-  // Attention banner
   const attentionBanner = d.attention_summary
     ? `<div class="attention-banner">
-        <div class="label">\u{1F534} Needs Attention</div>
+        <div class="label">${SIGNAL_ICONS.attention} Needs Attention</div>
         ${escapeHtml(d.attention_summary)}
       </div>` : '';
 
-  // Projects
   const projects = d.projects.map((p, pi) => renderProject(p, pi)).join('');
+
+  const analyzedInfo = d.analyzed_at
+    ? `Analyzed ${timeAgo(d.analyzed_at)}`
+    : 'Analysis pending';
 
   app.innerHTML = `
     <div class="header">
       <h1>Experiment Monitor</h1>
       <div class="header-right">
-        <span class="last-updated">Updated ${timeAgo(d.updated_at)}</span>
+        <span class="last-updated">Updated ${timeAgo(d.updated_at)} &middot; ${analyzedInfo}</span>
         <button class="refresh-btn" onclick="refreshData()">Refresh</button>
       </div>
     </div>
@@ -569,18 +721,38 @@ function render() {
       ${escapeHtml(d.global_summary)}
     </div>
     ${projects}
-    <div style="text-align:center;padding:24px;font-size:11px;color:var(--text-dim)">
-      Auto-updates every 15 min when Mac is online &middot; ${d.total_runs} runs tracked
+    <div class="footer">
+      Auto-updates every 20 min &middot; ${d.total_runs} runs tracked &middot; Annotations saved locally
     </div>
   `;
 
   // Auto-open first project
   const firstProj = document.querySelector('.project');
   if (firstProj) firstProj.classList.add('open');
+
+  // Apply saved annotation visuals
+  const annotations = loadAnnotations();
+  for (const runId of Object.keys(annotations)) {
+    applyRunAnnotationVisuals(runId);
+  }
 }
 
 function renderProject(p, pi) {
   const runRows = p.runs.map((r, ri) => renderRun(r, pi, ri)).join('');
+
+  // Project signal badge
+  const projSignal = p.project_signal || 'on_track';
+  const badgeHtml = projSignal !== 'on_track'
+    ? `<span class="project-signal-badge ${projSignal}">${SIGNAL_ICONS[projSignal] || ''} ${SIGNAL_LABELS[projSignal] || projSignal}</span>`
+    : '';
+
+  // Aggregate run signals for mini summary
+  const sigCounts = {};
+  p.runs.forEach(r => { sigCounts[r.signal] = (sigCounts[r.signal] || 0) + 1; });
+  const sigSummary = ['attention', 'surprise', 'best', 'improving', 'dead']
+    .filter(s => sigCounts[s])
+    .map(s => `${sigCounts[s]} ${SIGNAL_ICONS[s]}`)
+    .join(' ');
 
   return `
     <div class="project" id="proj-${pi}">
@@ -589,8 +761,10 @@ function renderProject(p, pi) {
           <span class="chevron">\u25B6</span>
           <h2>${escapeHtml(p.project)}</h2>
           <span class="entity">${escapeHtml(p.entity)}</span>
+          ${badgeHtml}
         </div>
         <div class="project-meta">
+          ${sigSummary ? `<span>${sigSummary}</span>` : ''}
           ${p.active_count > 0 ? `<span class="active-badge">${p.active_count} running</span>` : ''}
           <span>${p.run_count} runs</span>
         </div>
@@ -608,12 +782,14 @@ function renderProject(p, pi) {
 
 function renderRun(r, pi, ri) {
   const id = `run-${pi}-${ri}`;
+  const safeId = sanitizeId(r.id);
+  const ann = getRunAnnotation(safeId);
+  const annClass = ann.status === 'resolved' ? ' user-resolved' : (ann.status === 'flagged' ? ' user-flagged' : (ann.note ? ' user-noted' : ''));
 
-  // Top metrics (pick most important ones)
+  // Top metrics
   const importantKeys = Object.keys(r.summary || {})
     .filter(k => typeof r.summary[k] === 'number')
     .sort((a, b) => {
-      // Prioritize FID, loss, IS, perplexity, accuracy
       const priority = k => {
         const kl = k.toLowerCase();
         if (kl.includes('fid')) return 0;
@@ -625,7 +801,7 @@ function renderRun(r, pi, ri) {
       };
       return priority(a) - priority(b);
     })
-    .slice(0, 6);
+    .slice(0, 8);
 
   const metricsHtml = importantKeys.map(k => {
     const histData = (r.metric_history || {})[k] || [];
@@ -637,10 +813,9 @@ function renderRun(r, pi, ri) {
     </div>`;
   }).join('');
 
-  // Config display (skip huge objects)
   const configEntries = Object.entries(r.config || {})
     .filter(([k, v]) => typeof v !== 'object' || v === null)
-    .slice(0, 12);
+    .slice(0, 15);
   const configHtml = configEntries.length > 0
     ? `<table class="config-table">${configEntries.map(([k, v]) =>
         `<tr><td>${escapeHtml(k)}</td><td>${escapeHtml(String(v))}</td></tr>`
@@ -648,8 +823,13 @@ function renderRun(r, pi, ri) {
 
   const wandbUrl = r.url ? (r.url.startsWith('http') ? r.url : `https://wandb.ai${r.url}`) : '';
 
+  // Annotation buttons
+  const resolvedActive = ann.status === 'resolved' ? ' active-resolved' : '';
+  const flaggedActive = ann.status === 'flagged' ? ' active-flagged' : '';
+  const notedActive = ann.note ? ' active-noted' : '';
+
   return `
-    <div class="run" id="${id}">
+    <div class="run${annClass}" id="${id}" data-run-id="${safeId}">
       <div class="run-header" onclick="toggleRun('${id}')">
         <div class="run-signal ${r.signal}"></div>
         <div>
@@ -660,32 +840,41 @@ function renderRun(r, pi, ri) {
         <span class="run-runtime">${r.runtime_hours}h</span>
       </div>
       <div class="run-details">
+        <div class="run-actions">
+          <button class="run-action-btn${resolvedActive}" data-action="resolved" onclick="event.stopPropagation(); toggleRunStatus('${safeId}', 'resolved')">Resolved</button>
+          <button class="run-action-btn${flaggedActive}" data-action="flagged" onclick="event.stopPropagation(); toggleRunStatus('${safeId}', 'flagged')">Flagged</button>
+          <textarea class="run-note-input" rows="1" placeholder="Add a note..."
+            onblur="saveRunNote('${safeId}', this)"
+            onclick="event.stopPropagation()">${escapeHtml(ann.note || '')}</textarea>
+        </div>
         <div class="detail-tabs">
-          <div class="detail-tab active" onclick="switchTab('${id}', 'insights')">Insights</div>
-          <div class="detail-tab" onclick="switchTab('${id}', 'metrics')">Metrics</div>
-          <div class="detail-tab" onclick="switchTab('${id}', 'config')">Config</div>
-          ${r.console_logs ? `<div class="detail-tab" onclick="switchTab('${id}', 'logs')">Logs</div>` : ''}
+          <div class="detail-tab active" data-tab="insights" onclick="switchTab('${id}', 'insights')">Insights</div>
+          <div class="detail-tab" data-tab="metrics" onclick="switchTab('${id}', 'metrics')">Metrics</div>
+          <div class="detail-tab" data-tab="config" onclick="switchTab('${id}', 'config')">Config</div>
+          ${r.console_logs ? `<div class="detail-tab" data-tab="logs" onclick="switchTab('${id}', 'logs')">Logs</div>` : ''}
         </div>
         <div class="detail-pane active" data-tab="insights">
           ${r.run_insight ? `<div class="insight-block"><div class="label">Run Assessment</div><div class="text">${escapeHtml(r.run_insight)}</div></div>` : ''}
           ${r.viz_insight ? `<div class="insight-block"><div class="label">Metric Trends</div><div class="text">${escapeHtml(r.viz_insight)}</div></div>` : ''}
           ${r.log_insight ? `<div class="insight-block"><div class="label">Log Analysis</div><div class="text">${escapeHtml(r.log_insight)}</div></div>` : ''}
+          ${!r.run_insight && !r.viz_insight && !r.log_insight ? '<div style="color:var(--text-dim);font-size:12px">No analysis available yet</div>' : ''}
         </div>
         <div class="detail-pane" data-tab="metrics">
           <div class="metrics-grid">${metricsHtml}</div>
         </div>
         <div class="detail-pane" data-tab="config">
-          ${configHtml}
+          ${configHtml || '<div style="color:var(--text-dim);font-size:12px">No config data</div>'}
         </div>
         ${r.console_logs ? `
           <div class="detail-pane" data-tab="logs">
             <div class="console-logs">${escapeHtml(r.console_logs)}</div>
           </div>` : ''}
-        ${wandbUrl ? `<a class="wandb-link" href="${wandbUrl}" target="_blank" rel="noopener">\u2192 Open in W&B</a>` : ''}
+        ${wandbUrl ? `<a class="wandb-link" href="${escapeHtml(wandbUrl)}" target="_blank" rel="noopener">\u2192 Open in W&B</a>` : ''}
       </div>
     </div>`;
 }
 
+// --- Interactions ---
 function toggleProject(idx) {
   document.getElementById(`proj-${idx}`).classList.toggle('open');
 }
@@ -694,8 +883,6 @@ function toggleRun(id) {
   const el = document.getElementById(id);
   const wasOpen = el.classList.contains('open');
   el.classList.toggle('open');
-
-  // Draw sparklines when first opened
   if (!wasOpen) {
     setTimeout(() => drawSparklines(el), 50);
   }
@@ -703,7 +890,7 @@ function toggleRun(id) {
 
 function switchTab(runId, tab) {
   const run = document.getElementById(runId);
-  run.querySelectorAll('.detail-tab').forEach(t => t.classList.toggle('active', t.textContent.toLowerCase().includes(tab)));
+  run.querySelectorAll('.detail-tab').forEach(t => t.classList.toggle('active', (t.dataset.tab || t.textContent.toLowerCase()) === tab));
   run.querySelectorAll('.detail-pane').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
   if (tab === 'metrics') {
     setTimeout(() => drawSparklines(run), 50);
@@ -727,20 +914,56 @@ function drawSparklines(container) {
     const range = max - min || 1;
 
     const ctx = canvas.getContext('2d');
-    const w = canvas.width = canvas.offsetWidth * 2;
-    const h = canvas.height = 60;
-    ctx.scale(1, 1);
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.offsetWidth;
+    const h = 40;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.scale(dpr, dpr);
 
+    // Fill area under curve
+    ctx.fillStyle = 'rgba(88,166,255,0.08)';
+    ctx.beginPath();
+    ctx.moveTo(0, h);
+    values.forEach((v, i) => {
+      const x = (i / (values.length - 1)) * w;
+      const y = h - ((v - min) / range) * (h - 6) - 3;
+      ctx.lineTo(x, y);
+    });
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fill();
+
+    // Line
     ctx.strokeStyle = '#58a6ff';
     ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
     ctx.beginPath();
     values.forEach((v, i) => {
       const x = (i / (values.length - 1)) * w;
-      const y = h - ((v - min) / range) * (h - 4) - 2;
+      const y = h - ((v - min) / range) * (h - 6) - 3;
       if (i === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     });
     ctx.stroke();
+
+    // Endpoint dot
+    const lastX = w;
+    const lastY = h - ((values[values.length - 1] - min) / range) * (h - 6) - 3;
+    ctx.fillStyle = '#58a6ff';
+    ctx.beginPath();
+    ctx.arc(lastX, lastY, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Min/max labels
+    ctx.fillStyle = 'rgba(139,148,158,0.7)';
+    ctx.font = '9px system-ui';
+    ctx.textAlign = 'right';
+    ctx.fillText(formatNum(max), w - 2, 10);
+    ctx.fillText(formatNum(min), w - 2, h - 2);
+
     canvas.dataset.drawn = '1';
   });
 }
@@ -757,7 +980,7 @@ async function refreshData() {
 // Initial load
 loadData();
 
-// Auto-refresh every 5 min (in case new data was pushed)
+// Auto-refresh every 5 min
 setInterval(loadData, 5 * 60 * 1000);
 </script>
 </body>
