@@ -439,7 +439,7 @@ function renderGpuUsageChart() {
   const estimated = quality.estimated_hours ?? 0;
   const rangeLabel = state.rangeHours <= 24 ? "24h" : state.rangeHours <= 168 ? "7d" : state.rangeHours <= 720 ? "30d" : "90d";
   document.getElementById("gpu-usage-subtitle").textContent =
-    `${rangeLabel} window \u00b7 ${formatDecimal(coverage, 1)}% observed (${observed} obs / ${estimated} est)`;
+    `${rangeLabel} \u00b7 ${snapshots.length} pts \u00b7 ${formatDecimal(coverage, 1)}% observed`;
 
   upsertChart("gpuUsage", "gpu-usage-chart", {
     type: "line",
@@ -752,11 +752,17 @@ function renderTopProjects() {
   `).join("");
 }
 
+const fmtLocalTime = new Intl.DateTimeFormat("en-US", {
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: false
+});
+
 function updateLastRefreshed() {
   const el = document.getElementById("last-refreshed");
   if (el) {
-    const now = new Date();
-    el.textContent = `Fetched ${fmtHour.format(now)} local`;
+    el.textContent = `Fetched ${fmtLocalTime.format(new Date())}`;
   }
 }
 
