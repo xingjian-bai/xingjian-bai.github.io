@@ -400,7 +400,16 @@ function baseChartOptions({ stacked = false, yLabel = "" } = {}) {
         },
         ticks: {
           font: { family: "'IBM Plex Mono', monospace", size: 11 },
-          color: "#94a3b8"
+          color: "#94a3b8",
+          callback(value) {
+            if (yLabel === "USD") {
+              if (value >= 1000000) return `$${(value / 1000000).toFixed(1)}M`;
+              if (value >= 1000) return `$${(value / 1000).toFixed(0)}K`;
+              return `$${value}`;
+            }
+            if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
+            return value;
+          }
         },
         grid: { color: "rgba(226, 232, 240, 0.6)", drawBorder: false }
       }
@@ -462,7 +471,9 @@ function renderHourlyCostChart() {
       backgroundColor: "#ef4444",
       showLine: false,
       pointRadius: 3,
-      pointStyle: "triangle"
+      pointStyle: "triangle",
+      stack: false,
+      fill: false
     });
   }
 

@@ -674,6 +674,23 @@ tbody tr:hover {
   overflow-y: auto;
 }
 
+.table-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 3px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
 .footer {
   text-align: center;
   padding: 20px 0 0;
