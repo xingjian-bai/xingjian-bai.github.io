@@ -403,11 +403,12 @@ function renderGpuUsageChart() {
     label: GPU_META[gpuType].label,
     data: snapshots.map((s) => Number(s.gpus?.[gpuType] || 0)),
     borderColor: GPU_META[gpuType].color,
-    backgroundColor: `${GPU_META[gpuType].color}33`,
+    backgroundColor: `${GPU_META[gpuType].color}25`,
     fill: true,
     tension: 0.2,
     stack: "gpu",
-    pointRadius: 0
+    pointRadius: 0,
+    borderWidth: 1.5
   }));
 
   const quality = state.aggregates?.quality || {};
@@ -427,33 +428,34 @@ function renderGpuUsageChart() {
 function renderHourlyCostChart() {
   const snapshots = getRangeSnapshots();
   const labels = snapshots.map((s) => fmtHour.format(toDate(s.hour)));
-  const estimated = snapshots.map((s) => (s.estimated ? Number(s.total_hourly_cost || 0) : null));
+
+  const datasets = GPU_TYPES.map((gpuType) => ({
+    label: GPU_META[gpuType].label,
+    data: snapshots.map((s) => Number(s.hourly_cost?.[gpuType] || 0)),
+    borderColor: GPU_META[gpuType].color,
+    backgroundColor: `${GPU_META[gpuType].color}25`,
+    fill: true,
+    tension: 0.2,
+    stack: "cost",
+    pointRadius: 0,
+    borderWidth: 1.5
+  }));
+
+  const estimatedData = snapshots.map((s) => (s.estimated ? Number(s.total_hourly_cost || 0) : null));
+  datasets.push({
+    label: "Estimated",
+    data: estimatedData,
+    borderColor: "#ef4444",
+    backgroundColor: "#ef4444",
+    showLine: false,
+    pointRadius: 3,
+    pointStyle: "triangle"
+  });
 
   upsertChart("hourlyCost", "hourly-cost-chart", {
     type: "line",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: "Hourly Cost",
-          data: snapshots.map((s) => Number(s.total_hourly_cost || 0)),
-          borderColor: "#1c63d5",
-          backgroundColor: "rgba(28, 99, 213, 0.15)",
-          tension: 0.2,
-          fill: true,
-          pointRadius: 0
-        },
-        {
-          label: "Estimated Snapshot",
-          data: estimated,
-          borderColor: "#e58a00",
-          backgroundColor: "#e58a00",
-          showLine: false,
-          pointRadius: 3
-        }
-      ]
-    },
-    options: baseChartOptions({ yLabel: "USD" })
+    data: { labels, datasets },
+    options: baseChartOptions({ stacked: true, yLabel: "USD" })
   });
 }
 
