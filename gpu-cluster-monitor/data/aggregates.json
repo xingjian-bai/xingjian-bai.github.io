@@ -1,56 +1,56 @@
 {
-  "generated_at": "2026-03-12T12:27:23Z",
+  "generated_at": "2026-03-12T13:27:29Z",
   "version": 1,
-  "snapshot_count": 615,
+  "snapshot_count": 616,
   "is_stale": false,
   "stale_threshold_hours": 2,
   "latest": {
-    "hour": "2026-03-12T12:00:00Z",
-    "captured_at": "2026-03-12T12:27:23Z",
+    "hour": "2026-03-12T13:00:00Z",
+    "captured_at": "2026-03-12T13:27:29Z",
     "source": "pluto",
     "fetch_ok": true,
     "estimated": false,
     "error": null,
-    "jobs_total": 8,
-    "jobs_tracked": 8,
+    "jobs_total": 11,
+    "jobs_tracked": 11,
     "nodes": {
-      "H100": 4,
-      "A100": 50,
+      "H100": 0,
+      "A100": 82,
       "A100_40GB": 0
     },
     "gpus": {
-      "H100": 32,
-      "A100": 400,
+      "H100": 0,
+      "A100": 656,
       "A100_40GB": 0
     },
     "hourly_cost": {
-      "H100": 220.16,
-      "A100": 1372.35,
+      "H100": 0.0,
+      "A100": 2250.66,
       "A100_40GB": 0.0
     },
-    "total_hourly_cost": 1592.51,
+    "total_hourly_cost": 2250.66,
     "projects_top": [
       {
         "project": "ilo-combined",
-        "jobs": 8,
-        "nodes": 54,
-        "gpus": 432,
-        "hourly_cost": 1592.53
+        "jobs": 11,
+        "nodes": 82,
+        "gpus": 656,
+        "hourly_cost": 2250.69
       }
     ]
   },
   "kpis": {
-    "current_nodes_total": 54.0,
-    "current_gpus_total": 432.0,
-    "current_hourly_cost": 1592.51,
-    "all_time_total_cost": 1185641.54,
-    "all_time_total_gpu_hours": 302285.17,
-    "all_time_total_node_hours": 37885.54
+    "current_nodes_total": 82.0,
+    "current_gpus_total": 656.0,
+    "current_hourly_cost": 2250.66,
+    "all_time_total_cost": 1187892.2,
+    "all_time_total_gpu_hours": 302941.17,
+    "all_time_total_node_hours": 37967.54
   },
   "quality": {
-    "observed_hours": 540,
+    "observed_hours": 541,
     "estimated_hours": 75,
-    "coverage_pct": 87.8
+    "coverage_pct": 87.82
   },
   "rolling": {
     "24h": {
@@ -58,65 +58,65 @@
       "observed_hours": 24,
       "estimated_hours": 0,
       "node_hours": {
-        "H100": 1000.0,
-        "A100": 830.0,
-        "A100_40GB": 208.0
+        "H100": 924.0,
+        "A100": 910.0,
+        "A100_40GB": 160.0
       },
       "gpu_hours": {
-        "H100": 8000.0,
-        "A100": 6640.0,
-        "A100_40GB": 1664.0
+        "H100": 7392.0,
+        "A100": 7280.0,
+        "A100_40GB": 1280.0
       },
       "cost_by_type": {
-        "H100": 55040.0,
-        "A100": 22781.04,
-        "A100_40GB": 4567.17
+        "H100": 50856.96,
+        "A100": 24976.81,
+        "A100_40GB": 3513.2
       },
-      "total_node_hours": 2038.0,
-      "total_gpu_hours": 16304.0,
-      "total_cost": 82388.21,
+      "total_node_hours": 1994.0,
+      "total_gpu_hours": 15952.0,
+      "total_cost": 79346.97,
       "avg_nodes": {
-        "H100": 41.67,
-        "A100": 34.58,
-        "A100_40GB": 8.67
+        "H100": 38.5,
+        "A100": 37.92,
+        "A100_40GB": 6.67
       },
       "avg_gpus": {
-        "H100": 333.33,
-        "A100": 276.67,
-        "A100_40GB": 69.33
+        "H100": 308.0,
+        "A100": 303.33,
+        "A100_40GB": 53.33
       }
     },
     "7d": {
       "hours": 168,
-      "observed_hours": 99,
-      "estimated_hours": 69,
+      "observed_hours": 100,
+      "estimated_hours": 68,
       "node_hours": {
-        "H100": 3408.41,
-        "A100": 5337.0,
-        "A100_40GB": 8037.13
+        "H100": 3384.41,
+        "A100": 5331.0,
+        "A100_40GB": 7933.13
       },
       "gpu_hours": {
-        "H100": 27266.42,
-        "A100": 42695.68,
-        "A100_40GB": 64297.07
+        "H100": 27074.42,
+        "A100": 42647.68,
+        "A100_40GB": 63465.07
       },
       "cost_by_type": {
-        "H100": 187598.89,
-        "A100": 146484.79,
-        "A100_40GB": 176476.43
+        "H100": 186277.93,
+        "A100": 146320.11,
+        "A100_40GB": 174192.84
       },
-      "total_node_hours": 16782.54,
-      "total_gpu_hours": 134259.17,
-      "total_cost": 510560.11,
+      "total_node_hours": 16648.54,
+      "total_gpu_hours": 133187.17,
+      "total_cost": 506790.88,
       "avg_nodes": {
-        "H100": 20.29,
-        "A100": 31.77,
-        "A100_40GB": 47.84
+        "H100": 20.15,
+        "A100": 31.73,
+        "A100_40GB": 47.22
       },
       "avg_gpus": {
-        "H100": 162.3,
-        "A100": 254.14,
-        "A100_40GB": 382.72
+        "H100": 161.16,
+        "A100": 253.86,
+        "A100_40GB": 377.77
       }
     },
     "30d": {
@@ -124,31 +124,31 @@
       "observed_hours": 332,
       "estimated_hours": 75,
       "node_hours": {
-        "H100": 4486.41,
-        "A100": 10467.0,
+        "H100": 4466.41,
+        "A100": 10521.0,
         "A100_40GB": 11373.13
       },
       "gpu_hours": {
-        "H100": 35505.42,
-        "A100": 83735.68,
+        "H100": 35345.42,
+        "A100": 84167.68,
         "A100_40GB": 90985.07
       },
       "cost_by_type": {
-        "H100": 246932.01,
-        "A100": 290858.14,
+        "H100": 245831.21,
+        "A100": 292340.28,
         "A100_40GB": 249727.04
       },
-      "total_node_hours": 26326.54,
-      "total_gpu_hours": 210226.17,
-      "total_cost": 787517.19,
+      "total_node_hours": 26360.54,
+      "total_gpu_hours": 210498.17,
+      "total_cost": 787898.53,
       "avg_nodes": {
-        "H100": 11.02,
-        "A100": 25.72,
+        "H100": 10.97,
+        "A100": 25.85,
         "A100_40GB": 27.94
       },
       "avg_gpus": {
-        "H100": 87.24,
-        "A100": 205.74,
+        "H100": 86.84,
+        "A100": 206.8,
         "A100_40GB": 223.55
       }
     }
@@ -198,36 +198,36 @@
     }
   },
   "all_time": {
-    "hours": 615,
-    "observed_hours": 540,
+    "hours": 616,
+    "observed_hours": 541,
     "estimated_hours": 75,
     "node_hours": {
       "H100": 7754.41,
-      "A100": 17062.0,
+      "A100": 17144.0,
       "A100_40GB": 13069.13
     },
     "gpu_hours": {
       "H100": 61649.42,
-      "A100": 136082.68,
+      "A100": 136738.68,
       "A100_40GB": 104553.07
     },
     "cost_by_type": {
       "H100": 426802.73,
-      "A100": 471871.65,
+      "A100": 474122.31,
       "A100_40GB": 286967.16
     },
-    "total_node_hours": 37885.54,
-    "total_gpu_hours": 302285.17,
-    "total_cost": 1185641.54,
+    "total_node_hours": 37967.54,
+    "total_gpu_hours": 302941.17,
+    "total_cost": 1187892.2,
     "avg_nodes": {
-      "H100": 12.61,
-      "A100": 27.74,
-      "A100_40GB": 21.25
+      "H100": 12.59,
+      "A100": 27.83,
+      "A100_40GB": 21.22
     },
     "avg_gpus": {
-      "H100": 100.24,
-      "A100": 221.27,
-      "A100_40GB": 170.0
+      "H100": 100.08,
+      "A100": 221.98,
+      "A100_40GB": 169.73
     }
   },
   "daily": [
@@ -1710,36 +1710,36 @@
     {
       "period": "2026-03-12",
       "start_hour": "2026-03-12T00:00:00Z",
-      "end_hour": "2026-03-12T12:00:00Z",
-      "hours": 13,
-      "observed_hours": 13,
+      "end_hour": "2026-03-12T13:00:00Z",
+      "hours": 14,
+      "observed_hours": 14,
       "estimated_hours": 0,
       "node_hours": {
         "H100": 296.0,
-        "A100": 720.0,
+        "A100": 802.0,
         "A100_40GB": 0.0
       },
       "gpu_hours": {
         "H100": 2368.0,
-        "A100": 5760.0,
+        "A100": 6416.0,
         "A100_40GB": 0.0
       },
       "cost_by_type": {
         "H100": 16291.84,
-        "A100": 19761.88,
+        "A100": 22012.54,
         "A100_40GB": 0.0
       },
-      "total_cost": 36053.72,
-      "total_node_hours": 1016.0,
-      "total_gpu_hours": 8128.0,
+      "total_cost": 38304.38,
+      "total_node_hours": 1098.0,
+      "total_gpu_hours": 8784.0,
       "avg_nodes": {
-        "H100": 22.77,
-        "A100": 55.38,
+        "H100": 21.14,
+        "A100": 57.29,
         "A100_40GB": 0.0
       },
       "avg_gpus": {
-        "H100": 182.15,
-        "A100": 443.08,
+        "H100": 169.14,
+        "A100": 458.29,
         "A100_40GB": 0.0
       }
     }
@@ -2000,37 +2000,37 @@
     {
       "period": "2026-W11",
       "start_hour": "2026-03-09T00:00:00Z",
-      "end_hour": "2026-03-12T12:00:00Z",
-      "hours": 85,
-      "observed_hours": 55,
+      "end_hour": "2026-03-12T13:00:00Z",
+      "hours": 86,
+      "observed_hours": 56,
       "estimated_hours": 30,
       "node_hours": {
         "H100": 1910.73,
-        "A100": 2541.64,
+        "A100": 2623.64,
         "A100_40GB": 3207.69
       },
       "gpu_hours": {
         "H100": 15284.98,
-        "A100": 20332.8,
+        "A100": 20988.8,
         "A100_40GB": 25661.55
       },
       "cost_by_type": {
         "H100": 105166.58,
-        "A100": 69760.44,
+        "A100": 72011.1,
         "A100_40GB": 70433.29
       },
-      "total_cost": 245360.31,
-      "total_node_hours": 7660.06,
-      "total_gpu_hours": 61279.33,
+      "total_cost": 247610.97,
+      "total_node_hours": 7742.06,
+      "total_gpu_hours": 61935.33,
       "avg_nodes": {
-        "H100": 22.48,
-        "A100": 29.9,
-        "A100_40GB": 37.74
+        "H100": 22.22,
+        "A100": 30.51,
+        "A100_40GB": 37.3
       },
       "avg_gpus": {
-        "H100": 179.82,
-        "A100": 239.21,
-        "A100_40GB": 301.9
+        "H100": 177.73,
+        "A100": 244.06,
+        "A100_40GB": 298.39
       }
     }
   ],
@@ -2110,37 +2110,37 @@
     {
       "period": "2026-03",
       "start_hour": "2026-03-04T22:00:00Z",
-      "end_hour": "2026-03-12T12:00:00Z",
-      "hours": 183,
-      "observed_hours": 108,
+      "end_hour": "2026-03-12T13:00:00Z",
+      "hours": 184,
+      "observed_hours": 109,
       "estimated_hours": 75,
       "node_hours": {
         "H100": 3812.41,
-        "A100": 6409.0,
+        "A100": 6491.0,
         "A100_40GB": 8973.13
       },
       "gpu_hours": {
         "H100": 30498.42,
-        "A100": 51271.68,
+        "A100": 51927.68,
         "A100_40GB": 71785.07
       },
       "cost_by_type": {
         "H100": 209835.05,
-        "A100": 179478.07,
+        "A100": 181728.73,
         "A100_40GB": 197028.74
       },
-      "total_cost": 586341.86,
-      "total_node_hours": 19194.54,
-      "total_gpu_hours": 153555.17,
+      "total_cost": 588592.52,
+      "total_node_hours": 19276.54,
+      "total_gpu_hours": 154211.17,
       "avg_nodes": {
-        "H100": 20.83,
-        "A100": 35.02,
-        "A100_40GB": 49.03
+        "H100": 20.72,
+        "A100": 35.28,
+        "A100_40GB": 48.77
       },
       "avg_gpus": {
-        "H100": 166.66,
-        "A100": 280.17,
-        "A100_40GB": 392.27
+        "H100": 165.75,
+        "A100": 282.22,
+        "A100_40GB": 390.14
       }
     }
   ]
