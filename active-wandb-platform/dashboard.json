@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-13T16:08:17.214083+00:00",
+  "updated_at": "2026-03-13T16:08:19.271057+00:00",
   "collected_at": "2026-03-13T16:08:16.777038+00:00",
   "analyzed_at": "2026-03-13T15:55:14",
   "global_summary": "**tok-gen** 4\u4e2aactive running(+1 dead f4s4pim1)\uff0c\u5168\u5c40\u6700\u4f18FID=2.427(vx1242my)\u4e0d\u53d8\uff0cg2x84rtu(w025) runtime 7.72h\u21928.36h FID\u4ecd3.4319\u65e0\u65b0eval\uff0cp0r83qha(H200)\u9996\u6b21\u8bb0\u5f55loss=3.21; **better-world-model** qbmy7ppn(23.6h/epoch=14.36)\u4e8e15:38~15:55\u7a97\u53e3\u95f4crash\uff0c\u4ec51np4664i(epoch=15.63)\u5b58\u6d3b; **vs2zr/geo-diffusion** \u5168\u90e8completed\u65e0\u53d8\u5316",
