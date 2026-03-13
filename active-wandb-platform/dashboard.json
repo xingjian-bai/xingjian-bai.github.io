@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-13T19:14:13.170862+00:00",
+  "updated_at": "2026-03-13T19:14:15.105406+00:00",
   "collected_at": "2026-03-13T19:14:12.837398+00:00",
   "analyzed_at": "2026-03-13T19:08:38+00:00",
   "global_summary": "**4\u4e2a\u9879\u76ee\u6574\u4f53** \u2014 tok-gen\u4ece4\u4e2arunning\u589e\u81f35\u4e2arunning\uff08\u65b0\u589ej8sgf6oj/b6kwzbp9\uff09\uff0c90pt429w FID-best=3.6246\u7a33\u5b9a\uff0cx1hxuwd5 loss\u7ee7\u7eed\u964d\u81f30.9268\uff1bvs2zr\u65b9\u5411\u5207\u6362\u4e3aw3.0 frac0.1\uff0c7\u4e2arunning eval/acc 72-78%\uff0c\u4f4e\u4e8e\u4e0a\u6b21frac0.2\u768483-84%\uff1bgeo-diffusion\u65e0running run\uff0c\u72b6\u6001\u4e0d\u53d8\uff1blarge_video_planner\u65e0\u4efb\u4f55running run\uff0c\u4e0a\u6b21\u7a33\u5b9a\u76841np4664i\u5df2\u4ece\u6570\u636e\u6d88\u5931\uff0c\u6700\u65b0run j8rjw4ql\u5728epoch 0 crashed\u3002",
