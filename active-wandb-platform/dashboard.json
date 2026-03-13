@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-13T07:44:59.365354+00:00",
+  "updated_at": "2026-03-13T07:48:38.167699+00:00",
   "collected_at": "2026-03-13T07:44:58.807191+00:00",
   "analyzed_at": "2026-03-13T07:22:06Z",
   "global_summary": "**\u6574\u4f53** \u2014 4\u4e2a\u9879\u76ee\uff1avs2zr wd sweep(wni)\u5df2\u51fa\u6570\u636e\uff0cwni-0.003 eval_acc\u6700\u9ad882.48\uff08\u8d85\u8d8aentry phase\u6700\u4f1880.67\uff09\uff0c\u65b0\u4e00\u9636\u6bb5\u5f00\u5c40\u826f\u597d\uff1btok-gen 10\u4e2arunning\uff0cnsg-noshift\u7cfb\u5217loss\u6700\u4f4e~0.22\uff0ccezxf5en(w03-clip1)=0.2224\u5f53\u524d\u6700\u4f18\uff0cvxwl817r flow-flow=0.0064\u53e6\u4e00\u91cf\u7ea7\u6781\u4f4e\uff1bbetter-world-model qbmy7ppn val/loss=0.0343\u7a33\u5b9a\u9886\u8dd1\uff0c\u65b0\u589erkhfsx9h(N10M10_fixedgen10)\uff1bgeo-diffusion\u65e0running\uff0c\u4e09\u4e2arun\u5747\u5df2\u7ed3\u675f\u3002**vs\u4e0a\u6b21\u53d8\u5316** \u2014 wni sweep\u4ece\u65e0\u6570\u636e\u5230\u6709\u660e\u786e\u7ed3\u679c\uff0cwni-0.003\u4f18\u52bf\u786e\u7acb\uff1brkhfsx9h\u4e3a\u65b0\u542f\u52a8\u5b9e\u9a8c\uff1bwiyyk1qj(lookahead10)\u572814h\u540efailed\u4e14\u65e0loss\u6570\u636e\uff1brdp2sghi\u4ece0.21h\u589e\u81f30.76h\uff0closs 82.5\u219280.4\u7f13\u6162\u6536\u655b\u3002",
