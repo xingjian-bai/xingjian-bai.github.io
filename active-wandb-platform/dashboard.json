@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-03-13T16:46:34.652971+00:00",
+  "updated_at": "2026-03-13T16:46:36.611119+00:00",
   "collected_at": "2026-03-13T16:46:34.317940+00:00",
   "analyzed_at": "2026-03-13T16:34:49Z",
   "global_summary": "**\u6574\u4f53\u683c\u5c40** \u2014 tok-gen running\u6570\u4ece7\u21928\uff0c\u65b0\u589e90pt429w(w03-d64, 0.25h)\u548cbm2pm1ls(clip1, \u521a\u542f\u52a8)\uff1bbetter-world-model/1np4664i\u8f83\u4e0a\u6b21(epoch=16.49/loss=0.053)\u63a8\u8fdb\u81f3epoch=17.21/loss=0.0609\uff0c\u7a33\u6b65\u8fd0\u884c\uff1bgeo-diffusion\u548cvs2zr\u5168\u90e8\u9759\u6b62\u65e0\u65b0\u53d8\u5316\u3002**\u5173\u952e\u6570\u636e\u70b9** \u2014 \u5386\u53f2\u5168\u5c40\u6700\u4f18FID=2.427(vx1242my)\u4e0d\u53d8\uff1bactive\u6700\u4f18g2x84rtu FID=3.4319\u65e0\u65b0eval\uff1bcrashed run qs9656vj FID=2.667\u63a5\u8fd1\u5168\u5c40\u6700\u4f18\u503c\u5f97\u6ce8\u610f\uff1bp0r83qha(baseline-H200) loss 3.28\u21923.18\u7a33\u6b65\u6536\u655b\u3002",
