@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-12T22:38:40Z",
+  "generated_at": "2026-03-13T02:22:55Z",
   "version": 1,
-  "snapshot_count": 625,
+  "snapshot_count": 629,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -18497,6 +18497,150 @@
           "hourly_cost": 3133.07
         }
       ]
+    },
+    {
+      "hour": "2026-03-12T23:00:00Z",
+      "captured_at": "2026-03-13T02:22:55Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 13,
+      "jobs_tracked": 13,
+      "nodes": {
+        "H100": 25.2,
+        "A100": 52.2,
+        "A100_40GB": 0.0
+      },
+      "gpus": {
+        "H100": 201.6,
+        "A100": 417.6,
+        "A100_40GB": 0.0
+      },
+      "hourly_cost": {
+        "H100": 1387.01,
+        "A100": 1432.74,
+        "A100_40GB": 0.0
+      },
+      "total_hourly_cost": 2819.75,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 13,
+          "nodes": 86,
+          "gpus": 688,
+          "hourly_cost": 3133.07
+        }
+      ],
+      "based_on_hour": "2026-03-12T22:00:00Z"
+    },
+    {
+      "hour": "2026-03-13T00:00:00Z",
+      "captured_at": "2026-03-13T02:22:55Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 13,
+      "jobs_tracked": 13,
+      "nodes": {
+        "H100": 22.68,
+        "A100": 46.98,
+        "A100_40GB": 0.0
+      },
+      "gpus": {
+        "H100": 181.44,
+        "A100": 375.84,
+        "A100_40GB": 0.0
+      },
+      "hourly_cost": {
+        "H100": 1248.31,
+        "A100": 1289.46,
+        "A100_40GB": 0.0
+      },
+      "total_hourly_cost": 2537.77,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 13,
+          "nodes": 86,
+          "gpus": 688,
+          "hourly_cost": 3133.07
+        }
+      ],
+      "based_on_hour": "2026-03-12T23:00:00Z"
+    },
+    {
+      "hour": "2026-03-13T01:00:00Z",
+      "captured_at": "2026-03-13T02:22:55Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 13,
+      "jobs_tracked": 13,
+      "nodes": {
+        "H100": 20.41,
+        "A100": 42.28,
+        "A100_40GB": 0.0
+      },
+      "gpus": {
+        "H100": 163.3,
+        "A100": 338.26,
+        "A100_40GB": 0.0
+      },
+      "hourly_cost": {
+        "H100": 1123.37,
+        "A100": 1160.46,
+        "A100_40GB": 0.0
+      },
+      "total_hourly_cost": 2283.83,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 13,
+          "nodes": 86,
+          "gpus": 688,
+          "hourly_cost": 3133.07
+        }
+      ],
+      "based_on_hour": "2026-03-13T00:00:00Z"
+    },
+    {
+      "hour": "2026-03-13T02:00:00Z",
+      "captured_at": "2026-03-13T02:22:55Z",
+      "source": "estimated_fetch_failure",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Pluto command failed: /Users/xingjianb/miniforge3/bin/python -m colligo.pluto.sdk.cli job list --status running | ",
+      "jobs_total": 13,
+      "jobs_tracked": 13,
+      "nodes": {
+        "H100": 18.37,
+        "A100": 38.05,
+        "A100_40GB": 0.0
+      },
+      "gpus": {
+        "H100": 146.97,
+        "A100": 304.43,
+        "A100_40GB": 0.0
+      },
+      "hourly_cost": {
+        "H100": 1011.08,
+        "A100": 1044.36,
+        "A100_40GB": 0.0
+      },
+      "total_hourly_cost": 2055.44,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 13,
+          "nodes": 86,
+          "gpus": 688,
+          "hourly_cost": 3133.07
+        }
+      ],
+      "based_on_hour": "2026-03-13T01:00:00Z"
     }
   ]
 }
