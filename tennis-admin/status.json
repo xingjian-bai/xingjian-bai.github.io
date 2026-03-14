@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-03-14T10:00:47.898359",
+  "last_sync": "2026-03-14T10:10:21.261013",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         7987,
         7989
       ],
-      "last_seen": "2026-03-14T10:00:05.541264",
+      "last_seen": "2026-03-14T10:10:03.158725",
       "paused": false
     },
     "yangb": {
@@ -24,7 +24,7 @@
         7999,
         8001
       ],
-      "last_seen": "2026-03-14T10:00:05.541297",
+      "last_seen": "2026-03-14T10:10:03.158770",
       "paused": false
     },
     "zwang43b": {
@@ -37,7 +37,7 @@
         8012,
         8015
       ],
-      "last_seen": "2026-03-14T10:00:05.541318",
+      "last_seen": "2026-03-14T10:10:03.158813",
       "paused": false
     }
   },
@@ -65,6 +65,28 @@
   "reservations": [
     {
       "date": "2026-03-15",
+      "time": "14:00",
+      "court": "Bubble Court 2",
+      "activity": "Tennis Reservation (Bubble Court 2)",
+      "weekday": "Sun",
+      "cancel_id": "830488",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-03-15_1400",
+      "booked_at": "2026-03-13T06:00:07.762259-04:00"
+    },
+    {
+      "date": "2026-03-15",
+      "time": "15:00",
+      "court": "Bubble Court 4",
+      "activity": "Tennis Reservation (Bubble Court 4)",
+      "weekday": "Sun",
+      "cancel_id": "830486",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-03-15_1500",
+      "booked_at": "2026-03-13T06:00:07.473018-04:00"
+    },
+    {
+      "date": "2026-03-15",
       "time": "17:00",
       "court": "Bubble Court 1",
       "activity": "Tennis Reservation (Bubble Court 1)",
@@ -84,6 +106,17 @@
       "user": "xbai02b",
       "reservation_id": "xbai02b_2026-03-16_1400",
       "booked_at": "2026-03-14T06:00:05.113343-04:00"
+    },
+    {
+      "date": "2026-03-16",
+      "time": "15:00",
+      "court": "Bubble Court 3",
+      "activity": "Tennis Reservation (Bubble Court 3)",
+      "weekday": "Mon",
+      "cancel_id": "830832",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-03-16_1500",
+      "booked_at": "2026-03-14T06:00:04.631322-04:00"
     }
   ],
   "bookings": [
