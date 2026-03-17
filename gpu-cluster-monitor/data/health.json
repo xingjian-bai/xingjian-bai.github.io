@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-03-17T04:03:44Z",
+  "generated_at": "2026-03-17T05:03:49Z",
   "status": "ok",
   "message": null,
-  "latest_hour": "2026-03-17T04:00:00Z",
-  "latest_captured_at": "2026-03-17T04:03:44Z",
-  "snapshot_count": 727,
+  "latest_hour": "2026-03-17T05:00:00Z",
+  "latest_captured_at": "2026-03-17T05:03:49Z",
+  "snapshot_count": 728,
   "is_stale": false,
   "quality": {
-    "observed_hours": 605,
+    "observed_hours": 606,
     "estimated_hours": 122,
-    "coverage_pct": 83.22
+    "coverage_pct": 83.24
   }
 }
