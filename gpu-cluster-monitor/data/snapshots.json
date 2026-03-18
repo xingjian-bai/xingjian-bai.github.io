@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-18T14:24:07Z",
+  "generated_at": "2026-03-18T16:01:50Z",
   "version": 1,
-  "snapshot_count": 761,
+  "snapshot_count": 763,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -23304,6 +23304,78 @@
           "hourly_cost": 2548.28
         }
       ]
+    },
+    {
+      "hour": "2026-03-18T15:00:00Z",
+      "captured_at": "2026-03-18T16:01:50Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 12,
+      "jobs_tracked": 12,
+      "nodes": {
+        "H100": 7.2,
+        "A100": 57.6,
+        "A100_40GB": 14.4
+      },
+      "gpus": {
+        "H100": 57.6,
+        "A100": 460.8,
+        "A100_40GB": 115.2
+      },
+      "hourly_cost": {
+        "H100": 396.29,
+        "A100": 1580.95,
+        "A100_40GB": 316.19
+      },
+      "total_hourly_cost": 2293.43,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 12,
+          "nodes": 88,
+          "gpus": 704,
+          "hourly_cost": 2548.28
+        }
+      ],
+      "based_on_hour": "2026-03-18T14:00:00Z"
+    },
+    {
+      "hour": "2026-03-18T16:00:00Z",
+      "captured_at": "2026-03-18T16:01:50Z",
+      "source": "estimated_fetch_failure",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Pluto command failed: /Users/xingjianb/miniforge3/bin/python -m colligo.pluto.sdk.cli job list --status running | ",
+      "jobs_total": 12,
+      "jobs_tracked": 12,
+      "nodes": {
+        "H100": 6.48,
+        "A100": 51.84,
+        "A100_40GB": 12.96
+      },
+      "gpus": {
+        "H100": 51.84,
+        "A100": 414.72,
+        "A100_40GB": 103.68
+      },
+      "hourly_cost": {
+        "H100": 356.66,
+        "A100": 1422.86,
+        "A100_40GB": 284.57
+      },
+      "total_hourly_cost": 2064.09,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 12,
+          "nodes": 88,
+          "gpus": 704,
+          "hourly_cost": 2548.28
+        }
+      ],
+      "based_on_hour": "2026-03-18T15:00:00Z"
     }
   ]
 }
