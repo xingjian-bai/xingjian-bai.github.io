@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Real-time experiment training monitor with per-epoch FID tracking">
+  <title>Experiment Monitor</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧪</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --bg-soft: #edf1f8;
+      --card: #ffffff;
+      --ink: #15243b;
+      --muted: #64758b;
+      --line: #e2e8f0;
+      --blue: #2563eb;
+      --teal: #0d9488;
+      --amber: #d97706;
+      --red: #dc2626;
+      --green: #16a34a;
+      --purple: #7c3aed;
+      --radius: 16px;
+      --radius-sm: 8px;
+      --shadow-sm: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
+      --shadow: 0 4px 16px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.04);
+      --shadow-lg: 0 10px 30px rgba(15,23,42,.08), 0 4px 8px rgba(15,23,42,.04);
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    .page {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+      display: grid;
+      gap: 16px;
+    }
+
+    /* Hero */
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 28px;
+      border: 1px solid var(--line);
+      border-top: 3px solid var(--blue);
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+    }
+    .hero h1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+    .hero .subtitle { margin: 4px 0 0; color: var(--muted); font-size: .9rem; }
+    .hero-meta { display: flex; gap: 24px; }
+    .meta-item { text-align: center; }
+    .meta-label { display: block; font-size: .7rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+    .meta-value { font-size: 1.3rem; font-weight: 700; font-family: var(--mono); }
+
+    /* Status pills */
+    .status-strip {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: .8rem;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      background: var(--card);
+    }
+    .pill .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .pill.running .dot { background: var(--green); }
+    .pill.racing .dot { background: var(--amber); animation: pulse 1.5s infinite; }
+    .pill.paused .dot { background: var(--muted); }
+    .pill.done .dot { background: var(--blue); }
+    .pill.killed .dot { background: var(--red); }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+
+    /* Cards */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-header h2 {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .card-header .badge {
+      background: var(--bg-soft);
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: .75rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .82rem;
+    }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      background: var(--bg-soft);
+      font-weight: 600;
+      font-size: .72rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--muted);
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    th.num { text-align: right; }
+    td {
+      padding: 8px 12px;
+      border-top: 1px solid var(--line);
+      white-space: nowrap;
+    }
+    td.num {
+      text-align: right;
+      font-family: var(--mono);
+      font-size: .78rem;
+    }
+    td.config-name {
+      font-weight: 500;
+      max-width: 280px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    tr:hover td { background: var(--bg-soft); }
+
+    /* Status badges in table */
+    .st {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: .75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .st-running { color: var(--green); background: #dcfce7; }
+    .st-racing { color: var(--amber); background: #fef3c7; }
+    .st-paused { color: var(--muted); background: var(--bg-soft); }
+    .st-done { color: var(--blue); background: #dbeafe; }
+    .st-killed { color: var(--red); background: #fee2e2; }
+
+    /* Progress bar */
+    .prog-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .prog-bar {
+      width: 64px;
+      height: 6px;
+      background: var(--bg-soft);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .prog-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--blue);
+      transition: width .3s ease;
+    }
+    .prog-text {
+      font-family: var(--mono);
+      font-size: .75rem;
+      color: var(--muted);
+    }
+
+    /* FID cells */
+    td.fid-good { color: var(--green); font-weight: 600; }
+    td.fid-ok { color: var(--ink); }
+    td.fid-bad { color: var(--red); }
+    td.fid-missing { color: var(--line); }
+    td.fid-empty { }
+
+    /* Events */
+    .evt-icon { font-size: .85rem; }
+
+    /* Run stats grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      padding: 16px 20px;
+    }
+    .stat-box {
+      padding: 12px 16px;
+      background: var(--bg-soft);
+      border-radius: var(--radius-sm);
+    }
+    .stat-label {
+      font-size: .7rem;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--muted);
+    }
+    .stat-val {
+      font-size: 1.4rem;
+      font-weight: 700;
+      font-family: var(--mono);
+    }
+    .stat-sub {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Sections */
+    .section-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .two-col { grid-template-columns: 1fr; }
+      .hero { flex-direction: column; gap: 16px; }
+    }
+
+    /* Auto-refresh indicator */
+    .refresh-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .75rem;
+      color: var(--muted);
+    }
+    .refresh-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: .75rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+<main class="page" id="app">
+  <div class="hero">
+    <div>
+      <h1>Experiment Training Monitor</h1>
+      <p class="subtitle">Per-epoch FID tracking across GPU cluster experiments</p>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">Configs</span>
+        <div class="meta-value" id="m-configs">-</div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Running</span>
+        <div class="meta-value" id="m-running">-</div>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Updated</span>
+        <div class="meta-value" id="m-updated">-</div>
+      </div>
+      <div class="meta-item">
+        <div class="refresh-bar"><span class="refresh-dot"></span> Auto-refresh 5m</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="status-strip" id="status-pills"></div>
+
+  <!-- Active Monitoring -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Active Monitoring</h2>
+      <span class="badge" id="active-count">-</span>
+    </div>
+    <div class="table-wrap">
+      <table id="t-active"></table>
+    </div>
+  </div>
+
+  <!-- Run Duration Stats -->
+  <div class="two-col">
+    <div class="card">
+      <div class="card-header"><h2>Run Duration</h2></div>
+      <div class="stats-grid" id="run-stats"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h2>Per-GPU Breakdown</h2></div>
+      <div class="table-wrap"><table id="t-gpu"></table></div>
+    </div>
+  </div>
+
+  <!-- Recent Events -->
+  <div class="card">
+    <div class="card-header">
+      <h2>Recent Events</h2>
+      <span class="badge" id="evt-count">-</span>
+    </div>
+    <div class="table-wrap">
+      <table id="t-events"></table>
+    </div>
+  </div>
+
+  <!-- Experiment Results -->
+  <div class="section-grid" id="vis-tables"></div>
+
+  <div class="footer">
+    Auto-updated every 5 minutes &middot; Data from W&B + Pluto cluster
+  </div>
+</main>
+
+<script>
+const EVAL_EPOCHS = [40, 80, 120, 160, 200, 240, 280];
+const STATUS_MAP = {
+  RUNNING: { cls: 'st-running', icon: '●', label: 'Running' },
+  RACING:  { cls: 'st-racing',  icon: '◔', label: 'Racing' },
+  PAUSED:  { cls: 'st-paused',  icon: '‖', label: 'Paused' },
+  DONE:    { cls: 'st-done',    icon: '✓', label: 'Done' },
+  KILLED:  { cls: 'st-killed',  icon: '✗', label: 'Killed' },
+};
+const EVT_ICONS = {
+  SUBMITTED: '↻', KILLED: '✗', 'RACE WON': '✓', 'SILENT FAIL': '⚠'
+};
+
+function fmtHours(sec) {
+  if (sec == null) return '-';
+  const h = sec / 3600;
+  if (h < 0.1) return '<0.1h';
+  return h < 10 ? h.toFixed(1) + 'h' : Math.round(h) + 'h';
+}
+
+function stBadge(status) {
+  const s = STATUS_MAP[status] || { cls: '', icon: '?', label: status };
+  return `<span class="st ${s.cls}">${s.icon} ${s.label}</span>`;
+}
+
+function progressBar(ep, total) {
+  total = total || 300;
+  const pct = ep != null ? Math.min(ep / total * 100, 100) : 0;
+  const text = ep != null ? `${Math.round(ep)}/${total}` : '-';
+  return `<div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>
+    <span class="prog-text">${text}</span>
+  </div>`;
+}
+
+function fidCell(val, ep, evalEp) {
+  if (val != null) {
+    const cls = val < 2.5 ? 'fid-good' : val < 4 ? 'fid-ok' : 'fid-bad';
+    return `<td class="num ${cls}">${val.toFixed(2)}</td>`;
+  }
+  if (ep != null && evalEp <= ep) return `<td class="num fid-missing">-</td>`;
+  return `<td class="num fid-empty"></td>`;
+}
+
+function fidHeaders() {
+  return EVAL_EPOCHS.map(e => `<th class="num">gF-${e}</th>`).join('');
+}
+
+function fidCells(hist, ep) {
+  return EVAL_EPOCHS.map(e => {
+    const val = hist ? hist[String(e)] : null;
+    return fidCell(val != null ? val : null, ep, e);
+  }).join('');
+}
+
+function render(d) {
+  // Meta
+  document.getElementById('m-configs').textContent = d.total_configs;
+  document.getElementById('m-running').textContent = d.counts.RUNNING || 0;
+  document.getElementById('m-updated').textContent = d.updated;
+
+  // Status pills
+  const pills = Object.entries(d.counts)
+    .map(([k, v]) => `<div class="pill ${k.toLowerCase()}"><span class="dot"></span>${v} ${k.toLowerCase()}</div>`)
+    .join('');
+  document.getElementById('status-pills').innerHTML = pills;
+
+  // Active monitoring table
+  document.getElementById('active-count').textContent = d.active.length + ' configs';
+  const activeHdr = `<thead><tr>
+    <th>Config</th><th>Status</th><th>Size</th><th>Progress</th>
+    <th class="num">h/ep</th><th class="num">Uptime</th><th class="num">ETA</th>
+    ${fidHeaders()}<th class="num">rFID</th>
+  </tr></thead>`;
+  const activeRows = d.active.map(r => {
+    const hist = d.fid_history[r.name] || {};
+    return `<tr>
+      <td class="config-name" title="${r.name}">${r.name}</td>
+      <td>${stBadge(r.status)}</td>
+      <td>${r.size}</td>
+      <td>${progressBar(r.epoch, 300)}</td>
+      <td class="num">${fmtHours(r.speed_sec)}</td>
+      <td class="num">${fmtHours(r.uptime_sec)}</td>
+      <td class="num">${fmtHours(r.eta_sec)}</td>
+      ${fidCells(hist, r.epoch)}
+      <td class="num">${r.rfid != null ? r.rfid.toFixed(2) : '-'}</td>
+    </tr>`;
+  }).join('');
+  document.getElementById('t-active').innerHTML = activeHdr + '<tbody>' + activeRows + '</tbody>';
+
+  // Run stats
+  if (d.run_stats) {
+    const rs = d.run_stats;
+    document.getElementById('run-stats').innerHTML = `
+      <div class="stat-box"><div class="stat-label">Sessions</div><div class="stat-val">${rs.total}</div><div class="stat-sub">all time</div></div>
+      <div class="stat-box"><div class="stat-label">Avg Duration</div><div class="stat-val">${rs.avg_h}h</div></div>
+      <div class="stat-box"><div class="stat-label">≥1h</div><div class="stat-val">${rs.pct_1h}%</div></div>
+      <div class="stat-box"><div class="stat-label">≥4h</div><div class="stat-val">${rs.pct_4h}%</div></div>
+      <div class="stat-box"><div class="stat-label"><10m (preempted)</div><div class="stat-val">${rs.pct_lt10m}%</div></div>
+      ${rs.last12h ? `<div class="stat-box"><div class="stat-label">Last 12h</div><div class="stat-val">${rs.last12h.total}</div><div class="stat-sub">avg ${rs.last12h.avg_h}h</div></div>` : ''}
+    `;
+  }
+
+  // GPU table
+  if (d.gpu_stats) {
+    const gpuHdr = '<thead><tr><th>GPU</th><th class="num">Runs</th><th class="num">Avg</th><th class="num">≥1h</th></tr></thead>';
+    const gpuRows = d.gpu_stats.map(g =>
+      `<tr><td>${g.gpu}</td><td class="num">${g.runs}</td><td class="num">${g.avg_h}h</td><td class="num">${g.pct_1h}%</td></tr>`
+    ).join('');
+    document.getElementById('t-gpu').innerHTML = gpuHdr + '<tbody>' + gpuRows + '</tbody>';
+  }
+
+  // Events
+  if (d.events) {
+    document.getElementById('evt-count').textContent = d.events.length;
+    const evtHdr = '<thead><tr><th>Time</th><th>Event</th><th>Config</th><th>Detail</th></tr></thead>';
+    const evtRows = d.events.map(e => {
+      const icon = EVT_ICONS[e.event] || '•';
+      const cls = e.event === 'KILLED' || e.event === 'SILENT FAIL' ? 'st-killed' : e.event === 'RACE WON' ? 'st-done' : 'st-running';
+      return `<tr>
+        <td style="font-family:var(--mono);font-size:.78rem">${e.time}</td>
+        <td><span class="st ${cls}">${icon} ${e.event}</span></td>
+        <td class="config-name">${e.config}</td>
+        <td style="color:var(--muted);font-size:.78rem">${e.detail}</td>
+      </tr>`;
+    }).join('');
+    document.getElementById('t-events').innerHTML = evtHdr + '<tbody>' + evtRows + '</tbody>';
+  }
+
+  // Visualization tables (experiment results)
+  if (d.families) {
+    const visSections = Object.entries(d.families).map(([family, configs]) => {
+      if (!configs.length) return '';
+      const hdr = `<thead><tr>
+        <th>Config</th><th>Status</th><th>Progress</th>
+        ${fidHeaders()}<th class="num">rFID</th>
+      </tr></thead>`;
+      const rows = configs.map(c => {
+        const hist = d.fid_history[c.name] || {};
+        return `<tr>
+          <td class="config-name" title="${c.name}">${c.name}</td>
+          <td>${stBadge(c.status)}</td>
+          <td>${progressBar(c.epoch, 300)}</td>
+          ${fidCells(hist, c.epoch)}
+          <td class="num">${c.rfid != null ? c.rfid.toFixed(2) : '-'}</td>
+        </tr>`;
+      }).join('');
+      return `<div class="card">
+        <div class="card-header"><h2>${family}</h2><span class="badge">${configs.length}</span></div>
+        <div class="table-wrap"><table>${hdr}<tbody>${rows}</tbody></table></div>
+      </div>`;
+    }).join('');
+    document.getElementById('vis-tables').innerHTML = visSections;
+  }
+}
+
+async function load() {
+  try {
+    const r = await fetch('./data/dashboard.json?t=' + Date.now());
+    const d = await r.json();
+    render(d);
+  } catch (e) {
+    console.error('Failed to load data:', e);
+  }
+}
+
+load();
+setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>
