@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-19T16:21:55Z",
+  "generated_at": "2026-03-19T18:26:22Z",
   "version": 1,
-  "snapshot_count": 787,
+  "snapshot_count": 789,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -24226,6 +24226,77 @@
           "nodes": 116,
           "gpus": 928,
           "hourly_cost": 3096.07
+        }
+      ]
+    },
+    {
+      "hour": "2026-03-19T17:00:00Z",
+      "captured_at": "2026-03-19T18:26:22Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 15,
+      "jobs_tracked": 15,
+      "nodes": {
+        "H100": 0.0,
+        "A100": 90.0,
+        "A100_40GB": 14.4
+      },
+      "gpus": {
+        "H100": 0.0,
+        "A100": 720.0,
+        "A100_40GB": 115.2
+      },
+      "hourly_cost": {
+        "H100": 0.0,
+        "A100": 2470.23,
+        "A100_40GB": 316.19
+      },
+      "total_hourly_cost": 2786.42,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 15,
+          "nodes": 116,
+          "gpus": 928,
+          "hourly_cost": 3096.07
+        }
+      ],
+      "based_on_hour": "2026-03-19T16:00:00Z"
+    },
+    {
+      "hour": "2026-03-19T18:00:00Z",
+      "captured_at": "2026-03-19T18:26:22Z",
+      "source": "pluto",
+      "fetch_ok": true,
+      "estimated": false,
+      "error": null,
+      "jobs_total": 15,
+      "jobs_tracked": 15,
+      "nodes": {
+        "H100": 0,
+        "A100": 92,
+        "A100_40GB": 24
+      },
+      "gpus": {
+        "H100": 0,
+        "A100": 736,
+        "A100_40GB": 192
+      },
+      "hourly_cost": {
+        "H100": 0.0,
+        "A100": 2525.13,
+        "A100_40GB": 526.98
+      },
+      "total_hourly_cost": 3052.11,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 15,
+          "nodes": 116,
+          "gpus": 928,
+          "hourly_cost": 3052.15
         }
       ]
     }
