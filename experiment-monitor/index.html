@@ -425,8 +425,15 @@ function render(d) {
   const activeHdr = `<thead><tr>
     <th>Config</th><th>Status</th><th>Size</th><th>Progress</th>
     <th class="num">h/ep</th><th class="num">Uptime</th><th class="num">ETA</th>
-    ${fidHeaders()}<th class="num">rFID</th>
+    ${fidHeaders()}<th class="num">rFID</th><th class="num">rF-240</th>
   </tr></thead>`;
+  const rfidHist = d.rfid_history || {};
+  const rf240 = (name, ep) => {
+    const rh = rfidHist[name] || {};
+    if (rh['240'] != null) return rh['240'].toFixed(2);
+    if (ep >= 240) return '?';
+    return '-';
+  };
   const activeRows = d.active.map(r => {
     const hist = d.fid_history[r.name] || {};
     return `<tr>
@@ -439,6 +446,7 @@ function render(d) {
       <td class="num">${fmtHours(r.eta_sec)}</td>
       ${fidCells(hist, r.epoch)}
       <td class="num">${r.rfid != null ? r.rfid.toFixed(2) : '-'}</td>
+      <td class="num">${rf240(r.name, r.epoch)}</td>
     </tr>`;
   }).join('');
   document.getElementById('t-active').innerHTML = activeHdr + '<tbody>' + activeRows + '</tbody>';
@@ -488,7 +496,7 @@ function render(d) {
       if (!configs.length) return '';
       const hdr = `<thead><tr>
         <th>Config</th><th>Status</th><th>Progress</th>
-        ${fidHeaders()}<th class="num">rFID</th>
+        ${fidHeaders()}<th class="num">rFID</th><th class="num">rF-240</th>
       </tr></thead>`;
       const rows = configs.map(c => {
         const hist = d.fid_history[c.name] || {};
@@ -498,6 +506,7 @@ function render(d) {
           <td>${progressBar(c.epoch, 300)}</td>
           ${fidCells(hist, c.epoch)}
           <td class="num">${c.rfid != null ? c.rfid.toFixed(2) : '-'}</td>
+          <td class="num">${rf240(c.name, c.epoch)}</td>
         </tr>`;
       }).join('');
       return `<div class="card">
