@@ -1,64 +1,46 @@
 {
-  "last_sync": "2026-03-20T15:50:21.551485",
+  "last_sync": "2026-03-20T16:00:23.315643",
   "script_status": {
     "xbai02b": {
-      "running": true,
-      "copies": 5,
-      "pids": [
-        10553,
-        10559,
-        10561,
-        10565,
-        10567
-      ],
-      "last_seen": "2026-03-20T15:50:03.582839",
+      "running": false,
+      "copies": 0,
+      "pids": [],
+      "last_seen": null,
       "paused": false
     },
     "yangb": {
-      "running": true,
-      "copies": 5,
-      "pids": [
-        10570,
-        10573,
-        10575,
-        10577,
-        10581
-      ],
-      "last_seen": "2026-03-20T15:50:03.582898",
+      "running": false,
+      "copies": 0,
+      "pids": [],
+      "last_seen": null,
       "paused": false
     },
     "zwang43b": {
-      "running": true,
-      "copies": 5,
-      "pids": [
-        10584,
-        10586,
-        10588,
-        10590,
-        10592
-      ],
-      "last_seen": "2026-03-20T15:50:03.582941",
+      "running": false,
+      "copies": 0,
+      "pids": [],
+      "last_seen": null,
       "paused": false
     }
   },
-  "total_copies": 15,
+  "total_copies": 0,
   "users": [
     {
       "name": "xbai02b",
-      "status": "RUNNING",
-      "instances": 5,
+      "status": "STOPPED",
+      "instances": 0,
       "paused": false
     },
     {
       "name": "yangb",
-      "status": "RUNNING",
-      "instances": 5,
+      "status": "STOPPED",
+      "instances": 0,
       "paused": false
     },
     {
       "name": "zwang43b",
-      "status": "RUNNING",
-      "instances": 5,
+      "status": "STOPPED",
+      "instances": 0,
       "paused": false
     }
   ],
