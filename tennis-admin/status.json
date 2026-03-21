@@ -1,14 +1,7 @@
 {
-  "last_sync": "2026-03-21T12:40:22.023506",
+  "last_sync": "2026-03-21T12:50:21.707152",
   "script_status": {
     "xbai02b": {
-      "running": false,
-      "copies": 0,
-      "pids": [],
-      "last_seen": null,
-      "paused": false
-    },
-    "yangb": {
       "running": false,
       "copies": 0,
       "pids": [],
@@ -27,12 +20,6 @@
   "users": [
     {
       "name": "xbai02b",
-      "status": "STOPPED",
-      "instances": 0,
-      "paused": false
-    },
-    {
-      "name": "yangb",
       "status": "STOPPED",
       "instances": 0,
       "paused": false
@@ -1265,41 +1252,6 @@
         "weekday": "Tuesday",
         "hour": 22,
         "time": "22:00"
-      },
-      {
-        "user": "yangb",
-        "date": "2026-03-24",
-        "weekday": "Tuesday",
-        "hour": 18,
-        "time": "18:00"
-      },
-      {
-        "user": "yangb",
-        "date": "2026-03-24",
-        "weekday": "Tuesday",
-        "hour": 17,
-        "time": "17:00"
-      },
-      {
-        "user": "yangb",
-        "date": "2026-03-24",
-        "weekday": "Tuesday",
-        "hour": 16,
-        "time": "16:00"
-      },
-      {
-        "user": "yangb",
-        "date": "2026-03-24",
-        "weekday": "Tuesday",
-        "hour": 15,
-        "time": "15:00"
-      },
-      {
-        "user": "yangb",
-        "date": "2026-03-24",
-        "weekday": "Tuesday",
-        "hour": 14,
-        "time": "14:00"
       },
       {
         "user": "zwang43b",
