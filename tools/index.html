@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools | Xingjian Bai</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0f1117;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
+    .header {
+      text-align: center;
+      padding: 3rem 1rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .header h1 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .header p {
+      margin-top: 0.4rem;
+      color: #888;
+      font-size: 0.9rem;
+    }
+    .header a {
+      color: #6ca0dc;
+      text-decoration: none;
+    }
+    .grid {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.2rem;
+    }
+    .card {
+      background: #1a1d27;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 1.4rem;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.2s, transform 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .card:hover {
+      border-color: rgba(108,160,220,0.4);
+      transform: translateY(-2px);
+    }
+    .card-icon {
+      font-size: 1.5rem;
+      width: 2.2rem;
+    }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #f0f0f0;
+    }
+    .card-desc {
+      font-size: 0.82rem;
+      color: #999;
+      line-height: 1.45;
+    }
+    .card-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 3px;
+      background: rgba(108,160,220,0.15);
+      color: #6ca0dc;
+      margin-top: 0.3rem;
+      align-self: flex-start;
+    }
+    .section-label {
+      max-width: 900px;
+      margin: 2rem auto 0.5rem;
+      padding: 0 1.5rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Tools</h1>
+    <p><a href="/">xingjianbai.com</a></p>
+  </div>
+
+  <div class="section-label">Monitors</div>
+  <div class="grid">
+    <a class="card" href="/gpu-cluster-monitor/">
+      <span class="card-icon">&#x1F4BB;</span>
+      <span class="card-title">GPU Cluster Monitor</span>
+      <span class="card-desc">Real-time GPU utilization, memory, and job status across the cluster.</span>
+      <span class="card-tag">auto-refresh 20m</span>
+    </a>
+    <a class="card" href="/experiment-monitor/">
+      <span class="card-icon">&#x1F52C;</span>
+      <span class="card-title">Experiment Monitor</span>
+      <span class="card-desc">Track active training runs, metrics, and experiment status.</span>
+      <span class="card-tag">auto-refresh 20m</span>
+    </a>
+    <a class="card" href="/active-wandb-platform/">
+      <span class="card-icon">&#x1F4CA;</span>
+      <span class="card-title">Active W&amp;B Platform</span>
+      <span class="card-desc">Weights &amp; Biases run dashboard with live metrics.</span>
+      <span class="card-tag">auto-refresh 20m</span>
+    </a>
+    <a class="card" href="/tennis-admin/">
+      <span class="card-icon">&#x1F3BE;</span>
+      <span class="card-title">Tennis Court Booking</span>
+      <span class="card-desc">Automated MIT tennis court reservation status and calendar.</span>
+      <span class="card-tag">auto-refresh 20m</span>
+    </a>
+  </div>
+
+  <div class="section-label">Project Pages</div>
+  <div class="grid">
+    <a class="card" href="https://xingjian-bai.github.io/unite-web-page/">
+      <span class="card-icon">&#x1F517;</span>
+      <span class="card-title">UNITE</span>
+      <span class="card-desc">End-to-end training for unified tokenization and latent denoising.</span>
+      <span class="card-tag">project page</span>
+    </a>
+    <a class="card" href="/sparse-causal-diffusion/">
+      <span class="card-icon">&#x1F517;</span>
+      <span class="card-title">Sparse Causal Diffusion</span>
+      <span class="card-desc">Decoupled video generation model (CVPR 2025).</span>
+      <span class="card-tag">project page</span>
+    </a>
+  </div>
+</body>
+</html>

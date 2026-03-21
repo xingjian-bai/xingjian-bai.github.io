@@ -896,7 +896,7 @@ async function bootstrap() {
     } catch (err) {
       console.error("Auto-refresh failed", err);
     }
-  }, 5 * 60 * 1000);
+  }, 20 * 60 * 1000);
 }
 
 document.addEventListener("DOMContentLoaded", bootstrap);

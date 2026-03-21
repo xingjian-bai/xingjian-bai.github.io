@@ -10,7 +10,7 @@ const CONFIG = {
     PAGES_BASE: 'https://xingjianbai.com',
     STATUS_FILE: 'tennis-admin/status.json',
     CONTROL_FILE: 'tennis-admin/control.json',
-    REFRESH_INTERVAL: 5 * 60 * 1000,  // 5 minutes (reads from Pages, no rate limit)
+    REFRESH_INTERVAL: 20 * 60 * 1000,  // 20 minutes
     USERS: {
         'xbai02b': { name: 'Xingjian Bai', short: 'XB', color: 'xbai', initial: 'X' },
         // 'yangb': { name: 'Yang Liu', short: 'YL', color: 'yang', initial: 'Y' },  // Disabled 2026-03-21: MIT Rec membership expired
