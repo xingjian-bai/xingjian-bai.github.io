@@ -13,7 +13,7 @@ const CONFIG = {
     REFRESH_INTERVAL: 5 * 60 * 1000,  // 5 minutes (reads from Pages, no rate limit)
     USERS: {
         'xbai02b': { name: 'Xingjian Bai', short: 'XB', color: 'xbai', initial: 'X' },
-        'yangb': { name: 'Yang Liu', short: 'YL', color: 'yang', initial: 'Y' },
+        // 'yangb': { name: 'Yang Liu', short: 'YL', color: 'yang', initial: 'Y' },  // Disabled 2026-03-21: MIT Rec membership expired
         'zwang43b': { name: 'Zekai Wang', short: 'ZW', color: 'zekai', initial: 'Z' }
     }
 };
