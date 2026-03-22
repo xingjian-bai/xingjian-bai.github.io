@@ -1,45 +1,33 @@
 {
-  "last_sync": "2026-03-22T18:00:12.704370",
+  "last_sync": "2026-03-22T18:00:18.938100",
   "script_status": {
     "xbai02b": {
-      "running": true,
-      "copies": 5,
-      "pids": [
-        2896936,
-        2897087,
-        2897227,
-        2897354,
-        2897476
-      ],
-      "last_seen": "2026-03-22T18:00:03.789884",
+      "running": false,
+      "copies": 0,
+      "pids": [],
+      "last_seen": null,
       "paused": false
     },
     "zwang43b": {
-      "running": true,
-      "copies": 5,
-      "pids": [
-        2897611,
-        2897746,
-        2897892,
-        2898066,
-        2898193
-      ],
-      "last_seen": "2026-03-22T18:00:03.789896",
+      "running": false,
+      "copies": 0,
+      "pids": [],
+      "last_seen": null,
       "paused": false
     }
   },
-  "total_copies": 10,
+  "total_copies": 0,
   "users": [
     {
       "name": "xbai02b",
-      "status": "RUNNING",
-      "instances": 5,
+      "status": "STOPPED",
+      "instances": 0,
       "paused": false
     },
     {
       "name": "zwang43b",
-      "status": "RUNNING",
-      "instances": 5,
+      "status": "STOPPED",
+      "instances": 0,
       "paused": false
     }
   ],
