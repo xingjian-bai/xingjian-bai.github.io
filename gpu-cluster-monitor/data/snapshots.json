@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-21T22:45:34Z",
+  "generated_at": "2026-03-22T00:14:39Z",
   "version": 1,
-  "snapshot_count": 841,
+  "snapshot_count": 843,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -26133,6 +26133,78 @@
           "hourly_cost": 1603.49
         }
       ]
+    },
+    {
+      "hour": "2026-03-21T23:00:00Z",
+      "captured_at": "2026-03-22T00:14:39Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 9,
+      "jobs_tracked": 9,
+      "nodes": {
+        "H100": 3.6,
+        "A100": 10.8,
+        "A100_40GB": 43.2
+      },
+      "gpus": {
+        "H100": 28.8,
+        "A100": 86.4,
+        "A100_40GB": 345.6
+      },
+      "hourly_cost": {
+        "H100": 198.14,
+        "A100": 296.43,
+        "A100_40GB": 948.57
+      },
+      "total_hourly_cost": 1443.14,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 9,
+          "nodes": 64,
+          "gpus": 512,
+          "hourly_cost": 1603.49
+        }
+      ],
+      "based_on_hour": "2026-03-21T22:00:00Z"
+    },
+    {
+      "hour": "2026-03-22T00:00:00Z",
+      "captured_at": "2026-03-22T00:14:39Z",
+      "source": "estimated_fetch_failure",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Pluto command failed: /Users/xingjianb/miniforge3/bin/python -m colligo.pluto.sdk.cli job list --status running | ",
+      "jobs_total": 9,
+      "jobs_tracked": 9,
+      "nodes": {
+        "H100": 3.24,
+        "A100": 9.72,
+        "A100_40GB": 38.88
+      },
+      "gpus": {
+        "H100": 25.92,
+        "A100": 77.76,
+        "A100_40GB": 311.04
+      },
+      "hourly_cost": {
+        "H100": 178.33,
+        "A100": 266.79,
+        "A100_40GB": 853.71
+      },
+      "total_hourly_cost": 1298.83,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 9,
+          "nodes": 64,
+          "gpus": 512,
+          "hourly_cost": 1603.49
+        }
+      ],
+      "based_on_hour": "2026-03-21T23:00:00Z"
     }
   ]
 }
