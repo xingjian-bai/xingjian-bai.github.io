@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-23T20:54:15Z",
+  "generated_at": "2026-03-23T21:55:10Z",
   "version": 1,
-  "snapshot_count": 887,
+  "snapshot_count": 888,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -27767,6 +27767,41 @@
         }
       ],
       "based_on_hour": "2026-03-23T19:00:00Z"
+    },
+    {
+      "hour": "2026-03-23T21:00:00Z",
+      "captured_at": "2026-03-23T21:55:10Z",
+      "source": "pluto",
+      "fetch_ok": true,
+      "estimated": false,
+      "error": null,
+      "jobs_total": 3,
+      "jobs_tracked": 3,
+      "nodes": {
+        "H100": 0,
+        "A100": 8,
+        "A100_40GB": 16
+      },
+      "gpus": {
+        "H100": 0,
+        "A100": 64,
+        "A100_40GB": 128
+      },
+      "hourly_cost": {
+        "H100": 0.0,
+        "A100": 219.58,
+        "A100_40GB": 351.32
+      },
+      "total_hourly_cost": 570.9,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 3,
+          "nodes": 24,
+          "gpus": 192,
+          "hourly_cost": 570.9
+        }
+      ]
     }
   ]
 }
