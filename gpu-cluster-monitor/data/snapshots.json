@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-24T23:47:52Z",
+  "generated_at": "2026-03-25T01:42:32Z",
   "version": 1,
-  "snapshot_count": 914,
+  "snapshot_count": 916,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -28727,6 +28727,77 @@
           "nodes": 16,
           "gpus": 128,
           "hourly_cost": 395.24
+        }
+      ]
+    },
+    {
+      "hour": "2026-03-25T00:00:00Z",
+      "captured_at": "2026-03-25T01:42:32Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 2,
+      "jobs_tracked": 2,
+      "nodes": {
+        "H100": 0.0,
+        "A100": 7.2,
+        "A100_40GB": 7.2
+      },
+      "gpus": {
+        "H100": 0.0,
+        "A100": 57.6,
+        "A100_40GB": 57.6
+      },
+      "hourly_cost": {
+        "H100": 0.0,
+        "A100": 197.62,
+        "A100_40GB": 158.1
+      },
+      "total_hourly_cost": 355.72,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 2,
+          "nodes": 16,
+          "gpus": 128,
+          "hourly_cost": 395.24
+        }
+      ],
+      "based_on_hour": "2026-03-24T23:00:00Z"
+    },
+    {
+      "hour": "2026-03-25T01:00:00Z",
+      "captured_at": "2026-03-25T01:42:32Z",
+      "source": "pluto",
+      "fetch_ok": true,
+      "estimated": false,
+      "error": null,
+      "jobs_total": 2,
+      "jobs_tracked": 2,
+      "nodes": {
+        "H100": 0,
+        "A100": 16,
+        "A100_40GB": 0
+      },
+      "gpus": {
+        "H100": 0,
+        "A100": 128,
+        "A100_40GB": 0
+      },
+      "hourly_cost": {
+        "H100": 0.0,
+        "A100": 439.15,
+        "A100_40GB": 0.0
+      },
+      "total_hourly_cost": 439.15,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 2,
+          "nodes": 16,
+          "gpus": 128,
+          "hourly_cost": 439.16
         }
       ]
     }
