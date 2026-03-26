@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-03-26T05:50:18.187510",
+  "last_sync": "2026-03-26T06:00:20.278240",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         2918862,
         2918864
       ],
-      "last_seen": "2026-03-26T05:50:04.025476",
+      "last_seen": "2026-03-26T06:00:05.806395",
       "paused": false
     },
     "zwang43b": {
@@ -24,7 +24,7 @@
         2918873,
         2918875
       ],
-      "last_seen": "2026-03-26T05:50:04.025519",
+      "last_seen": "2026-03-26T06:00:05.806425",
       "paused": false
     }
   },
@@ -109,6 +109,36 @@
       "user": "zwang43b",
       "reservation_id": "zwang43b_2026-03-27_1500",
       "booked_at": "2026-03-25T06:00:03.822345-04:00"
+    },
+    {
+      "date": "2026-03-28",
+      "time": "14:00",
+      "court": "Bubble Court 1",
+      "activity": "Tennis Reservation (Bubble Court 1)",
+      "weekday": "Sat",
+      "cancel_id": "837502",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-03-28_1400"
+    },
+    {
+      "date": "2026-03-28",
+      "time": "16:00",
+      "court": "Bubble Court 1",
+      "activity": "Tennis Reservation (Bubble Court 1)",
+      "weekday": "Sat",
+      "cancel_id": "837507",
+      "user": "xbai02b",
+      "reservation_id": "xbai02b_2026-03-28_1600"
+    },
+    {
+      "date": "2026-03-28",
+      "time": "17:00",
+      "court": "Bubble Court 2",
+      "activity": "Tennis Reservation (Bubble Court 2)",
+      "weekday": "Sat",
+      "cancel_id": "837503",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-03-28_1700"
     }
   ],
   "bookings": [
@@ -1314,64 +1344,64 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-03-26T06:00:00-04:00",
-    "next_window_display": "2026-03-26 06:00 EDT",
-    "target_date": "2026-03-28",
-    "target_weekday": "Saturday",
+    "next_window": "2026-03-27T06:00:00-04:00",
+    "next_window_display": "2026-03-27 06:00 EDT",
+    "target_date": "2026-03-29",
+    "target_weekday": "Sunday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-03-28",
-        "weekday": "Saturday",
+        "date": "2026-03-29",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-03-28",
-        "weekday": "Saturday",
+        "date": "2026-03-29",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-03-28",
-        "weekday": "Saturday",
+        "date": "2026-03-29",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-03-28",
-        "weekday": "Saturday",
+        "date": "2026-03-29",
+        "weekday": "Sunday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-03-28",
-        "weekday": "Saturday",
+        "date": "2026-03-29",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-03-28",
-        "weekday": "Saturday",
+        "date": "2026-03-29",
+        "weekday": "Sunday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-03-28",
-        "weekday": "Saturday",
+        "date": "2026-03-29",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-03-28",
-        "weekday": "Saturday",
+        "date": "2026-03-29",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       }
