@@ -19,21 +19,37 @@ body {
     user-select: none;
 }
 
-/* Main tile container — always a centered square */
-#tile-container {
+/* ---- Viewport: clips the 3x3 tile grid ---- */
+#viewport {
     position: relative;
+    overflow: hidden;
 }
 
-#tile-img {
+/* Inner sliding layer: 3x3 grid of tiles */
+#slider {
+    position: absolute;
+    top: 0; left: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    transition: none;
+    will-change: transform;
+}
+
+#slider img {
     width: 100%;
     height: 100%;
     display: block;
     image-rendering: pixelated;
     image-rendering: crisp-edges;
-    transition: opacity 0.2s;
 }
 
-/* Quadrant hover overlay — 2×2 grid of clickable zones */
+/* Yellow border when mid-pan (not aligned to tile boundary) */
+#viewport.mid-pan {
+    box-shadow: inset 0 0 0 3px #f0c040;
+}
+
+/* Quadrant hover overlay */
 .quadrant-overlay {
     position: absolute;
     top: 0; left: 0;
@@ -42,6 +58,7 @@ body {
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     pointer-events: auto;
+    z-index: 10;
 }
 
 .quadrant-zone {
@@ -72,12 +89,13 @@ body {
     opacity: 1;
 }
 
-/* Quadrant grid lines (always visible, subtle) */
+/* Grid lines */
 .grid-lines {
     position: absolute;
     top: 0; left: 0;
     width: 100%; height: 100%;
     pointer-events: none;
+    z-index: 5;
 }
 .grid-lines .h-line {
     position: absolute;
@@ -92,18 +110,22 @@ body {
     background: rgba(100, 140, 255, 0.15);
 }
 
-/* At max zoom, hide quadrant overlay */
-#tile-container.at-max-zoom .quadrant-overlay {
+/* Hide quadrant overlay at max zoom or during mid-pan */
+#viewport.at-max-zoom .quadrant-overlay,
+#viewport.mid-pan .quadrant-overlay {
     pointer-events: none;
 }
-#tile-container.at-max-zoom .quadrant-zone {
+#viewport.at-max-zoom .quadrant-zone,
+#viewport.mid-pan .quadrant-zone {
     cursor: default;
 }
-#tile-container.at-max-zoom .quadrant-zone:hover {
+#viewport.at-max-zoom .quadrant-zone:hover,
+#viewport.mid-pan .quadrant-zone:hover {
     border-color: transparent;
     background: transparent;
 }
-#tile-container.at-max-zoom .grid-lines {
+#viewport.at-max-zoom .grid-lines,
+#viewport.mid-pan .grid-lines {
     display: none;
 }
 
@@ -155,7 +177,7 @@ body {
     word-break: break-all;
 }
 
-/* Server status indicator */
+/* Server status */
 .server-status {
     margin-top: 10px;
     display: flex;
@@ -175,32 +197,33 @@ body {
 @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
 .server-label { color: #6a7a9a; }
 
-/* Controls panel (bottom) */
+/* Controls panel (bottom) — LARGER text */
 .controls-panel {
     position: fixed;
-    bottom: 16px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 100;
     background: rgba(15, 17, 23, 0.88);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(100, 140, 255, 0.15);
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 12px;
-    color: #6a7a9a;
+    border-radius: 12px;
+    padding: 14px 28px;
+    font-size: 15px;
+    color: #8a9cc5;
     display: flex;
-    gap: 20px;
+    gap: 24px;
     white-space: nowrap;
+    line-height: 1.6;
 }
 .controls-panel kbd {
     display: inline-block;
     background: rgba(100, 140, 255, 0.12);
     border: 1px solid rgba(100, 140, 255, 0.25);
-    border-radius: 4px;
-    padding: 1px 6px;
+    border-radius: 5px;
+    padding: 2px 8px;
     font-family: 'SF Mono', Menlo, monospace;
-    font-size: 11px;
+    font-size: 13px;
     color: #a0b4d8;
 }
 
@@ -257,7 +280,7 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Navigation arrows on tile edges */
+/* Nav arrows on tile edges */
 .nav-arrow {
     position: absolute;
     z-index: 20;
@@ -316,7 +339,7 @@ body {
 /* Minimap (bottom-right) */
 .minimap {
     position: fixed;
-    bottom: 60px;
+    bottom: 70px;
     right: 16px;
     z-index: 100;
     width: 140px;
@@ -337,9 +360,9 @@ body {
     border: 2px solid #648cff;
     background: rgba(100, 140, 255, 0.15);
     pointer-events: none;
-    transition: all 0.2s;
+    transition: all 0.15s;
 }
-.minimap .label {
+.minimap .mini-label {
     position: absolute;
     bottom: 2px;
     left: 4px;
@@ -347,10 +370,10 @@ body {
     color: #6a7a9a;
 }
 
-/* Server URL input overlay */
+/* Server URL config */
 .server-config {
     position: fixed;
-    bottom: 60px;
+    bottom: 70px;
     left: 16px;
     z-index: 100;
     background: rgba(15, 17, 23, 0.92);
@@ -392,10 +415,17 @@ body {
 </head>
 <body>
 
-<div id="tile-container">
-    <img id="tile-img" alt="Map tile" />
+<!-- Main viewport -->
+<div id="viewport">
+    <!-- 3x3 tile grid for smooth panning -->
+    <div id="slider">
+        <!-- 9 images: row0(left-up, center-up, right-up), row1(left, center, right), row2(left-down, center-down, right-down) -->
+        <img id="t-nw" /><img id="t-n" /><img id="t-ne" />
+        <img id="t-w"  /><img id="t-c" /><img id="t-e"  />
+        <img id="t-sw" /><img id="t-s" /><img id="t-se" />
+    </div>
 
-    <!-- Quadrant click zones for zoom-in -->
+    <!-- Quadrant click zones for zoom-in (centered on viewport) -->
     <div class="quadrant-overlay" id="quadOverlay">
         <div class="quadrant-zone" data-quad="tl" onclick="zoomIn('tl')"><span class="quad-label">TL</span></div>
         <div class="quadrant-zone" data-quad="tr" onclick="zoomIn('tr')"><span class="quad-label">TR</span></div>
@@ -409,11 +439,11 @@ body {
         <div class="v-line"></div>
     </div>
 
-    <!-- Navigation arrows -->
-    <div class="nav-arrow up" id="navUp" onclick="pan('up')">&#9650;</div>
-    <div class="nav-arrow down" id="navDown" onclick="pan('down')">&#9660;</div>
-    <div class="nav-arrow left" id="navLeft" onclick="pan('left')">&#9664;</div>
-    <div class="nav-arrow right" id="navRight" onclick="pan('right')">&#9654;</div>
+    <!-- Nav arrows -->
+    <div class="nav-arrow up" id="navUp" onclick="panJump('up')">&#9650;</div>
+    <div class="nav-arrow down" id="navDown" onclick="panJump('down')">&#9660;</div>
+    <div class="nav-arrow left" id="navLeft" onclick="panJump('left')">&#9664;</div>
+    <div class="nav-arrow right" id="navRight" onclick="panJump('right')">&#9654;</div>
 
     <!-- Zoom out button -->
     <div class="zoom-out-btn" id="zoomOutBtn" onclick="zoomOut()">&#x1F50D; Zoom Out</div>
@@ -458,18 +488,19 @@ body {
     </div>
 </div>
 
-<!-- Controls help -->
+<!-- Controls help (LARGER) -->
 <div class="controls-panel" id="controlsPanel">
     <span>Click quadrant to zoom in</span>
     <span><kbd>Q</kbd> zoom out</span>
-    <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> pan</span>
+    <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> jump</span>
+    <span><kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8594;</kbd><kbd>&#8595;</kbd> smooth pan</span>
 </div>
 
 <!-- Minimap -->
 <div class="minimap" id="minimap">
     <img id="minimap-img" alt="Minimap" />
     <div class="indicator" id="minimap-indicator"></div>
-    <div class="label">z10 root</div>
+    <div class="mini-label">z10 overview</div>
 </div>
 
 <!-- Server URL config -->
@@ -478,8 +509,8 @@ body {
     <input type="text" id="serverUrl" placeholder="https://xxx.trycloudflare.com"
            onchange="setServerUrl(this.value)" />
     <div class="config-hint">
-        Leave empty for static tiles (z10-z15 only).<br>
-        Set to tunnel URL for live generation (z10-z17).
+        Leave empty for pre-generated tiles (z10-z17).<br>
+        Set to tunnel URL for live generation.
     </div>
 </div>
 
@@ -488,9 +519,13 @@ body {
 // Configuration
 // ============================================================
 const ZOOM_MIN = 10;
-const ZOOM_MAX_STATIC = 15;  // max pre-generated static tiles
-const ZOOM_MAX_DYNAMIC = 17; // max when server is connected
+const ZOOM_MAX_STATIC = 17;  // all 8 levels pre-generated
+const ZOOM_MAX_DYNAMIC = 17;
 const TILE_BASE_STATIC = '/map-explorer/tiles';
+
+// Smooth pan config
+const PAN_STEP = 0.1;       // fraction of tile per tick
+const PAN_INTERVAL = 100;   // ms between ticks
 
 // ============================================================
 // State
@@ -498,22 +533,32 @@ const TILE_BASE_STATIC = '/map-explorer/tiles';
 let currentZ = 0;  // leaflet zoom (0 = z10)
 let currentX = 0;
 let currentY = 0;
-let serverUrl = '';  // dynamic backend URL, empty = static mode
+let panFracX = 0;  // fractional pan offset: -1..0..+1
+let panFracY = 0;
+let serverUrl = '';
 let serverConnected = false;
 let isLoading = false;
+
+// Smooth pan state
+const arrowsHeld = { left: false, right: false, up: false, down: false };
+let panTimer = null;
+
+// Tile image cache (avoid re-fetching)
+const imgCache = {};
+
+// Root tile data URL for minimap
+let rootTileDataUrl = null;
 
 // ============================================================
 // Server URL management
 // ============================================================
 function initServerUrl() {
-    // Check URL params first
     const params = new URLSearchParams(window.location.search);
     const urlParam = params.get('server');
     if (urlParam) {
         serverUrl = urlParam.replace(/\/$/, '');
         document.getElementById('serverUrl').value = serverUrl;
     } else {
-        // Check localStorage
         const saved = localStorage.getItem('mapExplorerServer');
         if (saved) {
             serverUrl = saved;
@@ -531,8 +576,7 @@ function setServerUrl(url) {
         localStorage.removeItem('mapExplorerServer');
     }
     checkServerStatus();
-    // Reload current tile from new source
-    loadTile(currentZ, currentX, currentY);
+    loadAllTiles();
 }
 
 async function checkServerStatus() {
@@ -541,7 +585,7 @@ async function checkServerStatus() {
 
     if (!serverUrl) {
         dot.className = 'server-dot static';
-        label.textContent = 'Static tiles (z10-z' + ZOOM_MAX_STATIC + ')';
+        label.textContent = 'Pre-generated tiles (z10-z17)';
         serverConnected = false;
         rebuildZoomBar();
         return;
@@ -553,9 +597,8 @@ async function checkServerStatus() {
     try {
         const resp = await fetch(serverUrl + '/api/status', { mode: 'cors' });
         if (resp.ok) {
-            const data = await resp.json();
             dot.className = 'server-dot connected';
-            label.textContent = 'Server connected (z10-z' + ZOOM_MAX_DYNAMIC + ')';
+            label.textContent = 'Server connected (z10-z17)';
             serverConnected = true;
         } else {
             throw new Error('bad response');
@@ -574,14 +617,14 @@ function toggleServerConfig() {
 }
 
 // ============================================================
-// Effective max zoom
+// Max zoom
 // ============================================================
 function getMaxLeafletZoom() {
     return (serverConnected ? ZOOM_MAX_DYNAMIC : ZOOM_MAX_STATIC) - ZOOM_MIN;
 }
 
 // ============================================================
-// Tile URL
+// Tile URL helper
 // ============================================================
 function tileUrl(z, x, y) {
     if (serverConnected && serverUrl) {
@@ -591,62 +634,89 @@ function tileUrl(z, x, y) {
 }
 
 // ============================================================
-// Sizing: tile fills the viewport as a centered square
+// Transparent 1x1 pixel (for out-of-bounds tiles)
 // ============================================================
+const TRANSPARENT_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
+// ============================================================
+// Sizing
+// ============================================================
+let tileSize = 0;
 function resize() {
-    const container = document.getElementById('tile-container');
-    const sz = Math.min(window.innerWidth, window.innerHeight) - 100;
-    container.style.width = sz + 'px';
-    container.style.height = sz + 'px';
+    const vp = document.getElementById('viewport');
+    tileSize = Math.min(window.innerWidth, window.innerHeight) - 100;
+    vp.style.width = tileSize + 'px';
+    vp.style.height = tileSize + 'px';
+
+    const slider = document.getElementById('slider');
+    slider.style.width = (tileSize * 3) + 'px';
+    slider.style.height = (tileSize * 3) + 'px';
+
+    updateSliderTransform();
 }
 window.addEventListener('resize', resize);
-resize();
 
 // ============================================================
-// Navigation
+// Slider transform: positions the 3x3 grid so center tile is visible
 // ============================================================
-
-function loadTile(z, x, y) {
-    if (isLoading) return;
-    isLoading = true;
-
-    const img = document.getElementById('tile-img');
-    const loading = document.getElementById('loading');
-    const loadingText = document.getElementById('loadingText');
-
-    loading.style.display = 'block';
-    img.style.opacity = '0.4';
-
-    if (serverConnected && serverUrl) {
-        loadingText.textContent = 'Generating tile...';
-    } else {
-        loadingText.textContent = 'Loading...';
-    }
-
-    const url = tileUrl(z, x, y);
-    const newImg = new Image();
-    newImg.crossOrigin = 'anonymous';
-    newImg.onload = function() {
-        img.src = url;
-        img.crossOrigin = 'anonymous';
-        img.style.opacity = '1';
-        loading.style.display = 'none';
-        currentZ = z;
-        currentX = x;
-        currentY = y;
-        isLoading = false;
-        updateUI();
-    };
-    newImg.onerror = function() {
-        img.style.opacity = '1';
-        loading.style.display = 'none';
-        loadingText.textContent = 'Tile not found';
-        isLoading = false;
-    };
-    newImg.src = url;
+function updateSliderTransform() {
+    const slider = document.getElementById('slider');
+    // Center tile is at grid position (1,1). Offset by panFrac.
+    const offsetX = -(1 + panFracX) * tileSize;
+    const offsetY = -(1 + panFracY) * tileSize;
+    slider.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
 }
 
+// ============================================================
+// Load tile images into the 3x3 grid
+// ============================================================
+function setTileImg(elemId, z, x, y) {
+    const gridSize = 1 << z;
+    const img = document.getElementById(elemId);
+    if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) {
+        img.src = TRANSPARENT_PIXEL;
+        return;
+    }
+    const url = tileUrl(z, x, y);
+    img.crossOrigin = 'anonymous';
+    img.src = url;
+}
+
+function loadAllTiles() {
+    const z = currentZ, x = currentX, y = currentY;
+
+    // 3x3 grid: offsets from center
+    setTileImg('t-nw', z, x-1, y-1);
+    setTileImg('t-n',  z, x,   y-1);
+    setTileImg('t-ne', z, x+1, y-1);
+    setTileImg('t-w',  z, x-1, y);
+    setTileImg('t-c',  z, x,   y);
+    setTileImg('t-e',  z, x+1, y);
+    setTileImg('t-sw', z, x-1, y+1);
+    setTileImg('t-s',  z, x,   y+1);
+    setTileImg('t-se', z, x+1, y+1);
+
+    // Load root tile for minimap (only once, or when server changes)
+    loadMinimapRoot();
+}
+
+// ============================================================
+// Minimap: always shows the root tile (z10 = leaflet zoom 0)
+// ============================================================
+function loadMinimapRoot() {
+    const mmImg = document.getElementById('minimap-img');
+    const url = tileUrl(0, 0, 0);
+    mmImg.crossOrigin = 'anonymous';
+    if (mmImg.src !== url && !mmImg.src.endsWith(url)) {
+        mmImg.src = url;
+    }
+}
+
+// ============================================================
+// Navigation: zoom in
+// ============================================================
 function zoomIn(quadrant) {
+    if (panFracX !== 0 || panFracY !== 0) return; // can't zoom while mid-pan
     if (currentZ >= getMaxLeafletZoom()) return;
 
     const childZ = currentZ + 1;
@@ -656,20 +726,48 @@ function zoomIn(quadrant) {
     if (quadrant === 'tr' || quadrant === 'br') childX += 1;
     if (quadrant === 'bl' || quadrant === 'br') childY += 1;
 
-    loadTile(childZ, childX, childY);
+    currentZ = childZ;
+    currentX = childX;
+    currentY = childY;
+    panFracX = 0;
+    panFracY = 0;
+
+    loadAllTiles();
+    updateSliderTransform();
+    updateUI();
 }
 
+// ============================================================
+// Navigation: zoom out
+// ============================================================
 function zoomOut() {
     if (currentZ <= 0) return;
+
+    // Snap pan offset to 0
+    panFracX = 0;
+    panFracY = 0;
 
     const parentZ = currentZ - 1;
     const parentX = currentX >> 1;
     const parentY = currentY >> 1;
 
-    loadTile(parentZ, parentX, parentY);
+    currentZ = parentZ;
+    currentX = parentX;
+    currentY = parentY;
+
+    loadAllTiles();
+    updateSliderTransform();
+    updateUI();
 }
 
-function pan(direction) {
+// ============================================================
+// Navigation: WASD instant jump (snap to neighbor tile)
+// ============================================================
+function panJump(direction) {
+    // Snap any fractional pan first
+    panFracX = 0;
+    panFracY = 0;
+
     const gridSize = 1 << currentZ;
     let nx = currentX, ny = currentY;
 
@@ -681,31 +779,143 @@ function pan(direction) {
     }
 
     if (nx < 0 || nx >= gridSize || ny < 0 || ny >= gridSize) return;
-    loadTile(currentZ, nx, ny);
+
+    currentX = nx;
+    currentY = ny;
+
+    loadAllTiles();
+    updateSliderTransform();
+    updateUI();
+}
+
+// ============================================================
+// Smooth panning: arrow keys
+// ============================================================
+function startSmoothPan() {
+    if (panTimer !== null) return;
+    panTimer = setInterval(tickSmoothPan, PAN_INTERVAL);
+}
+
+function stopSmoothPan() {
+    if (!arrowsHeld.left && !arrowsHeld.right && !arrowsHeld.up && !arrowsHeld.down) {
+        if (panTimer !== null) {
+            clearInterval(panTimer);
+            panTimer = null;
+        }
+    }
+}
+
+function tickSmoothPan() {
+    const gridSize = 1 << currentZ;
+    let dx = 0, dy = 0;
+    if (arrowsHeld.left)  dx -= PAN_STEP;
+    if (arrowsHeld.right) dx += PAN_STEP;
+    if (arrowsHeld.up)    dy -= PAN_STEP;
+    if (arrowsHeld.down)  dy += PAN_STEP;
+
+    if (dx === 0 && dy === 0) return;
+
+    let newFracX = panFracX + dx;
+    let newFracY = panFracY + dy;
+
+    // When frac crosses +-1, shift to next tile
+    while (newFracX >= 1.0) {
+        if (currentX + 1 >= gridSize) {
+            newFracX = Math.min(newFracX, 0.99); // clamp at edge
+            break;
+        }
+        newFracX -= 1.0;
+        currentX += 1;
+        loadAllTiles(); // reload 3x3 grid for new center
+    }
+    while (newFracX <= -1.0) {
+        if (currentX - 1 < 0) {
+            newFracX = Math.max(newFracX, -0.99);
+            break;
+        }
+        newFracX += 1.0;
+        currentX -= 1;
+        loadAllTiles();
+    }
+    while (newFracY >= 1.0) {
+        if (currentY + 1 >= gridSize) {
+            newFracY = Math.min(newFracY, 0.99);
+            break;
+        }
+        newFracY -= 1.0;
+        currentY += 1;
+        loadAllTiles();
+    }
+    while (newFracY <= -1.0) {
+        if (currentY - 1 < 0) {
+            newFracY = Math.max(newFracY, -0.99);
+            break;
+        }
+        newFracY += 1.0;
+        currentY -= 1;
+        loadAllTiles();
+    }
+
+    // Clamp at boundaries
+    if (currentX === 0 && newFracX < 0) newFracX = 0;
+    if (currentX >= gridSize - 1 && newFracX > 0) newFracX = 0;
+    if (currentY === 0 && newFracY < 0) newFracY = 0;
+    if (currentY >= gridSize - 1 && newFracY > 0) newFracY = 0;
+
+    panFracX = Math.round(newFracX * 100) / 100; // avoid float drift
+    panFracY = Math.round(newFracY * 100) / 100;
+
+    updateSliderTransform();
+    updateUI();
 }
 
 // ============================================================
 // Keyboard controls
 // ============================================================
 document.addEventListener('keydown', (e) => {
-    // Don't capture when typing in input
     if (e.target.tagName === 'INPUT') return;
+    if (e.repeat && ['w','a','s','d','q'].includes(e.key.toLowerCase())) return;
+
+    switch(e.key) {
+        case 'ArrowUp':
+            e.preventDefault();
+            if (!arrowsHeld.up) { arrowsHeld.up = true; startSmoothPan(); }
+            return;
+        case 'ArrowDown':
+            e.preventDefault();
+            if (!arrowsHeld.down) { arrowsHeld.down = true; startSmoothPan(); }
+            return;
+        case 'ArrowLeft':
+            e.preventDefault();
+            if (!arrowsHeld.left) { arrowsHeld.left = true; startSmoothPan(); }
+            return;
+        case 'ArrowRight':
+            e.preventDefault();
+            if (!arrowsHeld.right) { arrowsHeld.right = true; startSmoothPan(); }
+            return;
+    }
 
     switch(e.key.toLowerCase()) {
-        case 'w': case 'arrowup':    pan('up'); break;
-        case 's': case 'arrowdown':  pan('down'); break;
-        case 'a': case 'arrowleft':  pan('left'); break;
-        case 'd': case 'arrowright': pan('right'); break;
+        case 'w': panJump('up'); break;
+        case 's': panJump('down'); break;
+        case 'a': panJump('left'); break;
+        case 'd': panJump('right'); break;
         case 'q': case '-': case '_': zoomOut(); break;
-        case 'e': case '=': case '+':
-            break;
+    }
+});
+
+document.addEventListener('keyup', (e) => {
+    switch(e.key) {
+        case 'ArrowUp':    arrowsHeld.up = false; stopSmoothPan(); break;
+        case 'ArrowDown':  arrowsHeld.down = false; stopSmoothPan(); break;
+        case 'ArrowLeft':  arrowsHeld.left = false; stopSmoothPan(); break;
+        case 'ArrowRight': arrowsHeld.right = false; stopSmoothPan(); break;
     }
 });
 
 // ============================================================
 // UI Updates
 // ============================================================
-
 function getQuadrantPath(z, x, y) {
     const quads = ['tl', 'tr', 'bl', 'br'];
     let path = [];
@@ -722,12 +932,19 @@ function updateUI() {
     const actualZ = currentZ + ZOOM_MIN;
     const maxLZ = getMaxLeafletZoom();
     const gridSize = 1 << currentZ;
+    const isMidPan = (panFracX !== 0 || panFracY !== 0);
 
     // Zoom display
     document.getElementById('zoomDisplay').textContent = 'z' + actualZ;
 
     // Position
-    document.getElementById('posDisplay').textContent = '(' + currentX + ', ' + currentY + ')';
+    if (isMidPan) {
+        const effX = (currentX + panFracX).toFixed(1);
+        const effY = (currentY + panFracY).toFixed(1);
+        document.getElementById('posDisplay').textContent = '(' + effX + ', ' + effY + ')';
+    } else {
+        document.getElementById('posDisplay').textContent = '(' + currentX + ', ' + currentY + ')';
+    }
 
     // Path
     const path = getQuadrantPath(currentZ, currentX, currentY);
@@ -740,18 +957,19 @@ function updateUI() {
         pip.classList.toggle('active', i <= currentZ);
     });
 
-    // Navigation arrows: enable/disable based on bounds
-    document.getElementById('navUp').classList.toggle('disabled', currentY <= 0);
-    document.getElementById('navDown').classList.toggle('disabled', currentY >= gridSize - 1);
-    document.getElementById('navLeft').classList.toggle('disabled', currentX <= 0);
-    document.getElementById('navRight').classList.toggle('disabled', currentX >= gridSize - 1);
+    // Navigation arrows
+    document.getElementById('navUp').classList.toggle('disabled', currentY <= 0 && panFracY <= 0);
+    document.getElementById('navDown').classList.toggle('disabled', currentY >= gridSize - 1 && panFracY >= 0);
+    document.getElementById('navLeft').classList.toggle('disabled', currentX <= 0 && panFracX <= 0);
+    document.getElementById('navRight').classList.toggle('disabled', currentX >= gridSize - 1 && panFracX >= 0);
 
     // Zoom out button
     document.getElementById('zoomOutBtn').classList.toggle('disabled', currentZ <= 0);
 
-    // At max zoom: hide quadrant overlay
-    const container = document.getElementById('tile-container');
-    container.classList.toggle('at-max-zoom', currentZ >= maxLZ);
+    // At max zoom or mid-pan: toggle classes
+    const vp = document.getElementById('viewport');
+    vp.classList.toggle('at-max-zoom', currentZ >= maxLZ);
+    vp.classList.toggle('mid-pan', isMidPan);
 
     // Minimap indicator
     updateMinimap();
@@ -765,14 +983,17 @@ function updateMinimap() {
     const tileW = mapSize / gridSize;
     const tileH = mapSize / gridSize;
 
-    indicator.style.left = (currentX * tileW) + 'px';
-    indicator.style.top = (currentY * tileH) + 'px';
+    const effX = currentX + panFracX;
+    const effY = currentY + panFracY;
+
+    indicator.style.left = (effX * tileW) + 'px';
+    indicator.style.top = (effY * tileH) + 'px';
     indicator.style.width = Math.max(4, tileW) + 'px';
     indicator.style.height = Math.max(4, tileH) + 'px';
 }
 
 // ============================================================
-// Initialize zoom bar
+// Zoom bar
 // ============================================================
 function rebuildZoomBar() {
     const maxLZ = getMaxLeafletZoom();
@@ -790,10 +1011,12 @@ function rebuildZoomBar() {
 // ============================================================
 // Boot
 // ============================================================
+resize();
 initServerUrl();
 rebuildZoomBar();
-document.getElementById('minimap-img').src = tileUrl(0, 0, 0);
-loadTile(0, 0, 0);
+loadAllTiles();
+updateSliderTransform();
+updateUI();
 </script>
 </body>
 </html>
