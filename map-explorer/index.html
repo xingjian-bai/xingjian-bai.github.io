@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Map Explorer — AI-Generated City</title>
+
+<!-- Leaflet CSS + JS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Leaflet MiniMap plugin -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-minimap@3.6.1/dist/Control.MiniMap.min.css" />
+<script src="https://unpkg.com/leaflet-minimap@3.6.1/dist/Control.MiniMap.min.js"></script>
+
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    overflow: hidden;
+    height: 100vh;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    background: #16213e;
+}
+
+/* Top-left info panel */
+.info-panel {
+    position: fixed;
+    top: 12px;
+    left: 60px;
+    z-index: 1000;
+    background: rgba(22, 33, 62, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(100, 140, 255, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    min-width: 200px;
+    pointer-events: none;
+}
+.info-panel .label { color: #7a8bb5; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.info-panel .value { color: #e8ecf4; font-weight: 600; font-size: 15px; }
+.info-panel .zoom-bar {
+    display: flex;
+    gap: 3px;
+    margin-top: 4px;
+}
+.info-panel .zoom-pip {
+    width: 18px; height: 6px;
+    border-radius: 2px;
+    background: rgba(100, 140, 255, 0.15);
+    transition: background 0.2s;
+}
+.info-panel .zoom-pip.active {
+    background: #648cff;
+}
+
+/* About panel (top-right) */
+.about-panel {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1000;
+    background: rgba(22, 33, 62, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(100, 140, 255, 0.3);
+    border-radius: 10px;
+    padding: 14px 16px;
+    font-size: 13px;
+    max-width: 260px;
+    line-height: 1.5;
+}
+.about-panel .title {
+    font-weight: 700;
+    font-size: 15px;
+    color: #e8ecf4;
+    margin-bottom: 6px;
+}
+.about-panel .desc {
+    color: #8a9cc5;
+    font-size: 12px;
+}
+.about-panel a {
+    color: #648cff;
+    text-decoration: none;
+}
+.about-panel a:hover {
+    text-decoration: underline;
+}
+
+/* Stats bar at bottom-left */
+.stats-bar {
+    position: fixed;
+    bottom: 12px;
+    left: 12px;
+    z-index: 1000;
+    background: rgba(22, 33, 62, 0.85);
+    border: 1px solid rgba(100, 140, 255, 0.2);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: #7a8bb5;
+    pointer-events: none;
+}
+
+/* Leaflet tile loading state */
+.leaflet-tile {
+    transition: opacity 0.3s ease-in;
+}
+.leaflet-tile-loaded {
+    opacity: 1 !important;
+}
+
+/* Override Leaflet zoom control style */
+.leaflet-control-zoom a {
+    background: rgba(22, 33, 62, 0.92) !important;
+    color: #c0ccf0 !important;
+    border-color: rgba(100, 140, 255, 0.3) !important;
+}
+.leaflet-control-zoom a:hover {
+    background: rgba(40, 60, 100, 0.95) !important;
+    color: #fff !important;
+}
+
+/* MiniMap styling */
+.leaflet-control-minimap {
+    border: 2px solid rgba(100, 140, 255, 0.4) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+}
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Info panel (top-left) -->
+<div class="info-panel" id="infoPanel">
+    <div class="label">Current Zoom</div>
+    <div class="value" id="zoomDisplay">z10</div>
+    <div class="zoom-bar" id="zoomBar"></div>
+    <div style="margin-top: 8px;">
+        <div class="label">Tile Position</div>
+        <div class="value" id="posDisplay">(0, 0)</div>
+    </div>
+</div>
+
+<!-- About panel (top-right) -->
+<div class="about-panel">
+    <div class="title">Map Explorer</div>
+    <div class="desc">
+        AI-generated city map from a flow-matching diffusion model
+        trained on OpenStreetMap tiles.
+        <br><br>
+        Zoom levels z10&ndash;z15 (6 scales). Each child tile is
+        conditionally generated from its parent's quadrant crop.
+        <br><br>
+        <a href="/">xingjianbai.com</a>
+    </div>
+</div>
+
+<!-- Stats bar -->
+<div class="stats-bar" id="statsBar">
+    Zoom: scroll &middot; Pan: drag
+</div>
+
+<script>
+// ============================================================
+// Constants
+// ============================================================
+const ZOOM_MIN_ACTUAL = 10;
+const MAX_LEAFLET_ZOOM = 5; // z10-z15
+const TILE_SIZE = 256;
+
+// ============================================================
+// Initialize Leaflet map
+// ============================================================
+
+const worldBounds = L.latLngBounds(
+    L.latLng(-TILE_SIZE, 0),
+    L.latLng(0, TILE_SIZE)
+);
+
+const map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: 0,
+    maxZoom: MAX_LEAFLET_ZOOM,
+    zoomSnap: 1,
+    zoomDelta: 1,
+    maxBounds: worldBounds.pad(0.1),
+    maxBoundsViscosity: 0.8,
+    attributionControl: false,
+}).setView([-TILE_SIZE / 2, TILE_SIZE / 2], 0);
+
+// Static tile layer — tiles are pre-generated PNGs
+const tileLayer = L.tileLayer('/map-explorer/tiles/{z}/{x}/{y}.png', {
+    minZoom: 0,
+    maxZoom: MAX_LEAFLET_ZOOM,
+    tileSize: TILE_SIZE,
+    noWrap: true,
+    bounds: worldBounds,
+    errorTileUrl: '',
+}).addTo(map);
+
+// ============================================================
+// MiniMap
+// ============================================================
+const miniMapLayer = L.tileLayer('/map-explorer/tiles/{z}/{x}/{y}.png', {
+    minZoom: 0,
+    maxZoom: MAX_LEAFLET_ZOOM,
+    tileSize: TILE_SIZE,
+    noWrap: true,
+});
+
+const miniMap = new L.Control.MiniMap(miniMapLayer, {
+    toggleDisplay: true,
+    minimized: false,
+    position: 'bottomleft',
+    width: 150,
+    height: 150,
+    zoomLevelOffset: -3,
+    zoomLevelFixed: 0,
+}).addTo(map);
+
+// ============================================================
+// Zoom bar initialization
+// ============================================================
+const zoomBar = document.getElementById('zoomBar');
+for (let i = 0; i <= MAX_LEAFLET_ZOOM; i++) {
+    const pip = document.createElement('div');
+    pip.className = 'zoom-pip';
+    pip.title = `z${i + ZOOM_MIN_ACTUAL}`;
+    zoomBar.appendChild(pip);
+}
+
+// ============================================================
+// Event handlers
+// ============================================================
+
+function updateInfoPanel() {
+    const z = map.getZoom();
+    const center = map.getCenter();
+    const actualZoom = z + ZOOM_MIN_ACTUAL;
+
+    document.getElementById('zoomDisplay').textContent = `z${actualZoom}`;
+
+    const pips = document.querySelectorAll('.zoom-pip');
+    pips.forEach((pip, i) => {
+        pip.classList.toggle('active', i <= z);
+    });
+
+    const gridSize = Math.pow(2, z);
+    const tileX = Math.floor((center.lng / TILE_SIZE) * gridSize);
+    const tileY = Math.floor((-center.lat / TILE_SIZE) * gridSize);
+    document.getElementById('posDisplay').textContent =
+        `(${Math.max(0, tileX)}, ${Math.max(0, tileY)})`;
+
+    document.getElementById('statsBar').textContent =
+        `z${actualZoom} · Tile (${Math.max(0, tileX)}, ${Math.max(0, tileY)}) · ${gridSize}×${gridSize} grid`;
+}
+
+map.on('zoom', updateInfoPanel);
+map.on('move', updateInfoPanel);
+map.on('zoomend', updateInfoPanel);
+
+// ============================================================
+// Initial state
+// ============================================================
+updateInfoPanel();
+</script>
+</body>
+</html>
