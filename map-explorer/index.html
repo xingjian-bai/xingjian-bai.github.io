@@ -4,78 +4,203 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Map Explorer — AI-Generated City</title>
-
-<!-- Leaflet CSS + JS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<!-- Leaflet MiniMap plugin -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet-minimap@3.6.1/dist/Control.MiniMap.min.css" />
-<script src="https://unpkg.com/leaflet-minimap@3.6.1/dist/Control.MiniMap.min.js"></script>
-
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #1a1a2e;
+    background: #0f1117;
     color: #e0e0e0;
     overflow: hidden;
     height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
 }
 
-#map {
+/* Main tile container — always a centered square */
+#tile-container {
+    position: relative;
+    /* size set by JS to be min(viewportW, viewportH) */
+}
+
+#tile-img {
     width: 100%;
     height: 100%;
-    background: #16213e;
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    transition: opacity 0.2s;
 }
 
-/* Top-left info panel */
-.info-panel {
-    position: fixed;
-    top: 12px;
-    left: 60px;
-    z-index: 1000;
-    background: rgba(22, 33, 62, 0.92);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(100, 140, 255, 0.3);
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-size: 13px;
-    line-height: 1.6;
-    min-width: 200px;
+/* Quadrant hover overlay — 2×2 grid of clickable zones */
+.quadrant-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    pointer-events: auto;
+}
+
+.quadrant-zone {
+    cursor: zoom-in;
+    border: 2px solid transparent;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quadrant-zone:hover {
+    border-color: rgba(100, 180, 255, 0.6);
+    background: rgba(100, 180, 255, 0.08);
+}
+
+.quadrant-zone .quad-label {
+    opacity: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(100, 180, 255, 0.8);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+    transition: opacity 0.15s;
     pointer-events: none;
 }
-.info-panel .label { color: #7a8bb5; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-.info-panel .value { color: #e8ecf4; font-weight: 600; font-size: 15px; }
+
+.quadrant-zone:hover .quad-label {
+    opacity: 1;
+}
+
+/* Quadrant grid lines (always visible, subtle) */
+.grid-lines {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+}
+.grid-lines .h-line {
+    position: absolute;
+    top: 50%; left: 0;
+    width: 100%; height: 1px;
+    background: rgba(100, 140, 255, 0.15);
+}
+.grid-lines .v-line {
+    position: absolute;
+    top: 0; left: 50%;
+    width: 1px; height: 100%;
+    background: rgba(100, 140, 255, 0.15);
+}
+
+/* At max zoom, hide quadrant overlay */
+#tile-container.at-max-zoom .quadrant-overlay {
+    pointer-events: none;
+}
+#tile-container.at-max-zoom .quadrant-zone {
+    cursor: default;
+}
+#tile-container.at-max-zoom .quadrant-zone:hover {
+    border-color: transparent;
+    background: transparent;
+}
+#tile-container.at-max-zoom .grid-lines {
+    display: none;
+}
+
+/* Info panel (top-left) */
+.info-panel {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 100;
+    background: rgba(15, 17, 23, 0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(100, 140, 255, 0.2);
+    border-radius: 10px;
+    padding: 14px 18px;
+    font-size: 13px;
+    line-height: 1.7;
+    min-width: 180px;
+}
+.info-panel .label {
+    color: #6a7a9a;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+.info-panel .value {
+    color: #e8ecf4;
+    font-weight: 600;
+    font-size: 16px;
+}
 .info-panel .zoom-bar {
     display: flex;
     gap: 3px;
     margin-top: 4px;
 }
 .info-panel .zoom-pip {
-    width: 18px; height: 6px;
+    width: 16px; height: 5px;
     border-radius: 2px;
-    background: rgba(100, 140, 255, 0.15);
+    background: rgba(100, 140, 255, 0.12);
     transition: background 0.2s;
 }
 .info-panel .zoom-pip.active {
     background: #648cff;
 }
+.info-panel .path-display {
+    color: #8a9cc5;
+    font-size: 11px;
+    font-family: 'SF Mono', Menlo, monospace;
+    margin-top: 2px;
+    word-break: break-all;
+}
+
+/* Controls panel (bottom) */
+.controls-panel {
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(15, 17, 23, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(100, 140, 255, 0.15);
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 12px;
+    color: #6a7a9a;
+    display: flex;
+    gap: 20px;
+    white-space: nowrap;
+}
+.controls-panel kbd {
+    display: inline-block;
+    background: rgba(100, 140, 255, 0.12);
+    border: 1px solid rgba(100, 140, 255, 0.25);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    color: #a0b4d8;
+}
+.controls-panel .disabled {
+    opacity: 0.3;
+}
 
 /* About panel (top-right) */
 .about-panel {
     position: fixed;
-    top: 12px;
-    right: 12px;
-    z-index: 1000;
-    background: rgba(22, 33, 62, 0.92);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(100, 140, 255, 0.3);
+    top: 16px;
+    right: 16px;
+    z-index: 100;
+    background: rgba(15, 17, 23, 0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(100, 140, 255, 0.2);
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 14px 18px;
     font-size: 13px;
-    max-width: 260px;
+    max-width: 240px;
     line-height: 1.5;
 }
 .about-panel .title {
@@ -85,196 +210,400 @@ body {
     margin-bottom: 6px;
 }
 .about-panel .desc {
-    color: #8a9cc5;
-    font-size: 12px;
+    color: #6a7a9a;
+    font-size: 11px;
 }
 .about-panel a {
     color: #648cff;
     text-decoration: none;
 }
-.about-panel a:hover {
-    text-decoration: underline;
-}
 
-/* Stats bar at bottom-left */
-.stats-bar {
-    position: fixed;
-    bottom: 12px;
-    left: 12px;
-    z-index: 1000;
-    background: rgba(22, 33, 62, 0.85);
+/* Loading indicator */
+.loading {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    display: none;
+}
+.loading .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid rgba(100, 140, 255, 0.15);
+    border-top-color: #648cff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Navigation arrows on tile edges */
+.nav-arrow {
+    position: absolute;
+    z-index: 20;
+    background: rgba(15, 17, 23, 0.6);
     border: 1px solid rgba(100, 140, 255, 0.2);
+    color: #a0b4d8;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
     border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 11px;
-    color: #7a8bb5;
+}
+.nav-arrow:hover {
+    background: rgba(30, 45, 80, 0.85);
+    border-color: rgba(100, 140, 255, 0.5);
+    color: #fff;
+}
+.nav-arrow.disabled {
+    opacity: 0.15;
+    cursor: default;
+    pointer-events: none;
+}
+.nav-arrow.up    { top: -40px;  left: 50%; transform: translateX(-50%); width: 50px; height: 30px; }
+.nav-arrow.down  { bottom: -40px; left: 50%; transform: translateX(-50%); width: 50px; height: 30px; }
+.nav-arrow.left  { left: -40px; top: 50%; transform: translateY(-50%); width: 30px; height: 50px; }
+.nav-arrow.right { right: -40px; top: 50%; transform: translateY(-50%); width: 30px; height: 50px; }
+
+/* Zoom out button */
+.zoom-out-btn {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    z-index: 20;
+    background: rgba(15, 17, 23, 0.6);
+    border: 1px solid rgba(100, 140, 255, 0.2);
+    color: #a0b4d8;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px 12px;
+    border-radius: 6px;
+    transition: all 0.15s;
+}
+.zoom-out-btn:hover {
+    background: rgba(30, 45, 80, 0.85);
+    border-color: rgba(100, 140, 255, 0.5);
+    color: #fff;
+}
+.zoom-out-btn.disabled {
+    opacity: 0.15;
+    cursor: default;
     pointer-events: none;
 }
 
-/* Leaflet tile loading state */
-.leaflet-tile {
-    transition: opacity 0.3s ease-in;
+/* Minimap (bottom-right) */
+.minimap {
+    position: fixed;
+    bottom: 60px;
+    right: 16px;
+    z-index: 100;
+    width: 140px;
+    height: 140px;
+    background: rgba(15, 17, 23, 0.92);
+    border: 1px solid rgba(100, 140, 255, 0.25);
+    border-radius: 8px;
+    overflow: hidden;
 }
-.leaflet-tile-loaded {
-    opacity: 1 !important;
+.minimap img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    image-rendering: pixelated;
 }
-
-/* Override Leaflet zoom control style */
-.leaflet-control-zoom a {
-    background: rgba(22, 33, 62, 0.92) !important;
-    color: #c0ccf0 !important;
-    border-color: rgba(100, 140, 255, 0.3) !important;
+.minimap .indicator {
+    position: absolute;
+    border: 2px solid #648cff;
+    background: rgba(100, 140, 255, 0.15);
+    pointer-events: none;
+    transition: all 0.2s;
 }
-.leaflet-control-zoom a:hover {
-    background: rgba(40, 60, 100, 0.95) !important;
-    color: #fff !important;
-}
-
-/* MiniMap styling */
-.leaflet-control-minimap {
-    border: 2px solid rgba(100, 140, 255, 0.4) !important;
-    border-radius: 6px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+.minimap .label {
+    position: absolute;
+    bottom: 2px;
+    left: 4px;
+    font-size: 9px;
+    color: #6a7a9a;
 }
 </style>
 </head>
 <body>
 
-<div id="map"></div>
+<div id="tile-container">
+    <img id="tile-img" alt="Map tile" />
 
-<!-- Info panel (top-left) -->
-<div class="info-panel" id="infoPanel">
-    <div class="label">Current Zoom</div>
+    <!-- Quadrant click zones for zoom-in -->
+    <div class="quadrant-overlay" id="quadOverlay">
+        <div class="quadrant-zone" data-quad="tl" onclick="zoomIn('tl')"><span class="quad-label">TL</span></div>
+        <div class="quadrant-zone" data-quad="tr" onclick="zoomIn('tr')"><span class="quad-label">TR</span></div>
+        <div class="quadrant-zone" data-quad="bl" onclick="zoomIn('bl')"><span class="quad-label">BL</span></div>
+        <div class="quadrant-zone" data-quad="br" onclick="zoomIn('br')"><span class="quad-label">BR</span></div>
+    </div>
+
+    <!-- Subtle grid lines -->
+    <div class="grid-lines">
+        <div class="h-line"></div>
+        <div class="v-line"></div>
+    </div>
+
+    <!-- Navigation arrows -->
+    <div class="nav-arrow up" id="navUp" onclick="pan('up')">&#9650;</div>
+    <div class="nav-arrow down" id="navDown" onclick="pan('down')">&#9660;</div>
+    <div class="nav-arrow left" id="navLeft" onclick="pan('left')">&#9664;</div>
+    <div class="nav-arrow right" id="navRight" onclick="pan('right')">&#9654;</div>
+
+    <!-- Zoom out button -->
+    <div class="zoom-out-btn" id="zoomOutBtn" onclick="zoomOut()">&#x1F50D; Zoom Out</div>
+
+    <!-- Loading spinner -->
+    <div class="loading" id="loading"><div class="spinner"></div></div>
+</div>
+
+<!-- Info panel -->
+<div class="info-panel">
+    <div class="label">Zoom Level</div>
     <div class="value" id="zoomDisplay">z10</div>
     <div class="zoom-bar" id="zoomBar"></div>
-    <div style="margin-top: 8px;">
+    <div style="margin-top: 10px;">
         <div class="label">Tile Position</div>
         <div class="value" id="posDisplay">(0, 0)</div>
     </div>
+    <div style="margin-top: 10px;">
+        <div class="label">Quadrant Path</div>
+        <div class="path-display" id="pathDisplay">root</div>
+    </div>
 </div>
 
-<!-- About panel (top-right) -->
+<!-- About panel -->
 <div class="about-panel">
     <div class="title">Map Explorer</div>
     <div class="desc">
         AI-generated city map from a flow-matching diffusion model
         trained on OpenStreetMap tiles.
-        <br><br>
-        Zoom levels z10&ndash;z15 (6 scales). Each child tile is
-        conditionally generated from its parent's quadrant crop.
+        Each child tile is conditionally generated from its parent's quadrant crop.
         <br><br>
         <a href="/">xingjianbai.com</a>
     </div>
 </div>
 
-<!-- Stats bar -->
-<div class="stats-bar" id="statsBar">
-    Zoom: scroll &middot; Pan: drag
+<!-- Controls help -->
+<div class="controls-panel" id="controlsPanel">
+    <span>Click quadrant to zoom in</span>
+    <span><kbd>Q</kbd> zoom out</span>
+    <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> pan</span>
+</div>
+
+<!-- Minimap -->
+<div class="minimap" id="minimap">
+    <img id="minimap-img" alt="Minimap" />
+    <div class="indicator" id="minimap-indicator"></div>
+    <div class="label">z10 root</div>
 </div>
 
 <script>
 // ============================================================
-// Constants
+// Configuration
 // ============================================================
-const ZOOM_MIN_ACTUAL = 10;
-const MAX_LEAFLET_ZOOM = 5; // z10-z15
-const TILE_SIZE = 256;
+const ZOOM_MIN = 10;
+const ZOOM_MAX = 15;  // max available pre-generated zoom
+const TILE_BASE = '/map-explorer/tiles';
 
 // ============================================================
-// Initialize Leaflet map
+// State
 // ============================================================
-
-const worldBounds = L.latLngBounds(
-    L.latLng(-TILE_SIZE, 0),
-    L.latLng(0, TILE_SIZE)
-);
-
-const map = L.map('map', {
-    crs: L.CRS.Simple,
-    minZoom: 0,
-    maxZoom: MAX_LEAFLET_ZOOM,
-    zoomSnap: 1,
-    zoomDelta: 1,
-    maxBounds: worldBounds.pad(0.1),
-    maxBoundsViscosity: 0.8,
-    attributionControl: false,
-}).setView([-TILE_SIZE / 2, TILE_SIZE / 2], 0);
-
-// Static tile layer — tiles are pre-generated PNGs
-const tileLayer = L.tileLayer('/map-explorer/tiles/{z}/{x}/{y}.png', {
-    minZoom: 0,
-    maxZoom: MAX_LEAFLET_ZOOM,
-    tileSize: TILE_SIZE,
-    noWrap: true,
-    bounds: worldBounds,
-    errorTileUrl: '',
-}).addTo(map);
+let currentZ = 0;  // leaflet zoom (0 = z10, 5 = z15)
+let currentX = 0;
+let currentY = 0;
 
 // ============================================================
-// MiniMap
+// Tile URL
 // ============================================================
-const miniMapLayer = L.tileLayer('/map-explorer/tiles/{z}/{x}/{y}.png', {
-    minZoom: 0,
-    maxZoom: MAX_LEAFLET_ZOOM,
-    tileSize: TILE_SIZE,
-    noWrap: true,
+function tileUrl(z, x, y) {
+    return `${TILE_BASE}/${z}/${x}/${y}.png`;
+}
+
+// ============================================================
+// Sizing: tile fills the viewport as a centered square
+// ============================================================
+function resize() {
+    const container = document.getElementById('tile-container');
+    const sz = Math.min(window.innerWidth, window.innerHeight) - 100; // margin for arrows
+    container.style.width = sz + 'px';
+    container.style.height = sz + 'px';
+}
+window.addEventListener('resize', resize);
+resize();
+
+// ============================================================
+// Navigation
+// ============================================================
+
+function loadTile(z, x, y) {
+    const img = document.getElementById('tile-img');
+    const loading = document.getElementById('loading');
+    loading.style.display = 'block';
+    img.style.opacity = '0.5';
+
+    const url = tileUrl(z, x, y);
+    const newImg = new Image();
+    newImg.onload = function() {
+        img.src = url;
+        img.style.opacity = '1';
+        loading.style.display = 'none';
+        currentZ = z;
+        currentX = x;
+        currentY = y;
+        updateUI();
+    };
+    newImg.onerror = function() {
+        // Tile doesn't exist
+        img.style.opacity = '1';
+        loading.style.display = 'none';
+    };
+    newImg.src = url;
+}
+
+function zoomIn(quadrant) {
+    const maxLeafletZoom = ZOOM_MAX - ZOOM_MIN;
+    if (currentZ >= maxLeafletZoom) return;
+
+    const childZ = currentZ + 1;
+    let childX = currentX * 2;
+    let childY = currentY * 2;
+
+    if (quadrant === 'tr' || quadrant === 'br') childX += 1;
+    if (quadrant === 'bl' || quadrant === 'br') childY += 1;
+
+    loadTile(childZ, childX, childY);
+}
+
+function zoomOut() {
+    if (currentZ <= 0) return;
+
+    const parentZ = currentZ - 1;
+    const parentX = currentX >> 1;
+    const parentY = currentY >> 1;
+
+    loadTile(parentZ, parentX, parentY);
+}
+
+function pan(direction) {
+    const gridSize = 1 << currentZ;
+    let nx = currentX, ny = currentY;
+
+    switch(direction) {
+        case 'up':    ny -= 1; break;
+        case 'down':  ny += 1; break;
+        case 'left':  nx -= 1; break;
+        case 'right': nx += 1; break;
+    }
+
+    if (nx < 0 || nx >= gridSize || ny < 0 || ny >= gridSize) return;
+    loadTile(currentZ, nx, ny);
+}
+
+// ============================================================
+// Keyboard controls
+// ============================================================
+document.addEventListener('keydown', (e) => {
+    switch(e.key.toLowerCase()) {
+        case 'w': case 'arrowup':    pan('up'); break;
+        case 's': case 'arrowdown':  pan('down'); break;
+        case 'a': case 'arrowleft':  pan('left'); break;
+        case 'd': case 'arrowright': pan('right'); break;
+        case 'q': case '-': case '_': zoomOut(); break;
+        case 'e': case '=': case '+':
+            // Zoom in to center (default: bottom-right, but let's not auto-pick)
+            break;
+    }
 });
 
-const miniMap = new L.Control.MiniMap(miniMapLayer, {
-    toggleDisplay: true,
-    minimized: false,
-    position: 'bottomleft',
-    width: 150,
-    height: 150,
-    zoomLevelOffset: -3,
-    zoomLevelFixed: 0,
-}).addTo(map);
+// ============================================================
+// UI Updates
+// ============================================================
+
+function getQuadrantPath(z, x, y) {
+    const quads = ['tl', 'tr', 'bl', 'br'];
+    let path = [];
+    for (let i = 0; i < z; i++) {
+        const bit = z - 1 - i;
+        const bx = (x >> bit) & 1;
+        const by = (y >> bit) & 1;
+        path.push(quads[by * 2 + bx]);
+    }
+    return path;
+}
+
+function updateUI() {
+    const actualZ = currentZ + ZOOM_MIN;
+    const maxLeafletZoom = ZOOM_MAX - ZOOM_MIN;
+    const gridSize = 1 << currentZ;
+
+    // Zoom display
+    document.getElementById('zoomDisplay').textContent = `z${actualZ}`;
+
+    // Position
+    document.getElementById('posDisplay').textContent = `(${currentX}, ${currentY})`;
+
+    // Path
+    const path = getQuadrantPath(currentZ, currentX, currentY);
+    document.getElementById('pathDisplay').textContent =
+        path.length === 0 ? 'root' : 'root → ' + path.join(' → ');
+
+    // Zoom bar pips
+    const pips = document.querySelectorAll('.zoom-pip');
+    pips.forEach((pip, i) => {
+        pip.classList.toggle('active', i <= currentZ);
+    });
+
+    // Navigation arrows: enable/disable based on bounds
+    document.getElementById('navUp').classList.toggle('disabled', currentY <= 0);
+    document.getElementById('navDown').classList.toggle('disabled', currentY >= gridSize - 1);
+    document.getElementById('navLeft').classList.toggle('disabled', currentX <= 0);
+    document.getElementById('navRight').classList.toggle('disabled', currentX >= gridSize - 1);
+
+    // Zoom out button
+    document.getElementById('zoomOutBtn').classList.toggle('disabled', currentZ <= 0);
+
+    // At max zoom: hide quadrant overlay
+    const container = document.getElementById('tile-container');
+    container.classList.toggle('at-max-zoom', currentZ >= maxLeafletZoom);
+
+    // Minimap indicator
+    updateMinimap();
+}
+
+function updateMinimap() {
+    const indicator = document.getElementById('minimap-indicator');
+    const mapSize = 140; // minimap size in px
+
+    // Current tile's coverage relative to the root
+    const gridSize = 1 << currentZ;
+    const tileW = mapSize / gridSize;
+    const tileH = mapSize / gridSize;
+
+    indicator.style.left = (currentX * tileW) + 'px';
+    indicator.style.top = (currentY * tileH) + 'px';
+    indicator.style.width = Math.max(4, tileW) + 'px';
+    indicator.style.height = Math.max(4, tileH) + 'px';
+}
 
 // ============================================================
-// Zoom bar initialization
+// Initialize zoom bar
 // ============================================================
+const maxLeafletZoom = ZOOM_MAX - ZOOM_MIN;
 const zoomBar = document.getElementById('zoomBar');
-for (let i = 0; i <= MAX_LEAFLET_ZOOM; i++) {
+for (let i = 0; i <= maxLeafletZoom; i++) {
     const pip = document.createElement('div');
     pip.className = 'zoom-pip';
-    pip.title = `z${i + ZOOM_MIN_ACTUAL}`;
+    pip.title = `z${i + ZOOM_MIN}`;
     zoomBar.appendChild(pip);
 }
 
 // ============================================================
-// Event handlers
+// Load root tile + minimap
 // ============================================================
-
-function updateInfoPanel() {
-    const z = map.getZoom();
-    const center = map.getCenter();
-    const actualZoom = z + ZOOM_MIN_ACTUAL;
-
-    document.getElementById('zoomDisplay').textContent = `z${actualZoom}`;
-
-    const pips = document.querySelectorAll('.zoom-pip');
-    pips.forEach((pip, i) => {
-        pip.classList.toggle('active', i <= z);
-    });
-
-    const gridSize = Math.pow(2, z);
-    const tileX = Math.floor((center.lng / TILE_SIZE) * gridSize);
-    const tileY = Math.floor((-center.lat / TILE_SIZE) * gridSize);
-    document.getElementById('posDisplay').textContent =
-        `(${Math.max(0, tileX)}, ${Math.max(0, tileY)})`;
-
-    document.getElementById('statsBar').textContent =
-        `z${actualZoom} · Tile (${Math.max(0, tileX)}, ${Math.max(0, tileY)}) · ${gridSize}×${gridSize} grid`;
-}
-
-map.on('zoom', updateInfoPanel);
-map.on('move', updateInfoPanel);
-map.on('zoomend', updateInfoPanel);
-
-// ============================================================
-// Initial state
-// ============================================================
-updateInfoPanel();
+document.getElementById('minimap-img').src = tileUrl(0, 0, 0);
+loadTile(0, 0, 0);
 </script>
 </body>
 </html>
