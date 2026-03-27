@@ -679,6 +679,7 @@ function setTileImg(elemId, z, x, y) {
     }
     const url = tileUrl(z, x, y);
     img.crossOrigin = 'anonymous';
+    img.onerror = function() { this.onerror = null; this.src = TRANSPARENT_PIXEL; };
     img.src = url;
 }
 
