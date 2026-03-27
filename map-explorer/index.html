@@ -22,7 +22,6 @@ body {
 /* Main tile container — always a centered square */
 #tile-container {
     position: relative;
-    /* size set by JS to be min(viewportW, viewportH) */
 }
 
 #tile-img {
@@ -156,6 +155,26 @@ body {
     word-break: break-all;
 }
 
+/* Server status indicator */
+.server-status {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+}
+.server-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #444;
+    flex-shrink: 0;
+}
+.server-dot.connected { background: #4caf50; }
+.server-dot.connecting { background: #ff9800; animation: pulse 1s infinite; }
+.server-dot.static { background: #6a7a9a; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.server-label { color: #6a7a9a; }
+
 /* Controls panel (bottom) */
 .controls-panel {
     position: fixed;
@@ -183,9 +202,6 @@ body {
     font-family: 'SF Mono', Menlo, monospace;
     font-size: 11px;
     color: #a0b4d8;
-}
-.controls-panel .disabled {
-    opacity: 0.3;
 }
 
 /* About panel (top-right) */
@@ -225,6 +241,7 @@ body {
     transform: translate(-50%, -50%);
     z-index: 50;
     display: none;
+    text-align: center;
 }
 .loading .spinner {
     width: 36px; height: 36px;
@@ -232,6 +249,11 @@ body {
     border-top-color: #648cff;
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
+    margin: 0 auto 8px;
+}
+.loading .loading-text {
+    font-size: 11px;
+    color: #6a7a9a;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -324,6 +346,48 @@ body {
     font-size: 9px;
     color: #6a7a9a;
 }
+
+/* Server URL input overlay */
+.server-config {
+    position: fixed;
+    bottom: 60px;
+    left: 16px;
+    z-index: 100;
+    background: rgba(15, 17, 23, 0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(100, 140, 255, 0.2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 12px;
+    max-width: 300px;
+    display: none;
+}
+.server-config .config-label {
+    color: #6a7a9a;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+}
+.server-config input {
+    width: 100%;
+    background: rgba(100, 140, 255, 0.08);
+    border: 1px solid rgba(100, 140, 255, 0.2);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: #e0e0e0;
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    outline: none;
+}
+.server-config input:focus {
+    border-color: rgba(100, 140, 255, 0.5);
+}
+.server-config .config-hint {
+    color: #555;
+    font-size: 10px;
+    margin-top: 4px;
+}
 </style>
 </head>
 <body>
@@ -355,7 +419,10 @@ body {
     <div class="zoom-out-btn" id="zoomOutBtn" onclick="zoomOut()">&#x1F50D; Zoom Out</div>
 
     <!-- Loading spinner -->
-    <div class="loading" id="loading"><div class="spinner"></div></div>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">Loading...</div>
+    </div>
 </div>
 
 <!-- Info panel -->
@@ -371,6 +438,10 @@ body {
         <div class="label">Quadrant Path</div>
         <div class="path-display" id="pathDisplay">root</div>
     </div>
+    <div class="server-status">
+        <div class="server-dot" id="serverDot"></div>
+        <span class="server-label" id="serverLabel">Checking...</span>
+    </div>
 </div>
 
 <!-- About panel -->
@@ -378,10 +449,12 @@ body {
     <div class="title">Map Explorer</div>
     <div class="desc">
         AI-generated city map from a flow-matching diffusion model
-        trained on OpenStreetMap tiles.
+        trained on OpenStreetMap tiles. z10-z17 (8 zoom levels).
         Each child tile is conditionally generated from its parent's quadrant crop.
         <br><br>
-        <a href="/">xingjianbai.com</a>
+        <a href="/" style="font-size:10px;">xingjianbai.com</a>
+        &nbsp;
+        <a href="#" onclick="toggleServerConfig(); return false;" style="font-size:10px;">server config</a>
     </div>
 </div>
 
@@ -399,26 +472,122 @@ body {
     <div class="label">z10 root</div>
 </div>
 
+<!-- Server URL config -->
+<div class="server-config" id="serverConfig">
+    <div class="config-label">Backend Server URL</div>
+    <input type="text" id="serverUrl" placeholder="https://xxx.trycloudflare.com"
+           onchange="setServerUrl(this.value)" />
+    <div class="config-hint">
+        Leave empty for static tiles (z10-z15 only).<br>
+        Set to tunnel URL for live generation (z10-z17).
+    </div>
+</div>
+
 <script>
 // ============================================================
 // Configuration
 // ============================================================
 const ZOOM_MIN = 10;
-const ZOOM_MAX = 15;  // max available pre-generated zoom
-const TILE_BASE = '/map-explorer/tiles';
+const ZOOM_MAX_STATIC = 15;  // max pre-generated static tiles
+const ZOOM_MAX_DYNAMIC = 17; // max when server is connected
+const TILE_BASE_STATIC = '/map-explorer/tiles';
 
 // ============================================================
 // State
 // ============================================================
-let currentZ = 0;  // leaflet zoom (0 = z10, 5 = z15)
+let currentZ = 0;  // leaflet zoom (0 = z10)
 let currentX = 0;
 let currentY = 0;
+let serverUrl = '';  // dynamic backend URL, empty = static mode
+let serverConnected = false;
+let isLoading = false;
+
+// ============================================================
+// Server URL management
+// ============================================================
+function initServerUrl() {
+    // Check URL params first
+    const params = new URLSearchParams(window.location.search);
+    const urlParam = params.get('server');
+    if (urlParam) {
+        serverUrl = urlParam.replace(/\/$/, '');
+        document.getElementById('serverUrl').value = serverUrl;
+    } else {
+        // Check localStorage
+        const saved = localStorage.getItem('mapExplorerServer');
+        if (saved) {
+            serverUrl = saved;
+            document.getElementById('serverUrl').value = serverUrl;
+        }
+    }
+    checkServerStatus();
+}
+
+function setServerUrl(url) {
+    serverUrl = url.replace(/\/$/, '');
+    if (serverUrl) {
+        localStorage.setItem('mapExplorerServer', serverUrl);
+    } else {
+        localStorage.removeItem('mapExplorerServer');
+    }
+    checkServerStatus();
+    // Reload current tile from new source
+    loadTile(currentZ, currentX, currentY);
+}
+
+async function checkServerStatus() {
+    const dot = document.getElementById('serverDot');
+    const label = document.getElementById('serverLabel');
+
+    if (!serverUrl) {
+        dot.className = 'server-dot static';
+        label.textContent = 'Static tiles (z10-z' + ZOOM_MAX_STATIC + ')';
+        serverConnected = false;
+        rebuildZoomBar();
+        return;
+    }
+
+    dot.className = 'server-dot connecting';
+    label.textContent = 'Connecting...';
+
+    try {
+        const resp = await fetch(serverUrl + '/api/status', { mode: 'cors' });
+        if (resp.ok) {
+            const data = await resp.json();
+            dot.className = 'server-dot connected';
+            label.textContent = 'Server connected (z10-z' + ZOOM_MAX_DYNAMIC + ')';
+            serverConnected = true;
+        } else {
+            throw new Error('bad response');
+        }
+    } catch(e) {
+        dot.className = 'server-dot';
+        label.textContent = 'Server unreachable';
+        serverConnected = false;
+    }
+    rebuildZoomBar();
+}
+
+function toggleServerConfig() {
+    const el = document.getElementById('serverConfig');
+    el.style.display = el.style.display === 'block' ? 'none' : 'block';
+}
+
+// ============================================================
+// Effective max zoom
+// ============================================================
+function getMaxLeafletZoom() {
+    return (serverConnected ? ZOOM_MAX_DYNAMIC : ZOOM_MAX_STATIC) - ZOOM_MIN;
+}
 
 // ============================================================
 // Tile URL
 // ============================================================
 function tileUrl(z, x, y) {
-    return `${TILE_BASE}/${z}/${x}/${y}.png`;
+    if (serverConnected && serverUrl) {
+        return serverUrl + '/tile/' + z + '/' + x + '/' + y + '.png';
+    }
+    return TILE_BASE_STATIC + '/' + z + '/' + x + '/' + y + '.png';
 }
 
 // ============================================================
@@ -426,7 +595,7 @@ function tileUrl(z, x, y) {
 // ============================================================
 function resize() {
     const container = document.getElementById('tile-container');
-    const sz = Math.min(window.innerWidth, window.innerHeight) - 100; // margin for arrows
+    const sz = Math.min(window.innerWidth, window.innerHeight) - 100;
     container.style.width = sz + 'px';
     container.style.height = sz + 'px';
 }
@@ -438,33 +607,47 @@ resize();
 // ============================================================
 
 function loadTile(z, x, y) {
+    if (isLoading) return;
+    isLoading = true;
+
     const img = document.getElementById('tile-img');
     const loading = document.getElementById('loading');
+    const loadingText = document.getElementById('loadingText');
+
     loading.style.display = 'block';
-    img.style.opacity = '0.5';
+    img.style.opacity = '0.4';
+
+    if (serverConnected && serverUrl) {
+        loadingText.textContent = 'Generating tile...';
+    } else {
+        loadingText.textContent = 'Loading...';
+    }
 
     const url = tileUrl(z, x, y);
     const newImg = new Image();
+    newImg.crossOrigin = 'anonymous';
     newImg.onload = function() {
         img.src = url;
+        img.crossOrigin = 'anonymous';
         img.style.opacity = '1';
         loading.style.display = 'none';
         currentZ = z;
         currentX = x;
         currentY = y;
+        isLoading = false;
         updateUI();
     };
     newImg.onerror = function() {
-        // Tile doesn't exist
         img.style.opacity = '1';
         loading.style.display = 'none';
+        loadingText.textContent = 'Tile not found';
+        isLoading = false;
     };
     newImg.src = url;
 }
 
 function zoomIn(quadrant) {
-    const maxLeafletZoom = ZOOM_MAX - ZOOM_MIN;
-    if (currentZ >= maxLeafletZoom) return;
+    if (currentZ >= getMaxLeafletZoom()) return;
 
     const childZ = currentZ + 1;
     let childX = currentX * 2;
@@ -505,6 +688,9 @@ function pan(direction) {
 // Keyboard controls
 // ============================================================
 document.addEventListener('keydown', (e) => {
+    // Don't capture when typing in input
+    if (e.target.tagName === 'INPUT') return;
+
     switch(e.key.toLowerCase()) {
         case 'w': case 'arrowup':    pan('up'); break;
         case 's': case 'arrowdown':  pan('down'); break;
@@ -512,7 +698,6 @@ document.addEventListener('keydown', (e) => {
         case 'd': case 'arrowright': pan('right'); break;
         case 'q': case '-': case '_': zoomOut(); break;
         case 'e': case '=': case '+':
-            // Zoom in to center (default: bottom-right, but let's not auto-pick)
             break;
     }
 });
@@ -535,19 +720,19 @@ function getQuadrantPath(z, x, y) {
 
 function updateUI() {
     const actualZ = currentZ + ZOOM_MIN;
-    const maxLeafletZoom = ZOOM_MAX - ZOOM_MIN;
+    const maxLZ = getMaxLeafletZoom();
     const gridSize = 1 << currentZ;
 
     // Zoom display
-    document.getElementById('zoomDisplay').textContent = `z${actualZ}`;
+    document.getElementById('zoomDisplay').textContent = 'z' + actualZ;
 
     // Position
-    document.getElementById('posDisplay').textContent = `(${currentX}, ${currentY})`;
+    document.getElementById('posDisplay').textContent = '(' + currentX + ', ' + currentY + ')';
 
     // Path
     const path = getQuadrantPath(currentZ, currentX, currentY);
     document.getElementById('pathDisplay').textContent =
-        path.length === 0 ? 'root' : 'root → ' + path.join(' → ');
+        path.length === 0 ? 'root' : 'root > ' + path.join(' > ');
 
     // Zoom bar pips
     const pips = document.querySelectorAll('.zoom-pip');
@@ -566,7 +751,7 @@ function updateUI() {
 
     // At max zoom: hide quadrant overlay
     const container = document.getElementById('tile-container');
-    container.classList.toggle('at-max-zoom', currentZ >= maxLeafletZoom);
+    container.classList.toggle('at-max-zoom', currentZ >= maxLZ);
 
     // Minimap indicator
     updateMinimap();
@@ -574,9 +759,8 @@ function updateUI() {
 
 function updateMinimap() {
     const indicator = document.getElementById('minimap-indicator');
-    const mapSize = 140; // minimap size in px
+    const mapSize = 140;
 
-    // Current tile's coverage relative to the root
     const gridSize = 1 << currentZ;
     const tileW = mapSize / gridSize;
     const tileH = mapSize / gridSize;
@@ -590,18 +774,24 @@ function updateMinimap() {
 // ============================================================
 // Initialize zoom bar
 // ============================================================
-const maxLeafletZoom = ZOOM_MAX - ZOOM_MIN;
-const zoomBar = document.getElementById('zoomBar');
-for (let i = 0; i <= maxLeafletZoom; i++) {
-    const pip = document.createElement('div');
-    pip.className = 'zoom-pip';
-    pip.title = `z${i + ZOOM_MIN}`;
-    zoomBar.appendChild(pip);
+function rebuildZoomBar() {
+    const maxLZ = getMaxLeafletZoom();
+    const zoomBar = document.getElementById('zoomBar');
+    zoomBar.innerHTML = '';
+    for (let i = 0; i <= maxLZ; i++) {
+        const pip = document.createElement('div');
+        pip.className = 'zoom-pip';
+        pip.title = 'z' + (i + ZOOM_MIN);
+        if (i <= currentZ) pip.classList.add('active');
+        zoomBar.appendChild(pip);
+    }
 }
 
 // ============================================================
-// Load root tile + minimap
+// Boot
 // ============================================================
+initServerUrl();
+rebuildZoomBar();
 document.getElementById('minimap-img').src = tileUrl(0, 0, 0);
 loadTile(0, 0, 0);
 </script>
