@@ -313,19 +313,21 @@ body {
 /* Zoom out button */
 .zoom-out-btn {
     position: absolute;
-    top: -40px;
+    top: -44px;
     right: 0;
     z-index: 20;
-    background: rgba(15, 17, 23, 0.6);
-    border: 1px solid rgba(100, 140, 255, 0.2);
+    background: rgba(15, 17, 23, 0.75);
+    border: 1px solid rgba(100, 140, 255, 0.25);
     color: #a0b4d8;
-    font-size: 12px;
+    font-size: 14px;
     cursor: pointer;
-    padding: 4px 12px;
-    border-radius: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
     transition: all 0.15s;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
-.zoom-out-btn:hover {
+.zoom-out-btn:hover, .zoom-out-btn:active {
     background: rgba(30, 45, 80, 0.85);
     border-color: rgba(100, 140, 255, 0.5);
     color: #fff;
@@ -411,6 +413,42 @@ body {
     font-size: 10px;
     margin-top: 4px;
 }
+/* ---- Mobile responsive ---- */
+@media (max-width: 768px) {
+    .about-panel { display: none; }
+    .info-panel {
+        top: 8px; left: 8px;
+        padding: 8px 12px;
+        font-size: 11px;
+        min-width: unset;
+    }
+    .info-panel .value { font-size: 14px; }
+    .minimap { width: 90px; height: 90px; bottom: 60px; right: 8px; }
+    .controls-panel {
+        padding: 8px 14px;
+        font-size: 12px;
+        gap: 12px;
+        bottom: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 95vw;
+    }
+    .controls-panel kbd { display: none; }
+    .nav-arrow { font-size: 24px; }
+    .nav-arrow.up, .nav-arrow.down { width: 60px; height: 36px; }
+    .nav-arrow.left, .nav-arrow.right { width: 36px; height: 60px; }
+    .zoom-out-btn { font-size: 15px; padding: 10px 18px; top: -48px; }
+    .quadrant-zone .quad-label { opacity: 0.5; font-size: 12px; }
+    .server-config { max-width: 85vw; }
+}
+@media (max-width: 480px) {
+    .info-panel .path-display { display: none; }
+    .minimap { width: 70px; height: 70px; }
+}
+
+/* Touch-friendly: larger tap targets for nav arrows */
+.nav-arrow { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.quadrant-zone { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 </style>
 </head>
 <body>
@@ -490,10 +528,10 @@ body {
 
 <!-- Controls help (LARGER) -->
 <div class="controls-panel" id="controlsPanel">
-    <span>Click quadrant to zoom in</span>
-    <span><kbd>Q</kbd> zoom out</span>
+    <span>Tap quadrant to zoom in</span>
+    <span>Tap &#x1F50D; to zoom out</span>
     <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> jump</span>
-    <span><kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8594;</kbd><kbd>&#8595;</kbd> smooth pan</span>
+    <span>Swipe or <kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8594;</kbd><kbd>&#8595;</kbd> to pan</span>
 </div>
 
 <!-- Minimap -->
@@ -1008,6 +1046,58 @@ function rebuildZoomBar() {
         zoomBar.appendChild(pip);
     }
 }
+
+// ============================================================
+// Touch swipe support (mobile panning)
+// ============================================================
+let touchStartX = 0, touchStartY = 0;
+let touchPanning = false;
+
+document.getElementById('viewport').addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+        touchPanning = true;
+    }
+}, { passive: true });
+
+document.getElementById('viewport').addEventListener('touchmove', (e) => {
+    e.preventDefault(); // prevent page scroll
+    if (!touchPanning || e.touches.length !== 1) return;
+    const dx = e.touches[0].clientX - touchStartX;
+    const dy = e.touches[0].clientY - touchStartY;
+    const threshold = tileSize * 0.15;
+
+    if (Math.abs(dx) > threshold || Math.abs(dy) > threshold) {
+        const gridSize = 1 << currentZ;
+        if (Math.abs(dx) > threshold) {
+            const stepX = dx > 0 ? -PAN_STEP : PAN_STEP;
+            let newFracX = panFracX + stepX;
+            if (newFracX >= 1.0 && currentX + 1 < gridSize) { newFracX -= 1.0; currentX += 1; loadAllTiles(); }
+            else if (newFracX <= -1.0 && currentX - 1 >= 0) { newFracX += 1.0; currentX -= 1; loadAllTiles(); }
+            if (currentX === 0 && newFracX < 0) newFracX = 0;
+            if (currentX >= gridSize - 1 && newFracX > 0) newFracX = 0;
+            panFracX = Math.round(newFracX * 100) / 100;
+            touchStartX = e.touches[0].clientX;
+        }
+        if (Math.abs(dy) > threshold) {
+            const stepY = dy > 0 ? -PAN_STEP : PAN_STEP;
+            let newFracY = panFracY + stepY;
+            if (newFracY >= 1.0 && currentY + 1 < gridSize) { newFracY -= 1.0; currentY += 1; loadAllTiles(); }
+            else if (newFracY <= -1.0 && currentY - 1 >= 0) { newFracY += 1.0; currentY -= 1; loadAllTiles(); }
+            if (currentY === 0 && newFracY < 0) newFracY = 0;
+            if (currentY >= gridSize - 1 && newFracY > 0) newFracY = 0;
+            panFracY = Math.round(newFracY * 100) / 100;
+            touchStartY = e.touches[0].clientY;
+        }
+        updateSliderTransform();
+        updateUI();
+    }
+}, { passive: false });
+
+document.getElementById('viewport').addEventListener('touchend', () => {
+    touchPanning = false;
+}, { passive: true });
 
 // ============================================================
 // Boot
