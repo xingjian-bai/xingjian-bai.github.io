@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-03-27T18:00:19.745833",
+  "last_sync": "2026-03-27T18:10:18.925306",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         2918862,
         2918864
       ],
-      "last_seen": "2026-03-27T18:00:05.734186",
+      "last_seen": "2026-03-27T18:10:04.418372",
       "paused": false
     },
     "zwang43b": {
@@ -24,7 +24,7 @@
         2918873,
         2918875
       ],
-      "last_seen": "2026-03-27T18:00:05.734217",
+      "last_seen": "2026-03-27T18:10:04.418422",
       "paused": false
     }
   },
@@ -1330,36 +1330,29 @@
         "user": "xbai02b",
         "date": "2026-03-30",
         "weekday": "Monday",
+        "hour": 16,
+        "time": "16:00"
+      },
+      {
+        "user": "xbai02b",
+        "date": "2026-03-30",
+        "weekday": "Monday",
+        "hour": 15,
+        "time": "15:00"
+      },
+      {
+        "user": "xbai02b",
+        "date": "2026-03-30",
+        "weekday": "Monday",
         "hour": 17,
         "time": "17:00"
       },
       {
-        "user": "xbai02b",
-        "date": "2026-03-30",
-        "weekday": "Monday",
-        "hour": 15,
-        "time": "15:00"
-      },
-      {
-        "user": "xbai02b",
-        "date": "2026-03-30",
-        "weekday": "Monday",
-        "hour": 16,
-        "time": "16:00"
-      },
-      {
         "user": "zwang43b",
         "date": "2026-03-30",
         "weekday": "Monday",
         "hour": 15,
         "time": "15:00"
-      },
-      {
-        "user": "zwang43b",
-        "date": "2026-03-30",
-        "weekday": "Monday",
-        "hour": 16,
-        "time": "16:00"
       },
       {
         "user": "zwang43b",
@@ -1374,6 +1367,13 @@
         "weekday": "Monday",
         "hour": 14,
         "time": "14:00"
+      },
+      {
+        "user": "zwang43b",
+        "date": "2026-03-30",
+        "weekday": "Monday",
+        "hour": 16,
+        "time": "16:00"
       }
     ]
   },
