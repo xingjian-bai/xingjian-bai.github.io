@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-03-28T02:38:42Z",
+  "generated_at": "2026-03-28T13:48:08Z",
   "version": 1,
-  "snapshot_count": 989,
+  "snapshot_count": 1000,
   "snapshots": [
     {
       "hour": "2026-01-24T23:00:00Z",
@@ -31398,6 +31398,402 @@
         }
       ],
       "based_on_hour": "2026-03-28T01:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T03:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 6.48,
+        "A100": 12.96,
+        "A100_40GB": 12.96
+      },
+      "gpus": {
+        "H100": 51.84,
+        "A100": 103.68,
+        "A100_40GB": 103.68
+      },
+      "hourly_cost": {
+        "H100": 356.66,
+        "A100": 355.71,
+        "A100_40GB": 284.57
+      },
+      "total_hourly_cost": 996.94,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T02:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T04:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 5.83,
+        "A100": 11.66,
+        "A100_40GB": 11.66
+      },
+      "gpus": {
+        "H100": 46.66,
+        "A100": 93.31,
+        "A100_40GB": 93.31
+      },
+      "hourly_cost": {
+        "H100": 320.88,
+        "A100": 320.03,
+        "A100_40GB": 256.03
+      },
+      "total_hourly_cost": 896.94,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T03:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T05:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 5.25,
+        "A100": 10.49,
+        "A100_40GB": 10.49
+      },
+      "gpus": {
+        "H100": 41.99,
+        "A100": 83.98,
+        "A100_40GB": 83.98
+      },
+      "hourly_cost": {
+        "H100": 288.96,
+        "A100": 287.92,
+        "A100_40GB": 230.34
+      },
+      "total_hourly_cost": 807.22,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T04:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T06:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 4.73,
+        "A100": 9.44,
+        "A100_40GB": 9.44
+      },
+      "gpus": {
+        "H100": 37.79,
+        "A100": 75.58,
+        "A100_40GB": 75.58
+      },
+      "hourly_cost": {
+        "H100": 260.34,
+        "A100": 259.1,
+        "A100_40GB": 207.28
+      },
+      "total_hourly_cost": 726.72,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T05:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T07:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 4.26,
+        "A100": 8.5,
+        "A100_40GB": 8.5
+      },
+      "gpus": {
+        "H100": 34.01,
+        "A100": 68.02,
+        "A100_40GB": 68.02
+      },
+      "hourly_cost": {
+        "H100": 234.47,
+        "A100": 233.3,
+        "A100_40GB": 186.64
+      },
+      "total_hourly_cost": 654.41,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T06:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T08:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 3.83,
+        "A100": 7.65,
+        "A100_40GB": 7.65
+      },
+      "gpus": {
+        "H100": 30.61,
+        "A100": 61.22,
+        "A100_40GB": 61.22
+      },
+      "hourly_cost": {
+        "H100": 210.8,
+        "A100": 209.97,
+        "A100_40GB": 167.98
+      },
+      "total_hourly_cost": 588.75,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T07:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T09:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 3.45,
+        "A100": 6.89,
+        "A100_40GB": 6.89
+      },
+      "gpus": {
+        "H100": 27.55,
+        "A100": 55.1,
+        "A100_40GB": 55.1
+      },
+      "hourly_cost": {
+        "H100": 189.89,
+        "A100": 189.11,
+        "A100_40GB": 151.29
+      },
+      "total_hourly_cost": 530.29,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T08:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T10:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 3.11,
+        "A100": 6.2,
+        "A100_40GB": 6.2
+      },
+      "gpus": {
+        "H100": 24.8,
+        "A100": 49.59,
+        "A100_40GB": 49.59
+      },
+      "hourly_cost": {
+        "H100": 171.17,
+        "A100": 170.17,
+        "A100_40GB": 136.14
+      },
+      "total_hourly_cost": 477.48,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T09:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T11:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 2.8,
+        "A100": 5.58,
+        "A100_40GB": 5.58
+      },
+      "gpus": {
+        "H100": 22.32,
+        "A100": 44.63,
+        "A100_40GB": 44.63
+      },
+      "hourly_cost": {
+        "H100": 154.11,
+        "A100": 153.15,
+        "A100_40GB": 122.52
+      },
+      "total_hourly_cost": 429.78,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T10:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T12:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_gap_fill",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Gap-filled with 0.9x/hour decay (10% kill probability per GPU per hour)",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 2.52,
+        "A100": 5.02,
+        "A100_40GB": 5.02
+      },
+      "gpus": {
+        "H100": 20.09,
+        "A100": 40.17,
+        "A100_40GB": 40.17
+      },
+      "hourly_cost": {
+        "H100": 138.7,
+        "A100": 137.78,
+        "A100_40GB": 110.23
+      },
+      "total_hourly_cost": 386.71,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T11:00:00Z"
+    },
+    {
+      "hour": "2026-03-28T13:00:00Z",
+      "captured_at": "2026-03-28T13:48:08Z",
+      "source": "estimated_fetch_failure",
+      "fetch_ok": false,
+      "estimated": true,
+      "error": "Pluto command failed: /Users/xingjianb/miniforge3/bin/python -m colligo.pluto.sdk.cli job list --status running | ",
+      "jobs_total": 5,
+      "jobs_tracked": 5,
+      "nodes": {
+        "H100": 2.27,
+        "A100": 4.52,
+        "A100_40GB": 4.52
+      },
+      "gpus": {
+        "H100": 18.08,
+        "A100": 36.15,
+        "A100_40GB": 36.15
+      },
+      "hourly_cost": {
+        "H100": 124.94,
+        "A100": 124.06,
+        "A100_40GB": 99.25
+      },
+      "total_hourly_cost": 348.25,
+      "projects_top": [
+        {
+          "project": "ilo-combined",
+          "jobs": 5,
+          "nodes": 40,
+          "gpus": 320,
+          "hourly_cost": 1230.8
+        }
+      ],
+      "based_on_hour": "2026-03-28T12:00:00Z"
     }
   ]
 }
