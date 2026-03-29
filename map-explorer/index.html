@@ -449,6 +449,39 @@ body {
 /* Touch-friendly: larger tap targets for nav arrows */
 .nav-arrow { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .quadrant-zone { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+
+/* ---- Scale bar ---- */
+.scale-bar {
+    position: fixed;
+    bottom: 60px;
+    left: 20px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    pointer-events: none;
+    font-family: 'SF Mono', Menlo, monospace;
+}
+.scale-bar-label {
+    color: #e0e0e0;
+    font-size: 11px;
+    margin-bottom: 3px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+.scale-bar-line {
+    height: 6px;
+    background: rgba(255,255,255,0.85);
+    border-left: 2px solid rgba(255,255,255,0.85);
+    border-right: 2px solid rgba(255,255,255,0.85);
+    border-radius: 1px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.6);
+    min-width: 20px;
+}
+@media (max-width: 768px) {
+    .scale-bar { bottom: 55px; left: 10px; }
+    .scale-bar-label { font-size: 10px; }
+    .scale-bar-line { height: 5px; }
+}
 </style>
 </head>
 <body>
@@ -539,6 +572,12 @@ body {
     <img id="minimap-img" alt="Minimap" />
     <div class="indicator" id="minimap-indicator"></div>
     <div class="mini-label">z10 overview</div>
+</div>
+
+<!-- Scale bar -->
+<div class="scale-bar" id="scaleBar">
+    <div class="scale-bar-label" id="scaleLabel">1 km</div>
+    <div class="scale-bar-line" id="scaleLine"></div>
 </div>
 
 <!-- Server URL config -->
@@ -691,6 +730,7 @@ function resize() {
     slider.style.height = (tileSize * 3) + 'px';
 
     updateSliderTransform();
+    if (typeof updateScaleBar === 'function') updateScaleBar();
 }
 window.addEventListener('resize', resize);
 
@@ -1012,6 +1052,9 @@ function updateUI() {
 
     // Minimap indicator
     updateMinimap();
+
+    // Scale bar
+    updateScaleBar();
 }
 
 function updateMinimap() {
@@ -1098,6 +1141,38 @@ document.getElementById('viewport').addEventListener('touchmove', (e) => {
 document.getElementById('viewport').addEventListener('touchend', () => {
     touchPanning = false;
 }, { passive: true });
+
+// ============================================================
+// Scale bar: shows real-world distance reference
+// ============================================================
+// OSM tile width at zoom z ≈ 40075 * cos(lat) / 2^z km
+// Using ~42°N (cos ≈ 0.743) as representative mid-latitude
+const EARTH_CIRCUMFERENCE_KM = 40075.016686;
+const REF_COS_LAT = 0.743;  // cos(42°)
+
+function updateScaleBar() {
+    const realZoom = currentZ + ZOOM_MIN;
+    const tileKm = EARTH_CIRCUMFERENCE_KM * REF_COS_LAT / Math.pow(2, realZoom);
+    const kmPerPixel = tileKm / tileSize;
+
+    // Target scale bar ~100px wide, find nice round distance
+    const targetKm = 100 * kmPerPixel;
+
+    // Nice numbers: 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50
+    const niceNumbers = [0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50];
+    let bestDist = niceNumbers[0];
+    let bestDiff = Infinity;
+    for (const n of niceNumbers) {
+        const diff = Math.abs(n - targetKm);
+        if (diff < bestDiff) { bestDiff = diff; bestDist = n; }
+    }
+
+    const barWidth = bestDist / kmPerPixel;
+    const label = bestDist >= 1 ? (bestDist + ' km') : (Math.round(bestDist * 1000) + ' m');
+
+    document.getElementById('scaleLine').style.width = barWidth + 'px';
+    document.getElementById('scaleLabel').textContent = label;
+}
 
 // ============================================================
 // Boot
