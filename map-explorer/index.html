@@ -470,12 +470,13 @@ map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
 
 // Custom tile layer that loads from our server
 let tileLayer = null;
+let tileCacheBuster = Date.now();  // Cache-busting token, changes on new world / template switch
 
 function createTileLayer(url) {
     if (tileLayer) {
         map.removeLayer(tileLayer);
     }
-    tileLayer = L.tileLayer(url + '/tile/{z}/{x}/{y}.png', {
+    tileLayer = L.tileLayer(url + '/tile/{z}/{x}/{y}.png?v=' + tileCacheBuster, {
         minZoom: 0,
         maxZoom: LEAFLET_MAX_ZOOM,
         maxNativeZoom: LEAFLET_MAX_ZOOM,
@@ -520,7 +521,7 @@ function createTileLayer(url) {
         for (const [sz, sx, sy] of siblings) {
             if (sx === x && sy === y) continue;  // Skip self
             // Low-priority background fetch to pre-generate
-            fetch(`${serverUrl}/tile/${sz}/${sx}/${sy}.png`, { priority: 'low' })
+            fetch(`${serverUrl}/tile/${sz}/${sx}/${sy}.png?v=${tileCacheBuster}`, { priority: 'low' })
                 .catch(() => {});
         }
     });
@@ -724,11 +725,9 @@ async function selectTemplate(name) {
         });
         if (!resp.ok) throw new Error('Set root failed: ' + resp.status);
 
-        // Force reload all tiles and jump to root zoom
-        if (tileLayer) {
-            map.removeLayer(tileLayer);
-            createTileLayer(serverUrl);
-        }
+        // Force reload all tiles (new cache buster defeats browser cache)
+        tileCacheBuster = Date.now();
+        createTileLayer(serverUrl);
         map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
 
         document.getElementById('status-dot').className = 'status-dot connected';
@@ -844,11 +843,9 @@ async function newWorld() {
 }
 
 function refreshTiles() {
-    if (tileLayer) {
-        // Remove and re-add to force a full reload
-        map.removeLayer(tileLayer);
-        createTileLayer(serverUrl);
-    }
+    // Bump cache buster so browser doesn't serve stale tiles
+    tileCacheBuster = Date.now();
+    createTileLayer(serverUrl);
     // Reset view to root tile center
     map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
 }
