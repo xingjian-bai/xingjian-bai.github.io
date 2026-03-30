@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
 <title>Map Explorer — AI-Generated City</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -13,632 +15,368 @@ body {
     color: #e0e0e0;
     overflow: hidden;
     height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
+    width: 100vw;
 }
 
-/* ---- Viewport: clips the 3x3 tile grid ---- */
-#viewport {
-    position: relative;
-    overflow: hidden;
-}
-
-/* Inner sliding layer: 3x3 grid of tiles */
-#slider {
-    position: absolute;
-    top: 0; left: 0;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    transition: none;
-    will-change: transform;
-}
-
-#slider img {
+#map {
     width: 100%;
     height: 100%;
-    display: block;
-    image-rendering: pixelated;
-    image-rendering: crisp-edges;
+    background: #0f1117;
 }
 
-/* Yellow border when mid-pan (not aligned to tile boundary) */
-#viewport.mid-pan {
-    box-shadow: inset 0 0 0 3px #f0c040;
-}
+/* Dark Leaflet tiles */
+.leaflet-container { background: #0f1117; }
+.leaflet-tile { image-rendering: pixelated; image-rendering: crisp-edges; }
 
-/* Quadrant hover overlay */
-.quadrant-overlay {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    pointer-events: auto;
-    z-index: 10;
-}
+/* Hide default Leaflet attribution */
+.leaflet-control-attribution { display: none !important; }
 
-.quadrant-zone {
-    cursor: zoom-in;
-    border: 2px solid transparent;
-    transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.quadrant-zone:hover {
-    border-color: rgba(100, 180, 255, 0.6);
-    background: rgba(100, 180, 255, 0.08);
-}
-
-.quadrant-zone .quad-label {
-    opacity: 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: rgba(100, 180, 255, 0.8);
-    text-shadow: 0 1px 4px rgba(0,0,0,0.7);
-    transition: opacity 0.15s;
-    pointer-events: none;
-}
-
-.quadrant-zone:hover .quad-label {
-    opacity: 1;
-}
-
-/* Grid lines */
-.grid-lines {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 5;
-}
-.grid-lines .h-line {
-    position: absolute;
-    top: 50%; left: 0;
-    width: 100%; height: 1px;
-    background: rgba(100, 140, 255, 0.15);
-}
-.grid-lines .v-line {
-    position: absolute;
-    top: 0; left: 50%;
-    width: 1px; height: 100%;
-    background: rgba(100, 140, 255, 0.15);
-}
-
-/* Hide quadrant overlay at max zoom or during mid-pan */
-#viewport.at-max-zoom .quadrant-overlay,
-#viewport.mid-pan .quadrant-overlay {
-    pointer-events: none;
-}
-#viewport.at-max-zoom .quadrant-zone,
-#viewport.mid-pan .quadrant-zone {
-    cursor: default;
-}
-#viewport.at-max-zoom .quadrant-zone:hover,
-#viewport.mid-pan .quadrant-zone:hover {
-    border-color: transparent;
-    background: transparent;
-}
-#viewport.at-max-zoom .grid-lines,
-#viewport.mid-pan .grid-lines {
-    display: none;
-}
-
-/* Info panel (top-left) */
-.info-panel {
+/* Overlay panel: top-left info */
+#info-panel {
     position: fixed;
-    top: 16px;
-    left: 16px;
-    z-index: 100;
-    background: rgba(15, 17, 23, 0.92);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(100, 140, 255, 0.2);
-    border-radius: 10px;
-    padding: 14px 18px;
-    font-size: 13px;
-    line-height: 1.7;
-    min-width: 180px;
-}
-.info-panel .label {
-    color: #6a7a9a;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-}
-.info-panel .value {
-    color: #e8ecf4;
-    font-weight: 600;
-    font-size: 16px;
-}
-.info-panel .zoom-bar {
-    display: flex;
-    gap: 3px;
-    margin-top: 4px;
-}
-.info-panel .zoom-pip {
-    width: 16px; height: 5px;
-    border-radius: 2px;
-    background: rgba(100, 140, 255, 0.12);
-    transition: background 0.2s;
-}
-.info-panel .zoom-pip.active {
-    background: #648cff;
-}
-.info-panel .path-display {
-    color: #8a9cc5;
-    font-size: 11px;
-    font-family: 'SF Mono', Menlo, monospace;
-    margin-top: 2px;
-    word-break: break-all;
+    top: 16px; left: 16px;
+    z-index: 1000;
+    pointer-events: none;
 }
 
-/* Server status */
-.server-status {
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 11px;
+#info-panel > * { pointer-events: auto; }
+
+.info-box {
+    background: rgba(15, 17, 23, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #c8c8d0;
 }
-.server-dot {
+
+.info-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.info-subtitle {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+}
+
+.info-label { color: #888; font-size: 12px; }
+.info-value { color: #e0e0e0; font-size: 12px; font-weight: 500; }
+
+/* Status dot */
+.status-dot {
+    display: inline-block;
     width: 8px; height: 8px;
     border-radius: 50%;
-    background: #444;
-    flex-shrink: 0;
+    margin-right: 6px;
+    vertical-align: middle;
 }
-.server-dot.connected { background: #4caf50; }
-.server-dot.connecting { background: #ff9800; animation: pulse 1s infinite; }
-.server-dot.static { background: #6a7a9a; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-.server-label { color: #6a7a9a; }
+.status-dot.connected { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+.status-dot.disconnected { background: #f87171; box-shadow: 0 0 6px #f87171; }
+.status-dot.generating { background: #fbbf24; box-shadow: 0 0 6px #fbbf24; animation: pulse 1s infinite; }
 
-/* Controls panel (bottom) — LARGER text */
-.controls-panel {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100;
-    background: rgba(15, 17, 23, 0.88);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(100, 140, 255, 0.15);
-    border-radius: 12px;
-    padding: 14px 28px;
-    font-size: 15px;
-    color: #8a9cc5;
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: #e0e0e0;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+}
+.btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+.btn:active { transform: scale(0.97); }
+
+.btn-row {
     display: flex;
-    gap: 24px;
-    white-space: nowrap;
-    line-height: 1.6;
-}
-.controls-panel kbd {
-    display: inline-block;
-    background: rgba(100, 140, 255, 0.12);
-    border: 1px solid rgba(100, 140, 255, 0.25);
-    border-radius: 5px;
-    padding: 2px 8px;
-    font-family: 'SF Mono', Menlo, monospace;
-    font-size: 13px;
-    color: #a0b4d8;
+    gap: 6px;
+    margin-top: 8px;
 }
 
-/* About panel (top-right) */
-.about-panel {
+/* Template panel: bottom-left */
+#template-panel {
     position: fixed;
-    top: 16px;
-    right: 16px;
-    z-index: 100;
-    background: rgba(15, 17, 23, 0.92);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(100, 140, 255, 0.2);
-    border-radius: 10px;
-    padding: 14px 18px;
-    font-size: 13px;
-    max-width: 240px;
-    line-height: 1.5;
-}
-.about-panel .title {
-    font-weight: 700;
-    font-size: 15px;
-    color: #e8ecf4;
-    margin-bottom: 6px;
-}
-.about-panel .desc {
-    color: #6a7a9a;
-    font-size: 11px;
-}
-.about-panel a {
-    color: #648cff;
-    text-decoration: none;
+    bottom: 16px; left: 16px;
+    z-index: 1000;
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
 }
 
-/* Loading indicator */
-.loading {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 50;
-    display: none;
+.template-card {
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s;
+    background: rgba(15,17,23,0.85);
+    backdrop-filter: blur(8px);
+}
+.template-card:hover { border-color: rgba(100,180,255,0.5); transform: translateY(-2px); }
+.template-card.active { border-color: #4ade80; box-shadow: 0 0 12px rgba(74,222,128,0.3); }
+
+.template-card img {
+    width: 64px; height: 64px;
+    display: block;
+    image-rendering: pixelated;
+}
+
+.template-card .template-name {
+    font-size: 10px;
     text-align: center;
+    padding: 3px 4px;
+    color: #aaa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 64px;
 }
-.loading .spinner {
-    width: 36px; height: 36px;
-    border: 3px solid rgba(100, 140, 255, 0.15);
-    border-top-color: #648cff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    margin: 0 auto 8px;
+
+/* Scale bar: bottom-right */
+#scale-bar {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
 }
-.loading .loading-text {
+
+#scale-bar-line {
+    height: 4px;
+    background: rgba(255,255,255,0.7);
+    border-left: 2px solid rgba(255,255,255,0.7);
+    border-right: 2px solid rgba(255,255,255,0.7);
+    min-width: 40px;
+    transition: width 0.15s;
+}
+
+#scale-bar-text {
     font-size: 11px;
-    color: #6a7a9a;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* Zoom info: top-right */
+#zoom-info {
+    position: fixed;
+    top: 16px; right: 16px;
+    z-index: 1000;
+    background: rgba(15,17,23,0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    text-align: right;
+}
+
+#zoom-info .zoom-level {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+}
+
+#zoom-info .zoom-label {
+    color: #888;
+    font-size: 11px;
+}
+
+/* Loading overlay */
+#loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15,17,23,0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    transition: opacity 0.5s;
+}
+#loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.loading-spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: #4ade80;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Nav arrows on tile edges */
-.nav-arrow {
-    position: absolute;
-    z-index: 20;
-    background: rgba(15, 17, 23, 0.6);
-    border: 1px solid rgba(100, 140, 255, 0.2);
-    color: #a0b4d8;
-    font-size: 20px;
+.loading-text {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #888;
+}
+
+/* Server config link */
+#server-config {
+    position: fixed;
+    bottom: 16px; right: 16px;
+    z-index: 999;
+    font-size: 10px;
+    color: #555;
     cursor: pointer;
-    display: flex;
+}
+#server-config:hover { color: #888; }
+
+/* Config modal */
+#config-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 3000;
+    background: rgba(0,0,0,0.6);
     align-items: center;
     justify-content: center;
-    transition: all 0.15s;
-    border-radius: 6px;
 }
-.nav-arrow:hover {
-    background: rgba(30, 45, 80, 0.85);
-    border-color: rgba(100, 140, 255, 0.5);
-    color: #fff;
-}
-.nav-arrow.disabled {
-    opacity: 0.15;
-    cursor: default;
-    pointer-events: none;
-}
-.nav-arrow.up    { top: -40px;  left: 50%; transform: translateX(-50%); width: 50px; height: 30px; }
-.nav-arrow.down  { bottom: -40px; left: 50%; transform: translateX(-50%); width: 50px; height: 30px; }
-.nav-arrow.left  { left: -40px; top: 50%; transform: translateY(-50%); width: 30px; height: 50px; }
-.nav-arrow.right { right: -40px; top: 50%; transform: translateY(-50%); width: 30px; height: 50px; }
+#config-modal.show { display: flex; }
 
-/* Zoom out button */
-.zoom-out-btn {
-    position: absolute;
-    top: -44px;
-    right: 0;
-    z-index: 20;
-    background: rgba(15, 17, 23, 0.75);
-    border: 1px solid rgba(100, 140, 255, 0.25);
-    color: #a0b4d8;
-    font-size: 14px;
-    cursor: pointer;
-    padding: 8px 16px;
-    border-radius: 8px;
-    transition: all 0.15s;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-}
-.zoom-out-btn:hover, .zoom-out-btn:active {
-    background: rgba(30, 45, 80, 0.85);
-    border-color: rgba(100, 140, 255, 0.5);
-    color: #fff;
-}
-.zoom-out-btn.disabled {
-    opacity: 0.15;
-    cursor: default;
-    pointer-events: none;
+#config-modal .modal-body {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 24px;
+    width: 380px;
+    max-width: 90vw;
 }
 
-/* Minimap (bottom-right) */
-.minimap {
-    position: fixed;
-    bottom: 70px;
-    right: 16px;
-    z-index: 100;
-    width: 140px;
-    height: 140px;
-    background: rgba(15, 17, 23, 0.92);
-    border: 1px solid rgba(100, 140, 255, 0.25);
-    border-radius: 8px;
-    overflow: hidden;
-}
-.minimap img {
+#config-modal input {
     width: 100%;
-    height: 100%;
-    display: block;
-    image-rendering: pixelated;
-}
-.minimap .indicator {
-    position: absolute;
-    border: 2px solid #648cff;
-    background: rgba(100, 140, 255, 0.15);
-    pointer-events: none;
-    transition: all 0.15s;
-}
-.minimap .mini-label {
-    position: absolute;
-    bottom: 2px;
-    left: 4px;
-    font-size: 9px;
-    color: #6a7a9a;
-}
-
-/* Server URL config */
-.server-config {
-    position: fixed;
-    bottom: 70px;
-    left: 16px;
-    z-index: 100;
-    background: rgba(15, 17, 23, 0.92);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(100, 140, 255, 0.2);
-    border-radius: 10px;
-    padding: 12px 16px;
-    font-size: 12px;
-    max-width: 300px;
-    display: none;
-}
-.server-config .config-label {
-    color: #6a7a9a;
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 6px;
-}
-.server-config input {
-    width: 100%;
-    background: rgba(100, 140, 255, 0.08);
-    border: 1px solid rgba(100, 140, 255, 0.2);
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
     border-radius: 6px;
-    padding: 6px 10px;
     color: #e0e0e0;
-    font-family: 'SF Mono', Menlo, monospace;
-    font-size: 11px;
+    font-size: 13px;
+    font-family: monospace;
+    margin: 8px 0 16px;
     outline: none;
 }
-.server-config input:focus {
-    border-color: rgba(100, 140, 255, 0.5);
+#config-modal input:focus { border-color: rgba(100,180,255,0.5); }
+
+/* Leaflet zoom control dark theme */
+.leaflet-control-zoom a {
+    background: rgba(15,17,23,0.85) !important;
+    color: #e0e0e0 !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    backdrop-filter: blur(8px);
 }
-.server-config .config-hint {
-    color: #555;
-    font-size: 10px;
-    margin-top: 4px;
-}
-/* ---- Mobile responsive ---- */
-@media (max-width: 768px) {
-    .about-panel { display: none; }
-    .info-panel {
-        top: 8px; left: 8px;
-        padding: 8px 12px;
-        font-size: 11px;
-        min-width: unset;
-    }
-    .info-panel .value { font-size: 14px; }
-    .minimap { width: 90px; height: 90px; bottom: 60px; right: 8px; }
-    .controls-panel {
-        padding: 8px 14px;
-        font-size: 12px;
-        gap: 12px;
-        bottom: 10px;
-        flex-wrap: wrap;
-        justify-content: center;
-        max-width: 95vw;
-    }
-    .controls-panel kbd { display: none; }
-    .nav-arrow { font-size: 24px; }
-    .nav-arrow.up, .nav-arrow.down { width: 60px; height: 36px; }
-    .nav-arrow.left, .nav-arrow.right { width: 36px; height: 60px; }
-    .zoom-out-btn { font-size: 15px; padding: 10px 18px; top: -48px; }
-    .quadrant-zone .quad-label { opacity: 0.5; font-size: 12px; }
-    .server-config { max-width: 85vw; }
-}
-@media (max-width: 480px) {
-    .info-panel .path-display { display: none; }
-    .minimap { width: 70px; height: 70px; }
+.leaflet-control-zoom a:hover {
+    background: rgba(255,255,255,0.12) !important;
 }
 
-/* Touch-friendly: larger tap targets for nav arrows */
-.nav-arrow { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-.quadrant-zone { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
-
-/* ---- Model selector ---- */
-.model-selector {
-    position: fixed;
-    top: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 200;
-    display: flex;
-    gap: 0;
-    background: rgba(20, 22, 30, 0.92);
-    border: 1px solid rgba(100, 140, 255, 0.2);
-    border-radius: 8px;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-.model-btn {
-    padding: 8px 16px;
-    font-size: 12px;
-    font-family: 'SF Mono', Menlo, monospace;
-    color: #888;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.2s;
-    border-right: 1px solid rgba(100, 140, 255, 0.1);
-}
-.model-btn:last-child { border-right: none; }
-.model-btn:hover { color: #ccc; background: rgba(100, 140, 255, 0.08); }
-.model-btn.active {
-    color: #fff;
-    background: rgba(100, 140, 255, 0.2);
-    text-shadow: 0 0 8px rgba(100, 140, 255, 0.4);
-}
-@media (max-width: 768px) {
-    .model-selector {
-        top: auto;
-        bottom: 52px;
-        flex-wrap: wrap;
-        max-width: 95vw;
-        justify-content: center;
-        border-radius: 6px;
-    }
-    .model-btn { padding: 6px 10px; font-size: 10px; }
-}
-
-/* ---- Scale bar ---- */
-.scale-bar {
-    position: fixed;
-    bottom: 60px;
-    left: 20px;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    pointer-events: none;
-    font-family: 'SF Mono', Menlo, monospace;
-}
-.scale-bar-label {
-    color: #e0e0e0;
-    font-size: 11px;
-    margin-bottom: 3px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
-.scale-bar-line {
-    height: 6px;
-    background: rgba(255,255,255,0.85);
-    border-left: 2px solid rgba(255,255,255,0.85);
-    border-right: 2px solid rgba(255,255,255,0.85);
-    border-radius: 1px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.6);
-    min-width: 20px;
-}
-@media (max-width: 768px) {
-    .scale-bar { bottom: 55px; left: 10px; }
-    .scale-bar-label { font-size: 10px; }
-    .scale-bar-line { height: 5px; }
+/* Tile loading indicator */
+.leaflet-tile-loading {
+    background: rgba(255,255,255,0.03);
 }
 </style>
 </head>
 <body>
 
-<!-- Main viewport -->
-<div id="viewport">
-    <!-- 3x3 tile grid for smooth panning -->
-    <div id="slider">
-        <!-- 9 images: row0(left-up, center-up, right-up), row1(left, center, right), row2(left-down, center-down, right-down) -->
-        <img id="t-nw" /><img id="t-n" /><img id="t-ne" />
-        <img id="t-w"  /><img id="t-c" /><img id="t-e"  />
-        <img id="t-sw" /><img id="t-s" /><img id="t-se" />
-    </div>
+<div id="map"></div>
 
-    <!-- Quadrant click zones for zoom-in (centered on viewport) -->
-    <div class="quadrant-overlay" id="quadOverlay">
-        <div class="quadrant-zone" data-quad="tl" onclick="zoomIn('tl')"><span class="quad-label">TL</span></div>
-        <div class="quadrant-zone" data-quad="tr" onclick="zoomIn('tr')"><span class="quad-label">TR</span></div>
-        <div class="quadrant-zone" data-quad="bl" onclick="zoomIn('bl')"><span class="quad-label">BL</span></div>
-        <div class="quadrant-zone" data-quad="br" onclick="zoomIn('br')"><span class="quad-label">BR</span></div>
-    </div>
+<!-- Loading overlay -->
+<div id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Connecting to GPU server...</div>
+</div>
 
-    <!-- Subtle grid lines -->
-    <div class="grid-lines">
-        <div class="h-line"></div>
-        <div class="v-line"></div>
-    </div>
-
-    <!-- Nav arrows -->
-    <div class="nav-arrow up" id="navUp" onclick="panJump('up')">&#9650;</div>
-    <div class="nav-arrow down" id="navDown" onclick="panJump('down')">&#9660;</div>
-    <div class="nav-arrow left" id="navLeft" onclick="panJump('left')">&#9664;</div>
-    <div class="nav-arrow right" id="navRight" onclick="panJump('right')">&#9654;</div>
-
-    <!-- Zoom out button -->
-    <div class="zoom-out-btn" id="zoomOutBtn" onclick="zoomOut()">&#x1F50D; Zoom Out</div>
-
-    <!-- Loading spinner -->
-    <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <div class="loading-text" id="loadingText">Loading...</div>
+<!-- Info panel (top-left) -->
+<div id="info-panel">
+    <div class="info-box">
+        <div class="info-title">Map Explorer</div>
+        <div class="info-subtitle">AI-generated city from a diffusion model</div>
+        <div class="info-row">
+            <span class="info-label">Server</span>
+            <span class="info-value" id="status-text">
+                <span class="status-dot disconnected" id="status-dot"></span>
+                <span id="status-label">Connecting...</span>
+            </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Model</span>
+            <span class="info-value">JiT-L/16 (460M)</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Cached tiles</span>
+            <span class="info-value" id="cached-count">0</span>
+        </div>
+        <div class="btn-row">
+            <button class="btn" id="btn-new-world" title="Generate a new random city (clears all tiles)">
+                New World
+            </button>
+            <button class="btn" id="btn-random-template" title="Random city template">
+                Random City
+            </button>
+        </div>
     </div>
 </div>
 
-<!-- Info panel -->
-<div class="info-panel">
-    <div class="label">Zoom Level</div>
-    <div class="value" id="zoomDisplay">z10</div>
-    <div class="zoom-bar" id="zoomBar"></div>
-    <div style="margin-top: 10px;">
-        <div class="label">Tile Position</div>
-        <div class="value" id="posDisplay">(0, 0)</div>
-    </div>
-    <div style="margin-top: 10px;">
-        <div class="label">Quadrant Path</div>
-        <div class="path-display" id="pathDisplay">root</div>
-    </div>
-    <div class="server-status">
-        <div class="server-dot" id="serverDot"></div>
-        <span class="server-label" id="serverLabel">Checking...</span>
+<!-- Zoom info (top-right) -->
+<div id="zoom-info">
+    <div class="zoom-level" id="zoom-display">z10</div>
+    <div class="zoom-label">scale level</div>
+    <div style="margin-top: 4px; font-size: 11px; color: #888;">
+        <span id="tile-km">~30 km</span> per tile
     </div>
 </div>
 
-<!-- About panel -->
-<div class="about-panel">
-    <div class="title">Map Explorer</div>
-    <div class="desc">
-        AI-generated city maps from flow-matching diffusion models
-        trained on OpenStreetMap tiles. z10-z17 (8 zoom levels).
-        Compare different model sizes and training configurations.
-        Each child tile is conditionally generated from its parent's quadrant crop.
-        <br><br>
-        <a href="/" style="font-size:10px;">xingjianbai.com</a>
-        &nbsp;
-        <a href="#" onclick="toggleServerConfig(); return false;" style="font-size:10px;">server config</a>
-    </div>
+<!-- Template panel (bottom-left) -->
+<div id="template-panel"></div>
+
+<!-- Scale bar (bottom-right above server config) -->
+<div id="scale-bar">
+    <div id="scale-bar-text">1 km</div>
+    <div id="scale-bar-line" style="width: 60px;"></div>
 </div>
 
-<!-- Controls help (LARGER) -->
-<div class="controls-panel" id="controlsPanel">
-    <span>Tap quadrant to zoom in</span>
-    <span>Tap &#x1F50D; to zoom out</span>
-    <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> jump</span>
-    <span>Swipe or <kbd>&#8592;</kbd><kbd>&#8593;</kbd><kbd>&#8594;</kbd><kbd>&#8595;</kbd> to pan</span>
-</div>
+<!-- Server config -->
+<span id="server-config">server config</span>
 
-<!-- Minimap -->
-<div class="minimap" id="minimap">
-    <img id="minimap-img" alt="Minimap" />
-    <div class="indicator" id="minimap-indicator"></div>
-    <div class="mini-label">z10 overview</div>
-</div>
-
-<!-- Model selector -->
-<div class="model-selector" id="modelSelector"></div>
-
-<!-- Scale bar -->
-<div class="scale-bar" id="scaleBar">
-    <div class="scale-bar-label" id="scaleLabel">1 km</div>
-    <div class="scale-bar-line" id="scaleLine"></div>
-</div>
-
-<!-- Server URL config -->
-<div class="server-config" id="serverConfig">
-    <div class="config-label">Backend Server URL</div>
-    <input type="text" id="serverUrl" placeholder="https://xxx.trycloudflare.com"
-           onchange="setServerUrl(this.value)" />
-    <div class="config-hint">
-        Leave empty for pre-generated tiles (z10-z17).<br>
-        Set to tunnel URL for live generation.
+<!-- Config modal -->
+<div id="config-modal">
+    <div class="modal-body">
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Server URL</div>
+        <div style="font-size: 11px; color: #888; margin-bottom: 8px;">
+            Enter the tile server URL (FastAPI backend with GPU inference)
+        </div>
+        <input id="config-url" type="text" placeholder="https://your-tunnel.trycloudflare.com" />
+        <div class="btn-row" style="justify-content: flex-end;">
+            <button class="btn" id="config-cancel">Cancel</button>
+            <button class="btn" id="config-save" style="background: rgba(74,222,128,0.15); border-color: rgba(74,222,128,0.3);">
+                Save & Reconnect
+            </button>
+        </div>
     </div>
 </div>
 
@@ -646,638 +384,399 @@ body {
 // ============================================================
 // Configuration
 // ============================================================
-const ZOOM_MIN = 10;
-const ZOOM_MAX_STATIC = 17;  // all 8 levels pre-generated
-const ZOOM_MAX_DYNAMIC = 17;
+const ZOOM_MIN_ACTUAL = 10;  // z10 = root
+const ZOOM_MAX_ACTUAL = 17;  // z17 = most detailed
+const LEAFLET_MAX_ZOOM = ZOOM_MAX_ACTUAL - ZOOM_MIN_ACTUAL;  // 7
+const TILE_SIZE = 256;
+const EARTH_CIRCUMFERENCE_KM = 40075;
+const REF_LAT = 42;  // Reference latitude for scale calculation
+const REF_COS_LAT = Math.cos(REF_LAT * Math.PI / 180);
+
+// Server URL — stored in localStorage, default to current tunnel
+let serverUrl = localStorage.getItem('mapExplorerServerUrl') || 'https://quote-poetry-colony-education.trycloudflare.com';
 
 // ============================================================
-// Model definitions
+// Leaflet Map Setup
 // ============================================================
-const MODELS = [
-    { id: 'jit-b16',         name: 'JiT-B/16 (130M)',              tilePath: '/map-explorer/tiles/jit-b16',         maxLeafletZoom: 6 },
-    { id: 'jit-l16',         name: 'JiT-L/16 (460M)',              tilePath: '/map-explorer/tiles/jit-l16',         maxLeafletZoom: 7 },
-    { id: 'jit-l16-noise05', name: 'JiT-L/16 (460M, Noise 0.5)',   tilePath: '/map-explorer/tiles/jit-l16-noise05', maxLeafletZoom: 6 },
-];
-let currentModelIdx = 1;  // default to JiT-L/16
 
-// Smooth pan config
-const PAN_STEP = 0.1;       // fraction of tile per tick
-const PAN_INTERVAL = 100;   // ms between ticks
-
-// ============================================================
-// State
-// ============================================================
-let currentZ = 0;  // leaflet zoom (0 = z10)
-let currentX = 0;
-let currentY = 0;
-let panFracX = 0;  // fractional pan offset: -1..0..+1
-let panFracY = 0;
-let serverUrl = '';
-let serverConnected = false;
-let isLoading = false;
-
-// Smooth pan state
-const arrowsHeld = { left: false, right: false, up: false, down: false };
-let panTimer = null;
-
-// Tile image cache (avoid re-fetching)
-const imgCache = {};
-
-// Root tile data URL for minimap
-let rootTileDataUrl = null;
-
-// ============================================================
-// Server URL management
-// ============================================================
-function initServerUrl() {
-    const params = new URLSearchParams(window.location.search);
-    const urlParam = params.get('server');
-    if (urlParam) {
-        serverUrl = urlParam.replace(/\/$/, '');
-        document.getElementById('serverUrl').value = serverUrl;
-    } else {
-        const saved = localStorage.getItem('mapExplorerServer');
-        if (saved) {
-            serverUrl = saved;
-            document.getElementById('serverUrl').value = serverUrl;
-        }
-    }
-    checkServerStatus();
-}
-
-function setServerUrl(url) {
-    serverUrl = url.replace(/\/$/, '');
-    if (serverUrl) {
-        localStorage.setItem('mapExplorerServer', serverUrl);
-    } else {
-        localStorage.removeItem('mapExplorerServer');
-    }
-    checkServerStatus();
-    loadAllTiles();
-}
-
-async function checkServerStatus() {
-    const dot = document.getElementById('serverDot');
-    const label = document.getElementById('serverLabel');
-
-    if (!serverUrl) {
-        dot.className = 'server-dot static';
-        label.textContent = 'Pre-generated tiles (z10-z17)';
-        serverConnected = false;
-        rebuildZoomBar();
-        return;
-    }
-
-    dot.className = 'server-dot connecting';
-    label.textContent = 'Connecting...';
-
-    try {
-        const resp = await fetch(serverUrl + '/api/status', { mode: 'cors' });
-        if (resp.ok) {
-            dot.className = 'server-dot connected';
-            label.textContent = 'Server connected (z10-z17)';
-            serverConnected = true;
-        } else {
-            throw new Error('bad response');
-        }
-    } catch(e) {
-        dot.className = 'server-dot';
-        label.textContent = 'Server unreachable';
-        serverConnected = false;
-    }
-    rebuildZoomBar();
-}
-
-function toggleServerConfig() {
-    const el = document.getElementById('serverConfig');
-    el.style.display = el.style.display === 'block' ? 'none' : 'block';
-}
-
-// ============================================================
-// Max zoom
-// ============================================================
-function getMaxLeafletZoom() {
-    if (serverConnected) return ZOOM_MAX_DYNAMIC - ZOOM_MIN;
-    return MODELS[currentModelIdx].maxLeafletZoom;
-}
-
-// ============================================================
-// Tile URL helper
-// ============================================================
-function tileUrl(z, x, y) {
-    if (serverConnected && serverUrl) {
-        return serverUrl + '/tile/' + z + '/' + x + '/' + y + '.png';
-    }
-    return MODELS[currentModelIdx].tilePath + '/' + z + '/' + x + '/' + y + '.png';
-}
-
-// ============================================================
-// Transparent 1x1 pixel (for out-of-bounds tiles)
-// ============================================================
-const TRANSPARENT_PIXEL = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
-
-// ============================================================
-// Sizing
-// ============================================================
-let tileSize = 0;
-function resize() {
-    const vp = document.getElementById('viewport');
-    tileSize = Math.min(window.innerWidth, window.innerHeight) - 100;
-    vp.style.width = tileSize + 'px';
-    vp.style.height = tileSize + 'px';
-
-    const slider = document.getElementById('slider');
-    slider.style.width = (tileSize * 3) + 'px';
-    slider.style.height = (tileSize * 3) + 'px';
-
-    updateSliderTransform();
-    if (typeof updateScaleBar === 'function') updateScaleBar();
-}
-window.addEventListener('resize', resize);
-
-// ============================================================
-// Slider transform: positions the 3x3 grid so center tile is visible
-// ============================================================
-function updateSliderTransform() {
-    const slider = document.getElementById('slider');
-    // Center tile is at grid position (1,1). Offset by panFrac.
-    const offsetX = -(1 + panFracX) * tileSize;
-    const offsetY = -(1 + panFracY) * tileSize;
-    slider.style.transform = 'translate(' + offsetX + 'px, ' + offsetY + 'px)';
-}
-
-// ============================================================
-// Load tile images into the 3x3 grid
-// ============================================================
-function setTileImg(elemId, z, x, y) {
-    const gridSize = 1 << z;
-    const img = document.getElementById(elemId);
-    if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) {
-        img.src = TRANSPARENT_PIXEL;
-        return;
-    }
-    const url = tileUrl(z, x, y);
-    img.crossOrigin = 'anonymous';
-    img.onerror = function() { this.onerror = null; this.src = TRANSPARENT_PIXEL; };
-    img.src = url;
-}
-
-function loadAllTiles() {
-    const z = currentZ, x = currentX, y = currentY;
-
-    // 3x3 grid: offsets from center
-    setTileImg('t-nw', z, x-1, y-1);
-    setTileImg('t-n',  z, x,   y-1);
-    setTileImg('t-ne', z, x+1, y-1);
-    setTileImg('t-w',  z, x-1, y);
-    setTileImg('t-c',  z, x,   y);
-    setTileImg('t-e',  z, x+1, y);
-    setTileImg('t-sw', z, x-1, y+1);
-    setTileImg('t-s',  z, x,   y+1);
-    setTileImg('t-se', z, x+1, y+1);
-
-    // Load root tile for minimap (only once, or when server changes)
-    loadMinimapRoot();
-}
-
-// ============================================================
-// Minimap: always shows the root tile (z10 = leaflet zoom 0)
-// ============================================================
-function loadMinimapRoot() {
-    const mmImg = document.getElementById('minimap-img');
-    const url = tileUrl(0, 0, 0);
-    mmImg.crossOrigin = 'anonymous';
-    if (mmImg.src !== url && !mmImg.src.endsWith(url)) {
-        mmImg.src = url;
-    }
-}
-
-// ============================================================
-// Navigation: zoom in
-// ============================================================
-function zoomIn(quadrant) {
-    if (panFracX !== 0 || panFracY !== 0) return; // can't zoom while mid-pan
-    if (currentZ >= getMaxLeafletZoom()) return;
-
-    const childZ = currentZ + 1;
-    let childX = currentX * 2;
-    let childY = currentY * 2;
-
-    if (quadrant === 'tr' || quadrant === 'br') childX += 1;
-    if (quadrant === 'bl' || quadrant === 'br') childY += 1;
-
-    currentZ = childZ;
-    currentX = childX;
-    currentY = childY;
-    panFracX = 0;
-    panFracY = 0;
-
-    loadAllTiles();
-    updateSliderTransform();
-    updateUI();
-}
-
-// ============================================================
-// Navigation: zoom out
-// ============================================================
-function zoomOut() {
-    if (currentZ <= 0) return;
-
-    // Snap pan offset to 0
-    panFracX = 0;
-    panFracY = 0;
-
-    const parentZ = currentZ - 1;
-    const parentX = currentX >> 1;
-    const parentY = currentY >> 1;
-
-    currentZ = parentZ;
-    currentX = parentX;
-    currentY = parentY;
-
-    loadAllTiles();
-    updateSliderTransform();
-    updateUI();
-}
-
-// ============================================================
-// Navigation: WASD instant jump (snap to neighbor tile)
-// ============================================================
-function panJump(direction) {
-    // Snap any fractional pan first
-    panFracX = 0;
-    panFracY = 0;
-
-    const gridSize = 1 << currentZ;
-    let nx = currentX, ny = currentY;
-
-    switch(direction) {
-        case 'up':    ny -= 1; break;
-        case 'down':  ny += 1; break;
-        case 'left':  nx -= 1; break;
-        case 'right': nx += 1; break;
-    }
-
-    if (nx < 0 || nx >= gridSize || ny < 0 || ny >= gridSize) return;
-
-    currentX = nx;
-    currentY = ny;
-
-    loadAllTiles();
-    updateSliderTransform();
-    updateUI();
-}
-
-// ============================================================
-// Smooth panning: arrow keys
-// ============================================================
-function startSmoothPan() {
-    if (panTimer !== null) return;
-    panTimer = setInterval(tickSmoothPan, PAN_INTERVAL);
-}
-
-function stopSmoothPan() {
-    if (!arrowsHeld.left && !arrowsHeld.right && !arrowsHeld.up && !arrowsHeld.down) {
-        if (panTimer !== null) {
-            clearInterval(panTimer);
-            panTimer = null;
-        }
-    }
-}
-
-function tickSmoothPan() {
-    const gridSize = 1 << currentZ;
-    let dx = 0, dy = 0;
-    if (arrowsHeld.left)  dx -= PAN_STEP;
-    if (arrowsHeld.right) dx += PAN_STEP;
-    if (arrowsHeld.up)    dy -= PAN_STEP;
-    if (arrowsHeld.down)  dy += PAN_STEP;
-
-    if (dx === 0 && dy === 0) return;
-
-    let newFracX = panFracX + dx;
-    let newFracY = panFracY + dy;
-
-    // When frac crosses +-1, shift to next tile
-    while (newFracX >= 1.0) {
-        if (currentX + 1 >= gridSize) {
-            newFracX = Math.min(newFracX, 0.99); // clamp at edge
-            break;
-        }
-        newFracX -= 1.0;
-        currentX += 1;
-        loadAllTiles(); // reload 3x3 grid for new center
-    }
-    while (newFracX <= -1.0) {
-        if (currentX - 1 < 0) {
-            newFracX = Math.max(newFracX, -0.99);
-            break;
-        }
-        newFracX += 1.0;
-        currentX -= 1;
-        loadAllTiles();
-    }
-    while (newFracY >= 1.0) {
-        if (currentY + 1 >= gridSize) {
-            newFracY = Math.min(newFracY, 0.99);
-            break;
-        }
-        newFracY -= 1.0;
-        currentY += 1;
-        loadAllTiles();
-    }
-    while (newFracY <= -1.0) {
-        if (currentY - 1 < 0) {
-            newFracY = Math.max(newFracY, -0.99);
-            break;
-        }
-        newFracY += 1.0;
-        currentY -= 1;
-        loadAllTiles();
-    }
-
-    // Clamp at boundaries
-    if (currentX === 0 && newFracX < 0) newFracX = 0;
-    if (currentX >= gridSize - 1 && newFracX > 0) newFracX = 0;
-    if (currentY === 0 && newFracY < 0) newFracY = 0;
-    if (currentY >= gridSize - 1 && newFracY > 0) newFracY = 0;
-
-    panFracX = Math.round(newFracX * 100) / 100; // avoid float drift
-    panFracY = Math.round(newFracY * 100) / 100;
-
-    updateSliderTransform();
-    updateUI();
-}
-
-// ============================================================
-// Keyboard controls
-// ============================================================
-document.addEventListener('keydown', (e) => {
-    if (e.target.tagName === 'INPUT') return;
-    if (e.repeat && ['w','a','s','d','q'].includes(e.key.toLowerCase())) return;
-
-    switch(e.key) {
-        case 'ArrowUp':
-            e.preventDefault();
-            if (!arrowsHeld.up) { arrowsHeld.up = true; startSmoothPan(); }
-            return;
-        case 'ArrowDown':
-            e.preventDefault();
-            if (!arrowsHeld.down) { arrowsHeld.down = true; startSmoothPan(); }
-            return;
-        case 'ArrowLeft':
-            e.preventDefault();
-            if (!arrowsHeld.left) { arrowsHeld.left = true; startSmoothPan(); }
-            return;
-        case 'ArrowRight':
-            e.preventDefault();
-            if (!arrowsHeld.right) { arrowsHeld.right = true; startSmoothPan(); }
-            return;
-    }
-
-    switch(e.key.toLowerCase()) {
-        case 'w': panJump('up'); break;
-        case 's': panJump('down'); break;
-        case 'a': panJump('left'); break;
-        case 'd': panJump('right'); break;
-        case 'q': case '-': case '_': zoomOut(); break;
-    }
+// Custom CRS: L.CRS.Simple but with tile coordinates matching our system
+const map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: 0,
+    maxZoom: LEAFLET_MAX_ZOOM,
+    zoomSnap: 0,       // Smooth fractional zoom
+    zoomDelta: 1,      // Scroll wheel steps
+    wheelPxPerZoomLevel: 120, // Scroll sensitivity
+    zoomAnimation: true,
+    fadeAnimation: true,
+    markerZoomAnimation: true,
+    attributionControl: false,
+    zoomControl: false,
 });
 
-document.addEventListener('keyup', (e) => {
-    switch(e.key) {
-        case 'ArrowUp':    arrowsHeld.up = false; stopSmoothPan(); break;
-        case 'ArrowDown':  arrowsHeld.down = false; stopSmoothPan(); break;
-        case 'ArrowLeft':  arrowsHeld.left = false; stopSmoothPan(); break;
-        case 'ArrowRight': arrowsHeld.right = false; stopSmoothPan(); break;
+// Add zoom control to top-right
+L.control.zoom({ position: 'topright' }).addTo(map);
+
+// Set initial view: center of z10 root tile
+// In L.CRS.Simple with 256px tiles:
+// zoom 0: 1 tile, world is [0, 256] x [-256, 0] (lng, lat)
+// We center on the middle of the root tile
+map.setView([-128, 128], 0);
+
+// Custom tile layer that loads from our server
+let tileLayer = null;
+
+function createTileLayer(url) {
+    if (tileLayer) {
+        map.removeLayer(tileLayer);
     }
-});
-
-// ============================================================
-// UI Updates
-// ============================================================
-function getQuadrantPath(z, x, y) {
-    const quads = ['tl', 'tr', 'bl', 'br'];
-    let path = [];
-    for (let i = 0; i < z; i++) {
-        const bit = z - 1 - i;
-        const bx = (x >> bit) & 1;
-        const by = (y >> bit) & 1;
-        path.push(quads[by * 2 + bx]);
-    }
-    return path;
-}
-
-function updateUI() {
-    const actualZ = currentZ + ZOOM_MIN;
-    const maxLZ = getMaxLeafletZoom();
-    const gridSize = 1 << currentZ;
-    const isMidPan = (panFracX !== 0 || panFracY !== 0);
-
-    // Zoom display
-    document.getElementById('zoomDisplay').textContent = 'z' + actualZ;
-
-    // Position
-    if (isMidPan) {
-        const effX = (currentX + panFracX).toFixed(1);
-        const effY = (currentY + panFracY).toFixed(1);
-        document.getElementById('posDisplay').textContent = '(' + effX + ', ' + effY + ')';
-    } else {
-        document.getElementById('posDisplay').textContent = '(' + currentX + ', ' + currentY + ')';
-    }
-
-    // Path
-    const path = getQuadrantPath(currentZ, currentX, currentY);
-    document.getElementById('pathDisplay').textContent =
-        path.length === 0 ? 'root' : 'root > ' + path.join(' > ');
-
-    // Zoom bar pips
-    const pips = document.querySelectorAll('.zoom-pip');
-    pips.forEach((pip, i) => {
-        pip.classList.toggle('active', i <= currentZ);
+    tileLayer = L.tileLayer(url + '/tile/{z}/{x}/{y}.png', {
+        minZoom: 0,
+        maxZoom: LEAFLET_MAX_ZOOM,
+        maxNativeZoom: LEAFLET_MAX_ZOOM,
+        tileSize: TILE_SIZE,
+        noWrap: true,
+        bounds: [[-256, 0], [0, 256]],  // Only show tiles within our world
+        errorTileUrl: '',  // Don't show error tiles
+        className: 'ai-tile',
     });
+    tileLayer.addTo(map);
 
-    // Navigation arrows
-    document.getElementById('navUp').classList.toggle('disabled', currentY <= 0 && panFracY <= 0);
-    document.getElementById('navDown').classList.toggle('disabled', currentY >= gridSize - 1 && panFracY >= 0);
-    document.getElementById('navLeft').classList.toggle('disabled', currentX <= 0 && panFracX <= 0);
-    document.getElementById('navRight').classList.toggle('disabled', currentX >= gridSize - 1 && panFracX >= 0);
-
-    // Zoom out button
-    document.getElementById('zoomOutBtn').classList.toggle('disabled', currentZ <= 0);
-
-    // At max zoom or mid-pan: toggle classes
-    const vp = document.getElementById('viewport');
-    vp.classList.toggle('at-max-zoom', currentZ >= maxLZ);
-    vp.classList.toggle('mid-pan', isMidPan);
-
-    // Minimap indicator
-    updateMinimap();
-
-    // Scale bar
-    updateScaleBar();
-}
-
-function updateMinimap() {
-    const indicator = document.getElementById('minimap-indicator');
-    const mapSize = 140;
-
-    const gridSize = 1 << currentZ;
-    const tileW = mapSize / gridSize;
-    const tileH = mapSize / gridSize;
-
-    const effX = currentX + panFracX;
-    const effY = currentY + panFracY;
-
-    indicator.style.left = (effX * tileW) + 'px';
-    indicator.style.top = (effY * tileH) + 'px';
-    indicator.style.width = Math.max(4, tileW) + 'px';
-    indicator.style.height = Math.max(4, tileH) + 'px';
+    // Track tile loading
+    tileLayer.on('loading', () => {
+        document.getElementById('status-dot').className = 'status-dot generating';
+        document.getElementById('status-label').textContent = 'Generating...';
+    });
+    tileLayer.on('load', () => {
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        updateCachedCount();
+    });
+    tileLayer.on('tileerror', (e) => {
+        console.warn('Tile error:', e.coords, e.error);
+    });
 }
 
 // ============================================================
-// Zoom bar
+// Scale bar
 // ============================================================
-function rebuildZoomBar() {
-    const maxLZ = getMaxLeafletZoom();
-    const zoomBar = document.getElementById('zoomBar');
-    zoomBar.innerHTML = '';
-    for (let i = 0; i <= maxLZ; i++) {
-        const pip = document.createElement('div');
-        pip.className = 'zoom-pip';
-        pip.title = 'z' + (i + ZOOM_MIN);
-        if (i <= currentZ) pip.classList.add('active');
-        zoomBar.appendChild(pip);
-    }
+
+function kmPerTile(actualZoom) {
+    return EARTH_CIRCUMFERENCE_KM * REF_COS_LAT / Math.pow(2, actualZoom);
 }
-
-// ============================================================
-// Touch swipe support (mobile panning)
-// ============================================================
-let touchStartX = 0, touchStartY = 0;
-let touchPanning = false;
-
-document.getElementById('viewport').addEventListener('touchstart', (e) => {
-    if (e.touches.length === 1) {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-        touchPanning = true;
-    }
-}, { passive: true });
-
-document.getElementById('viewport').addEventListener('touchmove', (e) => {
-    e.preventDefault(); // prevent page scroll
-    if (!touchPanning || e.touches.length !== 1) return;
-    const dx = e.touches[0].clientX - touchStartX;
-    const dy = e.touches[0].clientY - touchStartY;
-    const threshold = tileSize * 0.15;
-
-    if (Math.abs(dx) > threshold || Math.abs(dy) > threshold) {
-        const gridSize = 1 << currentZ;
-        if (Math.abs(dx) > threshold) {
-            const stepX = dx > 0 ? -PAN_STEP : PAN_STEP;
-            let newFracX = panFracX + stepX;
-            if (newFracX >= 1.0 && currentX + 1 < gridSize) { newFracX -= 1.0; currentX += 1; loadAllTiles(); }
-            else if (newFracX <= -1.0 && currentX - 1 >= 0) { newFracX += 1.0; currentX -= 1; loadAllTiles(); }
-            if (currentX === 0 && newFracX < 0) newFracX = 0;
-            if (currentX >= gridSize - 1 && newFracX > 0) newFracX = 0;
-            panFracX = Math.round(newFracX * 100) / 100;
-            touchStartX = e.touches[0].clientX;
-        }
-        if (Math.abs(dy) > threshold) {
-            const stepY = dy > 0 ? -PAN_STEP : PAN_STEP;
-            let newFracY = panFracY + stepY;
-            if (newFracY >= 1.0 && currentY + 1 < gridSize) { newFracY -= 1.0; currentY += 1; loadAllTiles(); }
-            else if (newFracY <= -1.0 && currentY - 1 >= 0) { newFracY += 1.0; currentY -= 1; loadAllTiles(); }
-            if (currentY === 0 && newFracY < 0) newFracY = 0;
-            if (currentY >= gridSize - 1 && newFracY > 0) newFracY = 0;
-            panFracY = Math.round(newFracY * 100) / 100;
-            touchStartY = e.touches[0].clientY;
-        }
-        updateSliderTransform();
-        updateUI();
-    }
-}, { passive: false });
-
-document.getElementById('viewport').addEventListener('touchend', () => {
-    touchPanning = false;
-}, { passive: true });
-
-// ============================================================
-// Scale bar: shows real-world distance reference
-// ============================================================
-// OSM tile width at zoom z ≈ 40075 * cos(lat) / 2^z km
-// Using ~42°N (cos ≈ 0.743) as representative mid-latitude
-const EARTH_CIRCUMFERENCE_KM = 40075.016686;
-const REF_COS_LAT = 0.743;  // cos(42°)
 
 function updateScaleBar() {
-    const realZoom = currentZ + ZOOM_MIN;
-    const tileKm = EARTH_CIRCUMFERENCE_KM * REF_COS_LAT / Math.pow(2, realZoom);
-    const kmPerPixel = tileKm / tileSize;
+    const zoom = map.getZoom();
+    const actualZoom = zoom + ZOOM_MIN_ACTUAL;
+    const kmTile = kmPerTile(actualZoom);
 
-    // Target scale bar ~100px wide, find nice round distance
-    const targetKm = 100 * kmPerPixel;
+    // Pixels per km at current zoom
+    // At integer zoom z, each tile = 256px = kmPerTile(z+10) km
+    // At fractional zoom, Leaflet scales tiles
+    const scale = Math.pow(2, zoom - Math.floor(zoom));
+    const pxPerKm = (TILE_SIZE * scale) / kmPerTile(Math.floor(zoom) + ZOOM_MIN_ACTUAL);
 
-    // Nice numbers: 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50
-    const niceNumbers = [0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50];
-    let bestDist = niceNumbers[0];
-    let bestDiff = Infinity;
-    for (const n of niceNumbers) {
-        const diff = Math.abs(n - targetKm);
-        if (diff < bestDiff) { bestDiff = diff; bestDist = n; }
+    // Find a nice scale bar length
+    const targetPx = 100;  // target pixel width
+    const targetKm = targetPx / pxPerKm;
+
+    // Round to a nice number
+    const niceValues = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100];
+    let bestKm = niceValues[0];
+    for (const v of niceValues) {
+        if (Math.abs(v - targetKm) < Math.abs(bestKm - targetKm)) {
+            bestKm = v;
+        }
     }
 
-    const barWidth = bestDist / kmPerPixel;
-    const label = bestDist >= 1 ? (bestDist + ' km') : (Math.round(bestDist * 1000) + ' m');
+    const barPx = bestKm * pxPerKm;
+    const barEl = document.getElementById('scale-bar-line');
+    const textEl = document.getElementById('scale-bar-text');
 
-    document.getElementById('scaleLine').style.width = barWidth + 'px';
-    document.getElementById('scaleLabel').textContent = label;
+    barEl.style.width = Math.round(barPx) + 'px';
+    if (bestKm >= 1) {
+        textEl.textContent = bestKm + ' km';
+    } else {
+        textEl.textContent = Math.round(bestKm * 1000) + ' m';
+    }
 }
 
 // ============================================================
-// Model selector
+// Zoom display
 // ============================================================
-function buildModelSelector() {
-    const container = document.getElementById('modelSelector');
-    container.innerHTML = '';
-    MODELS.forEach((model, idx) => {
-        const btn = document.createElement('button');
-        btn.className = 'model-btn' + (idx === currentModelIdx ? ' active' : '');
-        btn.textContent = model.name;
-        btn.onclick = () => switchModel(idx);
-        container.appendChild(btn);
-    });
-}
 
-function switchModel(idx) {
-    if (idx === currentModelIdx) return;
-    currentModelIdx = idx;
+function updateZoomDisplay() {
+    const zoom = map.getZoom();
+    const actualZoom = zoom + ZOOM_MIN_ACTUAL;
+    const intZoom = Math.round(actualZoom);
 
-    // Reset to root tile when switching models (each model has its own world)
-    currentZ = 0;
-    currentX = 0;
-    currentY = 0;
-    panFracX = 0;
-    panFracY = 0;
+    document.getElementById('zoom-display').textContent = 'z' + actualZoom.toFixed(1);
 
-    buildModelSelector();
-    rebuildZoomBar();
-    loadAllTiles();
-    updateSliderTransform();
-    updateUI();
+    const km = kmPerTile(actualZoom);
+    let kmText;
+    if (km >= 1) {
+        kmText = '~' + km.toFixed(1) + ' km';
+    } else {
+        kmText = '~' + Math.round(km * 1000) + ' m';
+    }
+    document.getElementById('tile-km').textContent = kmText;
 }
 
 // ============================================================
-// Boot
+// Server connection
 // ============================================================
-resize();
-initServerUrl();
-buildModelSelector();
-rebuildZoomBar();
-loadAllTiles();
-updateSliderTransform();
-updateUI();
+
+let connected = false;
+
+async function connectToServer() {
+    if (!serverUrl) {
+        document.getElementById('loading-overlay').classList.add('hidden');
+        showConfigModal();
+        return;
+    }
+
+    document.getElementById('loading-overlay').querySelector('.loading-text').textContent = 'Connecting to GPU server...';
+    document.getElementById('loading-overlay').classList.remove('hidden');
+
+    try {
+        const resp = await fetch(serverUrl + '/api/status', { signal: AbortSignal.timeout(10000) });
+        if (!resp.ok) throw new Error('Status ' + resp.status);
+        const data = await resp.json();
+
+        connected = true;
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        document.getElementById('cached-count').textContent = data.cached_tiles;
+
+        // Create tile layer
+        createTileLayer(serverUrl);
+
+        // Load templates
+        loadTemplates();
+
+        // Hide loading
+        setTimeout(() => {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }, 500);
+
+    } catch (e) {
+        console.error('Connection failed:', e);
+        document.getElementById('status-dot').className = 'status-dot disconnected';
+        document.getElementById('status-label').textContent = 'Disconnected';
+        document.getElementById('loading-overlay').classList.add('hidden');
+
+        // Show config if first time
+        if (!localStorage.getItem('mapExplorerServerUrl')) {
+            showConfigModal();
+        }
+    }
+}
+
+async function updateCachedCount() {
+    if (!connected || !serverUrl) return;
+    try {
+        const resp = await fetch(serverUrl + '/api/status');
+        if (resp.ok) {
+            const data = await resp.json();
+            document.getElementById('cached-count').textContent = data.cached_tiles;
+        }
+    } catch (e) { /* ignore */ }
+}
+
+// ============================================================
+// Template management
+// ============================================================
+
+const CITY_LABELS = {
+    'boston': 'Boston',
+    'paris': 'Paris',
+    'london': 'London',
+    'tokyo': 'Tokyo',
+    'amsterdam': 'Amsterdam',
+    'berlin': 'Berlin',
+    'rome': 'Rome',
+    'barcelona': 'Barcelona',
+};
+
+async function loadTemplates() {
+    if (!serverUrl) return;
+    try {
+        const resp = await fetch(serverUrl + '/api/templates');
+        if (!resp.ok) return;
+        const data = await resp.json();
+
+        const panel = document.getElementById('template-panel');
+        panel.innerHTML = '';
+
+        for (const t of data.templates) {
+            const card = document.createElement('div');
+            card.className = 'template-card';
+            card.dataset.name = t.name;
+
+            const img = document.createElement('img');
+            img.src = serverUrl + '/api/template/' + t.name + '.png';
+            img.alt = t.name;
+            img.loading = 'lazy';
+
+            const label = document.createElement('div');
+            label.className = 'template-name';
+            label.textContent = CITY_LABELS[t.name] || t.name;
+
+            card.appendChild(img);
+            card.appendChild(label);
+            card.addEventListener('click', () => selectTemplate(t.name));
+            panel.appendChild(card);
+        }
+    } catch (e) {
+        console.warn('Failed to load templates:', e);
+    }
+}
+
+async function selectTemplate(name) {
+    if (!serverUrl || !connected) return;
+
+    // Visual feedback
+    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+    const card = document.querySelector(`.template-card[data-name="${name}"]`);
+    if (card) card.classList.add('active');
+
+    document.getElementById('status-dot').className = 'status-dot generating';
+    document.getElementById('status-label').textContent = 'Setting root...';
+
+    try {
+        const resp = await fetch(serverUrl + '/api/set_root?template=' + encodeURIComponent(name), {
+            method: 'POST',
+        });
+        if (!resp.ok) throw new Error('Set root failed: ' + resp.status);
+
+        // Force reload all tiles
+        refreshTiles();
+
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        updateCachedCount();
+    } catch (e) {
+        console.error('Set root failed:', e);
+        document.getElementById('status-dot').className = 'status-dot disconnected';
+        document.getElementById('status-label').textContent = 'Error';
+    }
+}
+
+// ============================================================
+// Actions
+// ============================================================
+
+async function newWorld() {
+    if (!serverUrl || !connected) return;
+
+    document.getElementById('status-dot').className = 'status-dot generating';
+    document.getElementById('status-label').textContent = 'Resetting...';
+
+    // Deselect templates
+    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+
+    try {
+        const resp = await fetch(serverUrl + '/api/reset', { method: 'POST' });
+        if (!resp.ok) throw new Error('Reset failed');
+
+        refreshTiles();
+
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        updateCachedCount();
+    } catch (e) {
+        console.error('Reset failed:', e);
+    }
+}
+
+function refreshTiles() {
+    if (tileLayer) {
+        // Remove and re-add to force a full reload
+        map.removeLayer(tileLayer);
+        createTileLayer(serverUrl);
+    }
+    // Reset view to root
+    map.setView([-128, 128], 0);
+}
+
+function randomTemplate() {
+    const cards = document.querySelectorAll('.template-card');
+    if (cards.length === 0) return;
+    const idx = Math.floor(Math.random() * cards.length);
+    const name = cards[idx].dataset.name;
+    selectTemplate(name);
+}
+
+// ============================================================
+// Config modal
+// ============================================================
+
+function showConfigModal() {
+    document.getElementById('config-url').value = serverUrl;
+    document.getElementById('config-modal').classList.add('show');
+}
+
+function hideConfigModal() {
+    document.getElementById('config-modal').classList.remove('show');
+}
+
+function saveConfig() {
+    const url = document.getElementById('config-url').value.trim().replace(/\/+$/, '');
+    if (!url) return;
+    serverUrl = url;
+    localStorage.setItem('mapExplorerServerUrl', url);
+    hideConfigModal();
+    connectToServer();
+}
+
+// ============================================================
+// Event listeners
+// ============================================================
+
+document.getElementById('btn-new-world').addEventListener('click', newWorld);
+document.getElementById('btn-random-template').addEventListener('click', randomTemplate);
+document.getElementById('server-config').addEventListener('click', showConfigModal);
+document.getElementById('config-cancel').addEventListener('click', hideConfigModal);
+document.getElementById('config-save').addEventListener('click', saveConfig);
+document.getElementById('config-url').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') saveConfig();
+});
+document.getElementById('config-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) hideConfigModal();
+});
+
+// Map events
+map.on('zoom', () => {
+    updateZoomDisplay();
+    updateScaleBar();
+});
+map.on('zoomend', () => {
+    updateZoomDisplay();
+    updateScaleBar();
+    updateCachedCount();
+});
+map.on('moveend', () => {
+    updateCachedCount();
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === 'n' || e.key === 'N') newWorld();
+    if (e.key === 'r' || e.key === 'R') randomTemplate();
+    if (e.key === 'Escape') hideConfigModal();
+});
+
+// ============================================================
+// Initialize
+// ============================================================
+
+updateZoomDisplay();
+updateScaleBar();
+connectToServer();
+
+// Periodic status check
+setInterval(updateCachedCount, 10000);
 </script>
 </body>
 </html>
