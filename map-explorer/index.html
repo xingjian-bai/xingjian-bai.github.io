@@ -332,6 +332,143 @@ body {
 .leaflet-tile-loading {
     background: rgba(255,255,255,0.03);
 }
+
+/* Help button */
+#help-btn {
+    position: fixed;
+    bottom: 16px; right: 80px;
+    z-index: 1000;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(15,17,23,0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #aaa;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+#help-btn:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.25); }
+
+/* Help overlay */
+#help-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 2500;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+}
+#help-overlay.show { display: flex; }
+
+#help-panel {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 28px 32px;
+    max-width: 520px;
+    width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    color: #d0d0d8;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+#help-panel h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 4px;
+}
+#help-panel .help-sub {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 18px;
+}
+
+#help-panel h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #a0c4ff;
+    margin: 16px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#help-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+}
+#help-panel td {
+    padding: 5px 0;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+#help-panel td:first-child {
+    width: 44%;
+    color: #888;
+    padding-right: 12px;
+}
+#help-panel td:last-child {
+    color: #e0e0e0;
+}
+#help-panel kbd {
+    display: inline-block;
+    padding: 1px 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 11px;
+    color: #ccc;
+    white-space: nowrap;
+}
+#help-panel .help-section-phone { display: none; }
+#help-panel .help-section-desktop { display: block; }
+
+/* On touch devices, swap visibility */
+@media (hover: none) and (pointer: coarse) {
+    #help-panel .help-section-phone { display: block; }
+    #help-panel .help-section-desktop { display: block; }
+}
+
+#help-panel .help-close-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+#help-panel .help-footer {
+    font-size: 11px;
+    color: #666;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    #info-panel { max-width: 200px; }
+    .info-box { padding: 8px 12px; font-size: 12px; }
+    .info-title { font-size: 14px; }
+    .btn { padding: 6px 10px; font-size: 11px; }
+    #template-panel { gap: 4px; bottom: 8px; left: 8px; }
+    .template-card img { width: 48px; height: 48px; }
+    .template-card .template-name { font-size: 9px; max-width: 48px; }
+    #zoom-info { top: 8px; right: 8px; padding: 8px 10px; }
+    #zoom-info .zoom-level { font-size: 18px; }
+    #help-panel { padding: 20px 22px; }
+    #help-btn { bottom: 10px; right: 60px; }
+    #scale-bar { bottom: 12px; right: 12px; }
+}
 </style>
 </head>
 <body>
@@ -396,6 +533,59 @@ body {
 <div id="scale-bar">
     <div id="scale-bar-text">1 km</div>
     <div id="scale-bar-line" style="width: 60px;"></div>
+</div>
+
+<!-- Help button -->
+<button id="help-btn" title="Navigation help (?)" aria-label="Help">?</button>
+
+<!-- Help overlay -->
+<div id="help-overlay">
+<div id="help-panel">
+    <h2>Navigation Guide</h2>
+    <div class="help-sub">Explore an AI-generated city across 8 zoom levels (z10 &ndash; z17)</div>
+
+    <h3>Desktop &mdash; Mouse / Trackpad</h3>
+    <table>
+        <tr><td>Pan / move</td><td>Click and drag</td></tr>
+        <tr><td>Zoom in / out</td><td>Scroll wheel or pinch on trackpad</td></tr>
+        <tr><td>Quick zoom in</td><td>Double-click</td></tr>
+    </table>
+
+    <h3>Desktop &mdash; Keyboard</h3>
+    <table>
+        <tr><td><kbd>+</kbd> / <kbd>=</kbd></td><td>Zoom in one step</td></tr>
+        <tr><td><kbd>-</kbd> / <kbd>_</kbd></td><td>Zoom out one step</td></tr>
+        <tr><td><kbd>Arrow keys</kbd></td><td>Pan the map</td></tr>
+        <tr><td><kbd>N</kbd></td><td>New random world</td></tr>
+        <tr><td><kbd>R</kbd></td><td>Random city template</td></tr>
+        <tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Close dialogs</td></tr>
+    </table>
+
+    <h3>Phone / Tablet &mdash; Touch</h3>
+    <table>
+        <tr><td>Pan / move</td><td>Drag with one finger</td></tr>
+        <tr><td>Zoom in / out</td><td>Pinch with two fingers</td></tr>
+        <tr><td>Quick zoom in</td><td>Double-tap</td></tr>
+    </table>
+
+    <h3>How It Works</h3>
+    <table>
+        <tr><td>Generation</td><td>Tiles are generated on-the-fly by a diffusion model running on a GPU. The first visit to a new area may take 10&ndash;20 seconds.</td></tr>
+        <tr><td>Caching</td><td>Once generated, tiles are cached &mdash; revisiting is instant.</td></tr>
+        <tr><td>City templates</td><td>Click a city thumbnail at the bottom to start from a real city layout.</td></tr>
+        <tr><td>Models</td><td>Use the dropdown in the top-left panel to switch between trained models.</td></tr>
+    </table>
+
+    <div class="help-footer">
+        Built with a JiT flow-matching diffusion model trained on OpenStreetMap data.<br>
+        Each zoom level generates 4 child tiles from the parent, forming a quadtree of infinite detail.
+    </div>
+
+    <div class="help-close-row">
+        <button class="btn" id="help-close" style="background: rgba(74,222,128,0.12); border-color: rgba(74,222,128,0.25);">Got it</button>
+    </div>
+</div>
 </div>
 
 <!-- Server config -->
@@ -910,12 +1100,31 @@ map.on('moveend', () => {
     updateCachedCount();
 });
 
+// ============================================================
+// Help overlay
+// ============================================================
+
+function toggleHelp() {
+    const overlay = document.getElementById('help-overlay');
+    overlay.classList.toggle('show');
+}
+document.getElementById('help-btn').addEventListener('click', toggleHelp);
+document.getElementById('help-close').addEventListener('click', toggleHelp);
+document.getElementById('help-overlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) toggleHelp();
+});
+
 // Keyboard shortcuts
 document.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT') return;
+    if (e.key === '?' || e.key === '/') { toggleHelp(); e.preventDefault(); return; }
+    if (e.key === 'Escape') {
+        if (document.getElementById('help-overlay').classList.contains('show')) { toggleHelp(); return; }
+        hideConfigModal();
+        return;
+    }
     if (e.key === 'n' || e.key === 'N') newWorld();
     if (e.key === 'r' || e.key === 'R') randomTemplate();
-    if (e.key === 'Escape') hideConfigModal();
     // Zoom: +/= to zoom in, - to zoom out (0.2 per step)
     if (e.key === '=' || e.key === '+') { map.zoomIn(0.2); e.preventDefault(); }
     if (e.key === '-' || e.key === '_') { map.zoomOut(0.2); e.preventDefault(); }
@@ -968,6 +1177,12 @@ connectToServer();
 
 // Periodic status check
 setInterval(updateCachedCount, 10000);
+
+// Show help on first visit
+if (!localStorage.getItem('mapExplorerHelpSeen')) {
+    toggleHelp();
+    localStorage.setItem('mapExplorerHelpSeen', '1');
+}
 </script>
 </body>
 </html>
