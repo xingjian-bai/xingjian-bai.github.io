@@ -295,6 +295,39 @@ body {
     background: rgba(255,255,255,0.12) !important;
 }
 
+/* Model selector */
+#model-selector {
+    margin-top: 8px;
+}
+
+#model-select {
+    width: 100%;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    color: #e0e0e0;
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+}
+
+#model-select:hover { border-color: rgba(255,255,255,0.2); }
+#model-select:focus { border-color: rgba(100,180,255,0.5); }
+#model-select option { background: #1a1d27; color: #e0e0e0; }
+
+.model-switching {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 /* Tile loading indicator */
 .leaflet-tile-loading {
     background: rgba(255,255,255,0.03);
@@ -325,11 +358,16 @@ body {
         </div>
         <div class="info-row">
             <span class="info-label">Model</span>
-            <span class="info-value">JiT-L/16 (460M)</span>
+            <span class="info-value" id="model-display">Loading...</span>
         </div>
         <div class="info-row">
             <span class="info-label">Cached tiles</span>
             <span class="info-value" id="cached-count">0</span>
+        </div>
+        <div id="model-selector">
+            <select id="model-select" title="Switch model">
+                <option value="">Loading models...</option>
+            </select>
         </div>
         <div class="btn-row">
             <button class="btn" id="btn-new-world" title="Generate a new random city (clears all tiles)">
@@ -404,8 +442,8 @@ const map = L.map('map', {
     crs: L.CRS.Simple,
     minZoom: 0,
     maxZoom: LEAFLET_MAX_ZOOM,
-    zoomSnap: 0.25,    // 4 steps per integer zoom level
-    zoomDelta: 0.25,   // Scroll wheel / pinch step = 0.25
+    zoomSnap: 0.2,     // 5 steps per integer zoom level
+    zoomDelta: 0.2,    // Scroll wheel / pinch step = 0.2
     wheelPxPerZoomLevel: 120, // Scroll sensitivity
     zoomAnimation: true,
     fadeAnimation: true,
@@ -551,8 +589,14 @@ async function connectToServer() {
         // Create tile layer
         createTileLayer(serverUrl);
 
-        // Load templates
+        // Load templates and models
         loadTemplates();
+        loadModels();
+
+        // Update model display from status
+        if (data.current_model_display) {
+            document.getElementById('model-display').textContent = data.current_model_display;
+        }
 
         // Hide loading
         setTimeout(() => {
@@ -649,8 +693,12 @@ async function selectTemplate(name) {
         });
         if (!resp.ok) throw new Error('Set root failed: ' + resp.status);
 
-        // Force reload all tiles
-        refreshTiles();
+        // Force reload all tiles and jump to root zoom
+        if (tileLayer) {
+            map.removeLayer(tileLayer);
+            createTileLayer(serverUrl);
+        }
+        map.setView([-128, 128], 0);
 
         document.getElementById('status-dot').className = 'status-dot connected';
         document.getElementById('status-label').textContent = 'Connected';
@@ -661,6 +709,81 @@ async function selectTemplate(name) {
         document.getElementById('status-label').textContent = 'Error';
     }
 }
+
+// ============================================================
+// Model selector
+// ============================================================
+
+async function loadModels() {
+    if (!serverUrl) return;
+    try {
+        const resp = await fetch(serverUrl + '/api/models');
+        if (!resp.ok) return;
+        const data = await resp.json();
+
+        const select = document.getElementById('model-select');
+        select.innerHTML = '';
+
+        for (const m of data.models) {
+            const opt = document.createElement('option');
+            opt.value = m.name;
+            opt.textContent = m.display;
+            if (m.active) opt.selected = true;
+            select.appendChild(opt);
+        }
+
+        // Update display
+        const current = data.models.find(m => m.active);
+        if (current) {
+            document.getElementById('model-display').textContent = current.display;
+        }
+    } catch (e) {
+        console.warn('Failed to load models:', e);
+    }
+}
+
+async function switchModel(modelName) {
+    if (!serverUrl || !connected || !modelName) return;
+
+    const select = document.getElementById('model-select');
+    select.classList.add('model-switching');
+    document.getElementById('status-dot').className = 'status-dot generating';
+    document.getElementById('status-label').textContent = 'Switching model...';
+
+    try {
+        const resp = await fetch(serverUrl + '/api/switch_model?model=' + encodeURIComponent(modelName), {
+            method: 'POST',
+            signal: AbortSignal.timeout(120000),  // 2 min timeout for model loading
+        });
+        if (!resp.ok) {
+            const err = await resp.text();
+            throw new Error(err);
+        }
+        const data = await resp.json();
+
+        // Update display
+        document.getElementById('model-display').textContent = data.display || modelName;
+
+        // Reload tiles with new model
+        refreshTiles();
+
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        updateCachedCount();
+    } catch (e) {
+        console.error('Model switch failed:', e);
+        document.getElementById('status-dot').className = 'status-dot disconnected';
+        document.getElementById('status-label').textContent = 'Switch failed';
+        // Revert select to previous model
+        loadModels();
+    } finally {
+        select.classList.remove('model-switching');
+    }
+}
+
+document.getElementById('model-select').addEventListener('change', (e) => {
+    switchModel(e.target.value);
+});
 
 // ============================================================
 // Actions
@@ -765,9 +888,9 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'n' || e.key === 'N') newWorld();
     if (e.key === 'r' || e.key === 'R') randomTemplate();
     if (e.key === 'Escape') hideConfigModal();
-    // Zoom: +/= to zoom in, - to zoom out (0.25 per step)
-    if (e.key === '=' || e.key === '+') { map.zoomIn(0.25); e.preventDefault(); }
-    if (e.key === '-' || e.key === '_') { map.zoomOut(0.25); e.preventDefault(); }
+    // Zoom: +/= to zoom in, - to zoom out (0.2 per step)
+    if (e.key === '=' || e.key === '+') { map.zoomIn(0.2); e.preventDefault(); }
+    if (e.key === '-' || e.key === '_') { map.zoomOut(0.2); e.preventDefault(); }
 });
 
 // ============================================================
