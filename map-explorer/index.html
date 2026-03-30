@@ -404,8 +404,8 @@ const map = L.map('map', {
     crs: L.CRS.Simple,
     minZoom: 0,
     maxZoom: LEAFLET_MAX_ZOOM,
-    zoomSnap: 0,       // Smooth fractional zoom
-    zoomDelta: 1,      // Scroll wheel steps
+    zoomSnap: 0.25,    // 4 steps per integer zoom level
+    zoomDelta: 0.25,   // Scroll wheel / pinch step = 0.25
     wheelPxPerZoomLevel: 120, // Scroll sensitivity
     zoomAnimation: true,
     fadeAnimation: true,
@@ -765,6 +765,9 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'n' || e.key === 'N') newWorld();
     if (e.key === 'r' || e.key === 'R') randomTemplate();
     if (e.key === 'Escape') hideConfigModal();
+    // Zoom: +/= to zoom in, - to zoom out (0.25 per step)
+    if (e.key === '=' || e.key === '+') { map.zoomIn(0.25); e.preventDefault(); }
+    if (e.key === '-' || e.key === '_') { map.zoomOut(0.25); e.preventDefault(); }
 });
 
 // ============================================================
