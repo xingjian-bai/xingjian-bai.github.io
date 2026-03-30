@@ -26,7 +26,7 @@ body {
 
 /* Dark Leaflet tiles */
 .leaflet-container { background: #0f1117; }
-.leaflet-tile { image-rendering: pixelated; image-rendering: crisp-edges; }
+.leaflet-tile { image-rendering: auto; }
 
 /* Hide default Leaflet attribution */
 .leaflet-control-attribution { display: none !important; }
@@ -425,19 +425,24 @@ body {
 const ZOOM_MIN_ACTUAL = 10;  // z10 = root
 const ZOOM_MAX_ACTUAL = 17;  // z17 = most detailed
 const LEAFLET_MAX_ZOOM = ZOOM_MAX_ACTUAL - ZOOM_MIN_ACTUAL;  // 7
-const TILE_SIZE = 256;
 const EARTH_CIRCUMFERENCE_KM = 40075;
 const REF_LAT = 42;  // Reference latitude for scale calculation
 const REF_COS_LAT = Math.cos(REF_LAT * Math.PI / 180);
 
+// Display tile size: one tile fills the viewport at integer zoom
+// Use the shorter viewport dimension so the tile always fits on screen
+const DISPLAY_TILE_SIZE = Math.min(window.innerWidth, window.innerHeight);
+
 // Server URL — stored in localStorage, default to current tunnel
 let serverUrl = localStorage.getItem('mapExplorerServerUrl') || 'https://quote-poetry-colony-education.trycloudflare.com';
+
+// World bounds in CRS coordinates (one root tile = DISPLAY_TILE_SIZE units)
+const WORLD_BOUNDS = [[-DISPLAY_TILE_SIZE, 0], [0, DISPLAY_TILE_SIZE]];
 
 // ============================================================
 // Leaflet Map Setup
 // ============================================================
 
-// Custom CRS: L.CRS.Simple but with tile coordinates matching our system
 const map = L.map('map', {
     crs: L.CRS.Simple,
     minZoom: 0,
@@ -447,19 +452,21 @@ const map = L.map('map', {
     wheelPxPerZoomLevel: 120, // Scroll sensitivity
     zoomAnimation: true,
     fadeAnimation: true,
-    markerZoomAnimation: true,
     attributionControl: false,
     zoomControl: false,
+    // Touch & mobile
+    touchZoom: true,
+    inertia: true,
+    inertiaDeceleration: 3000,
+    inertiaMaxSpeed: 1500,
+    bounceAtZoomLimits: false,
 });
 
 // Add zoom control to top-right
 L.control.zoom({ position: 'topright' }).addTo(map);
 
-// Set initial view: center of z10 root tile
-// In L.CRS.Simple with 256px tiles:
-// zoom 0: 1 tile, world is [0, 256] x [-256, 0] (lng, lat)
-// We center on the middle of the root tile
-map.setView([-128, 128], 0);
+// Initial view: center on root tile, zoom 0 = one tile fills viewport
+map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
 
 // Custom tile layer that loads from our server
 let tileLayer = null;
@@ -472,11 +479,14 @@ function createTileLayer(url) {
         minZoom: 0,
         maxZoom: LEAFLET_MAX_ZOOM,
         maxNativeZoom: LEAFLET_MAX_ZOOM,
-        tileSize: TILE_SIZE,
+        tileSize: DISPLAY_TILE_SIZE,     // One tile fills viewport at integer zoom
         noWrap: true,
-        bounds: [[-256, 0], [0, 256]],  // Only show tiles within our world
-        errorTileUrl: '',  // Don't show error tiles
+        bounds: WORLD_BOUNDS,
+        errorTileUrl: '',
         className: 'ai-tile',
+        keepBuffer: 4,                   // Keep off-screen tiles as fallback during zoom
+        updateWhenZooming: false,        // Don't fetch new tiles mid-zoom animation
+        updateWhenIdle: true,            // Fetch when user stops interacting
     });
     tileLayer.addTo(map);
 
@@ -492,6 +502,27 @@ function createTileLayer(url) {
     });
     tileLayer.on('tileerror', (e) => {
         console.warn('Tile error:', e.coords, e.error);
+    });
+
+    // Prefetch sibling tiles when a tile loads (all 4 children of the same parent)
+    // This ensures all quadrants are generated even if only 1-2 are visible
+    tileLayer.on('tileload', (e) => {
+        const {z, x, y} = e.coords;
+        if (z <= 0) return;  // Root has no siblings
+        // Find parent and siblings
+        const px = Math.floor(x / 2), py = Math.floor(y / 2);
+        const siblings = [
+            [z, px * 2,     py * 2],
+            [z, px * 2 + 1, py * 2],
+            [z, px * 2,     py * 2 + 1],
+            [z, px * 2 + 1, py * 2 + 1],
+        ];
+        for (const [sz, sx, sy] of siblings) {
+            if (sx === x && sy === y) continue;  // Skip self
+            // Low-priority background fetch to pre-generate
+            fetch(`${serverUrl}/tile/${sz}/${sx}/${sy}.png`, { priority: 'low' })
+                .catch(() => {});
+        }
     });
 }
 
@@ -509,10 +540,10 @@ function updateScaleBar() {
     const kmTile = kmPerTile(actualZoom);
 
     // Pixels per km at current zoom
-    // At integer zoom z, each tile = 256px = kmPerTile(z+10) km
-    // At fractional zoom, Leaflet scales tiles
+    // At integer zoom z, each tile = DISPLAY_TILE_SIZE px = kmPerTile(z+10) km
+    // At fractional zoom, Leaflet scales tiles by 2^(fractional part)
     const scale = Math.pow(2, zoom - Math.floor(zoom));
-    const pxPerKm = (TILE_SIZE * scale) / kmPerTile(Math.floor(zoom) + ZOOM_MIN_ACTUAL);
+    const pxPerKm = (DISPLAY_TILE_SIZE * scale) / kmPerTile(Math.floor(zoom) + ZOOM_MIN_ACTUAL);
 
     // Find a nice scale bar length
     const targetPx = 100;  // target pixel width
@@ -698,7 +729,7 @@ async function selectTemplate(name) {
             map.removeLayer(tileLayer);
             createTileLayer(serverUrl);
         }
-        map.setView([-128, 128], 0);
+        map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
 
         document.getElementById('status-dot').className = 'status-dot connected';
         document.getElementById('status-label').textContent = 'Connected';
@@ -818,8 +849,8 @@ function refreshTiles() {
         map.removeLayer(tileLayer);
         createTileLayer(serverUrl);
     }
-    // Reset view to root
-    map.setView([-128, 128], 0);
+    // Reset view to root tile center
+    map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
 }
 
 function randomTemplate() {
@@ -894,9 +925,46 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============================================================
+// URL hash state (shareable positions)
+// ============================================================
+
+function saveHashState() {
+    const c = map.getCenter();
+    const z = map.getZoom();
+    // Normalize coordinates to tile-relative (0-1 range per tile at current zoom)
+    const norm_lat = c.lat / (-DISPLAY_TILE_SIZE);
+    const norm_lng = c.lng / DISPLAY_TILE_SIZE;
+    window.location.hash = `${z.toFixed(1)}/${norm_lat.toFixed(4)}/${norm_lng.toFixed(4)}`;
+}
+
+function loadHashState() {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return false;
+    const parts = hash.split('/');
+    if (parts.length !== 3) return false;
+    const [z, norm_lat, norm_lng] = parts.map(Number);
+    if (isNaN(z) || isNaN(norm_lat) || isNaN(norm_lng)) return false;
+    const lat = norm_lat * (-DISPLAY_TILE_SIZE);
+    const lng = norm_lng * DISPLAY_TILE_SIZE;
+    map.setView([lat, lng], z);
+    return true;
+}
+
+// Save state on move/zoom (debounced)
+let hashTimeout = null;
+map.on('moveend', () => {
+    clearTimeout(hashTimeout);
+    hashTimeout = setTimeout(saveHashState, 300);
+});
+
+// ============================================================
 // Initialize
 // ============================================================
 
+// Restore position from URL hash, or start at root
+if (!loadHashState()) {
+    map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
+}
 updateZoomDisplay();
 updateScaleBar();
 connectToServer();
