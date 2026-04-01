@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-04-01T14:50:18.050939",
+  "last_sync": "2026-04-01T15:00:29.613963",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         2918862,
         2918864
       ],
-      "last_seen": "2026-04-01T14:50:03.844998",
+      "last_seen": "2026-04-01T15:00:05.744319",
       "paused": false
     },
     "zwang43b": {
@@ -24,7 +24,7 @@
         2918873,
         2918875
       ],
-      "last_seen": "2026-04-01T14:50:03.845046",
+      "last_seen": "2026-04-01T15:00:05.744352",
       "paused": false
     }
   },
@@ -44,17 +44,6 @@
     }
   ],
   "reservations": [
-    {
-      "date": "2026-04-01",
-      "time": "15:00",
-      "court": "Bubble Court 1",
-      "activity": "Tennis Reservation (Bubble Court 1)",
-      "weekday": "Wed",
-      "cancel_id": "840107",
-      "user": "zwang43b",
-      "reservation_id": "zwang43b_2026-04-01_1500",
-      "booked_at": "2026-03-30T06:00:03.625328-04:00"
-    },
     {
       "date": "2026-04-02",
       "time": "14:00",
