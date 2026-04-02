@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-04-02T19:20:18.555073",
+  "last_sync": "2026-04-02T19:30:20.390962",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         2918862,
         2918864
       ],
-      "last_seen": "2026-04-02T19:20:04.431944",
+      "last_seen": "2026-04-02T19:30:05.812004",
       "paused": false
     },
     "zwang43b": {
@@ -24,7 +24,7 @@
         2918873,
         2918875
       ],
-      "last_seen": "2026-04-02T19:20:04.431979",
+      "last_seen": "2026-04-02T19:30:05.812025",
       "paused": false
     }
   },
@@ -1286,13 +1286,6 @@
         "user": "xbai02b",
         "date": "2026-04-05",
         "weekday": "Sunday",
-        "hour": 16,
-        "time": "16:00"
-      },
-      {
-        "user": "xbai02b",
-        "date": "2026-04-05",
-        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
@@ -1309,13 +1302,6 @@
         "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
-      },
-      {
-        "user": "zwang43b",
-        "date": "2026-04-05",
-        "weekday": "Sunday",
-        "hour": 17,
-        "time": "17:00"
       },
       {
         "user": "zwang43b",
@@ -1328,8 +1314,8 @@
         "user": "zwang43b",
         "date": "2026-04-05",
         "weekday": "Sunday",
-        "hour": 16,
-        "time": "16:00"
+        "hour": 17,
+        "time": "17:00"
       }
     ]
   },
