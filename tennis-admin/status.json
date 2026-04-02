@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-04-02T05:50:17.543745",
+  "last_sync": "2026-04-02T06:00:20.275978",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         2918862,
         2918864
       ],
-      "last_seen": "2026-04-02T05:50:03.699817",
+      "last_seen": "2026-04-02T06:00:06.252750",
       "paused": false
     },
     "zwang43b": {
@@ -24,7 +24,7 @@
         2918873,
         2918875
       ],
-      "last_seen": "2026-04-02T05:50:03.699847",
+      "last_seen": "2026-04-02T06:00:06.252772",
       "paused": false
     }
   },
@@ -109,6 +109,26 @@
       "user": "zwang43b",
       "reservation_id": "zwang43b_2026-04-02_1500",
       "booked_at": "2026-03-31T06:00:04.659122-04:00"
+    },
+    {
+      "date": "2026-04-04",
+      "time": "17:00",
+      "court": "Bubble Court 1",
+      "activity": "Tennis Reservation (Bubble Court 1)",
+      "weekday": "Sat",
+      "cancel_id": "841639",
+      "user": "xbai02b",
+      "reservation_id": "xbai02b_2026-04-04_1700"
+    },
+    {
+      "date": "2026-04-04",
+      "time": "17:00",
+      "court": "Bubble Court 4",
+      "activity": "Tennis Reservation (Bubble Court 4)",
+      "weekday": "Sat",
+      "cancel_id": "841670",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-04-04_1700"
     }
   ],
   "bookings": [
@@ -1314,64 +1334,64 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-04-02T06:00:00-04:00",
-    "next_window_display": "2026-04-02 06:00 EDT",
-    "target_date": "2026-04-04",
-    "target_weekday": "Saturday",
+    "next_window": "2026-04-03T06:00:00-04:00",
+    "next_window_display": "2026-04-03 06:00 EDT",
+    "target_date": "2026-04-05",
+    "target_weekday": "Sunday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-04-04",
-        "weekday": "Saturday",
+        "date": "2026-04-05",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-04-04",
-        "weekday": "Saturday",
+        "date": "2026-04-05",
+        "weekday": "Sunday",
         "hour": 16,
         "time": "16:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-04-04",
-        "weekday": "Saturday",
+        "date": "2026-04-05",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-04-04",
-        "weekday": "Saturday",
+        "date": "2026-04-05",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-04",
-        "weekday": "Saturday",
+        "date": "2026-04-05",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-04",
-        "weekday": "Saturday",
+        "date": "2026-04-05",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-04",
-        "weekday": "Saturday",
+        "date": "2026-04-05",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-04",
-        "weekday": "Saturday",
+        "date": "2026-04-05",
+        "weekday": "Sunday",
         "hour": 16,
         "time": "16:00"
       }
