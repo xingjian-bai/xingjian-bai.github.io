@@ -854,13 +854,14 @@ async function updateCachedCount() {
 // ============================================================
 
 const CITY_LABELS = {
+    'beijing': 'Beijing',
+    'rome': 'Rome',
     'boston': 'Boston',
     'paris': 'Paris',
     'london': 'London',
     'tokyo': 'Tokyo',
     'amsterdam': 'Amsterdam',
     'berlin': 'Berlin',
-    'rome': 'Rome',
     'barcelona': 'Barcelona',
 };
 
@@ -1174,17 +1175,18 @@ if (!loadHashState()) {
 updateZoomDisplay();
 updateScaleBar();
 
-// Auto-discover server URL from server.json, then connect
+// Auto-discover server URL from server.json (always, to pick up tunnel rotations)
 (async () => {
-    if (!serverUrl) {
-        try {
-            const resp = await fetch('/map-explorer/server.json', { cache: 'no-cache' });
-            if (resp.ok) {
-                const cfg = await resp.json();
-                if (cfg.api) serverUrl = cfg.api.replace(/\/+$/, '');
+    try {
+        const resp = await fetch('/map-explorer/server.json', { cache: 'no-cache' });
+        if (resp.ok) {
+            const cfg = await resp.json();
+            if (cfg.api) {
+                serverUrl = cfg.api.replace(/\/+$/, '');
+                localStorage.setItem('mapExplorerServerUrl', serverUrl);
             }
-        } catch (e) { /* fall through to manual config */ }
-    }
+        }
+    } catch (e) { /* fall through to localStorage value or manual config */ }
     connectToServer();
 })();
 
