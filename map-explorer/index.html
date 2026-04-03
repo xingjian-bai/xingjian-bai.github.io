@@ -203,55 +203,21 @@ body {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* Connect dialog */
-#connect-dialog {
-    display: none;
+/* Connect overlay (shown during auto-connect) */
+#connect-overlay {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     z-index: 3000;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(6px);
+    background: rgba(15,17,23,0.95);
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 16px;
+    transition: opacity 0.4s;
 }
-#connect-dialog.show { display: flex; }
-
-#connect-box {
-    background: #1a1d27;
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 14px;
-    padding: 28px 32px;
-    max-width: 480px;
-    width: 90vw;
-    text-align: center;
-}
-#connect-box h2 { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-#connect-box p { font-size: 12px; color: #888; margin-bottom: 16px; }
-#connect-box input {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 8px;
-    background: rgba(255,255,255,0.05);
-    color: #e0e0e0;
-    font-size: 13px;
-    font-family: monospace;
-    margin-bottom: 12px;
-}
-#connect-box input:focus { outline: none; border-color: #648cff; }
-#connect-box button {
-    padding: 10px 24px;
-    border: none;
-    border-radius: 8px;
-    background: #648cff;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s;
-}
-#connect-box button:hover { background: #5278cc; }
-#connect-box .error { color: #ef4444; font-size: 12px; margin-top: 8px; display: none; }
+#connect-overlay.hidden { opacity: 0; pointer-events: none; }
+#connect-msg { color: #888; font-size: 14px; }
 
 /* Help overlay */
 #help-overlay {
@@ -369,15 +335,10 @@ body {
     <div id="loading-text">Generating tiles...</div>
 </div>
 
-<!-- Connect dialog -->
-<div id="connect-dialog" class="show">
-<div id="connect-box">
-    <h2>Map Explorer</h2>
-    <p>Enter the GPU server URL (Cloudflare tunnel or direct)</p>
-    <input type="text" id="server-url-input" placeholder="https://xxx.trycloudflare.com" />
-    <button onclick="connectToServer()">Connect</button>
-    <div class="error" id="connect-error"></div>
-</div>
+<!-- Connect overlay (only shown if auto-connect fails) -->
+<div id="connect-overlay">
+    <div class="spinner"></div>
+    <div id="connect-msg">Connecting to GPU server...</div>
 </div>
 
 <!-- Help overlay -->
@@ -462,36 +423,25 @@ function setTileLayer() {
 }
 
 // ============================================================
-// Connection
+// Connection — fully automatic, no user input needed
 // ============================================================
-async function connectToServer() {
-    const input = document.getElementById('server-url-input');
-    const errorEl = document.getElementById('connect-error');
-    let url = input.value.trim().replace(/\/+$/, '');
+const basePath = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');
+let statsInterval = null;
 
-    if (!url) { errorEl.textContent = 'Please enter a URL'; errorEl.style.display = 'block'; return; }
+async function tryConnect(url) {
+    const resp = await fetch(url + '/api/status', { signal: AbortSignal.timeout(8000) });
+    if (!resp.ok) throw new Error('Server returned ' + resp.status);
+    return await resp.json();
+}
 
-    errorEl.style.display = 'none';
-    setStatus('connecting');
-
-    try {
-        const resp = await fetch(url + '/api/status', { signal: AbortSignal.timeout(8000) });
-        if (!resp.ok) throw new Error('Server returned ' + resp.status);
-        const data = await resp.json();
-
-        API_BASE = url;
-        localStorage.setItem('mapExplorerApi', url);
-
-        document.getElementById('connect-dialog').classList.remove('show');
-        setStatus('connected');
-        setTileLayer();
-        refreshStats();
-        setInterval(refreshStats, 5000);
-    } catch (e) {
-        errorEl.textContent = 'Cannot connect: ' + e.message;
-        errorEl.style.display = 'block';
-        setStatus('disconnected');
-    }
+async function connectTo(url) {
+    API_BASE = url;
+    localStorage.setItem('mapExplorerApi', url);
+    setStatus('connected');
+    setTileLayer();
+    refreshStats();
+    if (!statsInterval) statsInterval = setInterval(refreshStats, 5000);
+    document.getElementById('connect-overlay').classList.add('hidden');
 }
 
 function setStatus(state) {
@@ -501,17 +451,57 @@ function setStatus(state) {
     text.textContent = state;
 }
 
-// Auto-connect from saved URL or query param
-(function autoConnect() {
-    const params = new URLSearchParams(window.location.search);
-    const paramApi = params.get('api');
-    const savedApi = localStorage.getItem('mapExplorerApi');
-    const url = paramApi || savedApi || '';
+function setConnectMsg(msg) {
+    document.getElementById('connect-msg').textContent = msg;
+}
 
-    if (url) {
-        document.getElementById('server-url-input').value = url;
-        connectToServer();
+// Auto-connect: try server.json discovery → cached URL → query param
+(async function autoConnect() {
+    setStatus('connecting');
+
+    // Sources to try, in order
+    const params = new URLSearchParams(window.location.search);
+    const queryApi = params.get('api');
+    const cachedApi = localStorage.getItem('mapExplorerApi');
+
+    // 1. Try server.json (published by the GPU server on startup)
+    try {
+        setConnectMsg('Discovering GPU server...');
+        const configResp = await fetch(basePath + '/server.json?t=' + Date.now(), { signal: AbortSignal.timeout(5000) });
+        if (configResp.ok) {
+            const config = await configResp.json();
+            if (config.api) {
+                setConnectMsg('Connecting to ' + config.api + '...');
+                await tryConnect(config.api);
+                await connectTo(config.api);
+                return;
+            }
+        }
+    } catch (e) { /* server.json not found or server down, try fallbacks */ }
+
+    // 2. Try query param ?api=...
+    if (queryApi) {
+        try {
+            setConnectMsg('Connecting to ' + queryApi + '...');
+            await tryConnect(queryApi);
+            await connectTo(queryApi);
+            return;
+        } catch (e) { /* fallthrough */ }
     }
+
+    // 3. Try cached URL from last session
+    if (cachedApi) {
+        try {
+            setConnectMsg('Reconnecting to cached server...');
+            await tryConnect(cachedApi);
+            await connectTo(cachedApi);
+            return;
+        } catch (e) { /* fallthrough */ }
+    }
+
+    // All attempts failed
+    setStatus('disconnected');
+    setConnectMsg('GPU server offline. The server needs to be running for on-demand tile generation.');
 })();
 
 // ============================================================
