@@ -695,26 +695,9 @@ function createTileLayer(url) {
         console.warn('Tile error:', e.coords, e.error);
     });
 
-    // Prefetch sibling tiles when a tile loads (all 4 children of the same parent)
-    // This ensures all quadrants are generated even if only 1-2 are visible
-    tileLayer.on('tileload', (e) => {
-        const {z, x, y} = e.coords;
-        if (z <= 0) return;  // Root has no siblings
-        // Find parent and siblings
-        const px = Math.floor(x / 2), py = Math.floor(y / 2);
-        const siblings = [
-            [z, px * 2,     py * 2],
-            [z, px * 2 + 1, py * 2],
-            [z, px * 2,     py * 2 + 1],
-            [z, px * 2 + 1, py * 2 + 1],
-        ];
-        for (const [sz, sx, sy] of siblings) {
-            if (sx === x && sy === y) continue;  // Skip self
-            // Low-priority background fetch to pre-generate
-            fetch(`${serverUrl}/tile/${sz}/${sx}/${sy}.png?v=${tileCacheBuster}`, { priority: 'low' })
-                .catch(() => {});
-        }
-    });
+    // Note: sibling prefetch removed — the server's 9-tile scheme already
+    // generates all 4 children when any one is requested, so siblings are
+    // already cached server-side. Prefetching just wastes connections.
 }
 
 // ============================================================
@@ -899,8 +882,12 @@ async function loadTemplates() {
     }
 }
 
+let _templateSwitching = false;
+
 async function selectTemplate(name) {
     if (!serverUrl || !connected) return;
+    if (_templateSwitching) return;  // Prevent double-clicks during slow API call
+    _templateSwitching = true;
 
     // Visual feedback
     document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
@@ -913,12 +900,14 @@ async function selectTemplate(name) {
     try {
         const resp = await fetch(serverUrl + '/api/set_root?template=' + encodeURIComponent(name), {
             method: 'POST',
+            signal: AbortSignal.timeout(30000),  // 30s timeout
         });
         if (!resp.ok) throw new Error('Set root failed: ' + resp.status);
 
         // Force reload all tiles (new cache buster defeats browser cache)
         tileCacheBuster = Date.now();
         createTileLayer(serverUrl);
+        // Reset view to root — the template is the new z10 tile
         map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
 
         document.getElementById('status-dot').className = 'status-dot connected';
@@ -927,7 +916,9 @@ async function selectTemplate(name) {
     } catch (e) {
         console.error('Set root failed:', e);
         document.getElementById('status-dot').className = 'status-dot disconnected';
-        document.getElementById('status-label').textContent = 'Error';
+        document.getElementById('status-label').textContent = 'Error: ' + e.message;
+    } finally {
+        _templateSwitching = false;
     }
 }
 
