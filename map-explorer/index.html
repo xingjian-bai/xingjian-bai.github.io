@@ -894,6 +894,11 @@ async function selectTemplate(name) {
     const card = document.querySelector(`.template-card[data-name="${name}"]`);
     if (card) card.classList.add('active');
 
+    // Show loading overlay — GT renderer init can take 6-15s
+    const overlay = document.getElementById('loading-overlay');
+    overlay.querySelector('.loading-text').textContent = `Loading ${CITY_LABELS[name] || name}...`;
+    overlay.classList.remove('hidden');
+
     document.getElementById('status-dot').className = 'status-dot generating';
     document.getElementById('status-label').textContent = 'Setting root...';
 
@@ -919,6 +924,8 @@ async function selectTemplate(name) {
         document.getElementById('status-label').textContent = 'Error: ' + e.message;
     } finally {
         _templateSwitching = false;
+        // Hide loading overlay
+        setTimeout(() => overlay.classList.add('hidden'), 300);
     }
 }
 
