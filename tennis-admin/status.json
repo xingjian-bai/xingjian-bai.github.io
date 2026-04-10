@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-04-10T14:30:20.706547",
+  "last_sync": "2026-04-10T14:40:18.626999",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         12082,
         12084
       ],
-      "last_seen": "2026-04-10T14:30:06.085053",
+      "last_seen": "2026-04-10T14:40:04.255660",
       "paused": false
     },
     "zwang43b": {
@@ -24,7 +24,7 @@
         12093,
         12095
       ],
-      "last_seen": "2026-04-10T14:30:06.085095",
+      "last_seen": "2026-04-10T14:40:04.255698",
       "paused": false
     }
   },
@@ -44,17 +44,6 @@
     }
   ],
   "reservations": [
-    {
-      "date": "2026-04-10",
-      "time": "15:00",
-      "court": "Bubble Court 2",
-      "activity": "Tennis Reservation (Bubble Court 2)",
-      "weekday": "Fri",
-      "cancel_id": "845554",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-04-10_1500",
-      "booked_at": "2026-04-08T06:00:04.783212-04:00"
-    },
     {
       "date": "2026-04-10",
       "time": "15:00",
@@ -91,17 +80,6 @@
     {
       "date": "2026-04-12",
       "time": "14:00",
-      "court": "Bubble Court 1",
-      "activity": "Tennis Reservation (Bubble Court 1)",
-      "weekday": "Sun",
-      "cancel_id": "846754",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-04-12_1400",
-      "booked_at": "2026-04-10T06:00:04.978986-04:00"
-    },
-    {
-      "date": "2026-04-12",
-      "time": "14:00",
       "court": "Bubble Court 2",
       "activity": "Tennis Reservation (Bubble Court 2)",
       "weekday": "Sun",
@@ -117,17 +95,6 @@
       "activity": "Tennis Reservation (Bubble Court 1)",
       "weekday": "Sun",
       "cancel_id": "846804",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-04-12_1500",
-      "booked_at": "2026-04-10T06:00:06.310787-04:00"
-    },
-    {
-      "date": "2026-04-12",
-      "time": "15:00",
-      "court": "Bubble Court 3",
-      "activity": "Tennis Reservation (Bubble Court 3)",
-      "weekday": "Sun",
-      "cancel_id": "846819",
       "user": "xbai02b",
       "reservation_id": "xbai02b_2026-04-12_1500",
       "booked_at": "2026-04-10T06:00:06.310787-04:00"
