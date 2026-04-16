@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-04-16T05:50:18.434708",
+  "last_sync": "2026-04-16T06:00:21.268364",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -11,7 +11,7 @@
         12082,
         12084
       ],
-      "last_seen": "2026-04-16T05:50:04.068224",
+      "last_seen": "2026-04-16T06:00:05.866170",
       "paused": false
     },
     "zwang43b": {
@@ -24,7 +24,7 @@
         12093,
         12095
       ],
-      "last_seen": "2026-04-16T05:50:04.068272",
+      "last_seen": "2026-04-16T06:00:05.866221",
       "paused": false
     }
   },
@@ -142,6 +142,16 @@
       "user": "zwang43b",
       "reservation_id": "zwang43b_2026-04-17_1700",
       "booked_at": "2026-04-15T06:00:04.587158-04:00"
+    },
+    {
+      "date": "2026-04-18",
+      "time": "17:00",
+      "court": "Bubble Court 3",
+      "activity": "Tennis Reservation (Bubble Court 3)",
+      "weekday": "Sat",
+      "cancel_id": "851604",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-04-18_1700"
     }
   ],
   "bookings": [
@@ -1347,50 +1357,50 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-04-16T06:00:00-04:00",
-    "next_window_display": "2026-04-16 06:00 EDT",
-    "target_date": "2026-04-18",
-    "target_weekday": "Saturday",
+    "next_window": "2026-04-17T06:00:00-04:00",
+    "next_window_display": "2026-04-17 06:00 EDT",
+    "target_date": "2026-04-19",
+    "target_weekday": "Sunday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-04-18",
-        "weekday": "Saturday",
+        "date": "2026-04-19",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-04-18",
-        "weekday": "Saturday",
+        "date": "2026-04-19",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-04-18",
-        "weekday": "Saturday",
+        "date": "2026-04-19",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-18",
-        "weekday": "Saturday",
+        "date": "2026-04-19",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-18",
-        "weekday": "Saturday",
+        "date": "2026-04-19",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-18",
-        "weekday": "Saturday",
+        "date": "2026-04-19",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       }
