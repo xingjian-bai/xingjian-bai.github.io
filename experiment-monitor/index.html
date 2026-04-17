@@ -518,14 +518,26 @@ function render(d) {
   }
 }
 
+const DASHBOARD_SOURCES = [
+  () => 'https://raw.githubusercontent.com/xingjian-bai/xingjian-bai.github.io/master/experiment-monitor/data/dashboard.json?t=' + Date.now(),
+  () => './data/dashboard.json?t=' + Date.now(),
+];
+
 async function load() {
-  try {
-    const r = await fetch('./data/dashboard.json?t=' + Date.now());
-    const d = await r.json();
-    render(d);
-  } catch (e) {
-    console.error('Failed to load data:', e);
+  let lastErr = null;
+  for (const makeUrl of DASHBOARD_SOURCES) {
+    const url = makeUrl();
+    try {
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error(`HTTP ${r.status} for ${url}`);
+      const d = await r.json();
+      render(d);
+      return;
+    } catch (e) {
+      lastErr = e;
+    }
   }
+  console.error('Failed to load data:', lastErr);
 }
 
 load();
