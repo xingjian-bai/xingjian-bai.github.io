@@ -1,43 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport"                   content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description"                content="Xingjian Bai is a PhD student at MIT and has graduated from Oxford. He is interested in algorithms and machine learning." />
-    <meta name="author"                     content="Xingjian Bai" />
-    <meta property="og:title"               content="Xingjian Bai" />
-    <meta property="og:description"         content="Xingjian Bai is a PhD student at MIT and has graduated from Oxford. He is interested in algorithms and machine learning." />
-    <meta property="og:image"               content="https://xingjian-bai.github.io/img/profile.png" />
-    <meta property="og:image:width"         content="900" />
-    <meta property="og:image:height"        content="1200" />
-    <meta property="twitter:card"           content="summary" />
-    <meta property="twitter:title"          content="Xingjian Bai" />
-    <meta property="twitter:description"    content="Xingjian Bai is a PhD student at MIT and has graduated from Oxford. He is interested in algorithms and machine learning." />
-    <meta property="twitter:image"          content="https://xingjian-bai.github.io/img/profile.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
     <title>Xingjian Bai | 白行健</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <meta name="description" content="Xingjian Bai is a Ph.D. student at MIT and received his degrees from Oxford. His research focuses on understanding and empirically building stronger generative models." />
+    <meta name="author" content="Xingjian Bai" />
 
-    <!-- Custom fonts for this template -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Xingjian Bai | 白行健" />
+    <meta property="og:description" content="Ph.D. student at MIT. Research on understanding and empirically building stronger generative models." />
+    <meta property="og:image" content="https://xingjian-bai.github.io/img/profile_square.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="1200" />
+    <meta property="og:url" content="https://xingjian-bai.github.io/" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Xingjian Bai | 白行健" />
+    <meta name="twitter:description" content="Ph.D. student at MIT. Research on understanding and empirically building stronger generative models." />
+    <meta name="twitter:image" content="https://xingjian-bai.github.io/img/profile_square.png" />
+    <meta name="twitter:site" content="@SimulatedAnneal" />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic" rel="stylesheet" type="text/css" />
-
-    <!-- Plugin CSS -->
-    <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet" />
-
-    <!-- Custom styles for this template -->
-    <link href="css/creative.min.css" rel="stylesheet" />
-    <link href="css/footer.css" rel="stylesheet" />
     <link href="css/academicons.css" rel="stylesheet" />
-    <link rel="shortcut icon" type="image/jpeg" href="img/DALL·E 2023-02-03 15.32.36 - an animal called piggy duck, digital art.png" />
+    <link href="css/site.css" rel="stylesheet" />
 
-
-
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-715QQ7T5Z9"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -47,376 +44,350 @@
     </script>
 </head>
 
-<body id="page-top">
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand js-scroll-trigger" href="#page-top">Xingjian Bai</a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#about">About Me</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#publication">Publications</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#chatting-time">Chatting Time</a>
-                    </li>
-                </ul>
+<body id="top">
+
+<nav class="nav" aria-label="Primary">
+    <div class="inner">
+        <a class="brand" href="#top">Xingjian Bai</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list" aria-label="Toggle navigation">☰</button>
+        <ul id="nav-list">
+            <li><a class="navlink" href="#about">About</a></li>
+            <li><a class="navlink" href="#publications">Publications</a></li>
+            <li><a class="navlink" href="#contact">Contact</a></li>
+            <li>
+                <button class="theme-btn" type="button" data-theme-toggle aria-label="Toggle dark mode">☾</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main class="wrap">
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about" class="section">
+        <div class="hero">
+            <div class="portrait">
+                <img src="img/profile.png" alt="Portrait of Xingjian Bai" width="420" height="420" />
             </div>
-        </div>
-    </nav>
+            <div class="prose">
+                <h1>Xingjian Bai <span class="cn">· 白行健</span></h1>
+                <p class="role">Ph.D. Student · MIT CSAIL</p>
 
-    <section class="container" id="about">
-        <div class="container">
-            <hr class="light my-3" />
-            <div class="row">
-                <div class="col-md-3">
-                    <center>
-                        <img src="img/profile.png" alt="Profile Photo" width="250" height="auto" style="max-width: 95%; border-radius: 1em" />
-                        <p class="mt-3 mb-0">Undergraduate @ Oxford</p>
-                        <p class="mt-0 mb-0">PhD student @ MIT</p>
-                        <p class="mb-1 mb-3">Email: <i> xbai AT mit.edu</i></p>
-                        <div class="footer-social-icons">
-                            <ul class="social-icons">
-                                <li style="padding: 4px"><a href="https://github.com/xingjian-bai" title="GitHub" class="social-icon"> <i class="fa fa-github" style="font-size: 95%;"></i></a></li>
-                                <li style="padding: 4px"> <a href="https://scholar.google.com/citations?user=KCrwdnIAAAAJ&hl=en"     title="Google Scholar" class="social-icon">     <i class="fa ai ai-google-scholar" style="font-size: 95%"></i></a> </li>
-                                <li style="padding: 4px"> <a href="https://twitter.com/SimulatedAnneal" title="Twitter" class="social-icon">     <i class="fa fa-twitter" style="font-size: 95%"></i></a> </li>
-                                <li style="padding: 4px"> <a href="https://xingjian-bai.github.io/files/XingjianBAI.pdf" title="CV" class="social-icon">     <i class="fa ai ai-cv" style="font-size: 95%"></i></a> </li>
-                            </ul>
-                        </div>
-                    </center>
-                </div>
+                <p>Hello! I am a second-year Ph.D. student at MIT, working with Prof. <a href="https://people.csail.mit.edu/kaiming/">Kaiming He</a>. I received my master's and bachelor's degrees in Mathematics and Computer Science from the University of Oxford. My research focuses on understanding and empirically building stronger generative models &mdash; recently, flows, diffusion, and video world models. Over the years, I have also explored theoretical computer science, with a focus on online and learning-augmented algorithms. More broadly, I am drawn to research that is both scientifically impactful and intellectually stimulating.</p>
 
-                <div class="col-md-9">
-                    <h3 class="section-heading text-dark"> <b>Xingjian Bai | 白行健</b> </h3>
-                    <br />
+                <p>During my time at Oxford, I had the privilege of working with Prof. <a href="https://www.maths.ox.ac.uk/people/jan.obloj/">Jan Obloj</a>, Prof. <a href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a>, Prof. <a href="https://chrirupp.github.io/">Christian Rupprecht</a>, and <a href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>. I also spent a rewarding summer at Stanford, collaborating with Prof. <a href="https://jiajunwu.com/">Jiajun Wu</a>, Dr. <a href="http://weiyuliu.com/">Weiyu Liu</a>, and <a href="https://web.stanford.edu/~joycj/">Joy Hsu</a>. Outside of my academic pursuits, I enjoy jogging and playing tennis. I also engage in algorithmic programming competitions.</p>
 
-                    <p class="text-dark mb-2" align="justify">
-                        Hello! I am a first-year Ph.D. student at MIT, supervised by <a class="text-info" href="https://people.csail.mit.edu/kaiming/">Prof. Kaiming He</a>. I received my master's and bachelor's degree in Mathematics and Computer Science from the University of Oxford.
-                        My research has focused on the intersection of classic algorithms and deep learning, covering topics such as physics-inspired generative models and learning-augmented algorithms.
-                        More broadly, I am driven by research that is scientifically impactful and intellectually stimulating.
-                    </p>
+                <p><b>Collaboration.</b> If you would like to discuss anything related to research, startups, or life in general, I would be eager to hear from you. Please feel free to contact me via email or schedule a chat via <a href="#contact">Chatting Time</a>.</p>
 
-                    <br />
-
-                    <p class="text-dark mb-1" align="justify">
-                        During my time at Oxford, I had the privilege of working with
-                        <a class="text-info" href="https://www.maths.ox.ac.uk/people/jan.obloj/"> Prof. Jan Obloj</a>,
-                        <a class="text-info" href="https://www.cs.ox.ac.uk/people/christian.coester/">Prof. Christian
-                            Coester</a>,
-                        <a class="text-info" href="https://chrirupp.github.io/">Prof. Christian Rupprecht</a>, and
-                        <a class="text-info" href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>.
-                        I also spent a rewarding summer at Stanford, collaborating with
-                        <a class="text-info" href="https://jiajunwu.com/">Prof. Jiajun Wu</a>,
-                        <a class="text-info" href="http://weiyuliu.com/">Dr. Weiyu Liu</a>,
-                        and <a class="text-info" href="https://web.stanford.edu/~joycj/">Joy Hsu</a>.
-                        Outside of my academic pursuits, I enjoy jogging and playing tennis. I also engage in algorithmic programming competitions.
-                    </p>
-
-                    <br />
-
-                    <p class="text-dark mb-1" align="justify">
-                        <b>Collaborators</b>: 
-                        I am eager to learn from and collaborate with individuals from diverse backgrounds. 
-                        If you would like to discuss something, I would be grateful to hear from you. 
-                        Please feel free to contact me via email or schedule a time to chat through <a class="text-info" href="#chatting-time">Chatting Time</a>.
-                    </p>
-
-                    <br />
-
-                    <p class="text-dark mb-1" style="font-size: 120%"> <b><u>News: </u></b> </p>
-                    <p class="text-dark mb-1"> Mar 2026: Check out our new preprint, <a class="text-info" href="https://arxiv.org/abs/2603.22283">UNITE</a>, on single-stage joint training of tokenization and latent diffusion. </p>
-                    <p class="text-dark mb-1"> Feb 2026: Our paper, <a class="text-info" href="https://arxiv.org/abs/2602.10095">Causality in Video Diffusers is Separable from Denoising</a>, is accepted at <a class="text-info" href="https://cvpr.thecvf.com/Conferences/2026">CVPR 2026</a>! </p>
-                    <p class="text-dark mb-1"> May 2025: Our paper, <a class="text-info" href="https://arxiv.org/abs/2505.13447">Mean Flows for One-step Generative Modeling</a>, is accepted at <a class="text-info" href="https://neurips.cc/Conferences/2025">NeurIPS 2025</a> as an <a class="text-info" href="https://neurips.cc/virtual/2025/oral/115488">oral presentation</a>. </p>
-                    <p class="text-dark mb-1"> Oct 2024: Our paper, <a class="text-info" href="https://arxiv.org/abs/2404.16176">Unweighted Layered Graph Traversal</a>, is accepted at <a class="text-info" href="https://www.siam.org/conferences-events/siam-conferences/soda25/">SODA'25</a>! </p>
-                    <p class="text-dark mb-1"> Jun 2024: My master's thesis, <em>Efficient and Adaptive Image Generation with Fixed Point Diffusion Models</em>, has won the <a class="text-info" href="https://www.cs.ox.ac.uk/currentstudents/studentprizes">Departmental Prize for the Best Computer Science Project</a>. </p>
-                    <p class="text-dark mb-1"> Feb 2024: Our paper, <a class="text-info" href="https://lukemelas.github.io/fixed-point-diffusion-models/">Fixed Point Diffusion Models</a>, is accepted at <a class="text-info" href="https://cvpr.thecvf.com/">CVPR'24</a>! </p>
-                    
+                <div class="pill-row">
+                    <a class="pill" href="mailto:xbai@mit.edu"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</a>
+                    <a class="pill" href="https://github.com/xingjian-bai"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a>
+                    <a class="pill" href="https://scholar.google.com/citations?user=KCrwdnIAAAAJ&amp;hl=en"><i class="ai ai-google-scholar" aria-hidden="true"></i> Scholar</a>
+                    <a class="pill" href="https://twitter.com/SimulatedAnneal"><i class="fa fa-twitter" aria-hidden="true"></i> X / Twitter</a>
+                    <a class="pill" href="files/XingjianBAI.pdf"><i class="ai ai-cv" aria-hidden="true"></i> CV</a>
+                    <a class="pill" href="#contact"><i class="fa fa-calendar-o" aria-hidden="true"></i> Book a chat</a>
                 </div>
             </div>
         </div>
-        </div>
+
+        <hr />
+
+        <h2 class="section-label">News</h2>
+        <ul class="news" aria-label="Recent news">
+            <li>
+                <span class="date">Mar 2026</span>
+                <span class="body">Check out our new preprint, <a href="https://arxiv.org/abs/2603.22283">UNITE</a>, on single-stage joint training of tokenization and latent diffusion.</span>
+            </li>
+            <li>
+                <span class="date">Feb 2026</span>
+                <span class="body">Our paper, <a href="https://arxiv.org/abs/2602.10095">Causality in Video Diffusers is Separable from Denoising</a>, is accepted at <a href="https://cvpr.thecvf.com/Conferences/2026">CVPR 2026</a>!</span>
+            </li>
+            <li>
+                <span class="date">May 2025</span>
+                <span class="body">Our paper, <a href="https://arxiv.org/abs/2505.13447">Mean Flows for One-step Generative Modeling</a>, is accepted at <a href="https://neurips.cc/Conferences/2025">NeurIPS 2025</a> as an <a href="https://neurips.cc/virtual/2025/oral/115488">oral presentation</a>.</span>
+            </li>
+            <li>
+                <span class="date">Oct 2024</span>
+                <span class="body">Our paper, <a href="https://arxiv.org/abs/2404.16176">Unweighted Layered Graph Traversal</a>, is accepted at <a href="https://www.siam.org/conferences-events/siam-conferences/soda25/">SODA 2025</a>!</span>
+            </li>
+            <li>
+                <span class="date">Jun 2024</span>
+                <span class="body">My master's thesis, <em>Efficient and Adaptive Image Generation with Fixed Point Diffusion Models</em>, has won the <a href="https://www.cs.ox.ac.uk/currentstudents/studentprizes">Departmental Prize for the Best Computer Science Project</a>.</span>
+            </li>
+            <li>
+                <span class="date">Feb 2024</span>
+                <span class="body">Our paper, <a href="https://lukemelas.github.io/fixed-point-diffusion-models/">Fixed Point Diffusion Models</a>, is accepted at <a href="https://cvpr.thecvf.com/">CVPR 2024</a>!</span>
+            </li>
+        </ul>
     </section>
 
-    <section class="p-0" id="publication">
-        <div class="text-center">
-            <hr class="dark" style="max-width: 100%" />
-            <h2 style="font-size: calc(20px + 1.6vw)"><b>PUBLICATIONS</b></h2>
-            <hr class="dark" style="max-width: 100%" />
+    <!-- ==================== PUBLICATIONS ==================== -->
+    <section id="publications" class="section">
+        <div class="pub-header">
+            <h2 class="section-label">Publications</h2>
+            <div class="pub-toggle" role="tablist" aria-label="Publication filter">
+                <button type="button" class="active" data-view="selected" role="tab" aria-selected="true">Selected</button>
+                <button type="button" data-view="all" role="tab" aria-selected="false">All</button>
+            </div>
         </div>
+
+        <ul class="pub-list" data-view="selected">
+
+            <!-- 2026 · UNITE -->
+            <li class="pub selected">
+                <div class="thumb"><img src="projects/26_UNITE/teaser.png" alt="UNITE overview" loading="lazy" /></div>
+                <div class="meta">
+                    <h3><a href="https://xingjianbai.com/unite-tokenization-generation/">End-to-End Training for Unified Tokenization and Latent Denoising (UNITE)</a></h3>
+                    <p class="authors">
+                        <a href="https://shivamduggal4.github.io/">Shivam Duggal</a>*,
+                        <u class="self">Xingjian Bai</u>*,
+                        <a href="https://betterze.github.io/website/">Zongze Wu</a>,
+                        <a href="https://richzhang.github.io/">Richard Zhang</a>,
+                        <a href="https://research.adobe.com/person/eli-shechtman/">Eli Shechtman</a>,
+                        <a href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>,
+                        <a href="https://web.mit.edu/phillipi/">Phillip Isola</a>,
+                        <a href="https://billf.mit.edu/">William T. Freeman</a>
+                    </p>
+                    <p class="note">* equal contribution</p>
+                    <p class="venue"><span class="badge">arXiv 2026</span> <span>MIT · Adobe Research</span></p>
+                    <div class="buttons">
+                        <a class="pill" href="https://xingjianbai.com/unite-tokenization-generation/">page</a>
+                        <a class="pill" href="https://arxiv.org/abs/2603.22283">arXiv</a>
+                        <a class="pill" href="https://github.com/ShivamDuggal4/UNITE-tokenization-generation">code</a>
+                        <a class="pill" href="https://x.com/search?q=from%3ASimulatedAnneal%20(2603.22283%20OR%20UNITE)&amp;src=typed_query&amp;f=live" title="Posts on X from @SimulatedAnneal about this paper">X</a>
+                        <button class="pill" type="button" data-bibtex-toggle="bib-unite" aria-expanded="false">bibtex</button>
+                    </div>
+                    <div class="bibtex" id="bib-unite"><pre>@article{duggal2026unite,
+  title   = {End-to-End Training for Unified Tokenization and Latent Denoising},
+  author  = {Shivam Duggal and Xingjian Bai and Zongze Wu and Richard Zhang and Eli Shechtman and Antonio Torralba and Phillip Isola and William T. Freeman},
+  journal = {arXiv preprint arXiv:2603.22283},
+  year    = {2026}
+}</pre></div>
+                </div>
+            </li>
+
+            <!-- 2026 · Causality in Video Diffusers -->
+            <li class="pub">
+                <div class="thumb"><img src="sparse-causal-diffusion/teaser.png" alt="Separable causal diffusion teaser" loading="lazy" /></div>
+                <div class="meta">
+                    <h3><a href="https://xingjianbai.com/sparse-causal-diffusion/">Causality in Video Diffusers is Separable from Denoising</a></h3>
+                    <p class="authors">
+                        <u class="self">Xingjian Bai</u>,
+                        <a href="https://guandehe.github.io/">Guande He</a>,
+                        <a href="https://zhengqili.github.io/">Zhengqi Li</a>,
+                        <a href="https://research.adobe.com/person/eli-shechtman/">Eli Shechtman</a>,
+                        <a href="https://xunhuang.me/">Xun Huang</a>,
+                        <a href="https://betterze.github.io/website/">Zongze Wu</a>
+                    </p>
+                    <p class="venue"><span class="badge">CVPR 2026</span> <span>IEEE/CVF Conference on Computer Vision and Pattern Recognition</span></p>
+                    <div class="buttons">
+                        <a class="pill" href="https://xingjianbai.com/sparse-causal-diffusion/">page</a>
+                        <a class="pill" href="https://arxiv.org/abs/2602.10095">arXiv</a>
+                        <a class="pill" href="https://github.com/xingjian-bai/sparse-causal-diffusion">code</a>
+                        <a class="pill" href="https://x.com/search?q=from%3ASimulatedAnneal%202602.10095&amp;src=typed_query&amp;f=live" title="Posts on X from @SimulatedAnneal about this paper">X</a>
+                        <button class="pill" type="button" data-bibtex-toggle="bib-scd" aria-expanded="false">bibtex</button>
+                    </div>
+                    <div class="bibtex" id="bib-scd"><pre>@inproceedings{bai2026scd,
+  title     = {Causality in Video Diffusers is Separable from Denoising},
+  author    = {Bai, Xingjian and He, Guande and Li, Zhengqi and Shechtman, Eli and Huang, Xun and Wu, Zongze},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2026}
+}</pre></div>
+                </div>
+            </li>
+
+            <!-- 2025 · Mean Flows -->
+            <li class="pub">
+                <div class="thumb"><img src="projects/25_MeanFlow/teaser.png" alt="Mean Flow illustration" loading="lazy" /></div>
+                <div class="meta">
+                    <h3><a href="https://arxiv.org/abs/2505.13447">Mean Flows for One-step Generative Modeling</a></h3>
+                    <p class="authors">
+                        <a href="https://gsunshine.github.io/">Zhengyang Geng</a>,
+                        <a href="https://lambertae.github.io/">Mingyang Deng</a>,
+                        <u class="self">Xingjian Bai</u>,
+                        <a href="https://zicokolter.com/">J. Zico Kolter</a>,
+                        <a href="https://people.csail.mit.edu/kaiming/">Kaiming He</a>
+                    </p>
+                    <p class="venue"><span class="badge solid">NeurIPS 2025 · Oral</span> <span>CMU · MIT</span></p>
+                    <div class="buttons">
+                        <a class="pill" href="https://neurips.cc/virtual/2025/oral/115488">oral</a>
+                        <a class="pill" href="https://arxiv.org/abs/2505.13447">arXiv</a>
+                        <a class="pill" href="https://github.com/Gsunshine/meanflow">code</a>
+                        <a class="pill" href="https://x.com/search?q=from%3ASimulatedAnneal%20(2505.13447%20OR%20MeanFlow)&amp;src=typed_query&amp;f=live" title="Posts on X from @SimulatedAnneal about this paper">X</a>
+                        <button class="pill" type="button" data-bibtex-toggle="bib-meanflow" aria-expanded="false">bibtex</button>
+                    </div>
+                    <div class="bibtex" id="bib-meanflow"><pre>@inproceedings{geng2025meanflow,
+  title     = {Mean Flows for One-step Generative Modeling},
+  author    = {Geng, Zhengyang and Deng, Mingyang and Bai, Xingjian and Kolter, J. Zico and He, Kaiming},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2025},
+  note      = {Oral},
+  url       = {https://openreview.net/forum?id=uWj4s7rMnR}
+}</pre></div>
+                </div>
+            </li>
+
+            <!-- 2025 · Unweighted Layered Graph Traversal -->
+            <li class="pub selected">
+                <div class="thumb"><img src="projects/24_UnweightedLGT/mario.png" alt="Layered graph traversal illustration" loading="lazy" /></div>
+                <div class="meta">
+                    <h3><a href="https://arxiv.org/abs/2404.16176">Unweighted Layered Graph Traversal</a></h3>
+                    <p class="authors">
+                        <u class="self">Xingjian Bai</u>,
+                        <a href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a>,
+                        <a href="https://romcos.github.io/">Romain Cosson</a>
+                    </p>
+                    <p class="note">alphabetical order</p>
+                    <p class="venue"><span class="badge">SODA 2025</span> <span>Symposium on Discrete Algorithms</span></p>
+                    <div class="buttons">
+                        <a class="pill" href="https://arxiv.org/abs/2404.16176">arXiv</a>
+                        <button class="pill" type="button" data-bibtex-toggle="bib-lgt" aria-expanded="false">bibtex</button>
+                    </div>
+                    <div class="bibtex" id="bib-lgt"><pre>@inproceedings{bai2025lgt,
+  title     = {Unweighted Layered Graph Traversal},
+  author    = {Bai, Xingjian and Coester, Christian and Cosson, Romain},
+  booktitle = {ACM-SIAM Symposium on Discrete Algorithms (SODA)},
+  year      = {2025}
+}</pre></div>
+                </div>
+            </li>
+
+            <!-- 2024 · Fixed Point Diffusion Models -->
+            <li class="pub selected">
+                <div class="thumb"><img src="projects/24_FPDM/architecture.png" alt="Fixed Point Diffusion Models architecture" loading="lazy" /></div>
+                <div class="meta">
+                    <h3><a href="https://lukemelas.github.io/fixed-point-diffusion-models/">Fixed Point Diffusion Models</a></h3>
+                    <p class="authors">
+                        <u class="self">Xingjian Bai</u>*,
+                        <a href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>*
+                    </p>
+                    <p class="note">* equal contribution</p>
+                    <p class="venue"><span class="badge">CVPR 2024</span> <span>IEEE/CVF Conference on Computer Vision and Pattern Recognition</span></p>
+                    <div class="buttons">
+                        <a class="pill" href="https://lukemelas.github.io/fixed-point-diffusion-models/">page</a>
+                        <a class="pill" href="https://arxiv.org/abs/2401.08741">arXiv</a>
+                        <a class="pill" href="https://github.com/lukemelas/fixed-point-diffusion-models">code</a>
+                        <button class="pill" type="button" data-bibtex-toggle="bib-fpdm" aria-expanded="false">bibtex</button>
+                    </div>
+                    <div class="bibtex" id="bib-fpdm"><pre>@inproceedings{bai2024fixed,
+  title     = {Fixed Point Diffusion Models},
+  author    = {Bai, Xingjian and Melas-Kyriazi, Luke},
+  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  year      = {2024}
+}</pre></div>
+                </div>
+            </li>
+
+            <!-- 2024 · Goodhart's Law -->
+            <li class="pub">
+                <div class="thumb"><img src="projects/23_Goodhart/goodhart.png" alt="Goodhart's Law illustration" loading="lazy" /></div>
+                <div class="meta">
+                    <h3><a href="https://arxiv.org/abs/2310.09144">Goodhart's Law in Reinforcement Learning</a></h3>
+                    <p class="authors">
+                        <a href="https://users.ox.ac.uk/~mert4694/">Jacek Karwowski</a>,
+                        <a href="https://openreview.net/profile?id=~Oliver_Hayman1">Oliver Hayman</a>,
+                        <u class="self">Xingjian Bai</u>,
+                        Klaus Kiendlhofer,
+                        <a href="https://www.cs.ox.ac.uk/people/charlie.griffin/">Charlie Griffin</a>,
+                        <a href="https://scholar.google.com/citations?user=GuzLUmQAAAAJ&amp;hl=en">Joar Skalse</a>
+                    </p>
+                    <p class="venue"><span class="badge">ICLR 2024</span> <span>International Conference on Learning Representations</span></p>
+                    <div class="buttons">
+                        <a class="pill" href="https://arxiv.org/abs/2310.09144">arXiv</a>
+                        <button class="pill" type="button" data-bibtex-toggle="bib-goodhart" aria-expanded="false">bibtex</button>
+                    </div>
+                    <div class="bibtex" id="bib-goodhart"><pre>@inproceedings{karwowski2024goodharts,
+  title     = {Goodhart's Law in Reinforcement Learning},
+  author    = {Karwowski, Jacek and Hayman, Oliver and Bai, Xingjian and Kiendlhofer, Klaus and Griffin, Charlie and Skalse, Joar},
+  booktitle = {International Conference on Learning Representations (ICLR)},
+  year      = {2024}
+}</pre></div>
+                </div>
+            </li>
+
+            <!-- 2023 · Sorting with Predictions -->
+            <li class="pub selected">
+                <div class="thumb"><img src="projects/23_Sorting/dirty_clean_algo.png" alt="Sorting with predictions illustration" loading="lazy" /></div>
+                <div class="meta">
+                    <h3><a href="https://arxiv.org/abs/2311.00749">Sorting with Predictions</a></h3>
+                    <p class="authors">
+                        <u class="self">Xingjian Bai</u>,
+                        <a href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a>
+                    </p>
+                    <p class="note">alphabetical order</p>
+                    <p class="venue"><span class="badge">NeurIPS 2023</span> <span>Conference on Neural Information Processing Systems</span></p>
+                    <div class="buttons">
+                        <a class="pill" href="https://arxiv.org/abs/2311.00749">arXiv</a>
+                        <a class="pill" href="projects/23_Sorting/poster.pdf">poster</a>
+                        <a class="pill" href="https://github.com/xingjian-bai/Sorting-with-Predictions">code</a>
+                        <button class="pill" type="button" data-bibtex-toggle="bib-sorting" aria-expanded="false">bibtex</button>
+                    </div>
+                    <div class="bibtex" id="bib-sorting"><pre>@inproceedings{bai2023sorting,
+  title     = {Sorting with Predictions},
+  author    = {Bai, Xingjian and Coester, Christian},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2023}
+}</pre></div>
+                </div>
+            </li>
+
+            <!-- 2023 · Wasserstein DRO -->
+            <li class="pub">
+                <div class="thumb"><img src="projects/23_Robustness/poster.png" alt="Wasserstein DRO poster" loading="lazy" /></div>
+                <div class="meta">
+                    <h3><a href="https://arxiv.org/abs/2306.09844">Wasserstein Distributional Robustness of Neural Networks</a></h3>
+                    <p class="authors">
+                        <u class="self">Xingjian Bai</u>,
+                        <a href="https://openreview.net/profile?id=~Guangyi_He1">Guangyi He</a>,
+                        <a href="https://www.maths.ox.ac.uk/people/yifan.jiang">Yifan Jiang</a>,
+                        <a href="https://www.maths.ox.ac.uk/people/jan.obloj">Jan Obloj</a>
+                    </p>
+                    <p class="note">alphabetical order</p>
+                    <p class="venue"><span class="badge">NeurIPS 2023</span> <span>Conference on Neural Information Processing Systems</span></p>
+                    <div class="buttons">
+                        <a class="pill" href="https://arxiv.org/abs/2306.09844">arXiv</a>
+                        <a class="pill" href="projects/23_Robustness/poster.pdf">poster</a>
+                        <a class="pill" href="https://github.com/JanObloj/W-DRO-Adversarial-Methods">code</a>
+                        <button class="pill" type="button" data-bibtex-toggle="bib-wdro" aria-expanded="false">bibtex</button>
+                    </div>
+                    <div class="bibtex" id="bib-wdro"><pre>@inproceedings{bai2023wasserstein,
+  title     = {Wasserstein Distributional Robustness of Neural Networks},
+  author    = {Bai, Xingjian and He, Guangyi and Jiang, Yifan and Obloj, Jan},
+  booktitle = {Advances in Neural Information Processing Systems (NeurIPS)},
+  year      = {2023}
+}</pre></div>
+                </div>
+            </li>
+
+        </ul>
     </section>
 
-    <section class="container">
-        <div class="container">
-            <ul class="list-unstyled">
-
-                <!-- UNITE: End-to-End Training for Unified Tokenization and Latent Denoising -->
-                <li class="mb-4" style="margin-bottom: 2vw">
-                    <div class="row">
-                        <div class="col-md-3 mb-2"><center><img src="projects/26_UNITE/teaser.png" alt="UNITE overview figure" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid; border-radius: 0.5em;" /></center></div>
-                        <div class="col-md-9">
-                            <h2 class="section-heading" style="font-size: 120%"><b>End-to-End Training for Unified Tokenization and Latent Denoising (UNITE)</b></h2>
-                            <p class="text-dark mb-1"><i><a class="text-dark" href="https://shivamduggal4.github.io/">Shivam Duggal</a>*, <b><u>Xingjian Bai</u></b>*, <a class="text-dark" href="https://betterze.github.io/website/">Zongze Wu</a>, <a class="text-dark" href="https://richzhang.github.io/">Richard Zhang</a>, <a class="text-dark" href="https://research.adobe.com/person/eli-shechtman/">Eli Shechtman</a>, <a class="text-dark" href="https://groups.csail.mit.edu/vision/torralbalab/">Antonio Torralba</a>, <a class="text-dark" href="https://web.mit.edu/phillipi/">Phillip Isola</a>, <a class="text-dark" href="https://billf.mit.edu/">William T. Freeman</a></i></p>
-                            <p class="text-dark mb-1">(*equal contribution)</p>
-                            <p class="text-dark mb-1">arXiv preprint, 2026</p>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://xingjianbai.com/unite-tokenization-generation/" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">page</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2603.22283" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/ShivamDuggal4/UNITE-tokenization-generation" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://x.com/search?q=from%3ASimulatedAnneal%20(2603.22283%20OR%20UNITE)&amp;src=typed_query&amp;f=live" style="text-transform: none; height: calc(1.8em + 0.3vw)" title="Search posts on X from @SimulatedAnneal about this paper"><p style="font-size: calc(0.8em + 0.14vw)">X</p></a>
-                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('duggal2026unite')" style="cursor: pointer;text-transform: none;height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
-                            <code class="codebox" id="duggal2026unite" style="display: none"><pre>
-@article{duggal2026unite,
-    title={End-to-End Training for Unified Tokenization and Latent Denoising},
-    author={Shivam Duggal and Xingjian Bai and Zongze Wu and Richard Zhang and Eli Shechtman and Antonio Torralba and Phillip Isola and William T. Freeman},
-    journal={arXiv preprint arXiv:2603.22283},
-    year={2026}
-}</pre></code>
-                        </div>
-                    </div>
-                </li>
-
-                <!-- Causality in Video Diffusers is Separable from Denoising (SCD) -->
-                <li class="mb-4" style="margin-bottom: 2vw">
-                    <div class="row">
-                        <div class="col-md-3 mb-2"><center><img src="sparse-causal-diffusion/teaser.png" alt="Separable causal diffusion teaser" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid; border-radius: 0.5em;" /></center></div>
-                        <div class="col-md-9">
-                            <h2 class="section-heading" style="font-size: 120%"><b>Causality in Video Diffusers is Separable from Denoising</b></h2>
-                            <p class="text-dark mb-1"><i><b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://guandehe.github.io/">Guande He</a>, <a class="text-dark" href="https://zhengqili.github.io/">Zhengqi Li</a>, <a class="text-dark" href="https://research.adobe.com/person/eli-shechtman/">Eli Shechtman</a>, <a class="text-dark" href="https://xunhuang.me/">Xun Huang</a>, <a class="text-dark" href="https://betterze.github.io/website/">Zongze Wu</a></i></p>
-                            <p class="text-dark mb-1">Computer Vision and Pattern Recognition (CVPR), 2026</p>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://xingjianbai.com/sparse-causal-diffusion/" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">page</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2602.10095" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/xingjian-bai/sparse-causal-diffusion" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://x.com/search?q=from%3ASimulatedAnneal%202602.10095&amp;src=typed_query&amp;f=live" style="text-transform: none; height: calc(1.8em + 0.3vw)" title="Search posts on X from @SimulatedAnneal about this paper"><p style="font-size: calc(0.8em + 0.14vw)">X</p></a>
-                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2026scd')" style="cursor: pointer;text-transform: none;height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
-                            <code class="codebox" id="bai2026scd" style="display: none"><pre>
-@inproceedings{bai2026scd,
-    title={Causality in Video Diffusers is Separable from Denoising},
-    author={Xingjian Bai and Guande He and Zhengqi Li and Eli Shechtman and Xun Huang and Zongze Wu},
-    booktitle={Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-    year={2026}
-}</pre></code>
-                        </div>
-                    </div>
-                </li>
-
-                <!-- Mean Flows for One-step Generative Modeling -->
-                <li class="mb-4" style="margin-bottom: 2vw">
-                    <div class="row">
-                        <div class="col-md-3 mb-2"><center><img src="projects/25_MeanFlow/teaser.png" alt="Mean Flow illustration" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid; border-radius: 0.5em;" /></center></div>
-                        <div class="col-md-9">
-                            <h2 class="section-heading" style="font-size: 120%"><b>Mean Flows for One-step Generative Modeling</b></h2>
-                            <p class="text-dark mb-1"><i><a class="text-dark" href="https://gsunshine.github.io/">Zhengyang Geng</a>, <a class="text-dark" href="https://lambertae.github.io/">Mingyang Deng</a>, <b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://zicokolter.com/">J. Zico Kolter</a>, <a class="text-dark" href="https://people.csail.mit.edu/kaiming/">Kaiming He</a></i></p>
-                            <p class="text-dark mb-1">Neural Information Processing Systems (NeurIPS), 2025 <em>(Oral)</em></p>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://neurips.cc/virtual/2025/oral/115488" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">oral</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://nips.cc/virtual/2025/poster/115487" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">poster</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2505.13447" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/Gsunshine/meanflow" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://x.com/search?q=from%3ASimulatedAnneal%20(2505.13447%20OR%20MeanFlow)&amp;src=typed_query&amp;f=live" style="text-transform: none; height: calc(1.8em + 0.3vw)" title="Search posts on X from @SimulatedAnneal about this paper"><p style="font-size: calc(0.8em + 0.14vw)">X</p></a>
-                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('geng2025meanflow')" style="cursor: pointer;text-transform: none;height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
-                            <code class="codebox" id="geng2025meanflow" style="display: none"><pre>
-@inproceedings{geng2025meanflow,
-    title={Mean Flows for One-step Generative Modeling},
-    author={Geng, Zhengyang and Deng, Mingyang and Bai, Xingjian and Kolter, J. Zico and He, Kaiming},
-    booktitle={Advances in Neural Information Processing Systems},
-    year={2025},
-    url={https://openreview.net/forum?id=uWj4s7rMnR}
-}</pre></code>
-                        </div>
-                    </div>
-                </li>
-
-                <!-- Unweighted Layered Graph Traversal  -->
-                <li class="mb-4" style="margin-bottom: 2vw">
-                    <div class="row">
-                        <div class="col-md-3 mb-2"><center><img src="projects/24_UnweightedLGT/mario.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid; border-radius: 0.5em;" /></center></div>
-                        <div class="col-md-9">
-                            <h2 class="section-heading" style="font-size: 120%"><b>Unweighted Layered Graph Traversal</b></h2>
-                            <p class="text-dark mb-1"><i><b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a>, <a class="text-dark" href="https://romcos.github.io/">Romain Cosson</a></i></p>
-                            <p class="text-dark mb-1">(alphabetical order)</p>
-                            <p class="text-dark mb-1">Symposium on Discrete Algorithms (SODA), 2025</p>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2404.16176" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
-                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2024unweighted')" style="cursor: pointer;text-transform: none;height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)"> bibtex </p></button>
-                            <code class="codebox" id="bai2024unweighted" style="display: none"><pre>
-@misc{bai2024unweighted,
-      title={Unweighted Layered Graph Traversal}, 
-      author={Xingjian Bai and Christian Coester and Romain Cosson},
-      year={2024},
-      eprint={2404.16176},
-      archivePrefix={arXiv},
-      primaryClass={cs.DS}
-}</pre></code>
-                        </div>
-                    </div>
-                </li>
-
-                <!-- Fixed Point Diffusion Models -->
-                <li class="mb-4" style="margin-bottom: 2vw">
-                    <div class="row">
-                        <div class="col-md-3 mb-2"><center><img src="projects/24_FPDM/architecture.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid; border-radius: 0.5em;" /></center></div>
-                        <div class="col-md-9">
-                            <h2 class="section-heading" style="font-size: 120%"><b>Fixed Point Diffusion Models</b></h2>
-                            <p class="text-dark mb-1"><i><b><u>Xingjian Bai</u></b>*, <a class="text-dark" href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>*</i></p>
-                            <p class="text-dark mb-1">(*equal contribution)</p>
-                            <p class="text-dark mb-1">Computer Vision and Pattern Recognition (CVPR), 2024</p>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://lukemelas.github.io/fixed-point-diffusion-models/" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">page</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2401.08741" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/lukemelas/fixed-point-diffusion-models" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
-                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2024fixed')" style="cursor: pointer;text-transform: none;height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
-                            <code class="codebox" id="bai2024fixed" style="display: none"><pre>
-@InProceedings{bai2024fixed,
-    title={Fixed Point Diffusion Models},
-    author={Xingjian Bai and Luke Melas-Kyriazi},
-    booktitle = {CVPR},
-    year = {2024}
-}</pre></code>
-                        </div>
-                    </div>
-                </li>
-
-
-                <!-- Goodhart's Law in Reinforcement Learning -->
-                <li class="mb-4" style="margin-bottom: 2vw">
-                    <div class="row">
-                        <div class="col-md-3 mb-2"><center><img src="projects/23_Goodhart/goodhart.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid;border-radius: 0.5em;" /></center></div>
-                        <div class="col-md-9">
-                            <h2 class="section-heading" style="font-size: 120%"><b>Goodhart's Law in Reinforcement Learning</b></h2>
-                            <p class="text-dark mb-1"> <i> <a class="text-dark" href="https://users.ox.ac.uk/~mert4694/">Jacek Karwowski</a>, <a class="text-dark" href="https://openreview.net/profile?id=~Oliver_Hayman1">Oliver Hayman</a>, <b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://www.cs.ox.ac.uk/people/charlie.griffin/">Charlie Griffin</a>, <a class="text-dark" href="https://scholar.google.com/citations?user=GuzLUmQAAAAJ&hl=en">Joar Skalse</a></i></p>
-                            <p class="text-dark mb-1">International Conference on Learning Representations (ICLR), 2023</p>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2310.09144" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
-                            <!-- <a class="btn btn-light sr-button mr-1 mb-1" href="https://xingjian-bai.github.io/projects/23_Sorting/poster.pdf" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Poster</p></a> -->
-                            <!-- <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/xingjian-bai/Sorting-with-Predictions" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">Code</p></a> -->
-                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('karwowski2023goodharts')" style=" cursor: pointer; text-transform: none; height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
-                            <code class="codebox" id="karwowski2023goodharts" style="display: none"><pre>
-@InProceedings{karwowski2023goodharts,
-    title={Goodhart's Law in Reinforcement Learning}, 
-    author={Jacek Karwowski and Oliver Hayman and Xingjian Bai and Klaus Kiendlhofer and Charlie Griffin and Joar Skalse},
-    year={2024},
-    booktitle = {ICLR},
-}</pre></code>
-                        </div>
-                    </div>
-                </li>
-
-                <!-- Sorting with Predictions -->
-                <li class="mb-4" style="margin-bottom: 2vw">
-                    <div class="row">
-                        <div class="col-md-3 mb-2"><center><img src="projects/23_Sorting/dirty_clean_algo.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid;border-radius: 0.5em;" /></center></div>
-                        <div class="col-md-9">
-                            <h2 class="section-heading" style="font-size: 120%"><b>Sorting with Predictions</b></h2>
-                            <p class="text-dark mb-1"><i><b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a></i></p>
-                            <p class="text-dark mb-1">(alphabetical order)</p>
-                            <p class="text-dark mb-1">Conference on Neural Information Processing Systems (NeurIPS), 2023</p>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2311.00749" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://xingjian-bai.github.io/projects/23_Sorting/poster.pdf" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">poster</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/xingjian-bai/Sorting-with-Predictions" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
-                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2023sorting')" style=" cursor: pointer; text-transform: none; height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
-                            <code class="codebox" id="bai2023sorting" style="display: none"><pre>
-@InProceedings{bai2023sorting,
-    title={Sorting with Predictions}, 
-    author={Xingjian Bai and Christian Coester},
-    booktitle = {NeurIPS},
-    year = {2023}
-}</pre></code>
-                        </div>
-                    </div>
-                </li>
-
-                <!-- Wasserstein distributional robustness of neural networks -->
-                <li class="mb-4" style="margin-bottom: 2vw">
-                    <div class="row">
-                        <div class="col-md-3 mb-2"><center><img src="projects/23_Robustness/poster.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid;border-radius: 0.5em;" /></center></div>
-
-                        <div class="col-md-9">
-                            <h2 class="section-heading" style="font-size: 120%"><b>Wasserstein Distributional Robustness of Neural Networks</b></h2>
-                            <p class="text-dark mb-1"> <i> <b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://openreview.net/profile?id=~Guangyi_He1">Guangyi He</a>, <a class="text-dark" href="https://www.maths.ox.ac.uk/people/yifan.jiang">Yifan Jiang</a>, <a class="text-dark" href="https://www.maths.ox.ac.uk/people/jan.obloj">Jan Obloj</a></i></p>
-                            <p class="text-dark mb-1">(alphabetical order)</p>
-                            <p class="text-dark mb-1">Conference on Neural Information Processing Systems (NeurIPS), 2023</p>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2306.09844" style="text-transform: none; height: calc(1.8em + 0.3vw)"> <p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://xingjian-bai.github.io/projects/23_Robustness/poster.pdf" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">poster</p></a>
-                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/JanObloj/W-DRO-Adversarial-Methods" style="text-transform: none; height: calc(1.8em + 0.3vw)"> <p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
-                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2023wasserstein')" style=" cursor: pointer; text-transform: none; height: calc(1.8em + 0.3vw);"> <p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
-                            <code class="codebox" id="bai2023wasserstein" style="display: none"><pre>
-@InProceedings{bai2023wasserstein,
-    title={Wasserstein distributional robustness of neural networks}, 
-    author={Xingjian Bai and Guangyi He and Yifan Jiang and Jan Obloj},
-    year={2023},
-    booktitle = {NeurIPS},
-}</pre></code>
-                        </div>
-                    </div>
-                </li>
-
-            </ul>
-        </div>
-    </section>
-
-    <!-- TODO fun+ -->
-
-    <section class="p-0" id="chatting-time">
-        <div class="text-center">
-            <hr class="dark" style="max-width: 100%" />
-            <h2 style="font-size: calc(20px + 1.6vw)">
-                <b>CHATTING TIME</b>
-            </h2>
-            <hr class="dark" style="max-width: 100%" />
-        </div>
-        <!-- <center>
-            <p class="text-dark mb-1">
-                (This may take a while to load. Try refreshing the page if it's not
-                loading.)
-            </p>
-        </center> -->
-    </section>
-
-
-    <section class="container">
-        <!-- Calendly inline widget begin -->
-        <div class="calendly-inline-widget" data-url="https://calendly.com/xingjianbai0914/chatting-hours"
-            style="min-width: 320px; height: 660px"></div>
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact" class="section contact">
+        <h2 class="section-label">Chatting Time</h2>
+        <p class="lede">Happy to chat about research, algorithms, or life in grad school. Pick a slot below, or email me directly at <a href="mailto:xbai@mit.edu">xbai@mit.edu</a>.</p>
+        <div class="calendly-embed calendly-inline-widget" data-url="https://calendly.com/xingjianbai0914/chatting-hours"></div>
         <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-        <!-- Calendly inline widget end -->
     </section>
 
-    <section class="bg-dark" style="padding: 1em">
-        <center>
-            <div class="footer-social-icons">
-                <ul class="social-icons">
-                    <li style="padding: 4px"><a href="https://github.com/xingjian-bai" title="GitHub" class="social-icon"> <i class="fa fa-github" style="font-size: 95%;"></i></a></li>
-                    <li style="padding: 4px"> <a href="https://scholar.google.com/citations?user=KCrwdnIAAAAJ&hl=en"     title="Google Scholar" class="social-icon">     <i class="fa ai ai-google-scholar" style="font-size: 95%"></i></a> </li>
-                    <li style="padding: 4px"> <a href="https://twitter.com/SimulatedAnneal" title="Twitter" class="social-icon">     <i class="fa fa-twitter" style="font-size: 95%"></i></a> </li>
-                    <li style="padding: 4px"> <a href="https://xingjian-bai.github.io/files/XingjianBAI.pdf" title="CV" class="social-icon">     <i class="fa ai ai-cv" style="font-size: 95%"></i></a> </li>
-                </ul>
-                <footer style="color: white; font-size: 0.9em;">
-                    Designed based on Shangzhe Wu's website
-                </footer>
-            </div>
-        
-        
-        </center>
-    </section>
+</main>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<footer class="site-footer">
+    <div class="inner">
+        <div class="mark">
+            <img src="img/mark.png" alt="" />
+            <span>&copy; 2026 Xingjian Bai &middot; design inspired by <a href="https://elliottwu.com/">Shangzhe Wu</a> &middot; <a href="https://github.com/xingjian-bai/xingjian-bai.github.io">source</a></span>
+        </div>
+        <div class="socials">
+            <a href="https://github.com/xingjian-bai">GitHub</a> ·
+            <a href="https://scholar.google.com/citations?user=KCrwdnIAAAAJ&amp;hl=en">Scholar</a> ·
+            <a href="https://twitter.com/SimulatedAnneal">X</a> ·
+            <a href="files/XingjianBAI.pdf">CV</a>
+        </div>
+    </div>
+</footer>
 
-    <!-- Plugin JavaScript -->
-    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
-    <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="js/creative.min.js"></script>
-    <script src="js/custom.js"></script>
-
-    
+<script src="js/site.js"></script>
 
 </body>
-
 </html>
