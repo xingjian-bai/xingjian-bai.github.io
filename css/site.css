@@ -365,7 +365,7 @@ section.section + section.section { border-top: 1px solid var(--rule); }
     font-variant-numeric: tabular-nums;
     padding-top: 2px;
 }
-.news .body { font-size: 14.5px; color: var(--ink); max-width: var(--measure); }
+.news .body { font-size: 14.5px; color: var(--ink); }
 
 @media (max-width: 520px) {
     .news { grid-template-columns: 1fr; row-gap: 4px; }
