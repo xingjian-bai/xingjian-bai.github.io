@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-04-22T05:50:18.028788",
+  "last_sync": "2026-04-22T06:00:20.575009",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         12742,
         12744
       ],
-      "last_seen": "2026-04-22T05:50:03.193274",
+      "last_seen": "2026-04-22T06:00:05.892318",
       "paused": false
     },
     "zwang43b": {
@@ -20,7 +20,7 @@
         12774,
         12780
       ],
-      "last_seen": "2026-04-22T05:50:03.193309",
+      "last_seen": "2026-04-22T06:00:05.892334",
       "paused": false
     }
   },
@@ -1269,50 +1269,50 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-04-22T06:00:00-04:00",
-    "next_window_display": "2026-04-22 06:00 EDT",
-    "target_date": "2026-04-24",
-    "target_weekday": "Friday",
+    "next_window": "2026-04-23T06:00:00-04:00",
+    "next_window_display": "2026-04-23 06:00 EDT",
+    "target_date": "2026-04-25",
+    "target_weekday": "Saturday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-04-24",
-        "weekday": "Friday",
+        "date": "2026-04-25",
+        "weekday": "Saturday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-04-24",
-        "weekday": "Friday",
+        "date": "2026-04-25",
+        "weekday": "Saturday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-04-24",
-        "weekday": "Friday",
+        "date": "2026-04-25",
+        "weekday": "Saturday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-24",
-        "weekday": "Friday",
+        "date": "2026-04-25",
+        "weekday": "Saturday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-24",
-        "weekday": "Friday",
+        "date": "2026-04-25",
+        "weekday": "Saturday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-04-24",
-        "weekday": "Friday",
+        "date": "2026-04-25",
+        "weekday": "Saturday",
         "hour": 17,
         "time": "17:00"
       }
