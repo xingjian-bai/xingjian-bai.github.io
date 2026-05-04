@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-05-04T09:50:18.920687",
+  "last_sync": "2026-05-04T10:00:24.072934",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         12742,
         12744
       ],
-      "last_seen": "2026-05-04T09:50:03.372364",
+      "last_seen": "2026-05-04T10:00:06.119375",
       "paused": false
     },
     "zwang43b": {
@@ -20,7 +20,7 @@
         12774,
         12780
       ],
-      "last_seen": "2026-05-04T09:50:03.372420",
+      "last_seen": "2026-05-04T10:00:06.119459",
       "paused": false
     }
   },
@@ -39,74 +39,7 @@
       "paused": false
     }
   ],
-  "reservations": [
-    {
-      "date": "2026-05-04",
-      "time": "14:00",
-      "court": "Bubble Court 1",
-      "activity": "Tennis Reservation (Bubble Court 1)",
-      "weekday": "Mon",
-      "cancel_id": "860898",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-05-04_1400",
-      "booked_at": "2026-05-02T06:00:02.730350-04:00"
-    },
-    {
-      "date": "2026-05-04",
-      "time": "15:00",
-      "court": "Bubble Court 1",
-      "activity": "Tennis Reservation (Bubble Court 1)",
-      "weekday": "Mon",
-      "cancel_id": "860901",
-      "user": "zwang43b",
-      "reservation_id": "zwang43b_2026-05-04_1500",
-      "booked_at": "2026-05-02T06:00:02.922831-04:00"
-    },
-    {
-      "date": "2026-05-05",
-      "time": "14:00",
-      "court": "Bubble Court 1",
-      "activity": "Tennis Reservation (Bubble Court 1)",
-      "weekday": "Tue",
-      "cancel_id": "861420",
-      "user": "zwang43b",
-      "reservation_id": "zwang43b_2026-05-05_1400",
-      "booked_at": "2026-05-03T06:00:02.673258-04:00"
-    },
-    {
-      "date": "2026-05-05",
-      "time": "15:00",
-      "court": "Bubble Court 1",
-      "activity": "Tennis Reservation (Bubble Court 1)",
-      "weekday": "Tue",
-      "cancel_id": "861427",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-05-05_1500",
-      "booked_at": "2026-05-03T06:00:03.982463-04:00"
-    },
-    {
-      "date": "2026-05-06",
-      "time": "14:00",
-      "court": "Bubble Court 3",
-      "activity": "Tennis Reservation (Bubble Court 3)",
-      "weekday": "Wed",
-      "cancel_id": "861967",
-      "user": "xbai02b",
-      "reservation_id": "xbai02b_2026-05-06_1400",
-      "booked_at": "2026-05-04T06:00:03.934310-04:00"
-    },
-    {
-      "date": "2026-05-06",
-      "time": "14:00",
-      "court": "Bubble Court 2",
-      "activity": "Tennis Reservation (Bubble Court 2)",
-      "weekday": "Wed",
-      "cancel_id": "861965",
-      "user": "zwang43b",
-      "reservation_id": "zwang43b_2026-05-06_1400",
-      "booked_at": "2026-05-04T06:00:03.105120-04:00"
-    }
-  ],
+  "reservations": [],
   "bookings": [
     {
       "timestamp": "2026-05-04T06:01:04.456369-04:00",
