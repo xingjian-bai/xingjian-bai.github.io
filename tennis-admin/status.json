@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-05-05T05:50:19.699172",
+  "last_sync": "2026-05-05T06:00:22.235929",
   "script_status": {
     "xbai02b": {
       "running": false,
@@ -1235,50 +1235,50 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-05-05T06:00:00-04:00",
-    "next_window_display": "2026-05-05 06:00 EDT",
-    "target_date": "2026-05-07",
-    "target_weekday": "Thursday",
+    "next_window": "2026-05-06T06:00:00-04:00",
+    "next_window_display": "2026-05-06 06:00 EDT",
+    "target_date": "2026-05-08",
+    "target_weekday": "Friday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-05-07",
-        "weekday": "Thursday",
+        "date": "2026-05-08",
+        "weekday": "Friday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-05-07",
-        "weekday": "Thursday",
+        "date": "2026-05-08",
+        "weekday": "Friday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-05-07",
-        "weekday": "Thursday",
+        "date": "2026-05-08",
+        "weekday": "Friday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-07",
-        "weekday": "Thursday",
+        "date": "2026-05-08",
+        "weekday": "Friday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-07",
-        "weekday": "Thursday",
+        "date": "2026-05-08",
+        "weekday": "Friday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-07",
-        "weekday": "Thursday",
+        "date": "2026-05-08",
+        "weekday": "Friday",
         "hour": 17,
         "time": "17:00"
       }
