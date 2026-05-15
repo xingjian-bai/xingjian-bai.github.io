@@ -56,19 +56,21 @@
 </section>
 
 <!-- ================================================================
-     TEASER
+     HEADLINE  (paper Fig.1)
      ================================================================ -->
-<section class="hero is-vjam-teaser">
+<section class="section">
   <div class="container is-max-desktop">
-    <div class="teaser-frame">
-      <video autoplay loop muted playsinline preload="auto">
-        <source src="./static/videos/1VPM4Svvfn0Um5SorgmWR4dCoecQJm4am.mp4" type="video/mp4">
-      </video>
-    </div>
-    <p class="teaser-caption">
-      A 25-second look across the full pipeline &mdash; observation,
-      generated visual plan, and the action chunk it gets translated into.
+    <div class="kicker">Headline</div>
+    <h2 class="section-title">Across embodiments, skills, and environments</h2>
+    <p class="lede">
+      A 14B video generative model paired with a faithful Jacobian-IDM tackles a wide range of
+      manipulation challenges &mdash; from zero-shot pick-and-place on a real Panda arm to
+      contact-rich 16-DoF in-hand cube re-orientation.
     </p>
+    <div class="figure-block">
+      <img src="./static/figures/fig1_main_results-1.png"
+           alt="VJAM controls robots across embodiments, skills, and environments">
+    </div>
   </div>
 </section>
 
@@ -105,56 +107,26 @@
 </section>
 
 <!-- ================================================================
-     HEADLINE RESULTS  (paper Fig.1)
-     ================================================================ -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="kicker">Headline</div>
-    <h2 class="section-title">Across embodiments, skills, and environments</h2>
-    <p class="lede">
-      A 14B video generative model paired with a faithful Jacobian-IDM tackles a wide range of
-      manipulation challenges &mdash; from zero-shot pick-and-place on a real Panda arm to
-      contact-rich 16-DoF in-hand cube re-orientation.
-    </p>
-    <div class="figure-block">
-      <img src="./static/figures/fig1_main_results-1.png"
-           alt="VJAM controls robots across embodiments, skills, and environments">
-    </div>
-  </div>
-</section>
-
-<!-- ================================================================
-     METHOD OVERVIEW
+     PIPELINE  (paper Fig.2 + Jacobian IDM showcase, unified)
      ================================================================ -->
 <section class="section is-shaded">
   <div class="container is-max-desktop">
-    <div class="kicker">Method</div>
+    <div class="kicker">Pipeline</div>
     <h2 class="section-title">A planner, a translator, a closed loop</h2>
     <p class="lede">
       The video model rolls out a short visual plan &mdash; a path along the image manifold. The
-      Jacobian-IDM inverts each step into actions. The robot executes, re-observes, and the planner is
-      re-queried. One primitive subsumes perception, planning, and control.
+      Jacobian-IDM predicts a per-pixel tangent map from action perturbations to image-space motion,
+      and inverts each step of the visual plan into actions by regularized least squares. The robot
+      executes, re-observes, and the planner is re-queried. One primitive subsumes perception,
+      planning, and control.
+      Because the planner is action-free, the IDM is the sole bottleneck on the generality
+      that video models offer &mdash; how to design a faithful one is the central question of
+      this work.
     </p>
     <div class="figure-block">
       <img src="./static/figures/fig2_method_overview-1.png" alt="VJAM method overview pipeline">
     </div>
-  </div>
-</section>
-
-<!-- ================================================================
-     JACOBIAN IDM SHOWCASE
-     ================================================================ -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="kicker">The Jacobian IDM</div>
-    <h2 class="section-title">Generated video &rarr; Jacobian field &rarr; action</h2>
-    <p class="lede">
-      The Jacobian-IDM predicts a per-pixel <em>tangent map</em> from action perturbations to image-space
-      motion. Given two consecutive predicted frames, it recovers actions by regularized least squares
-      against this map &mdash; turning a generic video planner into an executable controller.
-    </p>
-
-    <div class="video-card is-wide" style="margin-bottom:1rem;">
+    <div class="video-card is-wide" style="margin-top:1.4rem; margin-bottom:1rem;">
       <video autoplay loop muted playsinline preload="metadata">
         <source src="./static/videos/1VPM4Svvfn0Um5SorgmWR4dCoecQJm4am.mp4" type="video/mp4">
       </video>
@@ -169,8 +141,7 @@
       </video>
       <div class="caption">
         <span class="label">Jacobian field</span>
-        The per-pixel tangent map predicted by the IDM &mdash; what the action&ndash;to&ndash;motion linearization
-        looks like along the visual plan.
+        The per-pixel action&ndash;to&ndash;motion tangent map predicted by the IDM along the visual plan.
       </div>
     </div>
   </div>
@@ -181,11 +152,13 @@
      ================================================================ -->
 <section class="section is-shaded">
   <div class="container is-max-desktop">
-    <div class="kicker">Multi-embodiment</div>
+    <div class="kicker">Main results &middot; multi-embodiment</div>
     <h2 class="section-title">One video planner, two very different bodies</h2>
     <p class="lede">
-      The same action-free planner &mdash; post-trained on a mixture of DROID and Allegro robot videos
-      &mdash; drives both arms when paired with an embodiment-specific Jacobian-IDM.
+      A <em>single</em> action-free video model, post-trained on a mixture of DROID and Allegro robot
+      videos, generates plans for both a 7-DoF Panda arm and a 16-DoF Allegro hand &mdash; we then pair
+      it with an embodiment-specific Jacobian-IDM per body. Both Panda manipulation and contact-rich
+      in-hand reorientation are produced zero-shot.
     </p>
 
     <div class="figure-block" style="margin-bottom:1.6rem;">
@@ -292,11 +265,12 @@
      ================================================================ -->
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="kicker">Prompt controllability</div>
+    <div class="kicker">Zero-shot instruction following</div>
     <h2 class="section-title">Same scene, three different goals</h2>
     <p class="lede">
       With identical initial observations, the prompt alone steers the planner &mdash; and therefore the
-      robot &mdash; to different objects on the table.
+      robot &mdash; to different objects on the table. The video model's prompt-following capability
+      flows directly through the faithful translator into the executed action chunk.
     </p>
 
     <div class="columns is-multiline cards-grid">
@@ -329,15 +303,44 @@
 </section>
 
 <!-- ================================================================
-     HIDDEN BUTTON  (reasoning under occlusion)
+     IDM DESIGN STUDY  (paper §4.2 — Designing a Faithful IDM)
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Designing a faithful IDM</div>
+    <h2 class="section-title">Faithfulness, data-efficiency, scaling with DoFs</h2>
+    <p class="lede">
+      Why does this work? A controlled study isolates the contribution of structure: comparing the
+      Jacobian-parameterized IDM against unstructured baselines under matched data and DoF budgets, we
+      find the gain comes specifically from <em>constraining actions to enter through a tangent map</em>
+      &mdash; not from any particular network or training trick.
+    </p>
+    <div class="figure-block">
+      <img src="./static/figures/fig4_idm_dof_study.png"
+           alt="J-IDM scales more favorably with action dimensionality"
+           style="max-width:88%;">
+      <div class="figure-caption">
+        <strong>(a)</strong> Actions recovered from generated videos by direct-IDM baselines vs.&nbsp;J-IDM,
+        for increasing degrees of freedom. <strong>(b)</strong> Under a fixed training budget, the
+        direct-IDM gap to J-IDM widens as DoF grows. <strong>(c)</strong> In the high-DoF regime, J-IDM
+        holds a better data&ndash;accuracy frontier.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     VJAM vs FOUNDATION MODEL BASELINES  (paper §4.3)
      ================================================================ -->
 <section class="section is-shaded-warm">
   <div class="container is-max-desktop">
-    <div class="kicker">Reasoning under occlusion</div>
-    <h2 class="section-title">The hidden-button task</h2>
+    <div class="kicker">VJAM vs robot foundation models</div>
+    <h2 class="section-title">Reasoning through occlusions</h2>
     <p class="lede">
-      A target button sits behind a partial occluder, visible from only one camera view. To solve the
-      task, the policy must integrate the prompt with multi-view evidence.
+      Faithful translation also preserves the planner's <em>reasoning</em>. We hide a target button
+      behind a partial occluder &mdash; visible from only one camera view &mdash; and compare VJAM
+      against a recent video&ndash;action baseline. VJAM produces a coherent visual plan that searches
+      around the wall; the baseline does not.
     </p>
 
     <div class="columns cards-grid compare-rail">
@@ -394,32 +397,6 @@
           </video>
           <div class="caption"><span class="label">Execution</span> Action chunk executed on the robot.</div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================================================================
-     IDM DESIGN STUDY
-     ================================================================ -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="kicker">Why a structured IDM</div>
-    <h2 class="section-title">Faithfulness, data-efficiency, scaling with DoFs</h2>
-    <p class="lede">
-      A controlled toy study isolates the contribution of structure. Constraining actions to enter through
-      a learned tangent map &mdash; rather than regressing them from raw image pairs &mdash; pays off
-      precisely where it matters: limited data, high-dimensional action spaces.
-    </p>
-    <div class="figure-block">
-      <img src="./static/figures/fig4_idm_dof_study.png"
-           alt="J-IDM scales more favorably with action dimensionality"
-           style="max-width:88%;">
-      <div class="figure-caption">
-        <strong>(a)</strong> Actions recovered from generated videos by direct-IDM baselines vs.&nbsp;J-IDM,
-        for increasing degrees of freedom. <strong>(b)</strong> Under a fixed training budget, the
-        direct-IDM gap to J-IDM widens as DoF grows. <strong>(c)</strong> In the high-DoF regime, J-IDM
-        holds a better data&ndash;accuracy frontier.
       </div>
     </div>
   </div>
