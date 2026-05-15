@@ -62,12 +62,12 @@
   <div class="container is-max-desktop">
     <div class="teaser-frame">
       <video autoplay loop muted playsinline preload="auto">
-        <source src="./static/videos/1_KODF0M55P1kduNQxqCIi_fq0my_pWVe.mp4" type="video/mp4">
+        <source src="./static/videos/1VPM4Svvfn0Um5SorgmWR4dCoecQJm4am.mp4" type="video/mp4">
       </video>
     </div>
     <p class="teaser-caption">
-      Generated visual plan&nbsp;&nbsp;&middot;&nbsp;&nbsp;Jacobian-IDM action recovery&nbsp;&nbsp;&middot;&nbsp;&nbsp;real-world execution.
-      One closed loop, run end-to-end at deployment.
+      A 25-second look across the full pipeline &mdash; observation,
+      generated visual plan, and the action chunk it gets translated into.
     </p>
   </div>
 </section>
@@ -135,28 +135,23 @@
       against this map &mdash; turning a generic video planner into an executable controller.
     </p>
 
-    <div class="columns is-multiline cards-grid">
-      <div class="column is-half">
-        <div class="video-card is-tall">
-          <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/19-dwtdoq2i5n5pm1dSMoX5x48MjnImR9.mp4" type="video/mp4">
-          </video>
-          <div class="caption">
-            <span class="label">Generated video</span>
-            What the planner imagines &mdash; the visual lookahead.
-          </div>
-        </div>
+    <div class="video-card is-wide" style="margin-bottom:1rem;">
+      <video autoplay loop muted playsinline preload="metadata">
+        <source src="./static/videos/1VPM4Svvfn0Um5SorgmWR4dCoecQJm4am.mp4" type="video/mp4">
+      </video>
+      <div class="caption">
+        <span class="label">Generated video</span>
+        What the planner imagines &mdash; a short visual lookahead in image space.
       </div>
-      <div class="column is-half">
-        <div class="video-card is-tall">
-          <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/1LfKw25SNV40YexxLNCCD4OSEY3sVDVcT.mp4" type="video/mp4">
-          </video>
-          <div class="caption">
-            <span class="label">Jacobian field + execution</span>
-            What the robot actually does, with the Jacobian translation overlaid.
-          </div>
-        </div>
+    </div>
+    <div class="video-card is-wide">
+      <video autoplay loop muted playsinline preload="metadata">
+        <source src="./static/videos/1_KODF0M55P1kduNQxqCIi_fq0my_pWVe.mp4" type="video/mp4">
+      </video>
+      <div class="caption">
+        <span class="label">Jacobian field</span>
+        The per-pixel tangent map predicted by the IDM &mdash; what the action&ndash;to&ndash;motion linearization
+        looks like along the visual plan.
       </div>
     </div>
   </div>
@@ -184,7 +179,7 @@
         <div class="column is-half">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1KIQfkZg7NyVa_SYdl6NETjqXFw7sEk_I.mp4" type="video/mp4">
+              <source src="./static/videos/1GgnPCZeGx2Anbw9TzfETBUDHofMhaDYZ.mp4" type="video/mp4">
             </video>
             <div class="caption"><span class="prompt">&ldquo;place the yellow cube on top of the lego block.&rdquo;</span></div>
           </div>
@@ -192,7 +187,7 @@
         <div class="column is-half">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1fWCKvHcgpRWFjQBmlNs9zIqWi66_kJpq.mp4" type="video/mp4">
+              <source src="./static/videos/1_K5cd0OAo7Qd2Dimg2wKA_K6a2LLy8hN.mp4" type="video/mp4">
             </video>
             <div class="caption"><span class="prompt">&ldquo;approach and push the blue button.&rdquo;</span></div>
           </div>
@@ -200,7 +195,7 @@
         <div class="column is-half">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1hksHG79Z8UX2axBNW1w7AmBIJiHKjVT9.mp4" type="video/mp4">
+              <source src="./static/videos/1CMzFPTIYAiR69stAuTuQ7TEzXgZpQdDZ.mp4" type="video/mp4">
             </video>
             <div class="caption"><span class="prompt">&ldquo;approach and push the orange button.&rdquo;</span></div>
           </div>
@@ -208,7 +203,7 @@
         <div class="column is-half">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1u9L9GWmqkY3ZNovHc5n11jEYDlMqQVwR.mp4" type="video/mp4">
+              <source src="./static/videos/19-dwtdoq2i5n5pm1dSMoX5x48MjnImR9.mp4" type="video/mp4">
             </video>
             <div class="caption"><span class="prompt">&ldquo;pick up the green tennis ball and place it inside the bowl.&rdquo;</span></div>
           </div>
@@ -226,33 +221,33 @@
         <div class="column is-one-third">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1Bdt4pceeTJOzC1WNinNoWiVnLfO0x7N7.mp4" type="video/mp4">
+              <source src="./static/videos/1hksHG79Z8UX2axBNW1w7AmBIJiHKjVT9.mp4" type="video/mp4">
             </video>
             <div class="caption">
-              <span class="label">Real</span>
-              <span class="prompt">&ldquo;rotate cube clockwise around the vertical axis.&rdquo;</span>
+              <span class="label">Real robot</span>
+              <span class="prompt">&ldquo;rotate the cube clockwise around the vertical axis.&rdquo;</span>
             </div>
           </div>
         </div>
         <div class="column is-one-third">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1lYGfIB6ZNpzWpUue6EXX3mIWF3XVJA0E.mp4" type="video/mp4">
+              <source src="./static/videos/1u9L9GWmqkY3ZNovHc5n11jEYDlMqQVwR.mp4" type="video/mp4">
             </video>
             <div class="caption">
-              <span class="label">Sim &middot; CW</span>
-              <span class="prompt">&ldquo;rotate cube clockwise around the vertical axis.&rdquo;</span>
+              <span class="label">Simulator</span>
+              <span class="prompt">&ldquo;rotate the cube clockwise around the vertical axis.&rdquo;</span>
             </div>
           </div>
         </div>
         <div class="column is-one-third">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/174TJF3ZfsHhcNxJiEpGuDBdvos5nhCSH.mp4" type="video/mp4">
+              <source src="./static/videos/1d5-tCrs131D5DSrhNy_nInUPE0hpbpAL.mp4" type="video/mp4">
             </video>
             <div class="caption">
-              <span class="label">Sim &middot; CCW</span>
-              <span class="prompt">&ldquo;rotate cube counter-clockwise around the vertical axis.&rdquo;</span>
+              <span class="label">Simulator</span>
+              <span class="prompt">&ldquo;rotate the cube counter-clockwise around the vertical axis.&rdquo;</span>
             </div>
           </div>
         </div>
@@ -319,7 +314,7 @@
         <h4>VJAM <span style="font-weight:400; color:var(--vjam-muted);">(ours)</span></h4>
         <div class="video-card">
           <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/1Cb2ZsZWgoHf0-8FO2UIMjPeelXC9y_EZ.mp4" type="video/mp4">
+            <source src="./static/videos/1kKDtGEzT2HJgX1qEDaezHoaudvxtIUlz.mp4" type="video/mp4">
           </video>
           <div class="caption">
             <span class="prompt">&ldquo;push the blue button.&rdquo;</span>
@@ -331,11 +326,42 @@
         <h4>DreamZero <span style="font-weight:400; color:var(--vjam-muted);">(baseline)</span></h4>
         <div class="video-card">
           <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/18jhPQFM4zMQf9KKR3sdlA65zWYtAXjiQ.mp4" type="video/mp4">
+            <source src="./static/videos/1LfKw25SNV40YexxLNCCD4OSEY3sVDVcT.mp4" type="video/mp4">
           </video>
           <div class="caption">
             Approaches the wall, fails to interact with the hidden target.
           </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="lede" style="margin-top:1.8rem; max-width:680px;">
+      The same six-second VJAM rollout, decomposed into what the planner imagined,
+      what the Jacobian-IDM read from it, and what the robot did.
+    </p>
+    <div class="columns is-multiline cards-grid">
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1nQRag4O436JsHZHvTnyP27gf9_fUtdRw.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="label">Dream</span> Generated video lookahead.</div>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1VsD6wlEmv0lKI7XqbeEId9F8TmUoyfBS.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="label">Jacobian</span> Per-pixel action&ndash;to&ndash;motion map.</div>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1kKDtGEzT2HJgX1qEDaezHoaudvxtIUlz.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="label">Execution</span> Action chunk executed on the robot.</div>
         </div>
       </div>
     </div>
