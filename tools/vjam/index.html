@@ -105,6 +105,25 @@
 </section>
 
 <!-- ================================================================
+     HEADLINE RESULTS  (paper Fig.1)
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Headline</div>
+    <h2 class="section-title">Across embodiments, skills, and environments</h2>
+    <p class="lede">
+      A 14B video generative model paired with a faithful Jacobian-IDM tackles a wide range of
+      manipulation challenges &mdash; from zero-shot pick-and-place on a real Panda arm to
+      contact-rich 16-DoF in-hand cube re-orientation.
+    </p>
+    <div class="figure-block">
+      <img src="./static/figures/fig1_main_results-1.png"
+           alt="VJAM controls robots across embodiments, skills, and environments">
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
      METHOD OVERVIEW
      ================================================================ -->
 <section class="section is-shaded">
@@ -168,6 +187,18 @@
       The same action-free planner &mdash; post-trained on a mixture of DROID and Allegro robot videos
       &mdash; drives both arms when paired with an embodiment-specific Jacobian-IDM.
     </p>
+
+    <div class="figure-block" style="margin-bottom:1.6rem;">
+      <img src="./static/figures/fig3_dream_follow-1.png"
+           alt="J-IDM enables zero-shot multi-embodiment control">
+      <div class="figure-caption">
+        <strong>J-IDM enables zero-shot multi-embodiment control.</strong>
+        <strong>(Top-Left)</strong> &ldquo;push the orange button.&rdquo;
+        <strong>(Top-Right)</strong> &ldquo;place the yellow cube on top of the lego block.&rdquo;
+        <strong>(Bottom)</strong> 16-DoF Allegro Hand orchestrates three phases of contact-rich
+        finger motion to rotate the black cube.
+      </div>
+    </div>
 
     <!-- ---------- Franka Panda ---------- -->
     <div class="embodiment-block">
