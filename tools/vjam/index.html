@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="VJAM: Turning Video Models into Generalist Robot Policies. A closed-loop video-to-action policy combining an action-free video world model with a Jacobian inverse dynamics model.">
+  <meta name="keywords" content="VJAM, video models, robot policy, inverse dynamics, Jacobian, manipulation, NeurIPS 2026">
+  <title>VJAM &mdash; Turning Video Models into Generalist Robot Policies</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600|Noto+Sans:400,500,600|JetBrains+Mono:400,500" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/vjam.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<!-- ================================================================
+     HERO
+     ================================================================ -->
+<section class="hero is-vjam-hero">
+  <div class="container is-narrow">
+    <div class="kicker">NeurIPS 2026 &middot; Submission</div>
+    <h1 class="publication-title">
+      Turning Video Models into Generalist Robot Policies
+    </h1>
+    <p class="publication-subtitle">
+      <span class="note-pill">VJAM</span>&nbsp;&nbsp;the Video&ndash;Jacobian&ndash;Action Model
+    </p>
+    <p class="is-anonymous">Anonymous Authors &middot; under double-blind review</p>
+
+    <div class="publication-links">
+      <a href="./static/paper.pdf" class="button is-pub">
+        <span class="icon"><i class="fas fa-file-pdf"></i></span>
+        <span>Paper</span>
+      </a>
+      <a href="#bibtex" class="button is-pub is-ghost">
+        <span class="icon"><i class="fas fa-quote-left"></i></span>
+        <span>BibTeX</span>
+      </a>
+      <a href="#" class="button is-pub is-ghost" title="Code release pending">
+        <span class="icon"><i class="fab fa-github"></i></span>
+        <span>Code &middot; coming soon</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     TEASER
+     ================================================================ -->
+<section class="hero is-vjam-teaser">
+  <div class="container is-max-desktop">
+    <div class="teaser-frame">
+      <video autoplay loop muted playsinline preload="auto">
+        <source src="./static/videos/1_KODF0M55P1kduNQxqCIi_fq0my_pWVe.mp4" type="video/mp4">
+      </video>
+    </div>
+    <p class="teaser-caption">
+      Generated visual plan&nbsp;&nbsp;&middot;&nbsp;&nbsp;Jacobian-IDM action recovery&nbsp;&nbsp;&middot;&nbsp;&nbsp;real-world execution.
+      One closed loop, run end-to-end at deployment.
+    </p>
+  </div>
+</section>
+
+<!-- ================================================================
+     ABSTRACT
+     ================================================================ -->
+<section class="section">
+  <div class="container is-narrow">
+    <div class="kicker">Abstract</div>
+    <h2 class="section-title">Decoupled video planning, faithful inverse dynamics</h2>
+    <div class="abstract-text">
+      <p>
+        Video generative models have emerged as a promising robotics backbone, capable of generating videos
+        that depict the completion of complex tasks across embodiments and environments. Many current
+        approaches finetune video models with action-labeled data, turning them into robot foundation
+        models that jointly predict future observations and actions.
+      </p>
+      <p>
+        We study an alternative, underexplored route: leave the video planner as is, and train an
+        embodiment-specific <em>inverse dynamics model</em> (IDM). This decoupling lets the planner
+        remain embodiment-agnostic, lets video backbones be swapped without re-training the IDM, and lets
+        the IDM be trained from autonomous self-play data.
+      </p>
+      <p>
+        Our policy combines an action-free video world model with a structured IDM based on the robot
+        embodiment Jacobian. The result is a <strong>faithful</strong> video-to-action translator that
+        is data-efficient and scales to high-dimensional action spaces. We call this policy the
+        <strong>Video&ndash;Jacobian&ndash;Action Model (VJAM)</strong>; it achieves strong zero-shot
+        performance on a real Panda arm and 16-DoF Allegro-hand cube re-orientation, and the same video
+        planner drives both bodies via different embodiment-specific IDMs.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     METHOD OVERVIEW
+     ================================================================ -->
+<section class="section is-shaded">
+  <div class="container is-max-desktop">
+    <div class="kicker">Method</div>
+    <h2 class="section-title">A planner, a translator, a closed loop</h2>
+    <p class="lede">
+      The video model rolls out a short visual plan &mdash; a path along the image manifold. The
+      Jacobian-IDM inverts each step into actions. The robot executes, re-observes, and the planner is
+      re-queried. One primitive subsumes perception, planning, and control.
+    </p>
+    <div class="figure-block">
+      <img src="./static/figures/fig2_method_overview-1.png" alt="VJAM method overview pipeline">
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     JACOBIAN IDM SHOWCASE
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">The Jacobian IDM</div>
+    <h2 class="section-title">Generated video &rarr; Jacobian field &rarr; action</h2>
+    <p class="lede">
+      The Jacobian-IDM predicts a per-pixel <em>tangent map</em> from action perturbations to image-space
+      motion. Given two consecutive predicted frames, it recovers actions by regularized least squares
+      against this map &mdash; turning a generic video planner into an executable controller.
+    </p>
+
+    <div class="columns is-multiline cards-grid">
+      <div class="column is-half">
+        <div class="video-card is-tall">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/19-dwtdoq2i5n5pm1dSMoX5x48MjnImR9.mp4" type="video/mp4">
+          </video>
+          <div class="caption">
+            <span class="label">Generated video</span>
+            What the planner imagines &mdash; the visual lookahead.
+          </div>
+        </div>
+      </div>
+      <div class="column is-half">
+        <div class="video-card is-tall">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1LfKw25SNV40YexxLNCCD4OSEY3sVDVcT.mp4" type="video/mp4">
+          </video>
+          <div class="caption">
+            <span class="label">Jacobian field + execution</span>
+            What the robot actually does, with the Jacobian translation overlaid.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     MULTI-EMBODIMENT
+     ================================================================ -->
+<section class="section is-shaded">
+  <div class="container is-max-desktop">
+    <div class="kicker">Multi-embodiment</div>
+    <h2 class="section-title">One video planner, two very different bodies</h2>
+    <p class="lede">
+      The same action-free planner &mdash; post-trained on a mixture of DROID and Allegro robot videos
+      &mdash; drives both arms when paired with an embodiment-specific Jacobian-IDM.
+    </p>
+
+    <!-- ---------- Franka Panda ---------- -->
+    <div class="embodiment-block">
+      <div class="embodiment-header">
+        <h3>Franka Panda</h3>
+        <span class="embodiment-tag">7-DoF arm &middot; zero-shot prompts</span>
+      </div>
+      <div class="columns is-multiline cards-grid">
+        <div class="column is-half">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/1KIQfkZg7NyVa_SYdl6NETjqXFw7sEk_I.mp4" type="video/mp4">
+            </video>
+            <div class="caption"><span class="prompt">&ldquo;place the yellow cube on top of the lego block.&rdquo;</span></div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/1fWCKvHcgpRWFjQBmlNs9zIqWi66_kJpq.mp4" type="video/mp4">
+            </video>
+            <div class="caption"><span class="prompt">&ldquo;approach and push the blue button.&rdquo;</span></div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/1hksHG79Z8UX2axBNW1w7AmBIJiHKjVT9.mp4" type="video/mp4">
+            </video>
+            <div class="caption"><span class="prompt">&ldquo;approach and push the orange button.&rdquo;</span></div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/1u9L9GWmqkY3ZNovHc5n11jEYDlMqQVwR.mp4" type="video/mp4">
+            </video>
+            <div class="caption"><span class="prompt">&ldquo;pick up the green tennis ball and place it inside the bowl.&rdquo;</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Allegro Hand ---------- -->
+    <div class="embodiment-block">
+      <div class="embodiment-header">
+        <h3>Allegro Hand</h3>
+        <span class="embodiment-tag">16-DoF dexterous reorientation</span>
+      </div>
+      <div class="columns is-multiline cards-grid">
+        <div class="column is-one-third">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/1Bdt4pceeTJOzC1WNinNoWiVnLfO0x7N7.mp4" type="video/mp4">
+            </video>
+            <div class="caption">
+              <span class="label">Real</span>
+              <span class="prompt">&ldquo;rotate cube clockwise around the vertical axis.&rdquo;</span>
+            </div>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/1lYGfIB6ZNpzWpUue6EXX3mIWF3XVJA0E.mp4" type="video/mp4">
+            </video>
+            <div class="caption">
+              <span class="label">Sim &middot; CW</span>
+              <span class="prompt">&ldquo;rotate cube clockwise around the vertical axis.&rdquo;</span>
+            </div>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/174TJF3ZfsHhcNxJiEpGuDBdvos5nhCSH.mp4" type="video/mp4">
+            </video>
+            <div class="caption">
+              <span class="label">Sim &middot; CCW</span>
+              <span class="prompt">&ldquo;rotate cube counter-clockwise around the vertical axis.&rdquo;</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     PROMPT CONTROLLABILITY
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Prompt controllability</div>
+    <h2 class="section-title">Same scene, three different goals</h2>
+    <p class="lede">
+      With identical initial observations, the prompt alone steers the planner &mdash; and therefore the
+      robot &mdash; to different objects on the table.
+    </p>
+
+    <div class="columns is-multiline cards-grid">
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1mI8D5_gftuv-RUMeXIuB_LS8tIzponJr.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="prompt">&ldquo;Approach the cup.&rdquo;</span></div>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1E9hYEmgWqnZWT0QIUqxq211TlfbxQpD3.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="prompt">&ldquo;Approach the lego block.&rdquo;</span></div>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1dxQTGq5l9_X9qZPLoU5L2-CSj3EHSA7e.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="prompt">&ldquo;Approach the tennis ball.&rdquo;</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     HIDDEN BUTTON  (reasoning under occlusion)
+     ================================================================ -->
+<section class="section is-shaded-warm">
+  <div class="container is-max-desktop">
+    <div class="kicker">Reasoning under occlusion</div>
+    <h2 class="section-title">The hidden-button task</h2>
+    <p class="lede">
+      A target button sits behind a partial occluder, visible from only one camera view. To solve the
+      task, the policy must integrate the prompt with multi-view evidence.
+    </p>
+
+    <div class="columns cards-grid compare-rail">
+      <div class="column is-half is-ours">
+        <h4>VJAM <span style="font-weight:400; color:var(--vjam-muted);">(ours)</span></h4>
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1Cb2ZsZWgoHf0-8FO2UIMjPeelXC9y_EZ.mp4" type="video/mp4">
+          </video>
+          <div class="caption">
+            <span class="prompt">&ldquo;push the blue button.&rdquo;</span>
+            Finds the occluded target and presses it.
+          </div>
+        </div>
+      </div>
+      <div class="column is-half">
+        <h4>DreamZero <span style="font-weight:400; color:var(--vjam-muted);">(baseline)</span></h4>
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/18jhPQFM4zMQf9KKR3sdlA65zWYtAXjiQ.mp4" type="video/mp4">
+          </video>
+          <div class="caption">
+            Approaches the wall, fails to interact with the hidden target.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     IDM DESIGN STUDY
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Why a structured IDM</div>
+    <h2 class="section-title">Faithfulness, data-efficiency, scaling with DoFs</h2>
+    <p class="lede">
+      A controlled toy study isolates the contribution of structure. Constraining actions to enter through
+      a learned tangent map &mdash; rather than regressing them from raw image pairs &mdash; pays off
+      precisely where it matters: limited data, high-dimensional action spaces.
+    </p>
+    <div class="figure-block">
+      <img src="./static/figures/fig4_idm_dof_study.png"
+           alt="J-IDM scales more favorably with action dimensionality"
+           style="max-width:88%;">
+      <div class="figure-caption">
+        <strong>(a)</strong> Actions recovered from generated videos by direct-IDM baselines vs.&nbsp;J-IDM,
+        for increasing degrees of freedom. <strong>(b)</strong> Under a fixed training budget, the
+        direct-IDM gap to J-IDM widens as DoF grows. <strong>(c)</strong> In the high-DoF regime, J-IDM
+        holds a better data&ndash;accuracy frontier.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     BIBTEX
+     ================================================================ -->
+<section class="section is-shaded" id="bibtex">
+  <div class="container is-narrow">
+    <div class="kicker">Cite</div>
+    <h2 class="section-title">BibTeX</h2>
+    <pre class="bibtex-block">@inproceedings{vjam2026anonymous,
+  title     = {Turning Video Models into Generalist Robot Policies},
+  author    = {Anonymous},
+  booktitle = {Submitted to the Thirty-Eighth Annual Conference on Neural Information Processing Systems},
+  year      = {2026},
+  note      = {Under double-blind review.}
+}</pre>
+  </div>
+</section>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="footer">
+  <div class="container is-narrow">
+    <p>
+      Page built from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> template
+      (CC BY-SA&nbsp;4.0). Videos and figures are produced by the authors.
+    </p>
+    <p>&copy; 2026 Anonymous Authors &middot; NeurIPS 2026 submission</p>
+  </div>
+</footer>
+
+</body>
+</html>

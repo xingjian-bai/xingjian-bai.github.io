@@ -1,0 +1,364 @@
+/* ============================================================
+   VJAM project page — refined layout & typography
+   Magenta accent (#d6336c) matches paper \hypersetup{urlcolor=magenta}.
+   Built on top of Bulma + nerfies index.css.
+   ============================================================ */
+
+:root {
+  --vjam-accent:        #d6336c;
+  --vjam-accent-hover:  #ad225a;
+  --vjam-accent-soft:   #fbe5ed;
+  --vjam-ink:           #14171a;
+  --vjam-ink-soft:      #2c333a;
+  --vjam-muted:         #5a6470;
+  --vjam-rule:          #eef0f2;
+  --vjam-tint:          #fafbfc;
+  --vjam-tint-warm:     #faf7f9;
+
+  --r-card:    10px;
+  --r-pill:    999px;
+  --shadow-card:    0 1px 2px rgba(20,23,26,.05), 0 6px 18px rgba(20,23,26,.05);
+  --shadow-hover:   0 2px 4px rgba(20,23,26,.06), 0 14px 28px rgba(20,23,26,.08);
+}
+
+/* ---------- base ---------- */
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+  color: var(--vjam-ink-soft);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a, a:visited { color: var(--vjam-accent); }
+a:hover { color: var(--vjam-accent-hover); text-decoration: underline; }
+
+p { line-height: 1.7; }
+
+.publication-title,
+.section-title,
+.title, .subtitle,
+h1, h2, h3, h4, h5 {
+  font-family: 'Google Sans', sans-serif;
+  color: var(--vjam-ink);
+}
+
+/* Tighter section padding than Bulma's default 3rem 1.5rem */
+.section {
+  padding: 2.6rem 1.5rem;
+}
+.section.is-tight   { padding: 1.6rem 1.5rem; }
+.section.is-shaded  { background: var(--vjam-tint); }
+.section.is-shaded-warm { background: var(--vjam-tint-warm); }
+
+.container.is-narrow { max-width: 880px; }
+
+/* ---------- shared "kicker → title → lede" rhythm ---------- */
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: var(--vjam-accent);
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 0.55rem;
+}
+
+.section-title {
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  font-size: 1.85rem;
+  line-height: 1.25;
+  margin: 0 0 0.65rem;
+}
+
+.lede {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 1.5rem;
+  color: var(--vjam-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* ---------- hero ---------- */
+
+.hero.is-vjam-hero {
+  background:
+    radial-gradient(1200px 400px at 50% -10%, rgba(214,51,108,0.06), transparent 60%),
+    linear-gradient(180deg, #fff 0%, var(--vjam-tint-warm) 100%);
+  padding: 4.2rem 1.5rem 2.6rem;
+  text-align: center;
+}
+
+.publication-title {
+  font-size: 2.55rem;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.18;
+  margin: 0.15rem auto 0.55rem;
+  max-width: 880px;
+}
+
+.publication-subtitle {
+  font-size: 1.05rem;
+  color: var(--vjam-muted);
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.note-pill {
+  display: inline-block;
+  background: var(--vjam-accent-soft);
+  color: var(--vjam-accent);
+  font-size: 0.78rem;
+  padding: 0.22rem 0.7rem;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+}
+
+.is-anonymous {
+  color: var(--vjam-muted);
+  font-style: italic;
+  margin-top: 1.05rem;
+  font-size: 0.96rem;
+}
+
+.publication-links {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+}
+
+.publication-links .link-block { margin: 0; }
+
+.button.is-pub {
+  background: var(--vjam-ink);
+  color: #fff;
+  border-color: var(--vjam-ink);
+  border-radius: var(--r-pill);
+  font-weight: 500;
+  padding-left: 1.15rem;
+  padding-right: 1.15rem;
+  transition: transform .12s ease, background-color .12s ease;
+}
+.button.is-pub:hover {
+  background: var(--vjam-accent);
+  border-color: var(--vjam-accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.button.is-pub.is-ghost {
+  background: transparent;
+  color: var(--vjam-ink);
+}
+.button.is-pub.is-ghost:hover {
+  background: var(--vjam-accent-soft);
+  color: var(--vjam-accent);
+  border-color: var(--vjam-accent-soft);
+}
+
+/* ---------- teaser ---------- */
+
+.hero.is-vjam-teaser {
+  background: #fff;
+  padding: 1.4rem 1.5rem 0.6rem;
+}
+
+.teaser-frame {
+  max-width: 1040px;
+  margin: 0 auto;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  background: #000;
+}
+.teaser-frame video {
+  width: 100%;
+  display: block;
+  max-height: 64vh;
+  object-fit: contain;
+  background: #000;
+}
+
+.teaser-caption {
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--vjam-muted);
+  margin: 0.85rem auto 0;
+  max-width: 820px;
+}
+
+/* ---------- abstract ---------- */
+
+.abstract-text {
+  font-size: 1.04rem;
+  line-height: 1.78;
+  color: var(--vjam-ink-soft);
+}
+.abstract-text p { margin-bottom: 0.95rem; }
+.abstract-text strong { color: var(--vjam-ink); font-weight: 600; }
+.abstract-text em { color: var(--vjam-ink); font-style: italic; }
+
+/* ---------- figure block ---------- */
+
+.figure-block {
+  text-align: center;
+  margin: 0.4rem 0 0.6rem;
+}
+.figure-block img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: var(--shadow-card);
+}
+.figure-block .figure-caption {
+  font-size: 0.92rem;
+  color: var(--vjam-muted);
+  margin: 0.75rem auto 0;
+  max-width: 760px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* ---------- video card ---------- */
+
+.video-card {
+  background: #fff;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow .18s ease, transform .18s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.video-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+.video-card video {
+  width: 100%;
+  display: block;
+  background: #000;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.video-card.is-tall video { aspect-ratio: 4 / 3; }
+.video-card.is-wide video { aspect-ratio: 21 / 9; object-fit: cover; }
+
+.video-card .caption {
+  padding: 0.72rem 0.95rem 0.85rem;
+  font-size: 0.93rem;
+  color: var(--vjam-muted);
+  border-top: 1px solid var(--vjam-rule);
+  line-height: 1.5;
+  flex: 1;
+}
+.video-card .caption .prompt {
+  color: var(--vjam-ink);
+  font-style: italic;
+}
+.video-card .caption .label {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vjam-accent);
+  font-weight: 700;
+  margin-right: 0.45rem;
+}
+
+/* even-height grids */
+.cards-grid .column { display: flex; }
+
+/* ---------- multi-embodiment row ---------- */
+
+.embodiment-block + .embodiment-block { margin-top: 2.2rem; }
+
+.embodiment-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--vjam-rule);
+  padding-bottom: 0.55rem;
+}
+.embodiment-header h3 {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.005em;
+  color: var(--vjam-ink);
+  margin: 0;
+}
+.embodiment-header .embodiment-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vjam-accent);
+  font-weight: 700;
+}
+
+/* ---------- comparison rail (ours vs baseline) ---------- */
+
+.compare-rail .column h4 {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: var(--vjam-muted);
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+.compare-rail .column.is-ours h4 { color: var(--vjam-accent); }
+
+/* ---------- bibtex ---------- */
+
+#bibtex .bibtex-block {
+  background: #1a1d22;
+  color: #f5f7fa;
+  padding: 1.15rem 1.35rem;
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+  margin: 0;
+}
+#bibtex .bibtex-block .bib-key { color: #f59f00; }
+#bibtex .bibtex-block .bib-tag { color: #74c0fc; }
+
+/* ---------- footer ---------- */
+
+.footer {
+  background: #fff;
+  padding: 1.8rem 1.5rem 2.4rem;
+  border-top: 1px solid var(--vjam-rule);
+  font-size: 0.86rem;
+  color: var(--vjam-muted);
+  text-align: center;
+}
+.footer p { margin: 0.2rem 0; }
+
+/* ---------- responsive tweaks ---------- */
+
+@media (max-width: 768px) {
+  .publication-title { font-size: 1.85rem; }
+  .section-title     { font-size: 1.45rem; }
+  .section           { padding: 2rem 1rem; }
+  .hero.is-vjam-hero { padding: 3rem 1rem 2rem; }
+  .teaser-frame video { max-height: 50vh; }
+  .publication-links { gap: 0.4rem; }
+  .button.is-pub     { padding-left: 0.95rem; padding-right: 0.95rem; }
+}
