@@ -107,42 +107,18 @@
 </section>
 
 <!-- ================================================================
-     PIPELINE  (paper Fig.2 + Jacobian IDM showcase, unified)
+     PIPELINE  (paper Fig.2 — brief)
      ================================================================ -->
 <section class="section is-shaded">
   <div class="container is-max-desktop">
     <div class="kicker">Pipeline</div>
     <h2 class="section-title">A planner, a translator, a closed loop</h2>
     <p class="lede">
-      The video model rolls out a short visual plan &mdash; a path along the image manifold. The
-      Jacobian-IDM predicts a per-pixel tangent map from action perturbations to image-space motion,
-      and inverts each step of the visual plan into actions by regularized least squares. The robot
-      executes, re-observes, and the planner is re-queried. One primitive subsumes perception,
-      planning, and control.
-      Because the planner is action-free, the IDM is the sole bottleneck on the generality
-      that video models offer &mdash; how to design a faithful one is the central question of
-      this work.
+      A video model proposes a short visual plan; the Jacobian-IDM inverts each step into actions; the
+      robot executes and the loop repeats. One primitive subsumes perception, planning, and control.
     </p>
     <div class="figure-block">
       <img src="./static/figures/fig2_method_overview-1.png" alt="VJAM method overview pipeline">
-    </div>
-    <div class="video-card is-wide" style="margin-top:1.4rem; margin-bottom:1rem;">
-      <video autoplay loop muted playsinline preload="metadata">
-        <source src="./static/videos/1VPM4Svvfn0Um5SorgmWR4dCoecQJm4am.mp4" type="video/mp4">
-      </video>
-      <div class="caption">
-        <span class="label">Generated video</span>
-        What the planner imagines &mdash; a short visual lookahead in image space.
-      </div>
-    </div>
-    <div class="video-card is-wide">
-      <video autoplay loop muted playsinline preload="metadata">
-        <source src="./static/videos/1_KODF0M55P1kduNQxqCIi_fq0my_pWVe.mp4" type="video/mp4">
-      </video>
-      <div class="caption">
-        <span class="label">Jacobian field</span>
-        The per-pixel action&ndash;to&ndash;motion tangent map predicted by the IDM along the visual plan.
-      </div>
     </div>
   </div>
 </section>
@@ -307,23 +283,19 @@
      ================================================================ -->
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="kicker">Designing a faithful IDM</div>
-    <h2 class="section-title">Faithfulness, data-efficiency, scaling with DoFs</h2>
+    <div class="kicker">Why this works &middot; ablation</div>
+    <h2 class="section-title">Structure matters when data is tight and DoFs are high</h2>
     <p class="lede">
-      Why does this work? A controlled study isolates the contribution of structure: comparing the
-      Jacobian-parameterized IDM against unstructured baselines under matched data and DoF budgets, we
-      find the gain comes specifically from <em>constraining actions to enter through a tangent map</em>
-      &mdash; not from any particular network or training trick.
+      A controlled study isolates what makes faithful translation possible: gains come from
+      constraining actions to enter through a learned tangent map.
     </p>
     <div class="figure-block">
       <img src="./static/figures/fig4_idm_dof_study.png"
            alt="J-IDM scales more favorably with action dimensionality"
-           style="max-width:88%;">
+           style="max-width:72%;">
       <div class="figure-caption">
-        <strong>(a)</strong> Actions recovered from generated videos by direct-IDM baselines vs.&nbsp;J-IDM,
-        for increasing degrees of freedom. <strong>(b)</strong> Under a fixed training budget, the
-        direct-IDM gap to J-IDM widens as DoF grows. <strong>(c)</strong> In the high-DoF regime, J-IDM
-        holds a better data&ndash;accuracy frontier.
+        Direct-IDM baselines stay competitive at low DoF, but the J-IDM holds a clearly better
+        data&ndash;accuracy frontier as the action space grows.
       </div>
     </div>
   </div>
