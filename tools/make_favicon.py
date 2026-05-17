@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Turn the piggy-duck DALLE image into a tasteful single-tone favicon.
+"""Turn the piggy-duck DALLE image into a full-color favicon / site mark.
 
 Output:
   img/favicon.png            32x32
   img/favicon-192.png       192x192
   img/apple-touch-icon.png  180x180
+  img/mark.png               512x512
 """
 import sys
 from pathlib import Path
@@ -41,7 +42,7 @@ def main():
     img = Image.open(SRC).convert("RGB")
     sq = center_square(img)
     sq = sq.resize((512, 512), Image.LANCZOS)
-    duo = duotone(sq, INK_BLUE, CREAM)
+    duo = sq  # keep the original full-color art (duotone() kept below but unused)
 
     out_dir = Path("img")
     duo.resize((32, 32), Image.LANCZOS).save(out_dir / "favicon.png", optimize=True)
