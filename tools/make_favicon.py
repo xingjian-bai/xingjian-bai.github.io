@@ -6,6 +6,7 @@ Output:
   img/favicon-192.png       192x192
   img/apple-touch-icon.png  180x180
   img/mark.png               512x512
+  favicon.ico                (site root; 16/32/48 — browsers request this by default)
 """
 import sys
 from pathlib import Path
@@ -49,7 +50,10 @@ def main():
     duo.resize((192, 192), Image.LANCZOS).save(out_dir / "favicon-192.png", optimize=True)
     duo.resize((180, 180), Image.LANCZOS).save(out_dir / "apple-touch-icon.png", optimize=True)
     duo.resize((512, 512), Image.LANCZOS).save(out_dir / "mark.png", optimize=True)
-    print("wrote favicon.png, favicon-192.png, apple-touch-icon.png, mark.png")
+    # Root /favicon.ico: browsers request this implicitly for the tab icon
+    # regardless of <link rel="icon">. Multi-size so it stays crisp.
+    duo.save(Path("favicon.ico"), sizes=[(16, 16), (32, 32), (48, 48)])
+    print("wrote favicon.png, favicon-192.png, apple-touch-icon.png, mark.png, favicon.ico")
 
 if __name__ == "__main__":
     main()
