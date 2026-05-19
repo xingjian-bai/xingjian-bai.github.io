@@ -201,9 +201,11 @@ h1, h2, h3, h4, h5 {
 /* ---------- abstract ---------- */
 
 .abstract-text {
-  font-size: 1.04rem;
-  line-height: 1.78;
+  font-size: 1.02rem;
+  line-height: 1.75;
   color: var(--vjam-ink-soft);
+  max-width: 680px;
+  margin: 0 auto;
 }
 .abstract-text p { margin-bottom: 0.95rem; }
 .abstract-text strong { color: var(--vjam-ink); font-weight: 600; }
