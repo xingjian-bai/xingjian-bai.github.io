@@ -137,18 +137,6 @@
       in-hand reorientation are produced zero-shot.
     </p>
 
-    <div class="figure-block" style="margin-bottom:1.6rem;">
-      <img src="./static/figures/fig3_dream_follow-1.png"
-           alt="J-IDM enables zero-shot multi-embodiment control">
-      <div class="figure-caption">
-        <strong>J-IDM enables zero-shot multi-embodiment control.</strong>
-        <strong>(Top-Left)</strong> &ldquo;push the orange button.&rdquo;
-        <strong>(Top-Right)</strong> &ldquo;place the yellow cube on top of the lego block.&rdquo;
-        <strong>(Bottom)</strong> 16-DoF Allegro Hand orchestrates three phases of contact-rich
-        finger motion to rotate the black cube.
-      </div>
-    </div>
-
     <!-- ---------- Franka Panda ---------- -->
     <div class="embodiment-block">
       <div class="embodiment-header">
@@ -237,6 +225,64 @@
 </section>
 
 <!-- ================================================================
+     PANDA DEEP-DIVE  (paper Fig.task-illustration -> panda_result.pdf)
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Zero-shot evaluation on Panda</div>
+    <h2 class="section-title">Task setup, the Jacobian we learn, and dream&ndash;execution alignment</h2>
+    <div class="figure-block">
+      <img src="./static/figures/panda_result-1.png"
+           alt="Zero-shot evaluation on Panda arm: task setup, Jacobian visualization, dream vs execution">
+      <div class="figure-caption" style="max-width:880px;">
+        <strong style="color:var(--vjam-accent);">a.</strong>
+        After training on DROID, we deploy zero-shot on a Panda arm in an unseen scene with ad-hoc camera
+        placements. In <em>Press-Hidden-Button</em>, the robot must press the blue button specified by
+        the language command; the button is visible from only one of the three views, and an orange
+        distractor probes instruction grounding.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">b.</strong>
+        Visualization of the visuomotor Jacobian predicted by our model across a set of action channels.
+        Columns correspond to action channels; rows correspond to viewpoints.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">c.</strong>
+        Generated frames and executed rollouts shown side by side, together with the text prompt used
+        for zero-shot evaluation. The robot's actions remain closely aligned with the generated frames
+        &mdash; the IDM is doing its job.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     ALLEGRO DEEP-DIVE  (paper Fig.3 dream_follow -> alllegro_result.pdf)
+     ================================================================ -->
+<section class="section is-shaded">
+  <div class="container is-max-desktop">
+    <div class="kicker">Zero-shot evaluation on Allegro Hand</div>
+    <h2 class="section-title">In-hand object reorientation</h2>
+    <div class="figure-block">
+      <img src="./static/figures/fig3_dream_follow-1.png"
+           alt="Zero-shot evaluation on Allegro Hand: task setup, Jacobian visualization, dream vs execution">
+      <div class="figure-caption" style="max-width:880px;">
+        <strong style="color:var(--vjam-accent);">a.</strong>
+        We train on cube-reorientation demonstrations with three language instructions
+        &mdash; <em>clockwise</em>, <em>counter-clockwise</em>, and <em>random</em> &mdash; and
+        evaluate prompt-conditioned in-hand reorientation.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">b.</strong>
+        Visualization of the visuomotor Jacobian predicted by our model across a set of action
+        channels. Columns correspond to action channels; rows correspond to viewpoints.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">c.</strong>
+        Generated frames and executed rollouts shown side by side, together with the text prompt.
+        The model carefully orchestrates dexterous finger motions to follow the visual plan.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
      PROMPT CONTROLLABILITY
      ================================================================ -->
 <section class="section">
@@ -284,7 +330,7 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="kicker">Why this works &middot; ablation</div>
-    <h2 class="section-title">Structure matters when data is tight and DoFs are high</h2>
+    <h2 class="section-title">J-IDM scales with action dimensionality</h2>
     <p class="lede">
       A controlled study isolates what makes faithful translation possible: gains come from
       constraining actions to enter through a learned tangent map.
@@ -292,10 +338,16 @@
     <div class="figure-block">
       <img src="./static/figures/fig4_idm_dof_study.png"
            alt="J-IDM scales more favorably with action dimensionality"
-           style="max-width:72%;">
-      <div class="figure-caption">
-        Direct-IDM baselines stay competitive at low DoF, but the J-IDM holds a clearly better
-        data&ndash;accuracy frontier as the action space grows.
+           style="max-width:78%;">
+      <div class="figure-caption" style="max-width:760px;">
+        <strong style="color:var(--vjam-accent);">a.</strong>
+        Rollouts of recovered actions for direct-IDM baselines and J-IDM as DoFs grow.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">b.</strong>
+        At a fixed data budget, the J-IDM gap over direct-IDMs widens with DoF.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">c.</strong>
+        At high DoF, J-IDM has a better data&ndash;accuracy trade-off across training-set sizes.
       </div>
     </div>
   </div>
