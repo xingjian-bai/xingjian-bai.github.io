@@ -29,7 +29,7 @@
      ================================================================ -->
 <section class="hero is-vjam-hero">
   <div class="container is-narrow">
-    <div class="kicker">NeurIPS 2026 &middot; Submission</div>
+    <div class="kicker">CoRL 2026 &middot; Submission</div>
     <h1 class="publication-title">
       Turning Video Models into Generalist Robot Policies
     </h1>
@@ -60,16 +60,17 @@
      ================================================================ -->
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="kicker">Headline</div>
-    <h2 class="section-title">Across embodiments, skills, and environments</h2>
-    <p class="lede">
-      A 14B video generative model paired with a faithful Jacobian-IDM tackles a wide range of
-      manipulation challenges &mdash; from zero-shot pick-and-place on a real Panda arm to
-      contact-rich 16-DoF in-hand cube re-orientation.
+    <div class="kicker">Overview</div>
+    <h2 class="section-title">Controlling robots across embodiments, skills, and environments</h2>
+    <p class="lede" style="max-width:820px;">
+      We demonstrate that a 14B video generative model, paired with an inverse dynamics model
+      carefully designed and evaluated for action-following, can be used to solve a wide variety
+      of robotics challenges &mdash; ranging from zero-shot pick-and-place tasks on a real-world
+      Panda arm to contact-rich re-orientation of a cube with a 16-DoF, multi-fingered robotic hand.
     </p>
     <div class="figure-block">
       <img src="./static/figures/fig1_main_results-1.png"
-           alt="VJAM controls robots across embodiments, skills, and environments">
+           alt="Controlling robots across embodiments, skills, and environments">
     </div>
   </div>
 </section>
@@ -83,24 +84,33 @@
     <h2 class="section-title">Decoupled video planning, faithful inverse dynamics</h2>
     <div class="abstract-text">
       <p>
-        Video generative models have emerged as a promising robotics backbone, capable of generating videos
-        that depict the completion of complex tasks across embodiments and environments. Many current
-        approaches finetune video models with action-labeled data, turning them into robot foundation
-        models that jointly predict future observations and actions.
+        Video generative models have emerged as a promising robotics backbone, capable of generating
+        videos that depict the completion of complex tasks across embodiments and environments. Many
+        current approaches finetune video models with action-labeled data, turning them into robot
+        foundation models that jointly predict future observations and actions.
       </p>
       <p>
-        We study an alternative, underexplored route: leave the video planner as is, and train an
-        embodiment-specific <em>inverse dynamics model</em> (IDM). This decoupling lets the planner
-        remain embodiment-agnostic, lets video backbones be swapped without re-training the IDM, and lets
-        the IDM be trained from autonomous self-play data.
+        In this paper, we study an alternative, underexplored route for transferring the capabilities
+        of video models into robot control: leave the video planner as is, while training an
+        embodiment-specific <em>inverse dynamics model</em> (IDM). This decoupling offers several
+        advantages: the video planner can remain embodiment-agnostic; different video models can be
+        interchanged easily without re-training the IDMs; and the inverse dynamics model can be
+        trained with the more readily available autonomous self-play data.
       </p>
       <p>
-        Our policy combines an action-free video world model with a structured IDM based on the robot
-        embodiment Jacobian. The result is a <strong>faithful</strong> video-to-action translator that
-        is data-efficient and scales to high-dimensional action spaces. We call this policy the
-        <strong>Video&ndash;Jacobian&ndash;Action Model (VJAM)</strong>; it achieves strong zero-shot
-        performance on a real Panda arm and 16-DoF Allegro-hand cube re-orientation, and the same video
-        planner drives both bodies via different embodiment-specific IDMs.
+        With this in mind, we present a closed-loop, video-to-action policy that combines an
+        action-free video world model with a carefully designed IDM based on the robot embodiment
+        Jacobian. We find that such a structure yields a <strong>faithful</strong> video-to-action
+        translator that is both data-efficient and scalable to high-dimensional action spaces. Our
+        policy, which we coin the <strong>Video&ndash;Jacobian&ndash;Action Model (VJAM)</strong>,
+        achieves strong performance across simulated and real-world benchmarks, including zero-shot
+        Panda arm manipulation and 16-DoF Allegro-hand dexterous cube re-orientation. The same video
+        planner can be used across multiple embodiments by pairing it with different
+        embodiment-specific IDMs.
+      </p>
+      <p>
+        Our results show that decoupled video planning plus faithful video-to-action translation is a
+        viable alternative route towards zero-shot, cross-embodiment, and generalizable robot control.
       </p>
     </div>
   </div>
@@ -287,7 +297,7 @@
      ================================================================ -->
 <section class="section">
   <div class="container is-max-desktop">
-    <div class="kicker">Zero-shot instruction following</div>
+    <div class="kicker">Instruction following on basic tasks</div>
     <h2 class="section-title">Same scene, three different goals</h2>
     <p class="lede">
       With identical initial observations, the prompt alone steers the planner &mdash; and therefore the
@@ -423,6 +433,23 @@
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CONCLUSION  (paper Discussion -> Conclusion)
+     ================================================================ -->
+<section class="section">
+  <div class="container is-narrow">
+    <div class="kicker">Conclusion</div>
+    <h2 class="section-title">Through the inverse dynamics model</h2>
+    <p class="abstract-text" style="font-size:1.05rem; max-width:760px; margin:0 auto;">
+      The path from a better video model to a better robot runs through the inverse dynamics model.
+      We have shown that our Jacobian-IDMs, as one realization among many possible faithful IDMs
+      &mdash; paired with an action-free video planner &mdash; enable zero-shot, multi-embodiment
+      robot control. We hope our results motivate careful attention to the design and evaluation of
+      future IDMs.
+    </p>
   </div>
 </section>
 
