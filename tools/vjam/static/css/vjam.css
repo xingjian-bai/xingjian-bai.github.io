@@ -206,6 +206,10 @@ h1, h2, h3, h4, h5 {
   color: var(--vjam-ink-soft);
   max-width: 680px;
   margin: 0 auto;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 .abstract-text p { margin-bottom: 0.95rem; }
 .abstract-text strong { color: var(--vjam-ink); font-weight: 600; }
