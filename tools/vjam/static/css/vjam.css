@@ -357,12 +357,51 @@ h1, h2, h3, h4, h5 {
 }
 .footer p { margin: 0.2rem 0; }
 
+/* ---------- prompt-group (shared prompt header above paired cards) ---------- */
+
+.prompt-group { margin-bottom: 1.4rem; }
+.prompt-group + .prompt-group { margin-top: 1.2rem; }
+
+.prompt-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  padding: 0.55rem 0.95rem;
+  background: var(--vjam-accent-soft);
+  border-left: 4px solid var(--vjam-accent);
+  border-radius: 6px;
+  margin-bottom: 0.7rem;
+}
+.prompt-header-label {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vjam-accent);
+  white-space: nowrap;
+}
+.prompt-header-text {
+  color: var(--vjam-ink);
+  font-size: 0.97rem;
+  line-height: 1.5;
+  font-style: italic;
+  flex: 1 1 320px;
+}
+
 /* ============================================================ */
 /* .method-anim  —  interactive 5-step closed-loop walkthrough  */
 /* (placeholder until the polished animation is built)          */
 /* ============================================================ */
 
 .method-anim {
+  --step-1: #e6a23c;   /* warm yellow-orange — observation history */
+  --step-2: #7b4f2a;   /* medium brown      — video model         */
+  --step-3: #1e7e34;   /* darker green      — visual plan         */
+  --step-4: #6fb55c;   /* lighter green     — Jacobian translation*/
+  --step-5: #1d4ed8;   /* deep blue         — robot execution     */
+
   margin: 1.6rem auto 0;
   max-width: 960px;
   padding: 1.3rem 1.3rem 1.1rem;
@@ -401,31 +440,43 @@ h1, h2, h3, h4, h5 {
 }
 
 .ma-step {
+  --step-color: var(--vjam-muted);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   background: transparent;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   border-radius: 12px;
   padding: 0.45rem 0.55rem 0.55rem;
-  min-width: 122px;
+  min-width: 118px;
   cursor: pointer;
   position: relative;
-  transition: background-color .18s ease, border-color .18s ease, transform .18s ease, opacity .18s ease;
-  opacity: 0.55;
+  transition: background-color .18s ease, border-color .18s ease,
+              transform .18s ease, opacity .18s ease, color .18s ease;
+  opacity: 0.6;
   font: inherit;
-  color: inherit;
+  color: var(--vjam-muted);
 }
-.ma-step:hover {
-  background: rgba(255,255,255,.6);
-}
+
+/* assign per-step colors */
+.ma-step[data-step="1"] { --step-color: var(--step-1); }
+.ma-step[data-step="2"] { --step-color: var(--step-2); }
+.ma-step[data-step="3"] { --step-color: var(--step-3); }
+.ma-step[data-step="4"] { --step-color: var(--step-4); }
+.ma-step[data-step="5"] { --step-color: var(--step-5); }
+
+.ma-step:hover { background: rgba(255,255,255,.6); }
+
 .ma-step.is-active {
   background: #fff;
-  border-color: var(--vjam-accent);
+  border-color: var(--step-color);
+  color: var(--step-color);
   opacity: 1;
   transform: translateY(-1px);
-  box-shadow: 0 1px 2px rgba(214,51,108,.18), 0 6px 18px rgba(214,51,108,.12);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--step-color) 18%, transparent),
+    0 6px 18px color-mix(in srgb, var(--step-color) 14%, transparent);
 }
 
 .ma-num {
@@ -434,7 +485,7 @@ h1, h2, h3, h4, h5 {
   right: 8px;
   width: 18px; height: 18px;
   border-radius: 50%;
-  background: var(--vjam-accent);
+  background: var(--step-color);
   color: #fff;
   font-family: 'Google Sans', sans-serif;
   font-size: 0.7rem;
@@ -443,106 +494,124 @@ h1, h2, h3, h4, h5 {
 }
 
 .ma-icon {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   border-radius: 10px;
   background: #fff;
-  border: 1px solid var(--vjam-accent);
+  border: 1.5px solid var(--step-color);
   position: relative;
   overflow: hidden;
-}
-.ma-icon::before,
-.ma-icon::after {
-  content: "";
-  position: absolute;
-  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* per-step icon animations — run only when the step is active */
-.ma-step:not(.is-active) .ma-icon::before,
-.ma-step:not(.is-active) .ma-icon::after {
-  animation-play-state: paused;
+.ma-svg {
+  width: 100%;
+  height: 100%;
+  color: var(--step-color);   /* inline SVGs use currentColor */
 }
 
-/* obs history — film-strip slide */
-.icon-frames::before {
-  background:
-    repeating-linear-gradient(90deg, rgba(214,51,108,.5) 0 3px, transparent 3px 14px);
-  animation: anim-frames 2.4s linear infinite;
-}
-@keyframes anim-frames {
-  from { transform: translateX(-14px); }
-  to   { transform: translateX(0); }
+/* pause icon animations on inactive steps */
+.ma-step:not(.is-active) .ma-svg * {
+  animation-play-state: paused !important;
 }
 
-/* video model — pulsating "brain" */
-.icon-videomodel::before {
-  background:
-    radial-gradient(circle at 50% 50%, rgba(214,51,108,.65) 0 18%, transparent 19%),
-    radial-gradient(circle at 30% 30%, rgba(214,51,108,.35) 0 10%, transparent 11%),
-    radial-gradient(circle at 70% 70%, rgba(214,51,108,.35) 0 10%, transparent 11%);
-  animation: anim-vmodel 2s ease-in-out infinite;
-}
-@keyframes anim-vmodel {
-  0%,100% { transform: scale(1);    opacity: .85; }
-  50%     { transform: scale(1.12); opacity: 1;   }
+/* ---- per-step icon animations ---- */
+
+/* (1) Observation history — frames slide horizontally with fade */
+.ic-frame { opacity: 0.6; }
+.ic-frame.f1 { animation: ic-frame-pulse 2.4s ease-in-out infinite 0s; }
+.ic-frame.f2 { animation: ic-frame-pulse 2.4s ease-in-out infinite 0.4s; }
+.ic-frame.f3 { animation: ic-frame-pulse 2.4s ease-in-out infinite 0.8s; }
+.ic-frame.f4 { animation: ic-frame-pulse 2.4s ease-in-out infinite 1.2s; }
+@keyframes ic-frame-pulse {
+  0%, 80%, 100% { opacity: 0.55; transform: translateY(0); }
+  20%, 50%      { opacity: 1;    transform: translateY(-1.5px); }
 }
 
-/* visual plan — drifting cloud */
-.icon-dream::before {
-  background:
-    radial-gradient(ellipse at 30% 50%, rgba(214,51,108,.6),  transparent 55%),
-    radial-gradient(ellipse at 70% 50%, rgba(214,51,108,.35), transparent 55%);
-  animation: anim-dream 3s ease-in-out infinite;
+/* (2) Video model — node pulse */
+.ic-net .ic-edge { stroke: currentColor; opacity: 0.45; }
+.ic-net .ic-pulse {
+  animation: ic-vmodel-pulse 1.8s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
 }
-@keyframes anim-dream {
-  0%,100% { transform: translateX(-6px) scale(1);    opacity: .85; }
-  50%     { transform: translateX( 6px) scale(1.06); opacity: 1;   }
-}
-
-/* Jacobian — vector grid that flexes */
-.icon-jacobian::before {
-  background:
-    linear-gradient(transparent 49%, rgba(214,51,108,.65) 49% 51%, transparent 51%),
-    linear-gradient(90deg, transparent 49%, rgba(214,51,108,.65) 49% 51%, transparent 51%);
-  background-size: 14px 14px;
-  animation: anim-jac 2.6s ease-in-out infinite;
-}
-@keyframes anim-jac {
-  0%,100% { transform: skewX(-5deg); }
-  50%     { transform: skewX(5deg);  }
+.ic-net .ic-pulse:nth-of-type(2) { animation-delay: 0.5s; }
+@keyframes ic-vmodel-pulse {
+  0%,100% { transform: scale(1);    opacity: 0.85; }
+  50%     { transform: scale(1.35); opacity: 1;    }
 }
 
-/* robot — end-effector tracing a path */
-.icon-robot::after {
-  background: radial-gradient(circle at 50% 50%, var(--vjam-accent) 0 9%, transparent 10%);
-  animation: anim-robot 2.4s linear infinite;
+/* (3) Visual plan — frames slowly drift forward + play pulse */
+.ic-plan .ic-pframe {
+  animation: ic-pframe-drift 3s ease-in-out infinite;
 }
-@keyframes anim-robot {
-  0%   { transform: translate(-22%,-22%); }
-  25%  { transform: translate( 22%,-22%); }
-  50%  { transform: translate( 22%, 22%); }
-  75%  { transform: translate(-22%, 22%); }
-  100% { transform: translate(-22%,-22%); }
+.ic-plan .p1 { animation-delay: 0s; }
+.ic-plan .p2 { animation-delay: 0.4s; }
+.ic-plan .p3 { animation-delay: 0.8s; }
+@keyframes ic-pframe-drift {
+  0%, 100% { transform: translateX(0)    scale(1); }
+  50%      { transform: translateX(-1px) scale(1.02); }
+}
+.ic-plan .ic-play {
+  animation: ic-play-pulse 1.6s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@keyframes ic-play-pulse {
+  0%,100% { opacity: 0.85; transform: scale(1); }
+  50%     { opacity: 1;    transform: scale(1.18); }
+}
+
+/* (4) Jacobian — vector field rotates subtly */
+.ic-vec .ic-arrow {
+  animation: ic-vec-rotate 3.4s ease-in-out infinite;
+  transform-origin: 0 0;
+  transform-box: fill-box;
+}
+.ic-vec .ic-arrow:nth-child(odd)  { animation-delay: 0s; }
+.ic-vec .ic-arrow:nth-child(even) { animation-delay: 1.2s; }
+@keyframes ic-vec-rotate {
+  0%, 100% { filter: brightness(0.95); }
+  50%      { filter: brightness(1.15); }
+}
+
+/* (5) Robot execution — end-effector dot bounces along trajectory */
+.ic-arm .ic-eedot {
+  animation: ic-ee-move 2s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@keyframes ic-ee-move {
+  0%,100% { transform: translate(-2px,  3px); opacity: 0.7; }
+  50%     { transform: translate( 2px, -2px); opacity: 1;   }
+}
+.ic-arm .ic-traj { animation: ic-traj-dash 2s linear infinite; }
+@keyframes ic-traj-dash {
+  to { stroke-dashoffset: -8; }
 }
 
 .ma-label {
   font-size: 0.78rem;
-  color: var(--vjam-ink);
+  color: inherit;
   font-weight: 600;
-  margin-top: 0.5rem;
+  margin-top: 0.55rem;
   text-align: center;
   letter-spacing: 0.005em;
   line-height: 1.25;
 }
 
+.ma-step.is-active .ma-label { color: var(--step-color); }
+
+/* between-step arrow (small) */
 .ma-arrow {
   align-self: center;
-  width: 24px;
+  width: 22px;
   height: 2px;
-  background: var(--vjam-accent);
+  background: var(--vjam-muted);
   position: relative;
-  opacity: .55;
+  opacity: .5;
 }
 .ma-arrow::after {
   content: "";
@@ -551,40 +620,61 @@ h1, h2, h3, h4, h5 {
   top: 50%;
   width: 0; height: 0;
   border: 5px solid transparent;
-  border-left-color: var(--vjam-accent);
+  border-left-color: var(--vjam-muted);
   transform: translateY(-50%);
 }
 
-/* loop-back arrow */
-.ma-loopback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.55rem;
-  margin: 0.4rem 0 0.8rem;
-  font-size: 0.76rem;
-  font-family: 'Google Sans', sans-serif;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--vjam-accent);
-  text-transform: uppercase;
-}
-.ma-loopback-arrow {
+/* ---- closed-loop arrow (U-shape from step 5 back to step 1) ---- */
+
+.ma-loop {
   position: relative;
-  display: inline-block;
-  width: 38px;
-  height: 14px;
-  border: 1.5px dashed var(--vjam-accent);
-  border-right: 0;
-  border-top: 0;
-  border-bottom-left-radius: 14px 7px;
+  height: 38px;
+  margin: 0.4rem auto 0.9rem;
+  max-width: 88%;
 }
-.ma-loopback-arrow::before {
+.ma-loop-path {
+  position: absolute;
+  inset: 0 22px;
+  border: 2px dashed var(--vjam-accent);
+  border-top: 0;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  opacity: 0.85;
+}
+/* upward arrowhead at top-left of the U, "feeding into" step 1 */
+.ma-loop-path::before {
   content: "";
   position: absolute;
-  left: -1px; bottom: -6px;
-  border: 5px solid transparent;
-  border-top-color: var(--vjam-accent);
+  left: -7px;
+  top: -3px;
+  width: 0; height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 9px solid var(--vjam-accent);
+}
+/* small terminator at top-right of the U, "leaving from" step 5 */
+.ma-loop-path::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: -3px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--vjam-accent);
+}
+.ma-loop-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--vjam-accent-soft);
+  padding: 2px 12px;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--vjam-accent);
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 /* ---- detail panel ---- */
@@ -592,22 +682,36 @@ h1, h2, h3, h4, h5 {
 .ma-detail {
   background: #fff;
   border-radius: 10px;
-  padding: 0.85rem 1.1rem;
-  border: 1px solid rgba(214,51,108,.25);
-  max-width: 760px;
+  padding: 0.95rem 1.15rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-left: 4px solid var(--vjam-accent);
+  max-width: 780px;
   margin: 0 auto;
   text-align: left;
+  transition: border-color .18s ease;
 }
+.method-anim[data-active="1"] .ma-detail { border-left-color: var(--step-1); }
+.method-anim[data-active="2"] .ma-detail { border-left-color: var(--step-2); }
+.method-anim[data-active="3"] .ma-detail { border-left-color: var(--step-3); }
+.method-anim[data-active="4"] .ma-detail { border-left-color: var(--step-4); }
+.method-anim[data-active="5"] .ma-detail { border-left-color: var(--step-5); }
+
 .ma-detail-title {
   font-family: 'Google Sans', sans-serif;
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: var(--vjam-accent);
-  letter-spacing: 0.02em;
-  margin-bottom: 0.3rem;
-}
-.ma-detail-body {
   font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.32rem;
+  color: var(--vjam-accent);
+}
+.method-anim[data-active="1"] .ma-detail-title { color: var(--step-1); }
+.method-anim[data-active="2"] .ma-detail-title { color: var(--step-2); }
+.method-anim[data-active="3"] .ma-detail-title { color: var(--step-3); }
+.method-anim[data-active="4"] .ma-detail-title { color: var(--step-4); }
+.method-anim[data-active="5"] .ma-detail-title { color: var(--step-5); }
+
+.ma-detail-body {
+  font-size: 0.96rem;
   color: var(--vjam-ink-soft);
   line-height: 1.6;
 }
@@ -624,7 +728,7 @@ h1, h2, h3, h4, h5 {
 @media (max-width: 720px) {
   .ma-arrow { display: none; }
   .ma-track { gap: 0.1rem; }
-  .ma-step  { min-width: 96px; padding: 0.4rem 0.35rem; }
+  .ma-step  { min-width: 90px; padding: 0.4rem 0.3rem; }
   .ma-icon  { width: 52px; height: 52px; }
   .ma-label { font-size: 0.72rem; }
 }
