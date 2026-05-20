@@ -61,7 +61,7 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="kicker">Overview</div>
-    <h2 class="section-title">Controlling robots across embodiments, skills, and environments</h2>
+    <h2 class="section-title">Controlling robots across embodiments, skills, and environments&mdash;<br>using generative video models paired with faithful inverse dynamics</h2>
     <p class="lede" style="max-width:820px;">
       We demonstrate that a 14B video generative model, paired with an inverse dynamics model
       carefully designed and evaluated for action-following, can be used to solve a wide variety
@@ -81,7 +81,6 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="kicker">Abstract</div>
-    <h2 class="section-title">Decoupled video planning, faithful inverse dynamics</h2>
     <div class="abstract-text">
       <p>
         Video generative models have emerged as a promising robotics backbone, capable of generating
@@ -121,7 +120,7 @@
      ================================================================ -->
 <section class="section is-shaded">
   <div class="container is-max-desktop">
-    <div class="kicker">Pipeline</div>
+    <div class="kicker">Method</div>
     <h2 class="section-title">A planner, a translator, a closed loop</h2>
     <p class="lede">
       A video model proposes a short visual plan; the Jacobian-IDM inverts each step into actions; the
@@ -129,6 +128,42 @@
     </p>
     <div class="figure-block">
       <img src="./static/figures/fig2_method_overview-1.png" alt="VJAM method overview pipeline">
+    </div>
+
+    <!-- Placeholder for the dynamic method animation; will be replaced by a
+         purpose-built HTML/CSS/JS animation that walks through one closed-loop
+         iteration (frames in -> generated video -> Jacobian field -> action chunk -> execution -> new frames in). -->
+    <div class="method-anim-placeholder" role="img"
+         aria-label="Placeholder for the upcoming method animation">
+      <div class="method-anim-row">
+        <div class="method-anim-step">
+          <div class="method-anim-icon icon-frames"></div>
+          <div class="method-anim-label">observation history</div>
+        </div>
+        <div class="method-anim-arrow"></div>
+        <div class="method-anim-step">
+          <div class="method-anim-icon icon-dream"></div>
+          <div class="method-anim-label">generated visual plan</div>
+        </div>
+        <div class="method-anim-arrow"></div>
+        <div class="method-anim-step">
+          <div class="method-anim-icon icon-jacobian"></div>
+          <div class="method-anim-label">Jacobian translation</div>
+        </div>
+        <div class="method-anim-arrow"></div>
+        <div class="method-anim-step">
+          <div class="method-anim-icon icon-robot"></div>
+          <div class="method-anim-label">robot execution</div>
+        </div>
+      </div>
+      <div class="method-anim-loop">re-observe &nbsp;&middot;&nbsp; re-plan</div>
+      <p class="method-anim-caption">
+        <strong>Placeholder.</strong> An HTML/CSS animation will replace this
+        block, walking through one full closed-loop iteration: an observation
+        history is encoded into a short generated video, the IDM reads a
+        Jacobian field off that video, the chunk of actions is executed on
+        the robot, and the loop repeats with fresh observations.
+      </p>
     </div>
   </div>
 </section>
@@ -157,33 +192,33 @@
         <div class="column is-half">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1GgnPCZeGx2Anbw9TzfETBUDHofMhaDYZ.mp4" type="video/mp4">
+              <source src="./static/videos/1hksHG79Z8UX2axBNW1w7AmBIJiHKjVT9.mp4" type="video/mp4">
             </video>
-            <div class="caption"><span class="prompt">&ldquo;place the yellow cube on top of the lego block.&rdquo;</span></div>
+            <div class="caption"><span class="prompt">Real-world Panda rollout &middot; view&nbsp;1</span></div>
           </div>
         </div>
         <div class="column is-half">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1_K5cd0OAo7Qd2Dimg2wKA_K6a2LLy8hN.mp4" type="video/mp4">
+              <source src="./static/videos/1u9L9GWmqkY3ZNovHc5n11jEYDlMqQVwR.mp4" type="video/mp4">
             </video>
-            <div class="caption"><span class="prompt">&ldquo;approach and push the blue button.&rdquo;</span></div>
+            <div class="caption"><span class="prompt">Same trajectory &middot; view&nbsp;2</span></div>
           </div>
         </div>
         <div class="column is-half">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1CMzFPTIYAiR69stAuTuQ7TEzXgZpQdDZ.mp4" type="video/mp4">
+              <source src="./static/videos/1KIQfkZg7NyVa_SYdl6NETjqXFw7sEk_I.mp4" type="video/mp4">
             </video>
-            <div class="caption"><span class="prompt">&ldquo;approach and push the orange button.&rdquo;</span></div>
+            <div class="caption"><span class="prompt">Real-world Panda rollout &middot; another prompt</span></div>
           </div>
         </div>
         <div class="column is-half">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/19-dwtdoq2i5n5pm1dSMoX5x48MjnImR9.mp4" type="video/mp4">
+              <source src="./static/videos/1fWCKvHcgpRWFjQBmlNs9zIqWi66_kJpq.mp4" type="video/mp4">
             </video>
-            <div class="caption"><span class="prompt">&ldquo;pick up the green tennis ball and place it inside the bowl.&rdquo;</span></div>
+            <div class="caption"><span class="prompt">Same prompt &middot; another view</span></div>
           </div>
         </div>
       </div>
@@ -199,22 +234,22 @@
         <div class="column is-one-third">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1hksHG79Z8UX2axBNW1w7AmBIJiHKjVT9.mp4" type="video/mp4">
+              <source src="./static/videos/1kKDtGEzT2HJgX1qEDaezHoaudvxtIUlz.mp4" type="video/mp4">
             </video>
             <div class="caption">
               <span class="label">Real robot</span>
-              <span class="prompt">&ldquo;rotate the cube clockwise around the vertical axis.&rdquo;</span>
+              <span class="prompt">in-hand cube reorientation.</span>
             </div>
           </div>
         </div>
         <div class="column is-one-third">
           <div class="video-card">
             <video autoplay loop muted playsinline preload="metadata">
-              <source src="./static/videos/1u9L9GWmqkY3ZNovHc5n11jEYDlMqQVwR.mp4" type="video/mp4">
+              <source src="./static/videos/1PvXxk24FDf_pa0eikB3Vc8XXjLUuGaTp.mp4" type="video/mp4">
             </video>
             <div class="caption">
               <span class="label">Simulator</span>
-              <span class="prompt">&ldquo;rotate the cube clockwise around the vertical axis.&rdquo;</span>
+              <span class="prompt">policy visualization, CCW rotation.</span>
             </div>
           </div>
         </div>
@@ -225,7 +260,7 @@
             </video>
             <div class="caption">
               <span class="label">Simulator</span>
-              <span class="prompt">&ldquo;rotate the cube counter-clockwise around the vertical axis.&rdquo;</span>
+              <span class="prompt">counter-clockwise reorientation.</span>
             </div>
           </div>
         </div>
@@ -309,7 +344,7 @@
       <div class="column is-one-third">
         <div class="video-card">
           <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/1mI8D5_gftuv-RUMeXIuB_LS8tIzponJr.mp4" type="video/mp4">
+            <source src="./static/videos/1pmu4WpzWynrTOuFCsC0AKaI5Y-rL9-61.mp4" type="video/mp4">
           </video>
           <div class="caption"><span class="prompt">&ldquo;Approach the cup.&rdquo;</span></div>
         </div>
@@ -317,7 +352,7 @@
       <div class="column is-one-third">
         <div class="video-card">
           <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/1E9hYEmgWqnZWT0QIUqxq211TlfbxQpD3.mp4" type="video/mp4">
+            <source src="./static/videos/1eyAp6nJjvgTqpsapncfq901LurSAU6c1.mp4" type="video/mp4">
           </video>
           <div class="caption"><span class="prompt">&ldquo;Approach the lego block.&rdquo;</span></div>
         </div>
@@ -325,7 +360,7 @@
       <div class="column is-one-third">
         <div class="video-card">
           <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/1dxQTGq5l9_X9qZPLoU5L2-CSj3EHSA7e.mp4" type="video/mp4">
+            <source src="./static/videos/1UfyE8U2wmbondFNuRrqnF4W3l37B0AZY.mp4" type="video/mp4">
           </video>
           <div class="caption"><span class="prompt">&ldquo;Approach the tennis ball.&rdquo;</span></div>
         </div>
@@ -382,7 +417,7 @@
         <h4>VJAM <span style="font-weight:400; color:var(--vjam-muted);">(ours)</span></h4>
         <div class="video-card">
           <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/1kKDtGEzT2HJgX1qEDaezHoaudvxtIUlz.mp4" type="video/mp4">
+            <source src="./static/videos/1Bdt4pceeTJOzC1WNinNoWiVnLfO0x7N7.mp4" type="video/mp4">
           </video>
           <div class="caption">
             <span class="prompt">&ldquo;push the blue button.&rdquo;</span>

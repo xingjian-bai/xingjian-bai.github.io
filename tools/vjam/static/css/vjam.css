@@ -357,6 +357,176 @@ h1, h2, h3, h4, h5 {
 }
 .footer p { margin: 0.2rem 0; }
 
+/* -------------------------------------------------------------- */
+/* method-anim-placeholder                                        */
+/* Visible-but-clearly-WIP block reserved for the upcoming        */
+/* HTML/CSS animation that walks through the closed-loop method.  */
+/* -------------------------------------------------------------- */
+
+.method-anim-placeholder {
+  margin: 1.6rem auto 0;
+  max-width: 900px;
+  padding: 1.4rem 1.4rem 1.1rem;
+  border: 2px dashed var(--vjam-accent);
+  border-radius: 14px;
+  background: var(--vjam-accent-soft);
+  text-align: center;
+  position: relative;
+}
+.method-anim-placeholder::before {
+  content: "PLACEHOLDER \00B7 method animation";
+  position: absolute;
+  top: -0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: var(--vjam-accent);
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 0.2rem 0.7rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--vjam-accent);
+  text-transform: uppercase;
+}
+
+.method-anim-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin: 0.65rem 0 0.4rem;
+}
+
+.method-anim-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 120px;
+  padding: 0.35rem 0.4rem 0.45rem;
+}
+
+.method-anim-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--vjam-accent);
+  position: relative;
+  overflow: hidden;
+}
+
+.method-anim-icon::before,
+.method-anim-icon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+/* obs frames — stacked rectangles, gently slide */
+.icon-frames::before {
+  background:
+    linear-gradient(180deg, rgba(214,51,108,.18), transparent),
+    repeating-linear-gradient(135deg, rgba(214,51,108,.5) 0 2px, transparent 2px 8px);
+  animation: anim-frames 2.4s ease-in-out infinite;
+}
+@keyframes anim-frames {
+  0%,100% { transform: translateX(-4px); }
+  50%     { transform: translateX(4px); }
+}
+
+/* generated visual plan — a soft moving glow */
+.icon-dream::before {
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(214,51,108,.6), transparent 55%),
+    radial-gradient(ellipse at 70% 50%, rgba(214,51,108,.35), transparent 55%);
+  animation: anim-dream 3s ease-in-out infinite;
+}
+@keyframes anim-dream {
+  0%,100% { transform: scale(1)    rotate(0deg); opacity: .85; }
+  50%     { transform: scale(1.08) rotate(2deg); opacity: 1;   }
+}
+
+/* Jacobian field — vector grid that flexes */
+.icon-jacobian::before {
+  background:
+    linear-gradient(transparent 49%, rgba(214,51,108,.65) 49% 51%, transparent 51%),
+    linear-gradient(90deg, transparent 49%, rgba(214,51,108,.65) 49% 51%, transparent 51%);
+  background-size: 16px 16px;
+  animation: anim-jac 2.6s ease-in-out infinite;
+}
+@keyframes anim-jac {
+  0%,100% { transform: skewX(-4deg); }
+  50%     { transform: skewX(4deg);  }
+}
+
+/* robot end-effector — a moving dot */
+.icon-robot::after {
+  background: radial-gradient(circle at 50% 50%, var(--vjam-accent) 0 8%, transparent 9%);
+  animation: anim-robot 2s linear infinite;
+}
+@keyframes anim-robot {
+  0%   { transform: translate(-22%,-22%); }
+  25%  { transform: translate( 22%,-22%); }
+  50%  { transform: translate( 22%, 22%); }
+  75%  { transform: translate(-22%, 22%); }
+  100% { transform: translate(-22%,-22%); }
+}
+
+.method-anim-label {
+  font-size: 0.75rem;
+  color: var(--vjam-ink);
+  font-weight: 600;
+  margin-top: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.method-anim-arrow {
+  width: 28px;
+  height: 2px;
+  background: var(--vjam-accent);
+  position: relative;
+  opacity: .8;
+}
+.method-anim-arrow::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: 50%;
+  width: 0; height: 0;
+  border: 5px solid transparent;
+  border-left-color: var(--vjam-accent);
+  transform: translateY(-50%);
+}
+
+.method-anim-loop {
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vjam-accent);
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 700;
+}
+
+.method-anim-caption {
+  margin: 0.85rem auto 0;
+  max-width: 720px;
+  font-size: 0.88rem;
+  color: var(--vjam-muted);
+  line-height: 1.55;
+}
+.method-anim-caption strong { color: var(--vjam-accent); }
+
+@media (max-width: 640px) {
+  .method-anim-arrow { display: none; }
+  .method-anim-row   { gap: 0.4rem; }
+  .method-anim-step  { min-width: 0; }
+  .method-anim-icon  { width: 52px; height: 52px; }
+}
+
 /* ---------- responsive tweaks ---------- */
 
 @media (max-width: 768px) {
