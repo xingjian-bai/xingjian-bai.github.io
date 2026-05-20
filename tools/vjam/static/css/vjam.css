@@ -636,13 +636,13 @@ h1, h2, h3, h4, h5 {
   transform: translateY(-50%);
 }
 
-/* ---- closed-loop arrow (SVG path with chevron marker) ---- */
+/* ---- closed-loop arrow (rectangle around steps, SVG chevron at the tip) ---- */
 
 .ma-loop {
   position: relative;
-  height: 42px;
-  margin: 0.5rem auto 0.95rem;
-  max-width: 92%;
+  height: 68px;
+  margin: 0.2rem auto 1rem;
+  max-width: 96%;
   color: var(--active-color);
   transition: color .25s ease;
 }
@@ -652,10 +652,12 @@ h1, h2, h3, h4, h5 {
   height: 100%;
   overflow: visible;
 }
+/* label sits ON the bottom horizontal line of the rectangle.
+   55/60 of viewBox height = ~92% of container height. */
 .ma-loop-label {
   position: absolute;
   left: 50%;
-  top: 64%;
+  top: 92%;
   transform: translate(-50%, -50%);
   background: color-mix(in srgb, var(--active-color) 8%, white);
   border: 1px solid color-mix(in srgb, var(--active-color) 30%, transparent);

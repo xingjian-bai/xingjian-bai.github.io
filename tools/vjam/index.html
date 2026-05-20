@@ -250,17 +250,31 @@
         </button>
       </div>
 
-      <!-- closed-loop arrow: SVG path with chevron marker auto-aligned to direction -->
+      <!-- closed-loop arrow: rectangular loop AROUND the step row.
+           Path: start at right of step 5 -> right -> down -> long left across
+           bottom -> up -> right into step 1's left edge (arrowhead points right).
+           Together with the gray inter-step arrows this completes a full loop. -->
       <div class="ma-loop" aria-hidden="true">
-        <svg class="ma-loop-svg" viewBox="0 0 1000 40" preserveAspectRatio="none">
+        <svg class="ma-loop-svg" viewBox="0 0 1000 60" preserveAspectRatio="none">
           <defs>
-            <marker id="loopChevron" markerWidth="22" markerHeight="22" refX="11" refY="6"
+            <!-- chevron marker; its local +x axis aligns with path tangent at the endpoint,
+                 so the apex always points the way the path is "going" -->
+            <marker id="loopChevron" markerWidth="14" markerHeight="14" refX="12" refY="7"
                     orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M 2,14 L 11,2 L 20,14" fill="none" stroke="currentColor"
+              <path d="M 1,1 L 12,7 L 1,13" fill="none" stroke="currentColor"
                     stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
             </marker>
           </defs>
-          <path d="M 990,4 L 990,18 Q 990,34 974,34 L 26,34 Q 10,34 10,18 L 10,4"
+          <path d="M 945,8
+                   L 985,8
+                   Q 992,8 992,15
+                   L 992,49
+                   Q 992,55 985,55
+                   L 15,55
+                   Q 8,55  8,49
+                   L 8,15
+                   Q 8,8   15,8
+                   L 55,8"
                 fill="none" stroke="currentColor" stroke-width="2"
                 stroke-dasharray="7 5" stroke-linecap="round"
                 marker-end="url(#loopChevron)"
