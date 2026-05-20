@@ -357,23 +357,21 @@ h1, h2, h3, h4, h5 {
 }
 .footer p { margin: 0.2rem 0; }
 
-/* -------------------------------------------------------------- */
-/* method-anim-placeholder                                        */
-/* Visible-but-clearly-WIP block reserved for the upcoming        */
-/* HTML/CSS animation that walks through the closed-loop method.  */
-/* -------------------------------------------------------------- */
+/* ============================================================ */
+/* .method-anim  —  interactive 5-step closed-loop walkthrough  */
+/* (placeholder until the polished animation is built)          */
+/* ============================================================ */
 
-.method-anim-placeholder {
+.method-anim {
   margin: 1.6rem auto 0;
-  max-width: 900px;
-  padding: 1.4rem 1.4rem 1.1rem;
+  max-width: 960px;
+  padding: 1.3rem 1.3rem 1.1rem;
   border: 2px dashed var(--vjam-accent);
   border-radius: 14px;
   background: var(--vjam-accent-soft);
-  text-align: center;
   position: relative;
 }
-.method-anim-placeholder::before {
+.method-anim::before {
   content: "PLACEHOLDER \00B7 method animation";
   position: absolute;
   top: -0.8rem;
@@ -391,81 +389,134 @@ h1, h2, h3, h4, h5 {
   text-transform: uppercase;
 }
 
-.method-anim-row {
+/* ---- step track ---- */
+
+.ma-track {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
-  gap: 0.55rem;
   flex-wrap: wrap;
-  margin: 0.65rem 0 0.4rem;
+  gap: 0.25rem;
+  margin: 0.4rem 0 0.5rem;
 }
 
-.method-anim-step {
+.ma-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-width: 120px;
-  padding: 0.35rem 0.4rem 0.45rem;
+  justify-content: flex-start;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 0.45rem 0.55rem 0.55rem;
+  min-width: 122px;
+  cursor: pointer;
+  position: relative;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease, opacity .18s ease;
+  opacity: 0.55;
+  font: inherit;
+  color: inherit;
+}
+.ma-step:hover {
+  background: rgba(255,255,255,.6);
+}
+.ma-step.is-active {
+  background: #fff;
+  border-color: var(--vjam-accent);
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow: 0 1px 2px rgba(214,51,108,.18), 0 6px 18px rgba(214,51,108,.12);
 }
 
-.method-anim-icon {
-  width: 64px;
-  height: 64px;
+.ma-num {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--vjam-accent);
+  color: #fff;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.ma-icon {
+  width: 60px;
+  height: 60px;
   border-radius: 10px;
   background: #fff;
   border: 1px solid var(--vjam-accent);
   position: relative;
   overflow: hidden;
 }
-
-.method-anim-icon::before,
-.method-anim-icon::after {
+.ma-icon::before,
+.ma-icon::after {
   content: "";
   position: absolute;
   inset: 0;
 }
 
-/* obs frames — stacked rectangles, gently slide */
-.icon-frames::before {
-  background:
-    linear-gradient(180deg, rgba(214,51,108,.18), transparent),
-    repeating-linear-gradient(135deg, rgba(214,51,108,.5) 0 2px, transparent 2px 8px);
-  animation: anim-frames 2.4s ease-in-out infinite;
-}
-@keyframes anim-frames {
-  0%,100% { transform: translateX(-4px); }
-  50%     { transform: translateX(4px); }
+/* per-step icon animations — run only when the step is active */
+.ma-step:not(.is-active) .ma-icon::before,
+.ma-step:not(.is-active) .ma-icon::after {
+  animation-play-state: paused;
 }
 
-/* generated visual plan — a soft moving glow */
+/* obs history — film-strip slide */
+.icon-frames::before {
+  background:
+    repeating-linear-gradient(90deg, rgba(214,51,108,.5) 0 3px, transparent 3px 14px);
+  animation: anim-frames 2.4s linear infinite;
+}
+@keyframes anim-frames {
+  from { transform: translateX(-14px); }
+  to   { transform: translateX(0); }
+}
+
+/* video model — pulsating "brain" */
+.icon-videomodel::before {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(214,51,108,.65) 0 18%, transparent 19%),
+    radial-gradient(circle at 30% 30%, rgba(214,51,108,.35) 0 10%, transparent 11%),
+    radial-gradient(circle at 70% 70%, rgba(214,51,108,.35) 0 10%, transparent 11%);
+  animation: anim-vmodel 2s ease-in-out infinite;
+}
+@keyframes anim-vmodel {
+  0%,100% { transform: scale(1);    opacity: .85; }
+  50%     { transform: scale(1.12); opacity: 1;   }
+}
+
+/* visual plan — drifting cloud */
 .icon-dream::before {
   background:
-    radial-gradient(ellipse at 30% 50%, rgba(214,51,108,.6), transparent 55%),
+    radial-gradient(ellipse at 30% 50%, rgba(214,51,108,.6),  transparent 55%),
     radial-gradient(ellipse at 70% 50%, rgba(214,51,108,.35), transparent 55%);
   animation: anim-dream 3s ease-in-out infinite;
 }
 @keyframes anim-dream {
-  0%,100% { transform: scale(1)    rotate(0deg); opacity: .85; }
-  50%     { transform: scale(1.08) rotate(2deg); opacity: 1;   }
+  0%,100% { transform: translateX(-6px) scale(1);    opacity: .85; }
+  50%     { transform: translateX( 6px) scale(1.06); opacity: 1;   }
 }
 
-/* Jacobian field — vector grid that flexes */
+/* Jacobian — vector grid that flexes */
 .icon-jacobian::before {
   background:
     linear-gradient(transparent 49%, rgba(214,51,108,.65) 49% 51%, transparent 51%),
     linear-gradient(90deg, transparent 49%, rgba(214,51,108,.65) 49% 51%, transparent 51%);
-  background-size: 16px 16px;
+  background-size: 14px 14px;
   animation: anim-jac 2.6s ease-in-out infinite;
 }
 @keyframes anim-jac {
-  0%,100% { transform: skewX(-4deg); }
-  50%     { transform: skewX(4deg);  }
+  0%,100% { transform: skewX(-5deg); }
+  50%     { transform: skewX(5deg);  }
 }
 
-/* robot end-effector — a moving dot */
+/* robot — end-effector tracing a path */
 .icon-robot::after {
-  background: radial-gradient(circle at 50% 50%, var(--vjam-accent) 0 8%, transparent 9%);
-  animation: anim-robot 2s linear infinite;
+  background: radial-gradient(circle at 50% 50%, var(--vjam-accent) 0 9%, transparent 10%);
+  animation: anim-robot 2.4s linear infinite;
 }
 @keyframes anim-robot {
   0%   { transform: translate(-22%,-22%); }
@@ -475,22 +526,25 @@ h1, h2, h3, h4, h5 {
   100% { transform: translate(-22%,-22%); }
 }
 
-.method-anim-label {
-  font-size: 0.75rem;
+.ma-label {
+  font-size: 0.78rem;
   color: var(--vjam-ink);
   font-weight: 600;
   margin-top: 0.5rem;
-  letter-spacing: 0.01em;
+  text-align: center;
+  letter-spacing: 0.005em;
+  line-height: 1.25;
 }
 
-.method-anim-arrow {
-  width: 28px;
+.ma-arrow {
+  align-self: center;
+  width: 24px;
   height: 2px;
   background: var(--vjam-accent);
   position: relative;
-  opacity: .8;
+  opacity: .55;
 }
-.method-anim-arrow::after {
+.ma-arrow::after {
   content: "";
   position: absolute;
   right: -1px;
@@ -501,30 +555,78 @@ h1, h2, h3, h4, h5 {
   transform: translateY(-50%);
 }
 
-.method-anim-loop {
-  margin-top: 0.4rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--vjam-accent);
+/* loop-back arrow */
+.ma-loopback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  margin: 0.4rem 0 0.8rem;
+  font-size: 0.76rem;
   font-family: 'Google Sans', sans-serif;
   font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--vjam-accent);
+  text-transform: uppercase;
+}
+.ma-loopback-arrow {
+  position: relative;
+  display: inline-block;
+  width: 38px;
+  height: 14px;
+  border: 1.5px dashed var(--vjam-accent);
+  border-right: 0;
+  border-top: 0;
+  border-bottom-left-radius: 14px 7px;
+}
+.ma-loopback-arrow::before {
+  content: "";
+  position: absolute;
+  left: -1px; bottom: -6px;
+  border: 5px solid transparent;
+  border-top-color: var(--vjam-accent);
 }
 
-.method-anim-caption {
+/* ---- detail panel ---- */
+
+.ma-detail {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid rgba(214,51,108,.25);
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: left;
+}
+.ma-detail-title {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--vjam-accent);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.3rem;
+}
+.ma-detail-body {
+  font-size: 0.95rem;
+  color: var(--vjam-ink-soft);
+  line-height: 1.6;
+}
+
+.ma-caption {
   margin: 0.85rem auto 0;
-  max-width: 720px;
-  font-size: 0.88rem;
+  max-width: 640px;
+  font-size: 0.82rem;
   color: var(--vjam-muted);
-  line-height: 1.55;
+  text-align: center;
+  font-style: italic;
 }
-.method-anim-caption strong { color: var(--vjam-accent); }
 
-@media (max-width: 640px) {
-  .method-anim-arrow { display: none; }
-  .method-anim-row   { gap: 0.4rem; }
-  .method-anim-step  { min-width: 0; }
-  .method-anim-icon  { width: 52px; height: 52px; }
+@media (max-width: 720px) {
+  .ma-arrow { display: none; }
+  .ma-track { gap: 0.1rem; }
+  .ma-step  { min-width: 96px; padding: 0.4rem 0.35rem; }
+  .ma-icon  { width: 52px; height: 52px; }
+  .ma-label { font-size: 0.72rem; }
 }
 
 /* ---------- responsive tweaks ---------- */

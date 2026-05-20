@@ -130,41 +130,117 @@
       <img src="./static/figures/fig2_method_overview-1.png" alt="VJAM method overview pipeline">
     </div>
 
-    <!-- Placeholder for the dynamic method animation; will be replaced by a
-         purpose-built HTML/CSS/JS animation that walks through one closed-loop
-         iteration (frames in -> generated video -> Jacobian field -> action chunk -> execution -> new frames in). -->
-    <div class="method-anim-placeholder" role="img"
-         aria-label="Placeholder for the upcoming method animation">
-      <div class="method-anim-row">
-        <div class="method-anim-step">
-          <div class="method-anim-icon icon-frames"></div>
-          <div class="method-anim-label">observation history</div>
-        </div>
-        <div class="method-anim-arrow"></div>
-        <div class="method-anim-step">
-          <div class="method-anim-icon icon-dream"></div>
-          <div class="method-anim-label">generated visual plan</div>
-        </div>
-        <div class="method-anim-arrow"></div>
-        <div class="method-anim-step">
-          <div class="method-anim-icon icon-jacobian"></div>
-          <div class="method-anim-label">Jacobian translation</div>
-        </div>
-        <div class="method-anim-arrow"></div>
-        <div class="method-anim-step">
-          <div class="method-anim-icon icon-robot"></div>
-          <div class="method-anim-label">robot execution</div>
+    <!-- Interactive 5-step closed-loop placeholder. Will be replaced by a
+         polished HTML/CSS/JS animation; for now the user can click any step
+         (or just watch the auto-cycle) to read what happens at each stage. -->
+    <div class="method-anim" id="methodAnim"
+         role="region" aria-label="Closed-loop method walkthrough (placeholder)">
+      <div class="ma-track">
+        <button class="ma-step is-active" data-step="1" type="button">
+          <span class="ma-num">1</span>
+          <span class="ma-icon icon-frames"></span>
+          <span class="ma-label">Observation history</span>
+        </button>
+        <span class="ma-arrow"></span>
+        <button class="ma-step" data-step="2" type="button">
+          <span class="ma-num">2</span>
+          <span class="ma-icon icon-videomodel"></span>
+          <span class="ma-label">Video model</span>
+        </button>
+        <span class="ma-arrow"></span>
+        <button class="ma-step" data-step="3" type="button">
+          <span class="ma-num">3</span>
+          <span class="ma-icon icon-dream"></span>
+          <span class="ma-label">Visual plan</span>
+        </button>
+        <span class="ma-arrow"></span>
+        <button class="ma-step" data-step="4" type="button">
+          <span class="ma-num">4</span>
+          <span class="ma-icon icon-jacobian"></span>
+          <span class="ma-label">Jacobian translation</span>
+        </button>
+        <span class="ma-arrow"></span>
+        <button class="ma-step" data-step="5" type="button">
+          <span class="ma-num">5</span>
+          <span class="ma-icon icon-robot"></span>
+          <span class="ma-label">Robot execution</span>
+        </button>
+      </div>
+      <div class="ma-loopback" aria-hidden="true">
+        <span class="ma-loopback-arrow"></span>
+        <span class="ma-loopback-label">re-observe &middot; re-plan</span>
+      </div>
+
+      <div class="ma-detail" id="maDetail" aria-live="polite">
+        <div class="ma-detail-title" id="maDetailTitle">Step&nbsp;1 &middot; Observation history</div>
+        <div class="ma-detail-body" id="maDetailBody">
+          The last few RGB frames from the robot's cameras. They seed the
+          next plan.
         </div>
       </div>
-      <div class="method-anim-loop">re-observe &nbsp;&middot;&nbsp; re-plan</div>
-      <p class="method-anim-caption">
-        <strong>Placeholder.</strong> An HTML/CSS animation will replace this
-        block, walking through one full closed-loop iteration: an observation
-        history is encoded into a short generated video, the IDM reads a
-        Jacobian field off that video, the chunk of actions is executed on
-        the robot, and the loop repeats with fresh observations.
+
+      <p class="ma-caption">
+        Placeholder &mdash; click any step (or watch it cycle) to see what
+        happens at that stage of the closed loop.
       </p>
     </div>
+
+    <script>
+    (function () {
+      var steps = {
+        1: {
+          t: "Step 1 · Observation history",
+          b: "The last few RGB frames from the robot's cameras, plus a language goal. They seed the next plan."
+        },
+        2: {
+          t: "Step 2 · Video model",
+          b: "An action-free video diffusion model (14B WAN-family) conditioned on the observation history and the prompt."
+        },
+        3: {
+          t: "Step 3 · Generated visual plan",
+          b: "A short look-ahead of imagined future frames — a path along the image manifold describing what should happen next."
+        },
+        4: {
+          t: "Step 4 · Jacobian translation",
+          b: "For each frame pair, the Jacobian-IDM predicts a per-pixel tangent map from action perturbations to pixel motion; regularized least squares solves the action chunk."
+        },
+        5: {
+          t: "Step 5 · Robot execution",
+          b: "The action chunk runs on the embodiment. Fresh observations stream back into Step 1, closing the loop and triggering a re-plan."
+        }
+      };
+      var btns = document.querySelectorAll('#methodAnim .ma-step');
+      var titleEl = document.getElementById('maDetailTitle');
+      var bodyEl  = document.getElementById('maDetailBody');
+      var current = 1;
+      var auto = null;
+      function setStep(n) {
+        current = n;
+        btns.forEach(function (b) {
+          b.classList.toggle('is-active', parseInt(b.dataset.step, 10) === n);
+        });
+        var d = steps[n];
+        titleEl.textContent = d.t;
+        bodyEl.textContent  = d.b;
+      }
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          setStep(parseInt(b.dataset.step, 10));
+          if (auto) { clearInterval(auto); auto = null; }
+        });
+      });
+      function startAuto() {
+        if (auto) return;
+        auto = setInterval(function () { setStep(current % 5 + 1); }, 4200);
+      }
+      var root = document.getElementById('methodAnim');
+      root.addEventListener('mouseenter', function () {
+        if (auto) { clearInterval(auto); auto = null; }
+      });
+      root.addEventListener('mouseleave', startAuto);
+      startAuto();
+    })();
+    </script>
   </div>
 </section>
 
@@ -194,7 +270,10 @@
             <video autoplay loop muted playsinline preload="metadata">
               <source src="./static/videos/1hksHG79Z8UX2axBNW1w7AmBIJiHKjVT9.mp4" type="video/mp4">
             </video>
-            <div class="caption"><span class="prompt">Real-world Panda rollout &middot; view&nbsp;1</span></div>
+            <div class="caption">
+              <span class="label">Wrist view</span>
+              <span class="prompt">&ldquo;Pick up the yellow cube and place it on the yellow brick.&rdquo;</span>
+            </div>
           </div>
         </div>
         <div class="column is-half">
@@ -202,7 +281,10 @@
             <video autoplay loop muted playsinline preload="metadata">
               <source src="./static/videos/1u9L9GWmqkY3ZNovHc5n11jEYDlMqQVwR.mp4" type="video/mp4">
             </video>
-            <div class="caption"><span class="prompt">Same trajectory &middot; view&nbsp;2</span></div>
+            <div class="caption">
+              <span class="label">External view</span>
+              <span class="prompt">Same trajectory, second camera.</span>
+            </div>
           </div>
         </div>
         <div class="column is-half">
@@ -210,7 +292,10 @@
             <video autoplay loop muted playsinline preload="metadata">
               <source src="./static/videos/1KIQfkZg7NyVa_SYdl6NETjqXFw7sEk_I.mp4" type="video/mp4">
             </video>
-            <div class="caption"><span class="prompt">Real-world Panda rollout &middot; another prompt</span></div>
+            <div class="caption">
+              <span class="label">Wrist view</span>
+              <span class="prompt">Press-Hidden-Button &mdash; occluded target visible from only one camera.</span>
+            </div>
           </div>
         </div>
         <div class="column is-half">
@@ -218,7 +303,10 @@
             <video autoplay loop muted playsinline preload="metadata">
               <source src="./static/videos/1fWCKvHcgpRWFjQBmlNs9zIqWi66_kJpq.mp4" type="video/mp4">
             </video>
-            <div class="caption"><span class="prompt">Same prompt &middot; another view</span></div>
+            <div class="caption">
+              <span class="label">External view</span>
+              <span class="prompt">Same trajectory, second camera.</span>
+            </div>
           </div>
         </div>
       </div>
@@ -244,12 +332,12 @@
         </div>
         <div class="column is-one-third">
           <div class="video-card">
-            <video autoplay loop muted playsinline preload="metadata">
+            <video autoplay loop muted playsinline preload="metadata" style="object-fit:contain; background:#000;">
               <source src="./static/videos/1PvXxk24FDf_pa0eikB3Vc8XXjLUuGaTp.mp4" type="video/mp4">
             </video>
             <div class="caption">
-              <span class="label">Simulator</span>
-              <span class="prompt">policy visualization, CCW rotation.</span>
+              <span class="label">Jacobian field</span>
+              <span class="prompt">visualization of the visuomotor Jacobian during reorientation.</span>
             </div>
           </div>
         </div>
@@ -406,22 +494,26 @@
     <div class="kicker">VJAM vs robot foundation models</div>
     <h2 class="section-title">Reasoning through occlusions</h2>
     <p class="lede">
-      Faithful translation also preserves the planner's <em>reasoning</em>. We hide a target button
-      behind a partial occluder &mdash; visible from only one camera view &mdash; and compare VJAM
-      against a recent video&ndash;action baseline. VJAM produces a coherent visual plan that searches
-      around the wall; the baseline does not.
+      We cluttered the table with props and hid the target button behind a wall so that it was
+      visible from only one of three camera views. To solve the task, the policy must integrate the
+      language prompt with multi-view evidence and search around the occluder. DreamZero and
+      $\pi_{0.5}$ struggle on this task; our model produces a coherent visual plan that finds the
+      hidden button and a faithful translation that presses it. We attribute this to preserving the
+      video branch without action-head contamination.
     </p>
 
     <div class="columns cards-grid compare-rail">
       <div class="column is-half is-ours">
         <h4>VJAM <span style="font-weight:400; color:var(--vjam-muted);">(ours)</span></h4>
-        <div class="video-card">
-          <video autoplay loop muted playsinline preload="metadata">
-            <source src="./static/videos/1Bdt4pceeTJOzC1WNinNoWiVnLfO0x7N7.mp4" type="video/mp4">
-          </video>
+        <div class="video-card is-tall" style="background:#fff;">
+          <img src="./static/figures/fig7_hidden_button_appendix-1.png"
+               alt="VJAM hidden-button rollouts: dream + execution"
+               style="display:block; width:100%; height:auto; background:#fff;">
           <div class="caption">
             <span class="prompt">&ldquo;push the blue button.&rdquo;</span>
-            Finds the occluded target and presses it.
+            Dream rollout (top) and matching execution (bottom) &mdash; the planner imagines a path
+            around the occluder, and the J-IDM translates it into an action chunk that presses the
+            target.
           </div>
         </div>
       </div>
@@ -432,7 +524,8 @@
             <source src="./static/videos/1LfKw25SNV40YexxLNCCD4OSEY3sVDVcT.mp4" type="video/mp4">
           </video>
           <div class="caption">
-            Approaches the wall, fails to interact with the hidden target.
+            Same prompt, same scene. The baseline approaches the wall and never reaches the hidden
+            target.
           </div>
         </div>
       </div>
