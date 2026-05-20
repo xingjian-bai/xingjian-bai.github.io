@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-05-20T05:50:18.564871",
+  "last_sync": "2026-05-20T06:00:18.993001",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         12829,
         12831
       ],
-      "last_seen": "2026-05-20T05:50:04.092603",
+      "last_seen": "2026-05-20T06:00:04.038575",
       "paused": false
     },
     "zwang43b": {
@@ -20,7 +20,7 @@
         12836,
         12838
       ],
-      "last_seen": "2026-05-20T05:50:04.092646",
+      "last_seen": "2026-05-20T06:00:04.038609",
       "paused": false
     }
   },
@@ -39,8 +39,69 @@
       "paused": false
     }
   ],
-  "reservations": [],
+  "reservations": [
+    {
+      "date": "2026-05-22",
+      "time": "17:00",
+      "court": "Bubble Court 1",
+      "activity": "Tennis Reservation (Bubble Court 1)",
+      "weekday": "Fri",
+      "cancel_id": "872402",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-05-22_1700",
+      "booked_at": "2026-05-20T06:00:03.313009-04:00"
+    }
+  ],
   "bookings": [
+    {
+      "timestamp": "2026-05-20T05:59:59.798295-04:00",
+      "timestamp_display": "2026-05-20 05:59:59.798",
+      "user": "zwang43b",
+      "service": "bubble",
+      "booking_date": "2026-05-22",
+      "booking_hour": 14,
+      "weekday": "Friday",
+      "success": false,
+      "message": "Unable to find any available Court",
+      "error_type": "no_availability",
+      "court_id": null,
+      "court_number": null,
+      "court_index": null,
+      "response_time_ms": 413,
+      "seconds_after_hour": 3.369,
+      "booking_window": "6am",
+      "thread_id": 2,
+      "phase": "rapid",
+      "attempt_number": 1,
+      "session_age_seconds": 40.5,
+      "copy_id": 1,
+      "pid": 12834
+    },
+    {
+      "timestamp": "2026-05-20T06:00:03.313009-04:00",
+      "timestamp_display": "2026-05-20 06:00:03.313",
+      "user": "zwang43b",
+      "service": "bubble",
+      "booking_date": "2026-05-22",
+      "booking_hour": 17,
+      "weekday": "Friday",
+      "success": true,
+      "message": "Reservation Completed",
+      "error_type": null,
+      "court_id": "45",
+      "court_number": 1,
+      "court_index": null,
+      "response_time_ms": 1976,
+      "seconds_after_hour": 3.358,
+      "booking_window": "6am",
+      "thread_id": 3,
+      "phase": "rapid",
+      "attempt_number": 1,
+      "session_age_seconds": 39.6,
+      "copy_id": 1,
+      "pid": 12834,
+      "time_slot": "2026-05-22T17:00:00-04:00"
+    },
     {
       "timestamp": "2026-05-19T06:00:50.291751-04:00",
       "timestamp_display": "2026-05-19 06:00:50.291",
@@ -1192,109 +1253,61 @@
       "session_age_seconds": 59.2,
       "copy_id": 1,
       "pid": 2293130
-    },
-    {
-      "timestamp": "2026-05-19T06:00:20.370819-04:00",
-      "timestamp_display": "2026-05-19 06:00:20.370",
-      "user": "xbai02b",
-      "service": "bubble",
-      "booking_date": "2026-05-21",
-      "booking_hour": 17,
-      "weekday": "Thursday",
-      "success": false,
-      "message": "Unable to find any available Court",
-      "error_type": "no_availability",
-      "court_id": null,
-      "court_number": null,
-      "court_index": null,
-      "response_time_ms": 755,
-      "seconds_after_hour": 24.232,
-      "booking_window": "6am",
-      "thread_id": 5,
-      "phase": "rapid",
-      "attempt_number": 4,
-      "session_age_seconds": 56.1,
-      "copy_id": 1,
-      "pid": 2293130
-    },
-    {
-      "timestamp": "2026-05-19T06:00:17.199937-04:00",
-      "timestamp_display": "2026-05-19 06:00:17.199",
-      "user": "xbai02b",
-      "service": "bubble",
-      "booking_date": "2026-05-21",
-      "booking_hour": 14,
-      "weekday": "Thursday",
-      "success": false,
-      "message": "Unable to find any available Court",
-      "error_type": "no_availability",
-      "court_id": null,
-      "court_number": null,
-      "court_index": null,
-      "response_time_ms": 514,
-      "seconds_after_hour": 24.231,
-      "booking_window": "6am",
-      "thread_id": 5,
-      "phase": "rapid",
-      "attempt_number": 3,
-      "session_age_seconds": 53.2,
-      "copy_id": 1,
-      "pid": 2293130
     }
   ],
   "next_booking": {
-    "next_window": "2026-05-20T06:00:00-04:00",
-    "next_window_display": "2026-05-20 06:00 EDT",
-    "target_date": "2026-05-22",
-    "target_weekday": "Friday",
+    "next_window": "2026-05-21T06:00:00-04:00",
+    "next_window_display": "2026-05-21 06:00 EDT",
+    "target_date": "2026-05-23",
+    "target_weekday": "Saturday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-05-22",
-        "weekday": "Friday",
+        "date": "2026-05-23",
+        "weekday": "Saturday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-05-22",
-        "weekday": "Friday",
+        "date": "2026-05-23",
+        "weekday": "Saturday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-05-22",
-        "weekday": "Friday",
+        "date": "2026-05-23",
+        "weekday": "Saturday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-22",
-        "weekday": "Friday",
+        "date": "2026-05-23",
+        "weekday": "Saturday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-22",
-        "weekday": "Friday",
+        "date": "2026-05-23",
+        "weekday": "Saturday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-22",
-        "weekday": "Friday",
+        "date": "2026-05-23",
+        "weekday": "Saturday",
         "hour": 17,
         "time": "17:00"
       }
     ]
   },
   "stats": {
-    "total_attempts": 115879,
-    "successful_attempts": 277,
+    "total_attempts": 115881,
+    "successful_attempts": 278,
     "success_rate": 0.0024
   }
 }
