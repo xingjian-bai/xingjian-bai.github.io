@@ -156,20 +156,37 @@
         <button class="ma-step" data-step="2" type="button">
           <span class="ma-num">2</span>
           <span class="ma-icon">
-            <svg viewBox="0 0 50 50" class="ma-svg ic-net" fill="currentColor" stroke="currentColor" stroke-width="1.4">
-              <!-- mini transformer-ish network -->
-              <line class="ic-edge" x1="10" y1="15" x2="25" y2="18"/>
-              <line class="ic-edge" x1="10" y1="25" x2="25" y2="18"/>
-              <line class="ic-edge" x1="10" y1="25" x2="25" y2="32"/>
-              <line class="ic-edge" x1="10" y1="35" x2="25" y2="32"/>
-              <line class="ic-edge" x1="25" y1="18" x2="40" y2="25"/>
-              <line class="ic-edge" x1="25" y1="32" x2="40" y2="25"/>
-              <circle cx="10" cy="15" r="2.4"/>
-              <circle cx="10" cy="25" r="2.4"/>
-              <circle cx="10" cy="35" r="2.4"/>
-              <circle class="ic-pulse" cx="25" cy="18" r="2.8"/>
-              <circle class="ic-pulse" cx="25" cy="32" r="2.8"/>
-              <circle cx="40" cy="25" r="3"/>
+            <svg viewBox="0 0 50 50" class="ma-svg ic-net" fill="currentColor" stroke="currentColor" stroke-width="0.9">
+              <!-- classical fully-connected NN: 3-3-3 with all-to-all edges -->
+              <g class="ic-edges" opacity="0.4">
+                <line x1="10" y1="14" x2="25" y2="14"/>
+                <line x1="10" y1="14" x2="25" y2="25"/>
+                <line x1="10" y1="14" x2="25" y2="36"/>
+                <line x1="10" y1="25" x2="25" y2="14"/>
+                <line x1="10" y1="25" x2="25" y2="25"/>
+                <line x1="10" y1="25" x2="25" y2="36"/>
+                <line x1="10" y1="36" x2="25" y2="14"/>
+                <line x1="10" y1="36" x2="25" y2="25"/>
+                <line x1="10" y1="36" x2="25" y2="36"/>
+                <line x1="25" y1="14" x2="40" y2="14"/>
+                <line x1="25" y1="14" x2="40" y2="25"/>
+                <line x1="25" y1="14" x2="40" y2="36"/>
+                <line x1="25" y1="25" x2="40" y2="14"/>
+                <line x1="25" y1="25" x2="40" y2="25"/>
+                <line x1="25" y1="25" x2="40" y2="36"/>
+                <line x1="25" y1="36" x2="40" y2="14"/>
+                <line x1="25" y1="36" x2="40" y2="25"/>
+                <line x1="25" y1="36" x2="40" y2="36"/>
+              </g>
+              <circle class="ic-node" cx="10" cy="14" r="2.3"/>
+              <circle class="ic-node" cx="10" cy="25" r="2.3"/>
+              <circle class="ic-node" cx="10" cy="36" r="2.3"/>
+              <circle class="ic-node ic-node-mid" cx="25" cy="14" r="2.5"/>
+              <circle class="ic-node ic-node-mid" cx="25" cy="25" r="2.5"/>
+              <circle class="ic-node ic-node-mid" cx="25" cy="36" r="2.5"/>
+              <circle class="ic-node" cx="40" cy="14" r="2.3"/>
+              <circle class="ic-node" cx="40" cy="25" r="2.3"/>
+              <circle class="ic-node" cx="40" cy="36" r="2.3"/>
             </svg>
           </span>
           <span class="ma-label">Video model</span>
@@ -196,17 +213,17 @@
         <button class="ma-step" data-step="4" type="button">
           <span class="ma-num">4</span>
           <span class="ma-icon">
-            <svg viewBox="0 0 50 50" class="ma-svg ic-vec" fill="currentColor" stroke="currentColor" stroke-width="1.3">
-              <!-- 3x3 vector field; each arrow rotates slightly -->
-              <g class="ic-arrow" transform="translate(12,15) rotate(-15)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
-              <g class="ic-arrow" transform="translate(25,15) rotate(20)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
-              <g class="ic-arrow" transform="translate(38,15) rotate(-5)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
-              <g class="ic-arrow" transform="translate(12,25) rotate(25)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
-              <g class="ic-arrow" transform="translate(25,25) rotate(90)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
-              <g class="ic-arrow" transform="translate(38,25) rotate(-30)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
-              <g class="ic-arrow" transform="translate(12,35) rotate(10)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
-              <g class="ic-arrow" transform="translate(25,35) rotate(-50)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
-              <g class="ic-arrow" transform="translate(38,35) rotate(35)"><line x1="0" y1="0" x2="7" y2="0"/><polygon points="7,-2 10,0 7,2"/></g>
+            <svg viewBox="0 0 50 50" class="ma-svg ic-vec" fill="currentColor" stroke="currentColor" stroke-width="1.2">
+              <!-- 3x3 tidy vector field; coherent "flow" with subtle row-by-row tilt -->
+              <g class="ic-vec-arrow" transform="translate(10,13) rotate(-12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(22,13) rotate(-12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(34,13) rotate(-12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(10,25) rotate(0)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(22,25) rotate(0)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(34,25) rotate(0)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(10,37) rotate(12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(22,37) rotate(12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(34,37) rotate(12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
             </svg>
           </span>
           <span class="ma-label">Jacobian translation</span>
@@ -233,9 +250,22 @@
         </button>
       </div>
 
-      <!-- closed-loop arrow: U-shape going below the row from step 5 back to step 1 -->
+      <!-- closed-loop arrow: SVG path with chevron marker auto-aligned to direction -->
       <div class="ma-loop" aria-hidden="true">
-        <span class="ma-loop-path"></span>
+        <svg class="ma-loop-svg" viewBox="0 0 1000 40" preserveAspectRatio="none">
+          <defs>
+            <marker id="loopChevron" markerWidth="22" markerHeight="22" refX="11" refY="6"
+                    orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M 2,14 L 11,2 L 20,14" fill="none" stroke="currentColor"
+                    stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <path d="M 990,4 L 990,18 Q 990,34 974,34 L 26,34 Q 10,34 10,18 L 10,4"
+                fill="none" stroke="currentColor" stroke-width="2"
+                stroke-dasharray="7 5" stroke-linecap="round"
+                marker-end="url(#loopChevron)"
+                vector-effect="non-scaling-stroke"/>
+        </svg>
         <span class="ma-loop-label">re-observe &middot; re-plan</span>
       </div>
 
@@ -277,37 +307,56 @@
           b: "The action chunk runs on the embodiment. Fresh observations stream back into Step 1, closing the loop and triggering a re-plan."
         }
       };
-      var btns = document.querySelectorAll('#methodAnim .ma-step');
+      var root    = document.getElementById('methodAnim');
+      var btns    = root.querySelectorAll('.ma-step');
       var titleEl = document.getElementById('maDetailTitle');
       var bodyEl  = document.getElementById('maDetailBody');
-      var current = 1;
-      var auto = null;
+
+      var NORMAL_MS   = 5000;   // 5s per step in auto-play
+      var CLICK_HOLD  = 10000;  // 10s extra hold after a click
+      var current     = 1;
+      var auto        = null;   // setInterval handle
+      var pendingTO   = null;   // setTimeout handle for click-hold
+
       function setStep(n) {
         current = n;
         btns.forEach(function (b) {
           b.classList.toggle('is-active', parseInt(b.dataset.step, 10) === n);
         });
-        document.getElementById('methodAnim').setAttribute('data-active', String(n));
+        root.setAttribute('data-active', String(n));
         var d = steps[n];
         titleEl.textContent = d.t;
         bodyEl.textContent  = d.b;
       }
+
+      function clearAll() {
+        if (auto)      { clearInterval(auto); auto = null; }
+        if (pendingTO) { clearTimeout(pendingTO); pendingTO = null; }
+      }
+      function startNormalCycle() {
+        clearAll();
+        auto = setInterval(function () { setStep(current % 5 + 1); }, NORMAL_MS);
+      }
+      function startClickHold() {
+        // hold current step for CLICK_HOLD, then resume normal cycle
+        clearAll();
+        pendingTO = setTimeout(function () {
+          setStep(current % 5 + 1);
+          startNormalCycle();
+        }, CLICK_HOLD);
+      }
+
       btns.forEach(function (b) {
         b.addEventListener('click', function () {
           setStep(parseInt(b.dataset.step, 10));
-          if (auto) { clearInterval(auto); auto = null; }
+          startClickHold();
         });
       });
-      function startAuto() {
-        if (auto) return;
-        auto = setInterval(function () { setStep(current % 5 + 1); }, 4200);
-      }
-      var root = document.getElementById('methodAnim');
-      root.addEventListener('mouseenter', function () {
-        if (auto) { clearInterval(auto); auto = null; }
-      });
-      root.addEventListener('mouseleave', startAuto);
-      startAuto();
+
+      root.addEventListener('mouseenter', clearAll);
+      root.addEventListener('mouseleave', startNormalCycle);
+
+      startNormalCycle();
     })();
     </script>
   </div>
