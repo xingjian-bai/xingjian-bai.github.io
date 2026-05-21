@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-05-21T05:50:19.171852",
+  "last_sync": "2026-05-21T06:00:19.252613",
   "script_status": {
     "xbai02b": {
       "running": true,
@@ -9,7 +9,7 @@
         12829,
         12831
       ],
-      "last_seen": "2026-05-21T05:50:04.453500",
+      "last_seen": "2026-05-21T06:00:03.999383",
       "paused": false
     },
     "zwang43b": {
@@ -20,7 +20,7 @@
         12836,
         12838
       ],
-      "last_seen": "2026-05-21T05:50:04.453522",
+      "last_seen": "2026-05-21T06:00:03.999401",
       "paused": false
     }
   },
@@ -50,9 +50,45 @@
       "user": "zwang43b",
       "reservation_id": "zwang43b_2026-05-22_1700",
       "booked_at": "2026-05-20T06:00:03.313009-04:00"
+    },
+    {
+      "date": "2026-05-23",
+      "time": "15:00",
+      "court": "Bubble Court 1",
+      "activity": "Tennis Reservation (Bubble Court 1)",
+      "weekday": "Sat",
+      "cancel_id": "874036",
+      "user": "zwang43b",
+      "reservation_id": "zwang43b_2026-05-23_1500",
+      "booked_at": "2026-05-21T06:00:03.200988-04:00"
     }
   ],
   "bookings": [
+    {
+      "timestamp": "2026-05-21T06:00:03.200988-04:00",
+      "timestamp_display": "2026-05-21 06:00:03.200",
+      "user": "zwang43b",
+      "service": "bubble",
+      "booking_date": "2026-05-23",
+      "booking_hour": 15,
+      "weekday": "Saturday",
+      "success": true,
+      "message": "Reservation Completed",
+      "error_type": null,
+      "court_id": "45",
+      "court_number": 1,
+      "court_index": null,
+      "response_time_ms": 1922,
+      "seconds_after_hour": 3.216,
+      "booking_window": "6am",
+      "thread_id": 4,
+      "phase": "rapid",
+      "attempt_number": 1,
+      "session_age_seconds": 37.6,
+      "copy_id": 3,
+      "pid": 12838,
+      "time_slot": "2026-05-23T15:00:00-04:00"
+    },
     {
       "timestamp": "2026-05-20T06:01:02.211812-04:00",
       "timestamp_display": "2026-05-20 06:01:02.211",
@@ -1228,85 +1264,61 @@
       "session_age_seconds": 13.6,
       "copy_id": 1,
       "pid": 3488525
-    },
-    {
-      "timestamp": "2026-05-20T06:00:45.645378-04:00",
-      "timestamp_display": "2026-05-20 06:00:45.645",
-      "user": "xbai02b",
-      "service": "bubble",
-      "booking_date": "2026-05-22",
-      "booking_hour": 15,
-      "weekday": "Friday",
-      "success": false,
-      "message": "Unable to find any available Court",
-      "error_type": "no_availability",
-      "court_id": null,
-      "court_number": null,
-      "court_index": null,
-      "response_time_ms": 629,
-      "seconds_after_hour": 58.606,
-      "booking_window": "6am",
-      "thread_id": 4,
-      "phase": "rapid",
-      "attempt_number": 2,
-      "session_age_seconds": 10.3,
-      "copy_id": 1,
-      "pid": 3488525
     }
   ],
   "next_booking": {
-    "next_window": "2026-05-21T06:00:00-04:00",
-    "next_window_display": "2026-05-21 06:00 EDT",
-    "target_date": "2026-05-23",
-    "target_weekday": "Saturday",
+    "next_window": "2026-05-22T06:00:00-04:00",
+    "next_window_display": "2026-05-22 06:00 EDT",
+    "target_date": "2026-05-24",
+    "target_weekday": "Sunday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-05-23",
-        "weekday": "Saturday",
+        "date": "2026-05-24",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-05-23",
-        "weekday": "Saturday",
+        "date": "2026-05-24",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-05-23",
-        "weekday": "Saturday",
+        "date": "2026-05-24",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-23",
-        "weekday": "Saturday",
+        "date": "2026-05-24",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-23",
-        "weekday": "Saturday",
+        "date": "2026-05-24",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-05-23",
-        "weekday": "Saturday",
+        "date": "2026-05-24",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       }
     ]
   },
   "stats": {
-    "total_attempts": 116184,
-    "successful_attempts": 278,
+    "total_attempts": 116185,
+    "successful_attempts": 279,
     "success_rate": 0.0024
   }
 }
