@@ -138,8 +138,8 @@
       <div class="ma-track">
 
         <button class="ma-step is-active" data-step="1" type="button">
-          <span class="ma-num">1</span>
           <span class="ma-icon">
+            <span class="ma-num">1</span>
             <svg viewBox="0 0 50 50" class="ma-svg" fill="currentColor" stroke="currentColor" stroke-linejoin="round">
               <!-- four observation frames sliding right -->
               <rect class="ic-frame f1" x="4"  y="14" width="9" height="22" rx="1.6"/>
@@ -232,54 +232,70 @@
         <span class="ma-arrow"></span>
 
         <button class="ma-step" data-step="5" type="button">
-          <span class="ma-num">5</span>
           <span class="ma-icon">
-            <svg viewBox="0 0 50 50" class="ma-svg ic-arm" fill="currentColor" stroke="currentColor" stroke-width="1.4">
-              <!-- robot arm with gripper + trajectory dot -->
-              <rect x="17" y="39" width="16" height="5" rx="1"/>
-              <rect x="22" y="22" width="6" height="17" rx="1"/>
-              <rect x="22" y="22" width="20" height="5" rx="1"/>
-              <line class="grip" x1="42" y1="20" x2="46" y2="20"/>
-              <line class="grip" x1="46" y1="20" x2="46" y2="30"/>
-              <line class="grip" x1="42" y1="30" x2="46" y2="30"/>
-              <circle class="ic-eedot" cx="44" cy="25" r="1.7" fill="#fff" stroke="#fff" stroke-width="1"/>
-              <path class="ic-traj" d="M 32 32 C 38 30, 42 27, 44 25" fill="none" stroke-dasharray="2 2"/>
+            <span class="ma-num">5</span>
+            <svg viewBox="0 0 50 50" class="ma-svg ic-arm" fill="currentColor" stroke="currentColor"
+                 stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+              <!-- table line -->
+              <line x1="7" y1="43" x2="43" y2="43" stroke-width="1" opacity="0.45"/>
+              <!-- base -->
+              <rect x="13" y="38" width="14" height="5" rx="1.3"/>
+              <!-- vertical column -->
+              <rect x="19" y="20" width="2.6" height="18" rx="0.5"/>
+              <!-- pivot joint -->
+              <circle cx="20.3" cy="20" r="1.9" fill="currentColor"/>
+              <!-- swinging arm group: rotates around (20.3, 20) -->
+              <g class="ic-arm-swing">
+                <line x1="20.3" y1="20" x2="38" y2="20" stroke-width="3"/>
+                <line x1="38" y1="20" x2="42.5" y2="17.5" stroke-width="2"/>
+                <line x1="38" y1="20" x2="42.5" y2="22.5" stroke-width="2"/>
+              </g>
+              <!-- target cube on the table -->
+              <rect class="ic-target" x="36.5" y="37" width="6" height="6" rx="0.8"/>
             </svg>
           </span>
           <span class="ma-label">Robot execution</span>
         </button>
       </div>
 
-      <!-- closed-loop arrow: rectangular loop AROUND the step row.
-           Path: start at right of step 5 -> right -> down -> long left across
-           bottom -> up -> right into step 1's left edge (arrowhead points right).
-           Together with the gray inter-step arrows this completes a full loop. -->
+      <!-- closed-loop arrow: rectangle around the step row, pulled up so the
+           top horizontal pieces sit at the SAME vertical level as the gray
+           arrows between steps. Together with those arrows the whole thing
+           reads as one continuous rectangular loop. -->
       <div class="ma-loop" aria-hidden="true">
-        <svg class="ma-loop-svg" viewBox="0 0 1000 60" preserveAspectRatio="none">
+        <svg class="ma-loop-svg" viewBox="0 0 1000 130" preserveAspectRatio="none">
           <defs>
-            <!-- chevron marker; its local +x axis aligns with path tangent at the endpoint,
-                 so the apex always points the way the path is "going" -->
             <marker id="loopChevron" markerWidth="14" markerHeight="14" refX="12" refY="7"
                     orient="auto" markerUnits="userSpaceOnUse">
               <path d="M 1,1 L 12,7 L 1,13" fill="none" stroke="currentColor"
                     stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
             </marker>
           </defs>
-          <path d="M 945,8
-                   L 985,8
-                   Q 992,8 992,15
-                   L 992,49
-                   Q 992,55 985,55
-                   L 15,55
-                   Q 8,55  8,49
-                   L 8,15
-                   Q 8,8   15,8
-                   L 55,8"
+          <path d="M 945,5
+                   L 985,5
+                   Q 992,5  992,12
+                   L 992,118
+                   Q 992,125 985,125
+                   L 15,125
+                   Q 8,125   8,118
+                   L 8,12
+                   Q 8,5     15,5
+                   L 55,5"
                 fill="none" stroke="currentColor" stroke-width="2"
                 stroke-dasharray="7 5" stroke-linecap="round"
                 marker-end="url(#loopChevron)"
                 vector-effect="non-scaling-stroke"/>
         </svg>
+        <!-- small camera icon ABOVE the re-observe/re-plan label, in the empty
+             space between the label and step 3 (Visual plan). -->
+        <span class="ma-loop-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 8,7 L 9.5,4.5 L 14.5,4.5 L 16,7"/>
+            <rect x="3" y="7" width="18" height="13" rx="2"/>
+            <circle cx="12" cy="13.5" r="3.5"/>
+          </svg>
+        </span>
         <span class="ma-loop-label">re-observe &middot; re-plan</span>
       </div>
 
@@ -739,11 +755,7 @@
      ================================================================ -->
 <footer class="footer">
   <div class="container is-max-desktop">
-    <p>
-      Page built from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a> template
-      (CC BY-SA&nbsp;4.0). Videos and figures are produced by the authors.
-    </p>
-    <p>&copy; 2026 Anonymous Authors &middot; NeurIPS 2026 submission</p>
+    <p>&copy; 2026 Anonymous Authors</p>
   </div>
 </footer>
 
