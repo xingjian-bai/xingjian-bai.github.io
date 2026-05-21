@@ -61,21 +61,22 @@ h1, h2, h3, h4, h5 {
 
 .kicker {
   text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  font-size: 1.02rem;
   color: var(--vjam-accent);
   font-weight: 700;
   text-align: center;
-  margin: 0 0 0.55rem;
+  margin: 0 0 0.7rem;
+  font-family: 'Google Sans', sans-serif;
 }
 
 .section-title {
   text-align: center;
   font-weight: 600;
-  letter-spacing: -0.012em;
-  font-size: 1.85rem;
-  line-height: 1.25;
-  margin: 0 0 0.65rem;
+  letter-spacing: -0.014em;
+  font-size: 2.2rem;
+  line-height: 1.22;
+  margin: 0 0 0.7rem;
 }
 
 .lede {
