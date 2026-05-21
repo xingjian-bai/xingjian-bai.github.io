@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="stylesheet" href="./static/css/vjam.css">
+  <link rel="stylesheet" href="./static/css/vjam.css?v=3">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -287,10 +287,12 @@
                 vector-effect="non-scaling-stroke"/>
         </svg>
         <!-- small camera icon ABOVE the re-observe/re-plan label, in the empty
-             space between the label and step 3 (Visual plan). -->
+             space between the label and step 3 (Visual plan). Width/height
+             attributes are set EXPLICITLY so the SVG never falls back to its
+             intrinsic 300x150 default. -->
         <span class="ma-loop-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M 8,7 L 9.5,4.5 L 14.5,4.5 L 16,7"/>
             <rect x="3" y="7" width="18" height="13" rx="2"/>
             <circle cx="12" cy="13.5" r="3.5"/>
