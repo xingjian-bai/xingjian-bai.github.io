@@ -704,7 +704,7 @@ h1, h2, h3, h4, h5 {
 .ma-loop-icon {
   position: absolute;
   left: 50%;
-  top: 64%;     /* moved up: sits just below step 3 (Visual plan), above the label */
+  top: 72%;     /* between step 3 and the re-observe·re-plan label */
   transform: translate(-50%, -50%);
   width: 22px;
   height: 22px;
@@ -738,7 +738,8 @@ h1, h2, h3, h4, h5 {
   border: 1px solid rgba(0,0,0,0.06);
   border-left: 4px solid var(--vjam-accent);
   max-width: 780px;
-  margin: 0 auto;
+  /* extra top margin so the box clears the re-observe/re-plan loop arrow above */
+  margin: 1.6rem auto 0.4rem;
   text-align: left;
   transition: border-color .18s ease;
 }
