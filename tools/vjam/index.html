@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="stylesheet" href="./static/css/vjam.css?v=5">
+  <link rel="stylesheet" href="./static/css/vjam.css?v=6">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -123,8 +123,9 @@
     <div class="kicker">Method</div>
     <h2 class="section-title">A planner, a translator, a closed loop</h2>
     <p class="lede">
-      A video model proposes a short visual plan; the Jacobian-IDM inverts each step into actions; the
-      robot executes and the loop repeats. One primitive subsumes perception, planning, and control.
+      From a short observation history, a video generative model imagines a visual plan; the
+      Jacobian-IDM translates each step of that plan into actions, the robot executes them, and the
+      new observations seed the next iteration of the loop.
     </p>
     <div class="figure-block">
       <img src="./static/figures/fig2_method_overview-1.png" alt="VJAM method overview pipeline">
