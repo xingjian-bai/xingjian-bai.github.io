@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description"
         content="VJAM: Turning Video Models into Generalist Robot Policies. A closed-loop video-to-action policy combining an action-free video world model with a Jacobian inverse dynamics model.">
-  <meta name="keywords" content="VJAM, video models, robot policy, inverse dynamics, Jacobian, manipulation, NeurIPS 2026">
+  <meta name="keywords" content="VJAM, video models, robot policy, inverse dynamics, Jacobian, manipulation, CoRL 2026">
   <title>VJAM &mdash; Turning Video Models into Generalist Robot Policies</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600|Noto+Sans:400,500,600|JetBrains+Mono:400,500" rel="stylesheet">
@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
   <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
   <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="stylesheet" href="./static/css/vjam.css?v=8">
+  <link rel="stylesheet" href="./static/css/vjam.css?v=9">
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script defer src="./static/js/fontawesome.all.min.js"></script>
@@ -23,6 +23,24 @@
   <script src="./static/js/index.js"></script>
 </head>
 <body>
+
+<!-- ================================================================
+     STICKY TOP NAV
+     ================================================================ -->
+<nav class="vjam-nav" aria-label="Section navigation">
+  <div class="container is-max-desktop vjam-nav-inner">
+    <a href="#top" class="vjam-nav-brand">VJAM</a>
+    <div class="vjam-nav-links">
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#ablation">Ablation</a>
+      <a href="#compare">Comparison</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </div>
+</nav>
+
+<span id="top"></span>
 
 <!-- ================================================================
      HERO
@@ -61,12 +79,12 @@
 <section class="section">
   <div class="container is-max-desktop">
     <div class="kicker">Overview</div>
-    <h2 class="section-title">Controlling robots across embodiments, skills, and environments&mdash;<br>using video generative models paired with faithful inverse dynamics</h2>
+    <h2 class="section-title">One video planner, many robots</h2>
     <p class="lede" style="max-width:820px;">
-      We demonstrate that a 14B video generative model, paired with a <em>faithful</em> inverse
-      dynamics model, can be used to solve a wide variety of robotics challenges &mdash; ranging
-      from zero-shot pick-and-place tasks on a real-world Panda arm to contact-rich re-orientation
-      of a cube with a 16-DoF, multi-fingered robotic hand.
+      A 14B video generative model, paired with a <em>faithful</em> inverse dynamics model,
+      solves a wide range of robotics challenges &mdash; from zero-shot pick-and-place on a
+      real-world Panda arm to contact-rich re-orientation of a cube with a 16-DoF
+      multi-fingered hand.
     </p>
     <div class="figure-block">
       <img src="./static/figures/fig1_main_results-1.png"
@@ -118,7 +136,7 @@
 <!-- ================================================================
      PIPELINE  (paper Fig.2 — brief)
      ================================================================ -->
-<section class="section is-shaded">
+<section class="section is-shaded" id="method">
   <div class="container is-max-desktop">
     <div class="kicker">Method</div>
     <h2 class="section-title">A planner, a translator, a closed loop</h2>
@@ -397,7 +415,7 @@
 <!-- ================================================================
      MULTI-EMBODIMENT
      ================================================================ -->
-<section class="section is-shaded">
+<section class="section is-shaded" id="results">
   <div class="container is-max-desktop">
     <div class="kicker">Main results &middot; multi-embodiment</div>
     <h2 class="section-title">One video planner, two very different bodies</h2>
@@ -614,7 +632,7 @@
 <!-- ================================================================
      IDM DESIGN STUDY  (paper §4.2 — Designing a Faithful IDM)
      ================================================================ -->
-<section class="section">
+<section class="section" id="ablation">
   <div class="container is-max-desktop">
     <div class="kicker">Why this works &middot; ablation</div>
     <h2 class="section-title">J-IDM scales with action dimensionality</h2>
@@ -643,7 +661,7 @@
 <!-- ================================================================
      VJAM vs FOUNDATION MODEL BASELINES  (paper §4.3)
      ================================================================ -->
-<section class="section is-shaded-warm">
+<section class="section is-shaded-warm" id="compare">
   <div class="container is-max-desktop">
     <div class="kicker">VJAM vs robot foundation models</div>
     <h2 class="section-title">Reasoning through occlusions</h2>
@@ -745,7 +763,7 @@
     <pre class="bibtex-block">@inproceedings{vjam2026anonymous,
   title     = {Turning Video Models into Generalist Robot Policies},
   author    = {Anonymous},
-  booktitle = {Submitted to the Thirty-Eighth Annual Conference on Neural Information Processing Systems},
+  booktitle = {Submitted to the Tenth Conference on Robot Learning (CoRL)},
   year      = {2026},
   note      = {Under double-blind review.}
 }</pre>

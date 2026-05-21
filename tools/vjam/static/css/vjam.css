@@ -1,6 +1,6 @@
 /* ============================================================
    VJAM project page — refined layout & typography
-   Magenta accent (#d6336c) matches paper \hypersetup{urlcolor=magenta}.
+   Navy accent (#1e3a8a) for academic restraint.
    Built on top of Bulma + nerfies index.css.
    ============================================================ */
 
@@ -32,6 +32,66 @@ body {
   background: #fff;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* anchor offset so sticky nav doesn't cover section headings */
+section[id], span[id] { scroll-margin-top: 64px; }
+
+/* ---------- sticky top navigation ---------- */
+
+.vjam-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(160%) blur(12px);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid var(--vjam-rule);
+}
+.vjam-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1.5rem;
+  gap: 1rem;
+}
+.vjam-nav-brand {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--vjam-ink);
+  text-decoration: none;
+}
+.vjam-nav-brand:hover {
+  color: var(--vjam-accent);
+  text-decoration: none;
+}
+.vjam-nav-links {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.vjam-nav-links a {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--vjam-muted);
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  transition: background-color .12s ease, color .12s ease;
+}
+.vjam-nav-links a:hover {
+  background: var(--vjam-accent-soft);
+  color: var(--vjam-accent);
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  .vjam-nav-brand { font-size: 0.95rem; }
+  .vjam-nav-links a { font-size: 0.82rem; padding: 0.28rem 0.55rem; }
+  .vjam-nav-inner { padding: 0.5rem 0.8rem; }
 }
 
 a, a:visited { color: var(--vjam-accent); }
@@ -92,7 +152,7 @@ h1, h2, h3, h4, h5 {
 
 .hero.is-vjam-hero {
   background:
-    radial-gradient(1200px 400px at 50% -10%, rgba(214,51,108,0.06), transparent 60%),
+    radial-gradient(1200px 400px at 50% -10%, rgba(30,58,138,0.05), transparent 60%),
     linear-gradient(180deg, #fff 0%, var(--vjam-tint-warm) 100%);
   padding: 4.2rem 1.5rem 2.6rem;
   text-align: center;
