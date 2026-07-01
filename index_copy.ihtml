@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"                   content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description"                content="Xingjian Bai is an undergraduate at the University of Oxford, interested on algorithms and machine learning." />
+    <meta name="author"                     content="Xingjian Bai" />
+    <meta property="og:title"               content="Xingjian Bai - Oxford" />
+    <meta property="og:description"         content="Xingjian Bai is an undergraduate at the University of Oxford, interested on algorithms and machine learning." />
+    <meta property="og:image"               content="https://xingjian-bai.github.io/img/profile.png" />
+    <meta property="og:image:width"         content="900" />
+    <meta property="og:image:height"        content="1200" />
+    <meta property="twitter:card"           content="summary" />
+    <meta property="twitter:title"          content="Xingjian Bai - Oxford" />
+    <meta property="twitter:description"    content="Xingjian Bai is an undergraduate at the University of Oxford, interested on algorithms and machine learning." />
+    <meta property="twitter:image"          content="https://xingjian-bai.github.io/img/profile.png" />
+
+    <title>Xingjian Bai - Oxford</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic" rel="stylesheet" type="text/css" />
+
+    <!-- Plugin CSS -->
+    <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="css/creative.min.css" rel="stylesheet" />
+    <link href="css/footer.css" rel="stylesheet" />
+    <link href="css/academicons.css" rel="stylesheet" />
+    <link rel="shortcut icon" type="image/jpeg" href="img/DALL·E 2023-02-03 15.32.36 - an animal called piggy duck, digital art.png" />
+
+
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-715QQ7T5Z9"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-715QQ7T5Z9');
+    </script>
+</head>
+
+<body id="page-top">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">Xingjian Bai</a>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#about">About Me</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#publication">Publications</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link js-scroll-trigger" href="#chatting-time">Chatting Time</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="container" id="about">
+        <div class="container">
+            <hr class="light my-3" />
+            <div class="row">
+                <div class="col-md-3">
+                    <center>
+                        <img src="img/profile.png" alt="Profile Photo" width="250" height="auto" style="max-width: 95%; border-radius: 1em" />
+                        <p class="mt-3 mb-0">Undergraduate @ Oxford</p>
+                        <p class="mt-0 mb-0">Incoming PhD student @ MIT</p>
+                        <p class="mb-1 mb-3">Email: <i> xbai AT mit.edu</i></p>
+                        <div class="footer-social-icons">
+                            <ul class="social-icons">
+                                <li style="padding: 4px"><a href="https://github.com/xingjian-bai" title="GitHub" class="social-icon"> <i class="fa fa-github" style="font-size: 95%;"></i></a></li>
+                                <li style="padding: 4px"> <a href="https://scholar.google.com/citations?user=KCrwdnIAAAAJ&hl=en"     title="Google Scholar" class="social-icon">     <i class="fa ai ai-google-scholar" style="font-size: 95%"></i></a> </li>
+                                <li style="padding: 4px"> <a href="https://twitter.com/SimulatedAnneal" title="Twitter" class="social-icon">     <i class="fa fa-twitter" style="font-size: 95%"></i></a> </li>
+                                <li style="padding: 4px"> <a href="https://xingjian-bai.github.io/XingjianBAI.pdf" title="CV" class="social-icon">     <i class="fa ai ai-cv" style="font-size: 95%"></i></a> </li>
+                            </ul>
+                        </div>
+                    </center>
+                </div>
+
+                <div class="col-md-9">
+                    <h3 class="section-heading text-dark"> <b>Xingjian Bai</b> </h3>
+                    <br />
+
+                    <p class="text-dark mb-2" align="justify">
+                        I am an undergraduate student at Oxford, pursuing a degree in Mathematics and Computer Science.
+                        My research primarily explores the intersection of classic algorithms and deep learning, including topics such as learning-augmented algorithms and the theoretical foundations of deep learning models.
+                        I am motivated to conduct research that has the potential of making a significant scientific impact.
+                    </p>
+
+                    <br />
+
+                    <p class="text-dark mb-1" align="justify">
+                        During my time at Oxford, I have had the privilege of working with
+                        <a class="text-info" href="https://www.maths.ox.ac.uk/people/jan.obloj/"> Prof. Jan Obloj</a>,
+                        <a class="text-info" href="https://www.cs.ox.ac.uk/people/christian.coester/">Prof. Christian
+                            Coester</a>,
+                        <a class="text-info" href="https://chrirupp.github.io/">Prof. Christian Rupprecht</a>, and
+                        <a class="text-info" href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>.
+                        I also spent a rewarding summer at Stanford, collaborating with
+                        <a class="text-info" href="https://jiajunwu.com/">Prof. Jiajun Wu</a>,
+                        <a class="text-info" href="http://weiyuliu.com/">Dr. Weiyu Liu</a>,
+                        and <a class="text-info" href="https://web.stanford.edu/~joycj/">Joy Hsu</a>.
+                        Outside of my academic pursuits, I enjoy jogging and playing tennis. I also engage in programming competitions.
+                    </p>
+
+                    <br />
+
+                    <p class="text-dark mb-1" align="justify">
+                        <b>Collaborators</b>: 
+                        I am eager to learn from and collaborate with individuals from diverse backgrounds. 
+                        If you would like to discuss something, I would be grateful to hear from you. 
+                        Please feel free to contact me via email or schedule a time to chat through <a class="text-info" href="#chatting-time">Chatting Time</a>.
+                    </p>
+
+                    <br />
+
+                    <p class="text-dark mb-1" style="font-size: 120%"> <b><u>News: </u></b> </p>
+                    <!-- TODO -->
+                    <p class="text-dark mb-1"> Feb 2024: Our paper, <a class="text-info" href="https://lukemelas.github.io/fixed-point-diffusion-models/">Fixed Point Diffusion Models</a>, is accepted at <a class="text-info" href="https://cvpr.thecvf.com/">CVPR'24</a>! </p>
+                    
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <section class="p-0" id="publication">
+        <div class="text-center">
+            <hr class="dark" style="max-width: 100%" />
+            <h2 style="font-size: calc(20px + 1.6vw)"><b>PUBLICATIONS</b></h2>
+            <hr class="dark" style="max-width: 100%" />
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="container">
+            <ul class="list-unstyled">
+
+                <!-- Unweighted Layered Graph Traversal  -->
+                <li class="mb-4" style="margin-bottom: 2vw">
+                    <div class="row">
+                        <div class="col-md-3 mb-2"><center><img src="projects/24_UnweightedLGT/mario.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid; border-radius: 0.5em;" /></center></div>
+                        <div class="col-md-9">
+                            <h2 class="section-heading" style="font-size: 120%"><b>Unweighted Layered Graph Traversal</b></h2>
+                            <p class="text-dark mb-1"><i><b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a>, <a class="text-dark" href="https://romcos.github.io/">Romain Cosson</a></i></p>
+                            <p class="text-dark mb-1">In submission</p>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2404.16176" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
+                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2024unweighted')" style="cursor: pointer;text-transform: none;height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)"> bibtex </p></button>
+                            <code class="codebox" id="bai2024unweighted" style="display: none"><pre>
+@misc{bai2024unweighted,
+      title={Unweighted Layered Graph Traversal}, 
+      author={Xingjian Bai and Christian Coester and Romain Cosson},
+      year={2024},
+      eprint={2404.16176},
+      archivePrefix={arXiv},
+      primaryClass={cs.DS}
+}</pre></code>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Fixed Point Diffusion Models -->
+                <li class="mb-4" style="margin-bottom: 2vw">
+                    <div class="row">
+                        <div class="col-md-3 mb-2"><center><img src="projects/24_FPDM/architecture.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid; border-radius: 0.5em;" /></center></div>
+                        <div class="col-md-9">
+                            <h2 class="section-heading" style="font-size: 120%"><b>Fixed Point Diffusion Models</b></h2>
+                            <p class="text-dark mb-1"><i><b><u>Xingjian Bai</u></b>*, <a class="text-dark" href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>*</i></p>
+                            <p class="text-dark mb-1">(*equal contribution)</p>
+                            <p class="text-dark mb-1">Computer Vision and Pattern Recognition (CVPR), 2024</p>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://lukemelas.github.io/fixed-point-diffusion-models/" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">page</p></a>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2401.08741" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/lukemelas/fixed-point-diffusion-models" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
+                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2024fixed')" style="cursor: pointer;text-transform: none;height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
+                            <code class="codebox" id="bai2024fixed" style="display: none"><pre>
+@InProceedings{bai2024fixed,
+    title={Fixed Point Diffusion Models},
+    author={Xingjian Bai and Luke Melas-Kyriazi},
+    booktitle = {CVPR},
+    year = {2024}
+}</pre></code>
+                        </div>
+                    </div>
+                </li>
+
+
+                <!-- Goodhart's Law in Reinforcement Learning -->
+                <li class="mb-4" style="margin-bottom: 2vw">
+                    <div class="row">
+                        <div class="col-md-3 mb-2"><center><img src="projects/23_Goodhart/goodhart.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid;border-radius: 0.5em;" /></center></div>
+                        <div class="col-md-9">
+                            <h2 class="section-heading" style="font-size: 120%"><b>Goodhart's Law in Reinforcement Learning</b></h2>
+                            <p class="text-dark mb-1"> <i> <a class="text-dark" href="https://users.ox.ac.uk/~mert4694/">Jacek Karwowski</a>, <a class="text-dark" href="https://openreview.net/profile?id=~Oliver_Hayman1">Oliver Hayman</a>, <b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://www.cs.ox.ac.uk/people/charlie.griffin/">Charlie Griffin</a>, <a class="text-dark" href="https://scholar.google.com/citations?user=GuzLUmQAAAAJ&hl=en">Joar Skalse</a></i></p>
+                            <p class="text-dark mb-1">International Conference on Learning Representations (ICLR), 2023</p>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2310.09144" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
+                            <!-- <a class="btn btn-light sr-button mr-1 mb-1" href="https://xingjian-bai.github.io/projects/23_Sorting/poster.pdf" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">Poster</p></a> -->
+                            <!-- <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/xingjian-bai/Sorting-with-Predictions" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">Code</p></a> -->
+                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('karwowski2023goodharts')" style=" cursor: pointer; text-transform: none; height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
+                            <code class="codebox" id="karwowski2023goodharts" style="display: none"><pre>
+@InProceedings{karwowski2023goodharts,
+    title={Goodhart's Law in Reinforcement Learning}, 
+    author={Jacek Karwowski and Oliver Hayman and Xingjian Bai and Klaus Kiendlhofer and Charlie Griffin and Joar Skalse},
+    year={2024},
+    booktitle = {ICLR},
+}</pre></code>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Sorting with Predictions -->
+                <li class="mb-4" style="margin-bottom: 2vw">
+                    <div class="row">
+                        <div class="col-md-3 mb-2"><center><img src="projects/23_Sorting/dirty_clean_algo.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid;border-radius: 0.5em;" /></center></div>
+                        <div class="col-md-9">
+                            <h2 class="section-heading" style="font-size: 120%"><b>Sorting with Predictions</b></h2>
+                            <p class="text-dark mb-1"><i><b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a></i></p>
+                            <p class="text-dark mb-1">Conference on Neural Information Processing Systems (NeurIPS), 2023</p>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2311.00749" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://xingjian-bai.github.io/projects/23_Sorting/poster.pdf" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">poster</p></a>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/xingjian-bai/Sorting-with-Predictions" style="text-transform: none; height: calc(1.8em + 0.3vw)"><p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
+                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2023sorting')" style=" cursor: pointer; text-transform: none; height: calc(1.8em + 0.3vw);"><p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
+                            <code class="codebox" id="bai2023sorting" style="display: none"><pre>
+@InProceedings{bai2023sorting,
+    title={Sorting with Predictions}, 
+    author={Xingjian Bai and Christian Coester},
+    booktitle = {NeurIPS},
+    year = {2023}
+}</pre></code>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Wasserstein distributional robustness of neural networks -->
+                <li class="mb-4" style="margin-bottom: 2vw">
+                    <div class="row">
+                        <div class="col-md-3 mb-2"><center><img src="projects/23_Robustness/poster.png" alt="architecture" width="320" height="100%" style="max-width: 100%;border: #343a40 1px solid;border-radius: 0.5em;" /></center></div>
+
+                        <div class="col-md-9">
+                            <h2 class="section-heading" style="font-size: 120%"><b>Wasserstein Distributional Robustness of Neural Networks</b></h2>
+                            <p class="text-dark mb-1"> <i> <b><u>Xingjian Bai</u></b>, <a class="text-dark" href="https://openreview.net/profile?id=~Guangyi_He1">Guangyi He</a>, <a class="text-dark" href="https://www.maths.ox.ac.uk/people/yifan.jiang">Yifan Jiang</a>, <a class="text-dark" href="https://www.maths.ox.ac.uk/people/jan.obloj">Jan Obloj</a></i></p>
+                            <p class="text-dark mb-1">Conference on Neural Information Processing Systems (NeurIPS), 2023</p>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://arxiv.org/abs/2306.09844" style="text-transform: none; height: calc(1.8em + 0.3vw)"> <p style="font-size: calc(0.8em + 0.14vw)">arXiv</p></a>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://xingjian-bai.github.io/projects/23_Robustness/poster.pdf" style="text-transform: none; height: calc(1.8em + 0.3vw);" ><p style="font-size: calc(0.8em + 0.14vw);">poster</p></a>
+                            <a class="btn btn-light sr-button mr-1 mb-1" href="https://github.com/JanObloj/W-DRO-Adversarial-Methods" style="text-transform: none; height: calc(1.8em + 0.3vw)"> <p style="font-size: calc(0.8em + 0.14vw)">code</p></a>
+                            <button class="btn btn-light sr-button mr-1 mb-1" href="" onclick="toggleBibtex('bai2023wasserstein')" style=" cursor: pointer; text-transform: none; height: calc(1.8em + 0.3vw);"> <p style="font-size: calc(0.8em + 0.14vw)">bibtex</p></button>
+                            <code class="codebox" id="bai2023wasserstein" style="display: none"><pre>
+@InProceedings{bai2023wasserstein,
+    title={Wasserstein distributional robustness of neural networks}, 
+    author={Xingjian Bai and Guangyi He and Yifan Jiang and Jan Obloj},
+    year={2023},
+    booktitle = {NeurIPS},
+}</pre></code>
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </section>
+
+    <!-- TODO fun+ -->
+
+    <section class="p-0" id="chatting-time">
+        <div class="text-center">
+            <hr class="dark" style="max-width: 100%" />
+            <h2 style="font-size: calc(20px + 1.6vw)">
+                <b>CHATTING TIME</b>
+            </h2>
+            <hr class="dark" style="max-width: 100%" />
+        </div>
+        <!-- <center>
+            <p class="text-dark mb-1">
+                (This may take a while to load. Try refreshing the page if it's not
+                loading.)
+            </p>
+        </center> -->
+    </section>
+
+
+    <section class="container">
+        <!-- Calendly inline widget begin -->
+        <div class="calendly-inline-widget" data-url="https://calendly.com/xingjianbai0914/chatting-hours"
+            style="min-width: 320px; height: 660px"></div>
+        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+        <!-- Calendly inline widget end -->
+    </section>
+
+    <section class="bg-dark" style="padding: 1em">
+        <center>
+            <div class="footer-social-icons">
+                <ul class="social-icons">
+                    <li style="padding: 4px"><a href="https://github.com/xingjian-bai" title="GitHub" class="social-icon"> <i class="fa fa-github" style="font-size: 95%;"></i></a></li>
+                    <li style="padding: 4px"> <a href="https://scholar.google.com/citations?user=KCrwdnIAAAAJ&hl=en"     title="Google Scholar" class="social-icon">     <i class="fa ai ai-google-scholar" style="font-size: 95%"></i></a> </li>
+                    <li style="padding: 4px"> <a href="https://twitter.com/SimulatedAnneal" title="Twitter" class="social-icon">     <i class="fa fa-twitter" style="font-size: 95%"></i></a> </li>
+                    <li style="padding: 4px"> <a href="https://xingjian-bai.github.io/XingjianBAI.pdf" title="CV" class="social-icon">     <i class="fa ai ai-cv" style="font-size: 95%"></i></a> </li>
+                </ul>
+                <footer style="color: white; font-size: 0.9em;">
+                    Designed based on Shangzhe Wu's website
+                </footer>
+            </div>
+        
+        
+        </center>
+    </section>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
+    <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="js/creative.min.js"></script>
+    <script src="js/custom.js"></script>
+
+    
+
+</body>
+
+</html>
