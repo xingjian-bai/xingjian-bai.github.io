@@ -1,4 +1,11 @@
 .DS_Store
-gpu-cluster-monitor/data/launchd_stdout.log
-gpu-cluster-monitor/data/launchd_stderr.log
 .gpu-monitor-hourly.lock/
+
+# Prevent auto-generated data from bloating git history
+# These should be served via external storage, not committed to git
+gpu-cluster-monitor/data/*.json
+gpu-cluster-monitor/data/*.log
+active-wandb-platform/dashboard.json
+experiment-monitor/data/*.json
+tennis-admin/status.json
+tennis-admin/control.json
