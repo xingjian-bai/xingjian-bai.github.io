@@ -1,0 +1,860 @@
+/* ============================================================
+   VJAM project page — refined layout & typography
+   Navy accent (#1e3a8a) for academic restraint.
+   Built on top of Bulma + nerfies index.css.
+   ============================================================ */
+
+:root {
+  /* academic navy as the single page accent (was magenta) */
+  --vjam-accent:        #1e3a8a;   /* deep navy */
+  --vjam-accent-hover:  #172554;   /* darker navy on hover */
+  --vjam-accent-soft:   #eef2ff;   /* very light indigo-50 background */
+  --vjam-ink:           #14171a;
+  --vjam-ink-soft:      #2c333a;
+  --vjam-muted:         #5a6470;
+  --vjam-rule:          #eef0f2;
+  --vjam-tint:          #f7f8fa;   /* neutral light gray for shaded sections */
+  --vjam-tint-warm:     #f3f4f6;   /* slightly warmer neutral gray (was pinkish) */
+
+  --r-card:    10px;
+  --r-pill:    999px;
+  --shadow-card:    0 1px 2px rgba(20,23,26,.05), 0 6px 18px rgba(20,23,26,.05);
+  --shadow-hover:   0 2px 4px rgba(20,23,26,.06), 0 14px 28px rgba(20,23,26,.08);
+}
+
+/* ---------- base ---------- */
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+  color: var(--vjam-ink-soft);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* anchor offset so sticky nav doesn't cover section headings */
+section[id], span[id] { scroll-margin-top: 64px; }
+
+/* ---------- sticky top navigation ---------- */
+
+.vjam-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: saturate(160%) blur(12px);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid var(--vjam-rule);
+}
+.vjam-nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 1.5rem;
+  gap: 1rem;
+}
+.vjam-nav-brand {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  color: var(--vjam-ink);
+  text-decoration: none;
+}
+.vjam-nav-brand:hover {
+  color: var(--vjam-accent);
+  text-decoration: none;
+}
+.vjam-nav-links {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+.vjam-nav-links a {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--vjam-muted);
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--r-pill);
+  text-decoration: none;
+  transition: background-color .12s ease, color .12s ease;
+}
+.vjam-nav-links a:hover {
+  background: var(--vjam-accent-soft);
+  color: var(--vjam-accent);
+  text-decoration: none;
+}
+@media (max-width: 540px) {
+  .vjam-nav-brand { font-size: 0.95rem; }
+  .vjam-nav-links a { font-size: 0.82rem; padding: 0.28rem 0.55rem; }
+  .vjam-nav-inner { padding: 0.5rem 0.8rem; }
+}
+
+a, a:visited { color: var(--vjam-accent); }
+a:hover { color: var(--vjam-accent-hover); text-decoration: underline; }
+
+p { line-height: 1.7; }
+
+.publication-title,
+.section-title,
+.title, .subtitle,
+h1, h2, h3, h4, h5 {
+  font-family: 'Google Sans', sans-serif;
+  color: var(--vjam-ink);
+}
+
+/* Tighter section padding than Bulma's default 3rem 1.5rem */
+.section {
+  padding: 2.6rem 1.5rem;
+}
+.section.is-tight   { padding: 1.6rem 1.5rem; }
+.section.is-shaded  { background: var(--vjam-tint); }
+.section.is-shaded-warm { background: var(--vjam-tint-warm); }
+
+.container.is-narrow { max-width: 880px; }
+
+/* ---------- shared "kicker → title → lede" rhythm ---------- */
+
+.kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 1.02rem;
+  color: var(--vjam-accent);
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 0.7rem;
+  font-family: 'Google Sans', sans-serif;
+}
+
+.section-title {
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: -0.014em;
+  font-size: 2.2rem;
+  line-height: 1.22;
+  margin: 0 0 0.7rem;
+}
+
+.lede {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 1.5rem;
+  color: var(--vjam-muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+/* ---------- hero ---------- */
+
+.hero.is-vjam-hero {
+  background:
+    radial-gradient(1200px 400px at 50% -10%, rgba(30,58,138,0.05), transparent 60%),
+    linear-gradient(180deg, #fff 0%, var(--vjam-tint-warm) 100%);
+  padding: 4.2rem 1.5rem 2.6rem;
+  text-align: center;
+}
+
+.publication-title {
+  font-size: 2.55rem;
+  font-weight: 600;
+  letter-spacing: -0.018em;
+  line-height: 1.18;
+  margin: 0.15rem auto 0.55rem;
+  max-width: 880px;
+}
+
+.publication-subtitle {
+  font-size: 1.05rem;
+  color: var(--vjam-muted);
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.note-pill {
+  display: inline-block;
+  background: var(--vjam-accent-soft);
+  color: var(--vjam-accent);
+  font-size: 0.78rem;
+  padding: 0.22rem 0.7rem;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+}
+
+.is-anonymous {
+  color: var(--vjam-muted);
+  font-style: italic;
+  margin-top: 1.05rem;
+  font-size: 0.96rem;
+}
+
+.publication-links {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+}
+
+.publication-links .link-block { margin: 0; }
+
+.button.is-pub {
+  background: var(--vjam-ink);
+  color: #fff;
+  border-color: var(--vjam-ink);
+  border-radius: var(--r-pill);
+  font-weight: 500;
+  padding-left: 1.15rem;
+  padding-right: 1.15rem;
+  transition: transform .12s ease, background-color .12s ease;
+}
+.button.is-pub:hover {
+  background: var(--vjam-accent);
+  border-color: var(--vjam-accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.button.is-pub.is-ghost {
+  background: transparent;
+  color: var(--vjam-ink);
+}
+.button.is-pub.is-ghost:hover {
+  background: var(--vjam-accent-soft);
+  color: var(--vjam-accent);
+  border-color: var(--vjam-accent-soft);
+}
+
+/* ---------- teaser ---------- */
+
+.hero.is-vjam-teaser {
+  background: #fff;
+  padding: 1.4rem 1.5rem 0.6rem;
+}
+
+.teaser-frame {
+  max-width: 1040px;
+  margin: 0 auto;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  background: #000;
+}
+.teaser-frame video {
+  width: 100%;
+  display: block;
+  max-height: 64vh;
+  object-fit: contain;
+  background: #000;
+}
+
+.teaser-caption {
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--vjam-muted);
+  margin: 0.85rem auto 0;
+  max-width: 820px;
+}
+
+/* ---------- abstract ---------- */
+
+.abstract-text {
+  font-size: 1.02rem;
+  line-height: 1.75;
+  color: var(--vjam-ink-soft);
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.abstract-text p { margin-bottom: 0.95rem; }
+.abstract-text strong { color: var(--vjam-ink); font-weight: 600; }
+.abstract-text em { color: var(--vjam-ink); font-style: italic; }
+
+/* ---------- figure block ---------- */
+
+.figure-block {
+  text-align: center;
+  margin: 0.4rem 0 0.6rem;
+}
+.figure-block img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: var(--shadow-card);
+}
+.figure-block .figure-caption {
+  font-size: 0.92rem;
+  color: var(--vjam-muted);
+  margin: 0.75rem auto 0;
+  max-width: 720px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* ---------- video card ---------- */
+
+.video-card {
+  background: #fff;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow .18s ease, transform .18s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.video-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+.video-card video {
+  width: 100%;
+  display: block;
+  background: #000;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+.video-card.is-tall video { aspect-ratio: 4 / 3; }
+.video-card.is-wide video { aspect-ratio: 21 / 9; object-fit: cover; }
+
+.video-card .caption {
+  padding: 0.72rem 0.95rem 0.85rem;
+  font-size: 0.93rem;
+  color: var(--vjam-muted);
+  border-top: 1px solid var(--vjam-rule);
+  line-height: 1.5;
+  flex: 1;
+}
+.video-card .caption .prompt {
+  color: var(--vjam-ink);
+  font-style: italic;
+}
+.video-card .caption .label {
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--vjam-accent);
+  font-weight: 700;
+  margin-right: 0.45rem;
+}
+
+/* even-height grids */
+.cards-grid .column { display: flex; }
+
+/* ---------- multi-embodiment row ---------- */
+
+.embodiment-block + .embodiment-block { margin-top: 2.2rem; }
+
+.embodiment-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--vjam-rule);
+  padding-bottom: 0.55rem;
+}
+.embodiment-header h3 {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  letter-spacing: -0.005em;
+  color: var(--vjam-ink);
+  margin: 0;
+}
+.embodiment-header .embodiment-tag {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--vjam-accent);
+  font-weight: 700;
+}
+
+/* ---------- comparison rail (ours vs baseline) ---------- */
+
+.compare-rail .column h4 {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: var(--vjam-muted);
+  margin: 0 0 0.5rem;
+  text-align: center;
+}
+.compare-rail .column.is-ours h4 { color: var(--vjam-accent); }
+
+/* ---------- bibtex ---------- */
+
+#bibtex .bibtex-block {
+  background: #1a1d22;
+  color: #f5f7fa;
+  padding: 1.15rem 1.35rem;
+  border-radius: 10px;
+  font-family: 'JetBrains Mono', 'Menlo', monospace;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+  margin: 0;
+}
+#bibtex .bibtex-block .bib-key { color: #f59f00; }
+#bibtex .bibtex-block .bib-tag { color: #74c0fc; }
+
+/* ---------- footer ---------- */
+
+.footer {
+  background: #fff;
+  padding: 1.8rem 1.5rem 2.4rem;
+  border-top: 1px solid var(--vjam-rule);
+  font-size: 0.86rem;
+  color: var(--vjam-muted);
+  text-align: center;
+}
+.footer p { margin: 0.2rem 0; }
+
+/* ---------- prompt-group (shared prompt header above paired cards) ---------- */
+
+.prompt-group { margin-bottom: 1.4rem; }
+.prompt-group + .prompt-group { margin-top: 1.2rem; }
+
+.prompt-header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  padding: 0.55rem 0.95rem;
+  background: var(--vjam-accent-soft);
+  border-left: 4px solid var(--vjam-accent);
+  border-radius: 6px;
+  margin-bottom: 0.7rem;
+}
+.prompt-header-label {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vjam-accent);
+  white-space: nowrap;
+}
+.prompt-header-text {
+  color: var(--vjam-ink);
+  font-size: 0.97rem;
+  line-height: 1.5;
+  font-style: italic;
+  flex: 1 1 320px;
+}
+
+/* ============================================================ */
+/* .method-anim  —  interactive 5-step closed-loop walkthrough  */
+/* (placeholder until the polished animation is built)          */
+/* ============================================================ */
+
+.method-anim {
+  --step-1: #d18b1f;   /* warm yellow-orange — observation history */
+  --step-2: #7b4f2a;   /* medium brown      — video model         */
+  --step-3: #15803d;   /* forest green      — visual plan         */
+  --step-4: #14b8a6;   /* teal             — Jacobian translation */
+  --step-5: #1d4ed8;   /* deep blue         — robot execution     */
+
+  /* --active-color drives the loop arrow, detail panel and step cards
+     ONLY; the outer frame intentionally stays neutral gray so the card
+     does not flash colors at the visitor. */
+  --active-color: #94a3b8;   /* default light slate before any step is shown */
+
+  margin: 1.6rem auto 0;
+  max-width: 960px;
+  padding: 1.3rem 1.3rem 1.1rem;
+  border: 2px dashed #d1d5db;          /* neutral gray dashed border */
+  border-radius: 14px;
+  background: #fafbfc;                  /* very light gray bg */
+  position: relative;
+  isolation: isolate;                   /* contain z-index of children */
+}
+.method-anim::before {
+  content: "Method";
+  position: absolute;
+  top: -0.8rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: var(--vjam-muted);             /* neutral gray text */
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  padding: 0.2rem 0.85rem;
+  border-radius: var(--r-pill);
+  border: 1px solid #d1d5db;            /* neutral gray border */
+  text-transform: uppercase;
+}
+
+/* per-step active accent (drives step cards, detail panel, loop arrow) */
+.method-anim[data-active="1"] { --active-color: var(--step-1); }
+.method-anim[data-active="2"] { --active-color: var(--step-2); }
+.method-anim[data-active="3"] { --active-color: var(--step-3); }
+.method-anim[data-active="4"] { --active-color: var(--step-4); }
+.method-anim[data-active="5"] { --active-color: var(--step-5); }
+
+/* ---- step track ---- */
+
+.ma-track {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin: 0.4rem 0 0.5rem;
+}
+
+.ma-step {
+  --step-color: var(--vjam-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: transparent;
+  border: 1.5px solid transparent;
+  border-radius: 12px;
+  padding: 0.45rem 0.55rem 0.55rem;
+  min-width: 118px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;                  /* stay above the loop SVG that overlaps the row */
+  transition: background-color .18s ease, border-color .18s ease,
+              transform .18s ease, opacity .18s ease, color .18s ease;
+  opacity: 0.6;
+  font: inherit;
+  color: var(--vjam-muted);
+}
+
+/* assign per-step colors */
+.ma-step[data-step="1"] { --step-color: var(--step-1); }
+.ma-step[data-step="2"] { --step-color: var(--step-2); }
+.ma-step[data-step="3"] { --step-color: var(--step-3); }
+.ma-step[data-step="4"] { --step-color: var(--step-4); }
+.ma-step[data-step="5"] { --step-color: var(--step-5); }
+
+.ma-step:hover { background: rgba(255,255,255,.6); }
+
+.ma-step.is-active {
+  background: #fff;
+  border-color: var(--step-color);
+  color: var(--step-color);
+  opacity: 1;
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 2px color-mix(in srgb, var(--step-color) 18%, transparent),
+    0 6px 18px color-mix(in srgb, var(--step-color) 14%, transparent);
+}
+
+.ma-num {
+  /* now sits INSIDE .ma-icon, anchored to its top-right corner so the
+     badge keeps the same offset from the icon regardless of how wide
+     the step label is */
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--step-color);
+  color: #fff;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.12);
+  z-index: 3;
+}
+
+.ma-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1.5px solid var(--step-color);
+  position: relative;
+  overflow: visible;            /* let the .ma-num badge peek outside */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ma-icon .ma-svg { overflow: hidden; border-radius: inherit; }
+
+.ma-svg {
+  width: 100%;
+  height: 100%;
+  color: var(--step-color);   /* inline SVGs use currentColor */
+}
+
+/* pause icon animations on inactive steps */
+.ma-step:not(.is-active) .ma-svg * {
+  animation-play-state: paused !important;
+}
+
+/* ---- per-step icon animations ---- */
+
+/* (1) Observation history — frames slide horizontally with fade */
+.ic-frame { opacity: 0.6; }
+.ic-frame.f1 { animation: ic-frame-pulse 2.4s ease-in-out infinite 0s; }
+.ic-frame.f2 { animation: ic-frame-pulse 2.4s ease-in-out infinite 0.4s; }
+.ic-frame.f3 { animation: ic-frame-pulse 2.4s ease-in-out infinite 0.8s; }
+.ic-frame.f4 { animation: ic-frame-pulse 2.4s ease-in-out infinite 1.2s; }
+@keyframes ic-frame-pulse {
+  0%, 80%, 100% { opacity: 0.55; transform: translateY(0); }
+  20%, 50%      { opacity: 1;    transform: translateY(-1.5px); }
+}
+
+/* (2) Video model — fully-connected NN: gentle pulse moving through layers */
+.ic-net .ic-edges line { stroke: currentColor; }
+.ic-net .ic-node {
+  animation: ic-net-node-pulse 2.4s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+.ic-net .ic-node-mid { animation-delay: 0.4s; }
+.ic-net circle.ic-node:nth-of-type(7),
+.ic-net circle.ic-node:nth-of-type(8),
+.ic-net circle.ic-node:nth-of-type(9) { animation-delay: 0.8s; }
+@keyframes ic-net-node-pulse {
+  0%,100% { transform: scale(1);    opacity: 0.85; }
+  35%     { transform: scale(1.25); opacity: 1;    }
+}
+
+/* (3) Visual plan — frames slowly drift forward + play pulse */
+.ic-plan .ic-pframe {
+  animation: ic-pframe-drift 3s ease-in-out infinite;
+}
+.ic-plan .p1 { animation-delay: 0s; }
+.ic-plan .p2 { animation-delay: 0.4s; }
+.ic-plan .p3 { animation-delay: 0.8s; }
+@keyframes ic-pframe-drift {
+  0%, 100% { transform: translateX(0)    scale(1); }
+  50%      { transform: translateX(-1px) scale(1.02); }
+}
+.ic-plan .ic-play {
+  animation: ic-play-pulse 1.6s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+@keyframes ic-play-pulse {
+  0%,100% { opacity: 0.85; transform: scale(1); }
+  50%     { opacity: 1;    transform: scale(1.18); }
+}
+
+/* (4) Jacobian — tidy vector field, all arrows wobble in sync ("breathing flow") */
+.ic-vec .ic-vec-arrow {
+  animation: ic-vec-wobble 3.6s ease-in-out infinite;
+  transform-origin: 0 0;
+  transform-box: fill-box;
+}
+@keyframes ic-vec-wobble {
+  0%, 100% { filter: brightness(0.92); opacity: 0.9; }
+  50%      { filter: brightness(1.15); opacity: 1;   }
+}
+
+/* (5) Robot execution — arm gently rotates around the column pivot, target pulses */
+.ic-arm .ic-arm-swing {
+  animation: ic-arm-reach 2.8s ease-in-out infinite;
+  transform-box: view-box;
+  transform-origin: 20.3px 20px;   /* pivot = top of column */
+}
+@keyframes ic-arm-reach {
+  0%, 100% { transform: rotate(0deg); }
+  50%      { transform: rotate(14deg); }
+}
+.ic-arm .ic-target {
+  animation: ic-target-pulse 2.8s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes ic-target-pulse {
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.08); }
+}
+
+.ma-label {
+  font-size: 0.78rem;
+  color: inherit;
+  font-weight: 600;
+  margin-top: 0.55rem;
+  text-align: center;
+  letter-spacing: 0.005em;
+  line-height: 1.25;
+}
+
+.ma-step.is-active .ma-label { color: var(--step-color); }
+
+/* between-step arrow (small): line + triangle whose apex sits AT the right end */
+.ma-arrow {
+  align-self: center;
+  width: 26px;
+  height: 2px;
+  background: var(--vjam-muted);
+  position: relative;
+  opacity: .55;
+}
+.ma-arrow::after {
+  /* 3-border triangle (no border-right) so the apex is at the element's
+     right edge, not at its centre */
+  content: "";
+  position: absolute;
+  right: -7px;
+  top: 50%;
+  width: 0; height: 0;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 7px solid var(--vjam-muted);
+  border-right: 0;
+  transform: translateY(-50%);
+}
+
+/* ---- closed-loop arrow (rectangle around steps, SVG chevron at the tip) ---- */
+
+.ma-loop {
+  /* negative margin-top pulls the loop UP so the top horizontal pieces sit
+     at the same vertical level as the gray inter-step arrows */
+  position: relative;
+  margin: -56px auto 0;
+  height: 130px;
+  max-width: 100%;
+  color: var(--active-color);
+  pointer-events: none;          /* don't block clicks on step buttons that overlap */
+  z-index: 0;                    /* stay behind .ma-step */
+  transition: color .25s ease;
+}
+.ma-loop-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* label sits at the BOTTOM horizontal of the rectangle.
+   y_svg = 125 of 130 ≈ 96% of container height. */
+.ma-loop-label {
+  position: absolute;
+  left: 50%;
+  top: 96%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--active-color) 35%, var(--vjam-rule));
+  padding: 3px 14px;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--active-color);
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-radius: var(--r-pill);
+  pointer-events: none;
+  transition: color .25s ease, border-color .25s ease;
+}
+
+/* tiny camera icon ABOVE the re-observe/re-plan label.
+   Hard cap on size with overflow:hidden so even an uncontrolled SVG
+   can never spill out of the badge. */
+.ma-loop-icon {
+  position: absolute;
+  left: 50%;
+  top: 72%;     /* between step 3 and the re-observe·re-plan label */
+  transform: translate(-50%, -50%);
+  width: 22px;
+  height: 22px;
+  color: var(--active-color);
+  background: #fff;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--active-color) 30%, var(--vjam-rule));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+  pointer-events: none;
+  box-sizing: border-box;
+  transition: color .25s ease, border-color .25s ease;
+}
+.ma-loop-icon svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+}
+
+/* ---- detail panel ---- */
+
+.ma-detail {
+  background: #fff;
+  border-radius: 10px;
+  padding: 0.95rem 1.15rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-left: 4px solid var(--vjam-accent);
+  max-width: 780px;
+  /* extra top margin so the box clears the re-observe/re-plan loop arrow above */
+  margin: 1.6rem auto 0.4rem;
+  text-align: left;
+  transition: border-color .18s ease;
+}
+.method-anim[data-active="1"] .ma-detail { border-left-color: var(--step-1); }
+.method-anim[data-active="2"] .ma-detail { border-left-color: var(--step-2); }
+.method-anim[data-active="3"] .ma-detail { border-left-color: var(--step-3); }
+.method-anim[data-active="4"] .ma-detail { border-left-color: var(--step-4); }
+.method-anim[data-active="5"] .ma-detail { border-left-color: var(--step-5); }
+
+.ma-detail-title {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.32rem;
+  color: var(--vjam-accent);
+}
+.method-anim[data-active="1"] .ma-detail-title { color: var(--step-1); }
+.method-anim[data-active="2"] .ma-detail-title { color: var(--step-2); }
+.method-anim[data-active="3"] .ma-detail-title { color: var(--step-3); }
+.method-anim[data-active="4"] .ma-detail-title { color: var(--step-4); }
+.method-anim[data-active="5"] .ma-detail-title { color: var(--step-5); }
+
+.ma-detail-body {
+  font-size: 0.96rem;
+  color: var(--vjam-ink-soft);
+  line-height: 1.6;
+}
+
+.ma-caption {
+  margin: 0.85rem auto 0;
+  max-width: 640px;
+  font-size: 0.82rem;
+  color: var(--vjam-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+@media (max-width: 720px) {
+  .ma-arrow { display: none; }
+  .ma-track { gap: 0.1rem; }
+  .ma-step  { min-width: 90px; padding: 0.4rem 0.3rem; }
+  .ma-icon  { width: 52px; height: 52px; }
+  .ma-label { font-size: 0.72rem; }
+}
+
+/* ---------- responsive tweaks ---------- */
+
+@media (max-width: 768px) {
+  .publication-title { font-size: 1.85rem; }
+  .section-title     { font-size: 1.45rem; }
+  .section           { padding: 2rem 1rem; }
+  .hero.is-vjam-hero { padding: 3rem 1rem 2rem; }
+  .teaser-frame video { max-height: 50vh; }
+  .publication-links { gap: 0.4rem; }
+  .button.is-pub     { padding-left: 0.95rem; padding-right: 0.95rem; }
+}

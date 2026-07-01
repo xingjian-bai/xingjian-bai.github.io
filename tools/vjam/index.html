@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="VJAM: Turning Video Models into Generalist Robot Policies. A closed-loop video-to-action policy combining an action-free video world model with a Jacobian inverse dynamics model.">
+  <meta name="keywords" content="VJAM, video models, robot policy, inverse dynamics, Jacobian, manipulation, CoRL 2026">
+  <title>VJAM &mdash; Turning Video Models into Generalist Robot Policies</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans:400,500,600|Noto+Sans:400,500,600|JetBrains+Mono:400,500" rel="stylesheet">
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/vjam.css?v=9">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<!-- ================================================================
+     STICKY TOP NAV
+     ================================================================ -->
+<nav class="vjam-nav" aria-label="Section navigation">
+  <div class="container is-max-desktop vjam-nav-inner">
+    <a href="#top" class="vjam-nav-brand">VJAM</a>
+    <div class="vjam-nav-links">
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#ablation">Ablation</a>
+      <a href="#compare">Comparison</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </div>
+</nav>
+
+<span id="top"></span>
+
+<!-- ================================================================
+     HERO
+     ================================================================ -->
+<section class="hero is-vjam-hero">
+  <div class="container is-max-desktop">
+    <div class="kicker">CoRL 2026 &middot; Submission</div>
+    <h1 class="publication-title">
+      Turning Video Models into Generalist Robot Policies
+    </h1>
+    <p class="publication-subtitle">
+      <span class="note-pill">VJAM</span>&nbsp;&nbsp;the Video&ndash;Jacobian&ndash;Action Model
+    </p>
+    <p class="is-anonymous">Anonymous Authors &middot; under double-blind review</p>
+
+    <div class="publication-links">
+      <a href="./static/paper.pdf" class="button is-pub">
+        <span class="icon"><i class="fas fa-file-pdf"></i></span>
+        <span>Paper</span>
+      </a>
+      <a href="#bibtex" class="button is-pub is-ghost">
+        <span class="icon"><i class="fas fa-quote-left"></i></span>
+        <span>BibTeX</span>
+      </a>
+      <a href="#" class="button is-pub is-ghost" title="Code release pending">
+        <span class="icon"><i class="fab fa-github"></i></span>
+        <span>Code &middot; coming soon</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     HEADLINE  (paper Fig.1)
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Overview</div>
+    <h2 class="section-title">A single video planner generalizes across embodiments</h2>
+    <p class="lede" style="max-width:820px;">
+      A 14B video generative model, paired with a <em>faithful</em> inverse dynamics model,
+      solves a wide range of robotics challenges &mdash; from zero-shot pick-and-place on a
+      real-world Panda arm to contact-rich re-orientation of a cube with a 16-DoF
+      multi-fingered hand.
+    </p>
+    <div class="figure-block">
+      <img src="./static/figures/fig1_main_results-1.png"
+           alt="Controlling robots across embodiments, skills, and environments">
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     ABSTRACT
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Abstract</div>
+    <div class="abstract-text">
+      <p>
+        Video generative models have emerged as a promising robotics backbone, capable of generating
+        videos that depict the completion of complex tasks across embodiments and environments. Many
+        current approaches finetune video models with action-labeled data, turning them into robot
+        foundation models that jointly predict future observations and actions.
+      </p>
+      <p>
+        In this paper, we study an alternative, underexplored route for transferring the capabilities
+        of video models into robot control: leave the video planner as is, while training an
+        embodiment-specific <em>inverse dynamics model</em> (IDM). This decoupling offers several
+        advantages: the video planner can remain embodiment-agnostic; different video models can be
+        interchanged easily without re-training the IDMs; and the inverse dynamics model can be
+        trained with the more readily available autonomous self-play data.
+      </p>
+      <p>
+        With this in mind, we present a closed-loop, video-to-action policy that combines an
+        action-free video world model with a carefully designed IDM based on the robot embodiment
+        Jacobian. We find that such a structure yields a <strong>faithful</strong> video-to-action
+        translator that is both data-efficient and scalable to high-dimensional action spaces. Our
+        policy, which we coin the <strong>Video&ndash;Jacobian&ndash;Action Model (VJAM)</strong>,
+        achieves strong performance across simulated and real-world benchmarks, including zero-shot
+        Panda arm manipulation and 16-DoF Allegro-hand dexterous cube re-orientation. The same video
+        planner can be used across multiple embodiments by pairing it with different
+        embodiment-specific IDMs.
+      </p>
+      <p>
+        Our results show that decoupled video planning plus faithful video-to-action translation is a
+        viable alternative route towards zero-shot, cross-embodiment, and generalizable robot control.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     PIPELINE  (paper Fig.2 — brief)
+     ================================================================ -->
+<section class="section is-shaded" id="method">
+  <div class="container is-max-desktop">
+    <div class="kicker">Method</div>
+    <h2 class="section-title">A planner, a translator, a closed loop</h2>
+    <p class="lede">
+      From a short observation history, a video generative model imagines a visual plan;
+      the Jacobian-IDM translates each step of that plan into actions, the robot executes them,
+      and the loop repeats.
+    </p>
+    <!-- Static method figure commented out: the interactive animation below replaces it.
+    <div class="figure-block">
+      <img src="./static/figures/fig2_method_overview-1.png" alt="VJAM method overview pipeline">
+    </div>
+    -->
+
+
+    <!-- Interactive 5-step closed-loop placeholder. Per-step colour scheme:
+         (1) warm orange-yellow  (2) brown  (3) dark green
+         (4) light green  (5) deep blue. -->
+    <div class="method-anim" id="methodAnim"
+         role="region" aria-label="Closed-loop method walkthrough (placeholder)">
+      <div class="ma-track">
+
+        <button class="ma-step is-active" data-step="1" type="button">
+          <span class="ma-icon">
+            <span class="ma-num">1</span>
+            <svg viewBox="0 0 50 50" class="ma-svg" fill="currentColor" stroke="currentColor" stroke-linejoin="round">
+              <!-- four observation frames sliding right -->
+              <rect class="ic-frame f1" x="4"  y="14" width="9" height="22" rx="1.6"/>
+              <rect class="ic-frame f2" x="14" y="14" width="9" height="22" rx="1.6"/>
+              <rect class="ic-frame f3" x="24" y="14" width="9" height="22" rx="1.6"/>
+              <rect class="ic-frame f4" x="34" y="14" width="9" height="22" rx="1.6"/>
+            </svg>
+          </span>
+          <span class="ma-label">Observation history</span>
+        </button>
+
+        <span class="ma-arrow"></span>
+
+        <button class="ma-step" data-step="2" type="button">
+          <span class="ma-icon">
+            <span class="ma-num">2</span>
+            <svg viewBox="0 0 50 50" class="ma-svg ic-net" fill="currentColor" stroke="currentColor" stroke-width="0.9">
+              <!-- classical fully-connected NN: 3-3-3 with all-to-all edges -->
+              <g class="ic-edges" opacity="0.4">
+                <line x1="10" y1="14" x2="25" y2="14"/>
+                <line x1="10" y1="14" x2="25" y2="25"/>
+                <line x1="10" y1="14" x2="25" y2="36"/>
+                <line x1="10" y1="25" x2="25" y2="14"/>
+                <line x1="10" y1="25" x2="25" y2="25"/>
+                <line x1="10" y1="25" x2="25" y2="36"/>
+                <line x1="10" y1="36" x2="25" y2="14"/>
+                <line x1="10" y1="36" x2="25" y2="25"/>
+                <line x1="10" y1="36" x2="25" y2="36"/>
+                <line x1="25" y1="14" x2="40" y2="14"/>
+                <line x1="25" y1="14" x2="40" y2="25"/>
+                <line x1="25" y1="14" x2="40" y2="36"/>
+                <line x1="25" y1="25" x2="40" y2="14"/>
+                <line x1="25" y1="25" x2="40" y2="25"/>
+                <line x1="25" y1="25" x2="40" y2="36"/>
+                <line x1="25" y1="36" x2="40" y2="14"/>
+                <line x1="25" y1="36" x2="40" y2="25"/>
+                <line x1="25" y1="36" x2="40" y2="36"/>
+              </g>
+              <circle class="ic-node" cx="10" cy="14" r="2.3"/>
+              <circle class="ic-node" cx="10" cy="25" r="2.3"/>
+              <circle class="ic-node" cx="10" cy="36" r="2.3"/>
+              <circle class="ic-node ic-node-mid" cx="25" cy="14" r="2.5"/>
+              <circle class="ic-node ic-node-mid" cx="25" cy="25" r="2.5"/>
+              <circle class="ic-node ic-node-mid" cx="25" cy="36" r="2.5"/>
+              <circle class="ic-node" cx="40" cy="14" r="2.3"/>
+              <circle class="ic-node" cx="40" cy="25" r="2.3"/>
+              <circle class="ic-node" cx="40" cy="36" r="2.3"/>
+            </svg>
+          </span>
+          <span class="ma-label">Video model</span>
+        </button>
+
+        <span class="ma-arrow"></span>
+
+        <button class="ma-step" data-step="3" type="button">
+          <span class="ma-icon">
+            <span class="ma-num">3</span>
+            <svg viewBox="0 0 50 50" class="ma-svg ic-plan" fill="currentColor" stroke="currentColor" stroke-linejoin="round">
+              <!-- three imagined future frames + play triangle -->
+              <rect class="ic-pframe p1" x="5"  y="14" width="12" height="22" rx="1.6" opacity=".55"/>
+              <rect class="ic-pframe p2" x="19" y="14" width="12" height="22" rx="1.6" opacity=".80"/>
+              <rect class="ic-pframe p3" x="33" y="14" width="12" height="22" rx="1.6"/>
+              <polygon class="ic-play" points="36,20 36,30 44,25" fill="#fff" stroke="#fff"/>
+            </svg>
+          </span>
+          <span class="ma-label">Visual plan</span>
+        </button>
+
+        <span class="ma-arrow"></span>
+
+        <button class="ma-step" data-step="4" type="button">
+          <span class="ma-icon">
+            <span class="ma-num">4</span>
+            <svg viewBox="0 0 50 50" class="ma-svg ic-vec" fill="currentColor" stroke="currentColor" stroke-width="1.2">
+              <!-- 3x3 tidy vector field; coherent "flow" with subtle row-by-row tilt -->
+              <g class="ic-vec-arrow" transform="translate(10,13) rotate(-12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(22,13) rotate(-12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(34,13) rotate(-12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(10,25) rotate(0)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(22,25) rotate(0)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(34,25) rotate(0)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(10,37) rotate(12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(22,37) rotate(12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+              <g class="ic-vec-arrow" transform="translate(34,37) rotate(12)"><line x1="0" y1="0" x2="6.5" y2="0"/><polygon points="6.5,-2 9,0 6.5,2"/></g>
+            </svg>
+          </span>
+          <span class="ma-label">Jacobian translation</span>
+        </button>
+
+        <span class="ma-arrow"></span>
+
+        <button class="ma-step" data-step="5" type="button">
+          <span class="ma-icon">
+            <span class="ma-num">5</span>
+            <svg viewBox="0 0 50 50" class="ma-svg ic-arm" fill="currentColor" stroke="currentColor"
+                 stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round">
+              <!-- table line -->
+              <line x1="7" y1="43" x2="43" y2="43" stroke-width="1" opacity="0.45"/>
+              <!-- base -->
+              <rect x="13" y="38" width="14" height="5" rx="1.3"/>
+              <!-- vertical column -->
+              <rect x="19" y="20" width="2.6" height="18" rx="0.5"/>
+              <!-- pivot joint -->
+              <circle cx="20.3" cy="20" r="1.9" fill="currentColor"/>
+              <!-- swinging arm group: rotates around (20.3, 20) -->
+              <g class="ic-arm-swing">
+                <line x1="20.3" y1="20" x2="38" y2="20" stroke-width="3"/>
+                <line x1="38" y1="20" x2="42.5" y2="17.5" stroke-width="2"/>
+                <line x1="38" y1="20" x2="42.5" y2="22.5" stroke-width="2"/>
+              </g>
+              <!-- target cube on the table -->
+              <rect class="ic-target" x="36.5" y="37" width="6" height="6" rx="0.8"/>
+            </svg>
+          </span>
+          <span class="ma-label">Robot execution</span>
+        </button>
+      </div>
+
+      <!-- closed-loop arrow: rectangle around the step row, pulled up so the
+           top horizontal pieces sit at the SAME vertical level as the gray
+           arrows between steps. Together with those arrows the whole thing
+           reads as one continuous rectangular loop. -->
+      <div class="ma-loop" aria-hidden="true">
+        <svg class="ma-loop-svg" viewBox="0 0 1000 130" preserveAspectRatio="none">
+          <defs>
+            <marker id="loopChevron" markerWidth="14" markerHeight="14" refX="12" refY="7"
+                    orient="auto" markerUnits="userSpaceOnUse">
+              <path d="M 1,1 L 12,7 L 1,13" fill="none" stroke="currentColor"
+                    stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <path d="M 945,5
+                   L 985,5
+                   Q 992,5  992,12
+                   L 992,118
+                   Q 992,125 985,125
+                   L 15,125
+                   Q 8,125   8,118
+                   L 8,12
+                   Q 8,5     15,5
+                   L 55,5"
+                fill="none" stroke="currentColor" stroke-width="2"
+                stroke-dasharray="7 5" stroke-linecap="round"
+                marker-end="url(#loopChevron)"
+                vector-effect="non-scaling-stroke"/>
+        </svg>
+        <!-- small camera icon ABOVE the re-observe/re-plan label, in the empty
+             space between the label and step 3 (Visual plan). Width/height
+             attributes are set EXPLICITLY so the SVG never falls back to its
+             intrinsic 300x150 default. -->
+        <span class="ma-loop-icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 8,7 L 9.5,4.5 L 14.5,4.5 L 16,7"/>
+            <rect x="3" y="7" width="18" height="13" rx="2"/>
+            <circle cx="12" cy="13.5" r="3.5"/>
+          </svg>
+        </span>
+        <span class="ma-loop-label">re-observe &middot; re-plan</span>
+      </div>
+
+      <div class="ma-detail" id="maDetail" aria-live="polite">
+        <div class="ma-detail-title" id="maDetailTitle">Step&nbsp;1 &middot; Observation history</div>
+        <div class="ma-detail-body" id="maDetailBody">
+          The last few RGB frames from the robot's cameras, plus a language
+          goal. They seed the next plan.
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+    (function () {
+      var steps = {
+        1: {
+          t: "Step 1 · Observation history",
+          b: "The last few RGB frames from the robot's cameras, plus a language goal. They seed the next plan."
+        },
+        2: {
+          t: "Step 2 · Video model",
+          b: "An action-free video diffusion model (14B WAN-family) conditioned on the observation history and the prompt."
+        },
+        3: {
+          t: "Step 3 · Generated visual plan",
+          b: "A short look-ahead of imagined future frames — a path along the image manifold describing what should happen next."
+        },
+        4: {
+          t: "Step 4 · Jacobian translation",
+          b: "For each frame pair, the Jacobian-IDM predicts a per-pixel tangent map from action perturbations to pixel motion; regularized least squares solves the action chunk."
+        },
+        5: {
+          t: "Step 5 · Robot execution",
+          b: "The action chunk runs on the embodiment. Fresh observations stream back into Step 1, closing the loop and triggering a re-plan."
+        }
+      };
+      var root    = document.getElementById('methodAnim');
+      var btns    = root.querySelectorAll('.ma-step');
+      var titleEl = document.getElementById('maDetailTitle');
+      var bodyEl  = document.getElementById('maDetailBody');
+
+      var NORMAL_MS   = 5000;   // 5s per step in auto-play
+      var CLICK_HOLD  = 10000;  // 10s extra hold after a click
+      var current     = 1;
+      var auto        = null;   // setInterval handle
+      var pendingTO   = null;   // setTimeout handle for click-hold
+
+      function setStep(n) {
+        current = n;
+        btns.forEach(function (b) {
+          b.classList.toggle('is-active', parseInt(b.dataset.step, 10) === n);
+        });
+        root.setAttribute('data-active', String(n));
+        var d = steps[n];
+        titleEl.textContent = d.t;
+        bodyEl.textContent  = d.b;
+      }
+
+      function clearAll() {
+        if (auto)      { clearInterval(auto); auto = null; }
+        if (pendingTO) { clearTimeout(pendingTO); pendingTO = null; }
+      }
+      function startNormalCycle() {
+        clearAll();
+        auto = setInterval(function () { setStep(current % 5 + 1); }, NORMAL_MS);
+      }
+      function startClickHold() {
+        // hold current step for CLICK_HOLD, then resume normal cycle
+        clearAll();
+        pendingTO = setTimeout(function () {
+          setStep(current % 5 + 1);
+          startNormalCycle();
+        }, CLICK_HOLD);
+      }
+
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          setStep(parseInt(b.dataset.step, 10));
+          startClickHold();
+        });
+      });
+
+      root.addEventListener('mouseenter', clearAll);
+      root.addEventListener('mouseleave', startNormalCycle);
+
+      startNormalCycle();
+    })();
+    </script>
+  </div>
+</section>
+
+<!-- ================================================================
+     MULTI-EMBODIMENT
+     ================================================================ -->
+<section class="section is-shaded" id="results">
+  <div class="container is-max-desktop">
+    <div class="kicker">Main results &middot; multi-embodiment</div>
+    <h2 class="section-title">One video planner, two very different bodies</h2>
+    <p class="lede">
+      A <em>single</em> action-free video model, post-trained on a mixture of DROID and Allegro robot
+      videos, generates plans for both a 7-DoF Panda arm and a 16-DoF Allegro hand &mdash; we then pair
+      it with an embodiment-specific Jacobian-IDM per body. Both Panda manipulation and contact-rich
+      in-hand reorientation are produced zero-shot.
+    </p>
+
+    <!-- ---------- Franka Panda ---------- -->
+    <div class="embodiment-block">
+      <div class="embodiment-header">
+        <h3>Franka Panda</h3>
+        <span class="embodiment-tag">7-DoF arm &middot; zero-shot prompts</span>
+      </div>
+      <!-- Each prompt group shares one header spanning both views below. -->
+      <div class="prompt-group">
+        <div class="prompt-header">
+          <span class="prompt-header-label">Prompt</span>
+          <span class="prompt-header-text">&ldquo;Pick up the yellow cube and place it on the yellow brick.&rdquo;</span>
+        </div>
+        <div class="columns is-multiline cards-grid">
+          <div class="column is-half">
+            <div class="video-card">
+              <video autoplay loop muted playsinline preload="metadata">
+                <source src="./static/videos/1hksHG79Z8UX2axBNW1w7AmBIJiHKjVT9.mp4" type="video/mp4">
+              </video>
+              <div class="caption"><span class="label">Wrist view</span></div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="video-card">
+              <video autoplay loop muted playsinline preload="metadata">
+                <source src="./static/videos/1u9L9GWmqkY3ZNovHc5n11jEYDlMqQVwR.mp4" type="video/mp4">
+              </video>
+              <div class="caption"><span class="label">External view</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="prompt-group">
+        <div class="prompt-header">
+          <span class="prompt-header-label">Press-Hidden-Button</span>
+          <span class="prompt-header-text">An occluded target visible from only one camera view &mdash; the policy must integrate the prompt with multi-view evidence.</span>
+        </div>
+        <div class="columns is-multiline cards-grid">
+          <div class="column is-half">
+            <div class="video-card">
+              <video autoplay loop muted playsinline preload="metadata">
+                <source src="./static/videos/1KIQfkZg7NyVa_SYdl6NETjqXFw7sEk_I.mp4" type="video/mp4">
+              </video>
+              <div class="caption"><span class="label">Wrist view</span></div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="video-card">
+              <video autoplay loop muted playsinline preload="metadata">
+                <source src="./static/videos/1fWCKvHcgpRWFjQBmlNs9zIqWi66_kJpq.mp4" type="video/mp4">
+              </video>
+              <div class="caption"><span class="label">External view</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ---------- Allegro Hand ---------- -->
+    <div class="embodiment-block">
+      <div class="embodiment-header">
+        <h3>Allegro Hand</h3>
+        <span class="embodiment-tag">16-DoF dexterous reorientation</span>
+      </div>
+      <div class="columns is-multiline cards-grid">
+        <div class="column is-one-third">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/1kKDtGEzT2HJgX1qEDaezHoaudvxtIUlz.mp4" type="video/mp4">
+            </video>
+            <div class="caption">
+              <span class="label">Real robot</span>
+              <span class="prompt">in-hand cube reorientation.</span>
+            </div>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata" style="object-fit:contain; background:#000;">
+              <source src="./static/videos/1PvXxk24FDf_pa0eikB3Vc8XXjLUuGaTp.mp4" type="video/mp4">
+            </video>
+            <div class="caption">
+              <span class="label">Jacobian field</span>
+              <span class="prompt">visualization of the visuomotor Jacobian during reorientation.</span>
+            </div>
+          </div>
+        </div>
+        <div class="column is-one-third">
+          <div class="video-card">
+            <video autoplay loop muted playsinline preload="metadata">
+              <source src="./static/videos/1d5-tCrs131D5DSrhNy_nInUPE0hpbpAL.mp4" type="video/mp4">
+            </video>
+            <div class="caption">
+              <span class="label">Simulator</span>
+              <span class="prompt">counter-clockwise reorientation.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     PANDA DEEP-DIVE  (paper Fig.task-illustration -> panda_result.pdf)
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Zero-shot evaluation on Panda</div>
+    <h2 class="section-title">Task setup, the Jacobian we learn, and dream&ndash;execution alignment</h2>
+    <div class="figure-block">
+      <img src="./static/figures/panda_result-1.png"
+           alt="Zero-shot evaluation on Panda arm: task setup, Jacobian visualization, dream vs execution">
+      <div class="figure-caption" style="max-width:880px;">
+        <strong style="color:var(--vjam-accent);">a.</strong>
+        After training on DROID, we deploy zero-shot on a Panda arm in an unseen scene with ad-hoc camera
+        placements. In <em>Press-Hidden-Button</em>, the robot must press the blue button specified by
+        the language command; the button is visible from only one of the three views, and an orange
+        distractor probes instruction grounding.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">b.</strong>
+        Visualization of the visuomotor Jacobian predicted by our model across a set of action channels.
+        Columns correspond to action channels; rows correspond to viewpoints.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">c.</strong>
+        Generated frames and executed rollouts shown side by side, together with the text prompt used
+        for zero-shot evaluation. The robot's actions remain closely aligned with the generated frames
+        &mdash; the IDM is doing its job.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     ALLEGRO DEEP-DIVE  (paper Fig.3 dream_follow -> alllegro_result.pdf)
+     ================================================================ -->
+<section class="section is-shaded">
+  <div class="container is-max-desktop">
+    <div class="kicker">Zero-shot evaluation on Allegro Hand</div>
+    <h2 class="section-title">In-hand object reorientation</h2>
+    <div class="figure-block">
+      <img src="./static/figures/fig3_dream_follow-1.png"
+           alt="Zero-shot evaluation on Allegro Hand: task setup, Jacobian visualization, dream vs execution">
+      <div class="figure-caption" style="max-width:880px;">
+        <strong style="color:var(--vjam-accent);">a.</strong>
+        We train on cube-reorientation demonstrations with three language instructions
+        &mdash; <em>clockwise</em>, <em>counter-clockwise</em>, and <em>random</em> &mdash; and
+        evaluate prompt-conditioned in-hand reorientation.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">b.</strong>
+        Visualization of the visuomotor Jacobian predicted by our model across a set of action
+        channels. Columns correspond to action channels; rows correspond to viewpoints.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">c.</strong>
+        Generated frames and executed rollouts shown side by side, together with the text prompt.
+        The model carefully orchestrates dexterous finger motions to follow the visual plan.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     PROMPT CONTROLLABILITY
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Instruction following on basic tasks</div>
+    <h2 class="section-title">Same scene, three different goals</h2>
+    <p class="lede">
+      With identical initial observations, the prompt alone steers the planner &mdash; and therefore the
+      robot &mdash; to different objects on the table. The video model's prompt-following capability
+      flows directly through the faithful translator into the executed action chunk.
+    </p>
+
+    <div class="columns is-multiline cards-grid">
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1pmu4WpzWynrTOuFCsC0AKaI5Y-rL9-61.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="prompt">&ldquo;Approach the cup.&rdquo;</span></div>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1eyAp6nJjvgTqpsapncfq901LurSAU6c1.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="prompt">&ldquo;Approach the lego block.&rdquo;</span></div>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1UfyE8U2wmbondFNuRrqnF4W3l37B0AZY.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="prompt">&ldquo;Approach the tennis ball.&rdquo;</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     IDM DESIGN STUDY  (paper §4.2 — Designing a Faithful IDM)
+     ================================================================ -->
+<section class="section" id="ablation">
+  <div class="container is-max-desktop">
+    <div class="kicker">Why this works &middot; ablation</div>
+    <h2 class="section-title">J-IDM scales with action dimensionality</h2>
+    <p class="lede">
+      A controlled study isolates what makes faithful translation possible: gains come from
+      constraining actions to enter through a learned tangent map.
+    </p>
+    <div class="figure-block">
+      <img src="./static/figures/fig4_idm_dof_study.png"
+           alt="J-IDM scales more favorably with action dimensionality"
+           style="max-width:78%;">
+      <div class="figure-caption" style="max-width:760px;">
+        <strong style="color:var(--vjam-accent);">a.</strong>
+        Rollouts of recovered actions for direct-IDM baselines and J-IDM as DoFs grow.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">b.</strong>
+        At a fixed data budget, the J-IDM gap over direct-IDMs widens with DoF.
+        <br><br>
+        <strong style="color:var(--vjam-accent);">c.</strong>
+        At high DoF, J-IDM has a better data&ndash;accuracy trade-off across training-set sizes.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     VJAM vs FOUNDATION MODEL BASELINES  (paper §4.3)
+     ================================================================ -->
+<section class="section is-shaded-warm" id="compare">
+  <div class="container is-max-desktop">
+    <div class="kicker">VJAM vs robot foundation models</div>
+    <h2 class="section-title">Reasoning through occlusions</h2>
+    <p class="lede">
+      We cluttered the table with props and hid the target button behind a wall so that it was
+      visible from only one of three camera views. To solve the task, the policy must integrate the
+      language prompt with multi-view evidence and search around the occluder. DreamZero and
+      $\pi_{0.5}$ struggle on this task; our model produces a coherent visual plan that finds the
+      hidden button and a faithful translation that presses it. We attribute this to preserving the
+      video branch without action-head contamination.
+    </p>
+
+    <div class="columns cards-grid compare-rail">
+      <div class="column is-half is-ours">
+        <h4>VJAM <span style="font-weight:400; color:var(--vjam-muted);">(ours)</span></h4>
+        <div class="video-card is-tall" style="background:#fff;">
+          <img src="./static/figures/fig7_hidden_button_appendix-1.png"
+               alt="VJAM hidden-button rollouts: dream + execution"
+               style="display:block; width:100%; height:auto; background:#fff;">
+          <div class="caption">
+            <span class="prompt">&ldquo;push the blue button.&rdquo;</span>
+            Dream rollout (top) and matching execution (bottom) &mdash; the planner imagines a path
+            around the occluder, and the J-IDM translates it into an action chunk that presses the
+            target.
+          </div>
+        </div>
+      </div>
+      <div class="column is-half">
+        <h4>DreamZero <span style="font-weight:400; color:var(--vjam-muted);">(baseline)</span></h4>
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1LfKw25SNV40YexxLNCCD4OSEY3sVDVcT.mp4" type="video/mp4">
+          </video>
+          <div class="caption">
+            Same prompt, same scene. The baseline approaches the wall and never reaches the hidden
+            target.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="lede" style="margin-top:1.8rem; max-width:680px;">
+      The same six-second VJAM rollout, decomposed into what the planner imagined,
+      what the Jacobian-IDM read from it, and what the robot did.
+    </p>
+    <div class="columns is-multiline cards-grid">
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1nQRag4O436JsHZHvTnyP27gf9_fUtdRw.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="label">Dream</span> Generated video lookahead.</div>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1VsD6wlEmv0lKI7XqbeEId9F8TmUoyfBS.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="label">Jacobian</span> Per-pixel action&ndash;to&ndash;motion map.</div>
+        </div>
+      </div>
+      <div class="column is-one-third">
+        <div class="video-card">
+          <video autoplay loop muted playsinline preload="metadata">
+            <source src="./static/videos/1kKDtGEzT2HJgX1qEDaezHoaudvxtIUlz.mp4" type="video/mp4">
+          </video>
+          <div class="caption"><span class="label">Execution</span> Action chunk executed on the robot.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================
+     CONCLUSION  (paper Discussion -> Conclusion)
+     ================================================================ -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="kicker">Conclusion</div>
+    <h2 class="section-title">Through the inverse dynamics model</h2>
+    <p class="abstract-text" style="font-size:1.05rem; max-width:760px; margin:0 auto;">
+      The path from a better video model to a better robot runs through the inverse dynamics model.
+      We have shown that our Jacobian-IDMs, as one realization among many possible faithful IDMs
+      &mdash; paired with an action-free video planner &mdash; enable zero-shot, multi-embodiment
+      robot control. We hope our results motivate careful attention to the design and evaluation of
+      future IDMs.
+    </p>
+  </div>
+</section>
+
+<!-- ================================================================
+     BIBTEX
+     ================================================================ -->
+<section class="section is-shaded" id="bibtex">
+  <div class="container is-max-desktop">
+    <div class="kicker">Cite</div>
+    <h2 class="section-title">BibTeX</h2>
+    <pre class="bibtex-block">@inproceedings{vjam2026anonymous,
+  title     = {Turning Video Models into Generalist Robot Policies},
+  author    = {Anonymous},
+  booktitle = {Submitted to the Tenth Conference on Robot Learning (CoRL)},
+  year      = {2026},
+  note      = {Under double-blind review.}
+}</pre>
+  </div>
+</section>
+
+<!-- ================================================================
+     FOOTER
+     ================================================================ -->
+<footer class="footer">
+  <div class="container is-max-desktop">
+    <p>&copy; 2026 Anonymous Authors</p>
+  </div>
+</footer>
+
+</body>
+</html>

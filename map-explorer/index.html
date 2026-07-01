@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Map Explorer — AI-Generated City</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0f1117;
+    color: #e0e0e0;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    background: #0f1117;
+}
+
+/* Dark Leaflet tiles */
+.leaflet-container { background: #0f1117; }
+.leaflet-tile { image-rendering: auto; }
+
+/* Hide default Leaflet attribution */
+.leaflet-control-attribution { display: none !important; }
+
+/* Overlay panel: top-left info */
+#info-panel {
+    position: fixed;
+    top: 16px; left: 16px;
+    z-index: 1000;
+    pointer-events: none;
+}
+
+#info-panel > * { pointer-events: auto; }
+
+.info-box {
+    background: rgba(15, 17, 23, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #c8c8d0;
+}
+
+.info-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.info-subtitle {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+}
+
+.info-label { color: #888; font-size: 12px; }
+.info-value { color: #e0e0e0; font-size: 12px; font-weight: 500; }
+
+/* Status dot */
+.status-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+.status-dot.connected { background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+.status-dot.disconnected { background: #f87171; box-shadow: 0 0 6px #f87171; }
+.status-dot.generating { background: #fbbf24; box-shadow: 0 0 6px #fbbf24; animation: pulse 1s infinite; }
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: #e0e0e0;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+}
+.btn:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.2); }
+.btn:active { transform: scale(0.97); }
+
+.btn-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+/* Template panel: bottom-left */
+#template-panel {
+    position: fixed;
+    bottom: 16px; left: 16px;
+    z-index: 1000;
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.template-card {
+    cursor: pointer;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s;
+    background: rgba(15,17,23,0.85);
+    backdrop-filter: blur(8px);
+}
+.template-card:hover { border-color: rgba(100,180,255,0.5); transform: translateY(-2px); }
+.template-card.active { border-color: #4ade80; box-shadow: 0 0 12px rgba(74,222,128,0.3); }
+
+.template-card img {
+    width: 64px; height: 64px;
+    display: block;
+    image-rendering: pixelated;
+}
+
+.template-card .template-name {
+    font-size: 10px;
+    text-align: center;
+    padding: 3px 4px;
+    color: #aaa;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 64px;
+}
+
+/* Scale bar: bottom-right */
+#scale-bar {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+#scale-bar-line {
+    height: 4px;
+    background: rgba(255,255,255,0.7);
+    border-left: 2px solid rgba(255,255,255,0.7);
+    border-right: 2px solid rgba(255,255,255,0.7);
+    min-width: 40px;
+    transition: width 0.15s;
+}
+
+#scale-bar-text {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+    white-space: nowrap;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+}
+
+/* Zoom info: top-right */
+#zoom-info {
+    position: fixed;
+    top: 16px; right: 16px;
+    z-index: 1000;
+    background: rgba(15,17,23,0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    text-align: right;
+}
+
+#zoom-info .zoom-level {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+}
+
+#zoom-info .zoom-label {
+    color: #888;
+    font-size: 11px;
+}
+
+/* Loading overlay */
+#loading-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(15,17,23,0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    transition: opacity 0.5s;
+}
+#loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.loading-spinner {
+    width: 40px; height: 40px;
+    border: 3px solid rgba(255,255,255,0.1);
+    border-top-color: #4ade80;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-text {
+    margin-top: 16px;
+    font-size: 14px;
+    color: #888;
+}
+
+/* Server config link */
+#server-config {
+    position: fixed;
+    bottom: 16px; right: 16px;
+    z-index: 999;
+    font-size: 10px;
+    color: #555;
+    cursor: pointer;
+}
+#server-config:hover { color: #888; }
+
+/* Config modal */
+#config-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 3000;
+    background: rgba(0,0,0,0.6);
+    align-items: center;
+    justify-content: center;
+}
+#config-modal.show { display: flex; }
+
+#config-modal .modal-body {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 24px;
+    width: 380px;
+    max-width: 90vw;
+}
+
+#config-modal input {
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    color: #e0e0e0;
+    font-size: 13px;
+    font-family: monospace;
+    margin: 8px 0 16px;
+    outline: none;
+}
+#config-modal input:focus { border-color: rgba(100,180,255,0.5); }
+
+/* Leaflet zoom control dark theme */
+.leaflet-control-zoom a {
+    background: rgba(15,17,23,0.85) !important;
+    color: #e0e0e0 !important;
+    border-color: rgba(255,255,255,0.1) !important;
+    backdrop-filter: blur(8px);
+}
+.leaflet-control-zoom a:hover {
+    background: rgba(255,255,255,0.12) !important;
+}
+
+/* Model selector */
+#model-selector {
+    margin-top: 8px;
+}
+
+#model-select {
+    width: 100%;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 6px;
+    color: #e0e0e0;
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M3 5l3 3 3-3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 24px;
+}
+
+#model-select:hover { border-color: rgba(255,255,255,0.2); }
+#model-select:focus { border-color: rgba(100,180,255,0.5); }
+#model-select option { background: #1a1d27; color: #e0e0e0; }
+
+.model-switching {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Tile loading indicator */
+.leaflet-tile-loading {
+    background: rgba(255,255,255,0.03);
+}
+
+/* Help button */
+#help-btn {
+    position: fixed;
+    bottom: 16px; right: 80px;
+    z-index: 1000;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(15,17,23,0.85);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #aaa;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+#help-btn:hover { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.25); }
+
+/* Help overlay */
+#help-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 2500;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+}
+#help-overlay.show { display: flex; }
+
+#help-panel {
+    background: #1a1d27;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 28px 32px;
+    max-width: 520px;
+    width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
+    color: #d0d0d8;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+#help-panel h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 4px;
+}
+#help-panel .help-sub {
+    font-size: 11px;
+    color: #888;
+    margin-bottom: 18px;
+}
+
+#help-panel h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #a0c4ff;
+    margin: 16px 0 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#help-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 6px;
+}
+#help-panel td {
+    padding: 5px 0;
+    vertical-align: top;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+#help-panel td:first-child {
+    width: 44%;
+    color: #888;
+    padding-right: 12px;
+}
+#help-panel td:last-child {
+    color: #e0e0e0;
+}
+#help-panel kbd {
+    display: inline-block;
+    padding: 1px 6px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 11px;
+    color: #ccc;
+    white-space: nowrap;
+}
+#help-panel .help-section-phone { display: none; }
+#help-panel .help-section-desktop { display: block; }
+
+/* On touch devices, swap visibility */
+@media (hover: none) and (pointer: coarse) {
+    #help-panel .help-section-phone { display: block; }
+    #help-panel .help-section-desktop { display: block; }
+}
+
+#help-panel .help-close-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+#help-panel .help-footer {
+    font-size: 11px;
+    color: #666;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    #info-panel { max-width: 200px; }
+    .info-box { padding: 8px 12px; font-size: 12px; }
+    .info-title { font-size: 14px; }
+    .btn { padding: 6px 10px; font-size: 11px; }
+    #template-panel { gap: 4px; bottom: 8px; left: 8px; }
+    .template-card img { width: 48px; height: 48px; }
+    .template-card .template-name { font-size: 9px; max-width: 48px; }
+    #zoom-info { top: 8px; right: 8px; padding: 8px 10px; }
+    #zoom-info .zoom-level { font-size: 18px; }
+    #help-panel { padding: 20px 22px; }
+    #help-btn { bottom: 10px; right: 60px; }
+    #scale-bar { bottom: 12px; right: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<!-- Loading overlay -->
+<div id="loading-overlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Connecting to GPU server...</div>
+</div>
+
+<!-- Info panel (top-left) -->
+<div id="info-panel">
+    <div class="info-box">
+        <div class="info-title">Map Explorer</div>
+        <div class="info-subtitle">AI-generated city from a diffusion model</div>
+        <div class="info-row">
+            <span class="info-label">Server</span>
+            <span class="info-value" id="status-text">
+                <span class="status-dot disconnected" id="status-dot"></span>
+                <span id="status-label">Connecting...</span>
+            </span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Model</span>
+            <span class="info-value" id="model-display">Loading...</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">Cached tiles</span>
+            <span class="info-value" id="cached-count">0</span>
+        </div>
+        <div id="model-selector">
+            <select id="model-select" title="Switch model">
+                <option value="">Loading models...</option>
+            </select>
+        </div>
+        <div class="btn-row">
+            <button class="btn" id="btn-new-world" title="Generate a new random city (clears all tiles)">
+                New World
+            </button>
+            <button class="btn" id="btn-random-template" title="Random city template">
+                Random City
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Zoom info (top-right) -->
+<div id="zoom-info">
+    <div class="zoom-level" id="zoom-display">z10</div>
+    <div class="zoom-label">scale level</div>
+    <div style="margin-top: 4px; font-size: 11px; color: #888;">
+        <span id="tile-km">~30 km</span> per tile
+    </div>
+</div>
+
+<!-- Template panel (bottom-left) -->
+<div id="template-panel"></div>
+
+<!-- Scale bar (bottom-right above server config) -->
+<div id="scale-bar">
+    <div id="scale-bar-text">1 km</div>
+    <div id="scale-bar-line" style="width: 60px;"></div>
+</div>
+
+<!-- Help button -->
+<button id="help-btn" title="Navigation help (?)" aria-label="Help">?</button>
+
+<!-- Help overlay -->
+<div id="help-overlay">
+<div id="help-panel">
+    <h2>Navigation Guide</h2>
+    <div class="help-sub">Explore an AI-generated city across 8 zoom levels (z10 &ndash; z17)</div>
+
+    <h3>Desktop &mdash; Mouse / Trackpad</h3>
+    <table>
+        <tr><td>Pan / move</td><td>Click and drag</td></tr>
+        <tr><td>Zoom in / out</td><td>Scroll wheel or pinch on trackpad</td></tr>
+        <tr><td>Quick zoom in</td><td>Double-click</td></tr>
+    </table>
+
+    <h3>Desktop &mdash; Keyboard</h3>
+    <table>
+        <tr><td><kbd>+</kbd> / <kbd>=</kbd></td><td>Zoom in one step</td></tr>
+        <tr><td><kbd>-</kbd> / <kbd>_</kbd></td><td>Zoom out one step</td></tr>
+        <tr><td><kbd>Arrow keys</kbd></td><td>Pan the map</td></tr>
+        <tr><td><kbd>N</kbd></td><td>New random world</td></tr>
+        <tr><td><kbd>R</kbd></td><td>Random city template</td></tr>
+        <tr><td><kbd>?</kbd></td><td>Toggle this help</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Close dialogs</td></tr>
+    </table>
+
+    <h3>Phone / Tablet &mdash; Touch</h3>
+    <table>
+        <tr><td>Pan / move</td><td>Drag with one finger</td></tr>
+        <tr><td>Zoom in / out</td><td>Pinch with two fingers</td></tr>
+        <tr><td>Quick zoom in</td><td>Double-tap</td></tr>
+    </table>
+
+    <h3>How It Works</h3>
+    <table>
+        <tr><td>Generation</td><td>Tiles are generated on-the-fly by a diffusion model running on a GPU. The first visit to a new area may take 10&ndash;20 seconds.</td></tr>
+        <tr><td>Caching</td><td>Once generated, tiles are cached &mdash; revisiting is instant.</td></tr>
+        <tr><td>City templates</td><td>Click a city thumbnail at the bottom to start from a real city layout.</td></tr>
+        <tr><td>Models</td><td>Use the dropdown in the top-left panel to switch between trained models.</td></tr>
+    </table>
+
+    <div class="help-footer">
+        Built with a JiT flow-matching diffusion model trained on OpenStreetMap data.<br>
+        Each zoom level generates 4 child tiles from the parent, forming a quadtree of infinite detail.
+    </div>
+
+    <div class="help-close-row">
+        <button class="btn" id="help-close" style="background: rgba(74,222,128,0.12); border-color: rgba(74,222,128,0.25);">Got it</button>
+    </div>
+</div>
+</div>
+
+<!-- Server config -->
+<span id="server-config">server config</span>
+
+<!-- Config modal -->
+<div id="config-modal">
+    <div class="modal-body">
+        <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">Server URL</div>
+        <div style="font-size: 11px; color: #888; margin-bottom: 8px;">
+            Enter the tile server URL (FastAPI backend with GPU inference)
+        </div>
+        <input id="config-url" type="text" placeholder="https://your-tunnel.trycloudflare.com" />
+        <div class="btn-row" style="justify-content: flex-end;">
+            <button class="btn" id="config-cancel">Cancel</button>
+            <button class="btn" id="config-save" style="background: rgba(74,222,128,0.15); border-color: rgba(74,222,128,0.3);">
+                Save & Reconnect
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================================================
+// Configuration
+// ============================================================
+const ZOOM_MIN_ACTUAL = 10;  // z10 = root
+const ZOOM_MAX_ACTUAL = 17;  // z17 = most detailed
+const LEAFLET_MAX_ZOOM = ZOOM_MAX_ACTUAL - ZOOM_MIN_ACTUAL;  // 7
+const EARTH_CIRCUMFERENCE_KM = 40075;
+const REF_LAT = 42;  // Reference latitude for scale calculation
+const REF_COS_LAT = Math.cos(REF_LAT * Math.PI / 180);
+
+// Display tile size: one tile fills the viewport at integer zoom
+// Use the shorter viewport dimension so the tile always fits on screen
+const DISPLAY_TILE_SIZE = Math.min(window.innerWidth, window.innerHeight);
+
+// Server URL — auto-discovered from server.json, overridable via localStorage
+let serverUrl = localStorage.getItem('mapExplorerServerUrl') || '';
+
+// World bounds in CRS coordinates (one root tile = DISPLAY_TILE_SIZE units)
+const WORLD_BOUNDS = [[-DISPLAY_TILE_SIZE, 0], [0, DISPLAY_TILE_SIZE]];
+
+// ============================================================
+// Leaflet Map Setup
+// ============================================================
+
+const map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: 0,
+    maxZoom: LEAFLET_MAX_ZOOM,
+    zoomSnap: 0.2,     // 5 steps per integer zoom level
+    zoomDelta: 0.2,    // Scroll wheel / pinch step = 0.2
+    wheelPxPerZoomLevel: 120, // Scroll sensitivity
+    zoomAnimation: true,
+    fadeAnimation: true,
+    attributionControl: false,
+    zoomControl: false,
+    // Touch & mobile
+    touchZoom: true,
+    inertia: true,
+    inertiaDeceleration: 3000,
+    inertiaMaxSpeed: 1500,
+    bounceAtZoomLimits: false,
+});
+
+// Add zoom control to top-right
+L.control.zoom({ position: 'topright' }).addTo(map);
+
+// Initial view: center on root tile, zoom 0 = one tile fills viewport
+map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
+
+// Custom tile layer that loads from our server
+let tileLayer = null;
+let tileCacheBuster = Date.now();  // Cache-busting token, changes on new world / template switch
+
+function createTileLayer(url) {
+    if (tileLayer) {
+        map.removeLayer(tileLayer);
+    }
+    tileLayer = L.tileLayer(url + '/tile/{z}/{x}/{y}.png?v=' + tileCacheBuster, {
+        minZoom: 0,
+        maxZoom: LEAFLET_MAX_ZOOM,
+        maxNativeZoom: LEAFLET_MAX_ZOOM,
+        tileSize: DISPLAY_TILE_SIZE,     // One tile fills viewport at integer zoom
+        noWrap: true,
+        bounds: WORLD_BOUNDS,
+        errorTileUrl: '',
+        className: 'ai-tile',
+        keepBuffer: 4,                   // Keep off-screen tiles as fallback during zoom
+        updateWhenZooming: false,        // Don't fetch new tiles mid-zoom animation
+        updateWhenIdle: true,            // Fetch when user stops interacting
+    });
+    tileLayer.addTo(map);
+
+    // Track tile loading
+    tileLayer.on('loading', () => {
+        document.getElementById('status-dot').className = 'status-dot generating';
+        document.getElementById('status-label').textContent = 'Generating...';
+    });
+    tileLayer.on('load', () => {
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        updateCachedCount();
+    });
+    tileLayer.on('tileerror', (e) => {
+        console.warn('Tile error:', e.coords, e.error);
+    });
+
+    // Note: sibling prefetch removed — the server's 9-tile scheme already
+    // generates all 4 children when any one is requested, so siblings are
+    // already cached server-side. Prefetching just wastes connections.
+}
+
+// ============================================================
+// Scale bar
+// ============================================================
+
+function kmPerTile(actualZoom) {
+    return EARTH_CIRCUMFERENCE_KM * REF_COS_LAT / Math.pow(2, actualZoom);
+}
+
+function updateScaleBar() {
+    const zoom = map.getZoom();
+    const actualZoom = zoom + ZOOM_MIN_ACTUAL;
+    const kmTile = kmPerTile(actualZoom);
+
+    // Pixels per km at current zoom
+    // At integer zoom z, each tile = DISPLAY_TILE_SIZE px = kmPerTile(z+10) km
+    // At fractional zoom, Leaflet scales tiles by 2^(fractional part)
+    const scale = Math.pow(2, zoom - Math.floor(zoom));
+    const pxPerKm = (DISPLAY_TILE_SIZE * scale) / kmPerTile(Math.floor(zoom) + ZOOM_MIN_ACTUAL);
+
+    // Find a nice scale bar length
+    const targetPx = 100;  // target pixel width
+    const targetKm = targetPx / pxPerKm;
+
+    // Round to a nice number
+    const niceValues = [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100];
+    let bestKm = niceValues[0];
+    for (const v of niceValues) {
+        if (Math.abs(v - targetKm) < Math.abs(bestKm - targetKm)) {
+            bestKm = v;
+        }
+    }
+
+    const barPx = bestKm * pxPerKm;
+    const barEl = document.getElementById('scale-bar-line');
+    const textEl = document.getElementById('scale-bar-text');
+
+    barEl.style.width = Math.round(barPx) + 'px';
+    if (bestKm >= 1) {
+        textEl.textContent = bestKm + ' km';
+    } else {
+        textEl.textContent = Math.round(bestKm * 1000) + ' m';
+    }
+}
+
+// ============================================================
+// Zoom display
+// ============================================================
+
+function updateZoomDisplay() {
+    const zoom = map.getZoom();
+    const actualZoom = zoom + ZOOM_MIN_ACTUAL;
+    const intZoom = Math.round(actualZoom);
+
+    document.getElementById('zoom-display').textContent = 'z' + actualZoom.toFixed(1);
+
+    const km = kmPerTile(actualZoom);
+    let kmText;
+    if (km >= 1) {
+        kmText = '~' + km.toFixed(1) + ' km';
+    } else {
+        kmText = '~' + Math.round(km * 1000) + ' m';
+    }
+    document.getElementById('tile-km').textContent = kmText;
+}
+
+// ============================================================
+// Server connection
+// ============================================================
+
+let connected = false;
+
+async function connectToServer() {
+    if (!serverUrl) {
+        document.getElementById('loading-overlay').classList.add('hidden');
+        showConfigModal();
+        return;
+    }
+
+    document.getElementById('loading-overlay').querySelector('.loading-text').textContent = 'Connecting to GPU server...';
+    document.getElementById('loading-overlay').classList.remove('hidden');
+
+    try {
+        const resp = await fetch(serverUrl + '/api/status', { signal: AbortSignal.timeout(10000) });
+        if (!resp.ok) throw new Error('Status ' + resp.status);
+        const data = await resp.json();
+
+        connected = true;
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        document.getElementById('cached-count').textContent = data.cached_tiles;
+
+        // Create tile layer
+        createTileLayer(serverUrl);
+
+        // Load templates and models
+        loadTemplates();
+        loadModels();
+
+        // Update model display from status
+        if (data.current_model_display) {
+            document.getElementById('model-display').textContent = data.current_model_display;
+        }
+
+        // Hide loading
+        setTimeout(() => {
+            document.getElementById('loading-overlay').classList.add('hidden');
+        }, 500);
+
+    } catch (e) {
+        console.error('Connection failed:', e);
+        document.getElementById('status-dot').className = 'status-dot disconnected';
+        document.getElementById('status-label').textContent = 'Disconnected';
+        document.getElementById('loading-overlay').classList.add('hidden');
+
+        // Show config if first time
+        if (!localStorage.getItem('mapExplorerServerUrl')) {
+            showConfigModal();
+        }
+    }
+}
+
+async function updateCachedCount() {
+    if (!connected || !serverUrl) return;
+    try {
+        const resp = await fetch(serverUrl + '/api/status');
+        if (resp.ok) {
+            const data = await resp.json();
+            document.getElementById('cached-count').textContent = data.cached_tiles;
+        }
+    } catch (e) { /* ignore */ }
+}
+
+// ============================================================
+// Template management
+// ============================================================
+
+const CITY_LABELS = {
+    'beijing': 'Beijing',
+    'rome': 'Rome',
+    'boston': 'Boston',
+    'paris': 'Paris',
+    'london': 'London',
+    'tokyo': 'Tokyo',
+    'amsterdam': 'Amsterdam',
+    'berlin': 'Berlin',
+    'barcelona': 'Barcelona',
+};
+
+async function loadTemplates() {
+    if (!serverUrl) return;
+    try {
+        const resp = await fetch(serverUrl + '/api/templates');
+        if (!resp.ok) return;
+        const data = await resp.json();
+
+        const panel = document.getElementById('template-panel');
+        panel.innerHTML = '';
+
+        for (const t of data.templates) {
+            const card = document.createElement('div');
+            card.className = 'template-card';
+            card.dataset.name = t.name;
+
+            const img = document.createElement('img');
+            img.src = serverUrl + '/api/template/' + t.name + '.png';
+            img.alt = t.name;
+            img.loading = 'lazy';
+
+            const label = document.createElement('div');
+            label.className = 'template-name';
+            label.textContent = CITY_LABELS[t.name] || t.name;
+
+            card.appendChild(img);
+            card.appendChild(label);
+            card.addEventListener('click', () => selectTemplate(t.name));
+            panel.appendChild(card);
+        }
+    } catch (e) {
+        console.warn('Failed to load templates:', e);
+    }
+}
+
+let _templateSwitching = false;
+
+async function selectTemplate(name) {
+    if (!serverUrl || !connected) return;
+    if (_templateSwitching) return;  // Prevent double-clicks during slow API call
+    _templateSwitching = true;
+
+    // Visual feedback
+    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+    const card = document.querySelector(`.template-card[data-name="${name}"]`);
+    if (card) card.classList.add('active');
+
+    // Show loading overlay — GT renderer init can take 6-15s
+    const overlay = document.getElementById('loading-overlay');
+    overlay.querySelector('.loading-text').textContent = `Loading ${CITY_LABELS[name] || name}...`;
+    overlay.classList.remove('hidden');
+
+    document.getElementById('status-dot').className = 'status-dot generating';
+    document.getElementById('status-label').textContent = 'Setting root...';
+
+    try {
+        const resp = await fetch(serverUrl + '/api/set_root?template=' + encodeURIComponent(name), {
+            method: 'POST',
+            signal: AbortSignal.timeout(30000),  // 30s timeout
+        });
+        if (!resp.ok) throw new Error('Set root failed: ' + resp.status);
+
+        // Force reload all tiles (new cache buster defeats browser cache)
+        tileCacheBuster = Date.now();
+        createTileLayer(serverUrl);
+        // Reset view to root — the template is the new z10 tile
+        map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
+
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        updateCachedCount();
+    } catch (e) {
+        console.error('Set root failed:', e);
+        document.getElementById('status-dot').className = 'status-dot disconnected';
+        document.getElementById('status-label').textContent = 'Error: ' + e.message;
+    } finally {
+        _templateSwitching = false;
+        // Hide loading overlay
+        setTimeout(() => overlay.classList.add('hidden'), 300);
+    }
+}
+
+// ============================================================
+// Model selector
+// ============================================================
+
+async function loadModels() {
+    if (!serverUrl) return;
+    try {
+        const resp = await fetch(serverUrl + '/api/models');
+        if (!resp.ok) return;
+        const data = await resp.json();
+
+        const select = document.getElementById('model-select');
+        select.innerHTML = '';
+
+        for (const m of data.models) {
+            const opt = document.createElement('option');
+            opt.value = m.name;
+            opt.textContent = m.display;
+            if (m.active) opt.selected = true;
+            select.appendChild(opt);
+        }
+
+        // Update display
+        const current = data.models.find(m => m.active);
+        if (current) {
+            document.getElementById('model-display').textContent = current.display;
+        }
+    } catch (e) {
+        console.warn('Failed to load models:', e);
+    }
+}
+
+async function switchModel(modelName) {
+    if (!serverUrl || !connected || !modelName) return;
+
+    const select = document.getElementById('model-select');
+    select.classList.add('model-switching');
+    document.getElementById('status-dot').className = 'status-dot generating';
+    document.getElementById('status-label').textContent = 'Switching model...';
+
+    try {
+        const resp = await fetch(serverUrl + '/api/switch_model?model=' + encodeURIComponent(modelName), {
+            method: 'POST',
+            signal: AbortSignal.timeout(120000),  // 2 min timeout for model loading
+        });
+        if (!resp.ok) {
+            const err = await resp.text();
+            throw new Error(err);
+        }
+        const data = await resp.json();
+
+        // Update display
+        document.getElementById('model-display').textContent = data.display || modelName;
+
+        // Reload tiles with new model
+        refreshTiles();
+
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        updateCachedCount();
+    } catch (e) {
+        console.error('Model switch failed:', e);
+        document.getElementById('status-dot').className = 'status-dot disconnected';
+        document.getElementById('status-label').textContent = 'Switch failed';
+        // Revert select to previous model
+        loadModels();
+    } finally {
+        select.classList.remove('model-switching');
+    }
+}
+
+document.getElementById('model-select').addEventListener('change', (e) => {
+    switchModel(e.target.value);
+});
+
+// ============================================================
+// Actions
+// ============================================================
+
+async function newWorld() {
+    if (!serverUrl || !connected) return;
+
+    document.getElementById('status-dot').className = 'status-dot generating';
+    document.getElementById('status-label').textContent = 'Resetting...';
+
+    // Deselect templates
+    document.querySelectorAll('.template-card').forEach(c => c.classList.remove('active'));
+
+    try {
+        const resp = await fetch(serverUrl + '/api/reset', { method: 'POST' });
+        if (!resp.ok) throw new Error('Reset failed');
+
+        refreshTiles();
+
+        document.getElementById('status-dot').className = 'status-dot connected';
+        document.getElementById('status-label').textContent = 'Connected';
+        updateCachedCount();
+    } catch (e) {
+        console.error('Reset failed:', e);
+    }
+}
+
+function refreshTiles() {
+    // Bump cache buster so browser doesn't serve stale tiles
+    tileCacheBuster = Date.now();
+    createTileLayer(serverUrl);
+    // Reset view to root tile center
+    map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
+}
+
+function randomTemplate() {
+    const cards = document.querySelectorAll('.template-card');
+    if (cards.length === 0) return;
+    const idx = Math.floor(Math.random() * cards.length);
+    const name = cards[idx].dataset.name;
+    selectTemplate(name);
+}
+
+// ============================================================
+// Config modal
+// ============================================================
+
+function showConfigModal() {
+    document.getElementById('config-url').value = serverUrl;
+    document.getElementById('config-modal').classList.add('show');
+}
+
+function hideConfigModal() {
+    document.getElementById('config-modal').classList.remove('show');
+}
+
+function saveConfig() {
+    const url = document.getElementById('config-url').value.trim().replace(/\/+$/, '');
+    if (!url) return;
+    serverUrl = url;
+    localStorage.setItem('mapExplorerServerUrl', url);
+    hideConfigModal();
+    connectToServer();
+}
+
+// ============================================================
+// Event listeners
+// ============================================================
+
+document.getElementById('btn-new-world').addEventListener('click', newWorld);
+document.getElementById('btn-random-template').addEventListener('click', randomTemplate);
+document.getElementById('server-config').addEventListener('click', showConfigModal);
+document.getElementById('config-cancel').addEventListener('click', hideConfigModal);
+document.getElementById('config-save').addEventListener('click', saveConfig);
+document.getElementById('config-url').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') saveConfig();
+});
+document.getElementById('config-modal').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) hideConfigModal();
+});
+
+// Map events
+map.on('zoom', () => {
+    updateZoomDisplay();
+    updateScaleBar();
+});
+map.on('zoomend', () => {
+    updateZoomDisplay();
+    updateScaleBar();
+    updateCachedCount();
+});
+map.on('moveend', () => {
+    updateCachedCount();
+});
+
+// ============================================================
+// Help overlay
+// ============================================================
+
+function toggleHelp() {
+    const overlay = document.getElementById('help-overlay');
+    overlay.classList.toggle('show');
+}
+document.getElementById('help-btn').addEventListener('click', toggleHelp);
+document.getElementById('help-close').addEventListener('click', toggleHelp);
+document.getElementById('help-overlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) toggleHelp();
+});
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT') return;
+    if (e.key === '?' || e.key === '/') { toggleHelp(); e.preventDefault(); return; }
+    if (e.key === 'Escape') {
+        if (document.getElementById('help-overlay').classList.contains('show')) { toggleHelp(); return; }
+        hideConfigModal();
+        return;
+    }
+    if (e.key === 'n' || e.key === 'N') newWorld();
+    if (e.key === 'r' || e.key === 'R') randomTemplate();
+    // Zoom: +/= to zoom in, - to zoom out (0.2 per step)
+    if (e.key === '=' || e.key === '+') { map.zoomIn(0.2); e.preventDefault(); }
+    if (e.key === '-' || e.key === '_') { map.zoomOut(0.2); e.preventDefault(); }
+});
+
+// ============================================================
+// URL hash state (shareable positions)
+// ============================================================
+
+function saveHashState() {
+    const c = map.getCenter();
+    const z = map.getZoom();
+    // Normalize coordinates to tile-relative (0-1 range per tile at current zoom)
+    const norm_lat = c.lat / (-DISPLAY_TILE_SIZE);
+    const norm_lng = c.lng / DISPLAY_TILE_SIZE;
+    window.location.hash = `${z.toFixed(1)}/${norm_lat.toFixed(4)}/${norm_lng.toFixed(4)}`;
+}
+
+function loadHashState() {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return false;
+    const parts = hash.split('/');
+    if (parts.length !== 3) return false;
+    const [z, norm_lat, norm_lng] = parts.map(Number);
+    if (isNaN(z) || isNaN(norm_lat) || isNaN(norm_lng)) return false;
+    const lat = norm_lat * (-DISPLAY_TILE_SIZE);
+    const lng = norm_lng * DISPLAY_TILE_SIZE;
+    map.setView([lat, lng], z);
+    return true;
+}
+
+// Save state on move/zoom (debounced)
+let hashTimeout = null;
+map.on('moveend', () => {
+    clearTimeout(hashTimeout);
+    hashTimeout = setTimeout(saveHashState, 300);
+});
+
+// ============================================================
+// Initialize
+// ============================================================
+
+// Restore position from URL hash, or start at root
+if (!loadHashState()) {
+    map.setView([-DISPLAY_TILE_SIZE / 2, DISPLAY_TILE_SIZE / 2], 0);
+}
+updateZoomDisplay();
+updateScaleBar();
+
+// Auto-discover server URL from server.json (always, to pick up tunnel rotations)
+(async () => {
+    try {
+        const resp = await fetch('/map-explorer/server.json', { cache: 'no-cache' });
+        if (resp.ok) {
+            const cfg = await resp.json();
+            if (cfg.api) {
+                serverUrl = cfg.api.replace(/\/+$/, '');
+                localStorage.setItem('mapExplorerServerUrl', serverUrl);
+            }
+        }
+    } catch (e) { /* fall through to localStorage value or manual config */ }
+    connectToServer();
+})();
+
+// Periodic status check
+setInterval(updateCachedCount, 10000);
+
+// Show help on first visit
+if (!localStorage.getItem('mapExplorerHelpSeen')) {
+    toggleHelp();
+    localStorage.setItem('mapExplorerHelpSeen', '1');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experiment Monitor</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg-card: #161b22;
+  --bg-card-hover: #1c2333;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-dim: #8b949e;
+  --text-bright: #f0f6fc;
+  --accent: #58a6ff;
+  --accent-dim: rgba(88,166,255,0.15);
+  --signal-surprise: #f97316;
+  --signal-surprise-bg: rgba(249,115,22,0.12);
+  --signal-attention: #ef4444;
+  --signal-attention-bg: rgba(239,68,68,0.10);
+  --signal-best: #eab308;
+  --signal-best-bg: rgba(234,179,8,0.10);
+  --signal-improving: #22c55e;
+  --signal-improving-bg: rgba(34,197,94,0.10);
+  --signal-degrading: #f97316;
+  --signal-degrading-bg: rgba(249,115,22,0.08);
+  --signal-on_track: #6366f1;
+  --signal-on_track-bg: rgba(99,102,241,0.08);
+  --signal-dead: #6b7280;
+  --signal-dead-bg: rgba(107,114,128,0.08);
+  --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+  --mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+  --radius: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: -0.5px;
+}
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.last-updated {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.refresh-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 5px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+.refresh-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.refresh-btn.loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Signal summary bar */
+.signal-bar {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.signal-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+.signal-chip.surprise { background: var(--signal-surprise-bg); color: var(--signal-surprise); border-color: rgba(249,115,22,0.25); }
+.signal-chip.attention { background: var(--signal-attention-bg); color: var(--signal-attention); border-color: rgba(239,68,68,0.25); }
+.signal-chip.best { background: var(--signal-best-bg); color: var(--signal-best); border-color: rgba(234,179,8,0.25); }
+.signal-chip.improving { background: var(--signal-improving-bg); color: var(--signal-improving); border-color: rgba(34,197,94,0.25); }
+.signal-chip.degrading { background: var(--signal-degrading-bg); color: var(--signal-degrading); }
+.signal-chip.on_track { background: var(--signal-on_track-bg); color: var(--signal-on_track); }
+.signal-chip.dead { background: var(--signal-dead-bg); color: var(--signal-dead); }
+.signal-chip .count { font-weight: 700; font-size: 15px; }
+
+/* Global summary */
+.global-summary {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.global-summary .label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.attention-banner {
+  background: var(--signal-attention-bg);
+  border: 1px solid rgba(239,68,68,0.25);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  color: var(--signal-attention);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.attention-banner .label {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Project sections */
+.project {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.project:hover { border-color: #3d444d; }
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+}
+.project-header:hover { background: var(--bg-card-hover); }
+.project-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.project-title h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-bright);
+}
+.project-title .entity {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 400;
+}
+/* Project-level signal badge */
+.project-signal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+.project-signal-badge.attention { background: var(--signal-attention-bg); color: var(--signal-attention); }
+.project-signal-badge.surprise { background: var(--signal-surprise-bg); color: var(--signal-surprise); }
+.project-signal-badge.best { background: var(--signal-best-bg); color: var(--signal-best); }
+.project-signal-badge.improving { background: var(--signal-improving-bg); color: var(--signal-improving); }
+.project-signal-badge.degrading { background: var(--signal-degrading-bg); color: var(--signal-degrading); }
+.project-signal-badge.on_track { background: var(--signal-on_track-bg); color: var(--signal-on_track); }
+.project-signal-badge.dead { background: var(--signal-dead-bg); color: var(--signal-dead); }
+
+.project-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+.project-meta .active-badge {
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+.chevron {
+  transition: transform 0.2s;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+.project.open .chevron { transform: rotate(90deg); }
+
+.project-body {
+  display: none;
+  border-top: 1px solid var(--border);
+}
+.project.open .project-body { display: block; }
+
+.project-insight {
+  padding: 16px 20px;
+  background: rgba(88,166,255,0.03);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--text);
+  word-break: break-word;
+}
+.project-insight .label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+/* Run rows */
+.run {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+.run:last-child { border-bottom: none; }
+.run-header {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto auto;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+.run-header:hover { background: var(--bg-card-hover); }
+
+/* Dimmed style for resolved/noted runs */
+.run.user-resolved { opacity: 0.45; }
+.run.user-noted { border-left: 3px solid var(--accent); }
+.run.user-flagged { border-left: 3px solid var(--signal-attention); }
+
+.run-signal {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.run-signal.surprise { background: var(--signal-surprise); box-shadow: 0 0 8px var(--signal-surprise); }
+.run-signal.attention { background: var(--signal-attention); box-shadow: 0 0 8px var(--signal-attention); animation: pulse 2s infinite; }
+.run-signal.best { background: var(--signal-best); box-shadow: 0 0 6px var(--signal-best); }
+.run-signal.improving { background: var(--signal-improving); }
+.run-signal.degrading { background: var(--signal-degrading); }
+.run-signal.on_track { background: var(--signal-on_track); }
+.run-signal.dead { background: var(--signal-dead); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.run-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.run-signal-text {
+  font-size: 11px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 400px;
+}
+.run-state {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.run-state.running { background: rgba(34,197,94,0.15); color: #22c55e; }
+.run-state.finished { background: rgba(99,102,241,0.15); color: #818cf8; }
+.run-state.crashed { background: rgba(239,68,68,0.15); color: #ef4444; }
+.run-state.killed { background: rgba(234,179,8,0.15); color: #eab308; }
+.run-state.failed { background: rgba(239,68,68,0.15); color: #ef4444; }
+
+.run-runtime {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  white-space: nowrap;
+}
+
+.run-details {
+  display: none;
+  padding: 0 20px 16px 42px;
+}
+.run.open .run-details { display: block; }
+
+/* Run annotation buttons */
+.run-actions {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.run-action-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 3px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+.run-action-btn:hover { border-color: var(--text-dim); color: var(--text); }
+.run-action-btn.active-resolved { background: rgba(34,197,94,0.15); color: #22c55e; border-color: rgba(34,197,94,0.3); }
+.run-action-btn.active-flagged { background: var(--signal-attention-bg); color: var(--signal-attention); border-color: rgba(239,68,68,0.3); }
+.run-action-btn.active-noted { background: var(--accent-dim); color: var(--accent); border-color: rgba(88,166,255,0.3); }
+
+.run-note-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  padding: 6px 10px;
+  font-size: 12px;
+  font-family: var(--font);
+  margin-top: 6px;
+  resize: none;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.run-note-input:focus { border-color: var(--accent); }
+.run-note-input::placeholder { color: var(--text-dim); }
+
+.insight-block {
+  margin-bottom: 12px;
+}
+.insight-block .label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.insight-block .text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.metric-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 14px;
+}
+.metric-card .name {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.metric-card .value {
+  font-size: 18px;
+  font-weight: 600;
+  font-family: var(--mono);
+  color: var(--text-bright);
+}
+.metric-card canvas {
+  width: 100%;
+  height: 40px;
+  margin-top: 6px;
+}
+
+.wandb-link {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+  margin-top: 8px;
+}
+.wandb-link:hover { text-decoration: underline; }
+
+.console-logs {
+  background: #0d1117;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-dim);
+  max-height: 350px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin-top: 8px;
+}
+
+/* Config table */
+.config-table {
+  font-size: 12px;
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 12px;
+}
+.config-table td {
+  padding: 4px 10px;
+  border-bottom: 1px solid rgba(48,54,61,0.5);
+}
+.config-table td:first-child {
+  color: var(--text-dim);
+  font-family: var(--mono);
+  white-space: nowrap;
+  width: 1%;
+}
+.config-table td:last-child {
+  color: var(--text);
+  font-family: var(--mono);
+}
+
+/* Loading */
+.loading-screen {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-dim);
+}
+.loading-screen .spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-screen {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--signal-attention);
+}
+
+/* Tabs for run details */
+.detail-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.detail-tab {
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+.detail-tab:hover { color: var(--text); }
+.detail-tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+.detail-pane { display: none; }
+.detail-pane.active { display: block; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.filter-bar .filter-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.filter-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 3px 12px;
+  border-radius: 14px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font);
+}
+.filter-toggle:hover { border-color: var(--text-dim); color: var(--text); }
+.filter-toggle.active { background: var(--accent-dim); color: var(--accent); border-color: rgba(88,166,255,0.3); }
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 28px;
+  font-size: 11px;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+  margin-top: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .run-header { grid-template-columns: auto 1fr auto; }
+  .run-signal-text { display: none; }
+  .run-runtime { display: none; }
+  .signal-bar { gap: 8px; }
+  .signal-chip { padding: 4px 10px; font-size: 12px; }
+  .project-signal-badge { display: none; }
+  .metrics-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div id="app">
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <p>Loading experiment data...</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const SIGNAL_ICONS = {
+  surprise: '\u{1F7E0}',
+  attention: '\u{1F534}',
+  best: '\u2B50',
+  improving: '\u{1F4C8}',
+  degrading: '\u{1F4C9}',
+  on_track: '\u{1F7E2}',
+  dead: '\u{1F480}'
+};
+
+const SIGNAL_LABELS = {
+  surprise: 'Surprise',
+  attention: 'Attention',
+  best: 'Best',
+  improving: 'Improving',
+  degrading: 'Degrading',
+  on_track: 'On Track',
+  dead: 'Dead'
+};
+
+let dashboardData = null;
+let filters = { hideResolved: false, hideDead: false };
+
+// --- localStorage annotation store ---
+const ANNOTATIONS_KEY = 'exp-monitor-annotations';
+
+function loadAnnotations() {
+  try {
+    return JSON.parse(localStorage.getItem(ANNOTATIONS_KEY)) || {};
+  } catch { return {}; }
+}
+
+function saveAnnotations(annotations) {
+  try {
+    localStorage.setItem(ANNOTATIONS_KEY, JSON.stringify(annotations));
+  } catch (e) {
+    // localStorage may be full or unavailable (Safari private browsing)
+    console.warn('Failed to save annotations:', e.message);
+  }
+}
+
+function getRunAnnotation(runId) {
+  return loadAnnotations()[runId] || {};
+}
+
+function setRunAnnotation(runId, field, value) {
+  const all = loadAnnotations();
+  if (!all[runId]) all[runId] = {};
+  all[runId][field] = value;
+  // Clean up empty entries
+  if (!all[runId].status && !all[runId].note) delete all[runId];
+  saveAnnotations(all);
+}
+
+function toggleRunStatus(runId, status) {
+  const ann = getRunAnnotation(runId);
+  const newStatus = ann.status === status ? null : status;
+  setRunAnnotation(runId, 'status', newStatus);
+  // Re-render just this run's visual state
+  applyRunAnnotationVisuals(runId);
+}
+
+function applyRunAnnotationVisuals(runId) {
+  const el = document.querySelector(`[data-run-id="${runId}"]`);
+  if (!el) return;
+  const ann = getRunAnnotation(runId);
+  el.classList.remove('user-resolved', 'user-flagged', 'user-noted');
+  if (ann.status === 'resolved') el.classList.add('user-resolved');
+  if (ann.status === 'flagged') el.classList.add('user-flagged');
+  if (ann.note) el.classList.add('user-noted');
+
+  // Update button states
+  el.querySelectorAll('.run-action-btn').forEach(btn => {
+    btn.classList.remove('active-resolved', 'active-flagged', 'active-noted');
+    const action = btn.dataset.action;
+    if (action === ann.status) btn.classList.add(`active-${action}`);
+  });
+}
+
+function saveRunNote(runId, textarea) {
+  setRunAnnotation(runId, 'note', textarea.value.trim() || null);
+  applyRunAnnotationVisuals(runId);
+}
+
+// --- Data loading ---
+async function loadData() {
+  try {
+    const resp = await fetch('dashboard.json?t=' + Date.now());
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    dashboardData = await resp.json();
+    render();
+  } catch (e) {
+    document.getElementById('app').innerHTML = `
+      <div class="error-screen">
+        <p>Failed to load dashboard data</p>
+        <p style="font-size:12px;margin-top:8px;color:var(--text-dim)">${e.message}</p>
+        <p style="font-size:12px;margin-top:12px;color:var(--text-dim)">
+          Run <code>~/.claude/experiment-monitor/run.sh</code> to generate data.
+        </p>
+      </div>`;
+  }
+}
+
+function timeAgo(isoStr) {
+  if (!isoStr) return 'never';
+  const diff = Date.now() - new Date(isoStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  return `${Math.floor(hrs / 24)}d ago`;
+}
+
+function formatNum(v) {
+  if (typeof v !== 'number') return v;
+  if (Number.isInteger(v)) return v.toLocaleString();
+  if (Math.abs(v) < 0.001) return v.toExponential(2);
+  if (Math.abs(v) < 1) return v.toFixed(4);
+  if (Math.abs(v) < 100) return v.toFixed(3);
+  return v.toFixed(1);
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function sanitizeId(id) {
+  // W&B run IDs are alphanumeric, but sanitize defensively
+  return String(id).replace(/[^a-zA-Z0-9_-]/g, '');
+}
+
+// --- Rendering ---
+function render() {
+  const d = dashboardData;
+  const app = document.getElementById('app');
+
+  const signalOrder = ['attention', 'surprise', 'best', 'improving', 'degrading', 'on_track', 'dead'];
+  const signalChips = signalOrder
+    .filter(s => (d.signal_counts[s] || 0) > 0)
+    .map(s => `<div class="signal-chip ${s}">
+      <span class="count">${d.signal_counts[s]}</span>
+      ${SIGNAL_ICONS[s]} ${SIGNAL_LABELS[s]}
+    </div>`).join('');
+
+  const attentionBanner = d.attention_summary
+    ? `<div class="attention-banner">
+        <div class="label">${SIGNAL_ICONS.attention} Needs Attention</div>
+        ${escapeHtml(d.attention_summary)}
+      </div>` : '';
+
+  const projects = d.projects.map((p, pi) => renderProject(p, pi)).join('');
+
+  const analyzedInfo = d.analyzed_at
+    ? `Analyzed ${timeAgo(d.analyzed_at)}`
+    : 'Analysis pending';
+
+  app.innerHTML = `
+    <div class="header">
+      <h1>Experiment Monitor</h1>
+      <div class="header-right">
+        <span class="last-updated">Updated ${timeAgo(d.updated_at)} &middot; ${analyzedInfo}</span>
+        <button class="refresh-btn" onclick="refreshData()">Refresh</button>
+      </div>
+    </div>
+    <div class="signal-bar">${signalChips}</div>
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <button class="filter-toggle${filters.hideResolved ? ' active' : ''}" onclick="toggleFilter('hideResolved')">Hide Resolved</button>
+      <button class="filter-toggle${filters.hideDead ? ' active' : ''}" onclick="toggleFilter('hideDead')">Hide Dead</button>
+    </div>
+    ${attentionBanner}
+    <div class="global-summary">
+      <div class="label">Overview</div>
+      ${escapeHtml(d.global_summary)}
+    </div>
+    ${projects}
+    <div class="footer">
+      Auto-updates every 20 min &middot; ${d.total_runs} runs tracked &middot; Annotations saved locally
+    </div>
+  `;
+
+  // Auto-open first project
+  const firstProj = document.querySelector('.project');
+  if (firstProj) firstProj.classList.add('open');
+
+  // Apply saved annotation visuals
+  const annotations = loadAnnotations();
+  for (const runId of Object.keys(annotations)) {
+    applyRunAnnotationVisuals(runId);
+  }
+}
+
+function renderProject(p, pi) {
+  const runRows = p.runs.map((r, ri) => renderRun(r, pi, ri)).join('');
+
+  // Project signal badge
+  const projSignal = p.project_signal || 'on_track';
+  const badgeHtml = projSignal !== 'on_track'
+    ? `<span class="project-signal-badge ${projSignal}">${SIGNAL_ICONS[projSignal] || ''} ${SIGNAL_LABELS[projSignal] || projSignal}</span>`
+    : '';
+
+  // Aggregate run signals for mini summary
+  const sigCounts = {};
+  p.runs.forEach(r => { sigCounts[r.signal] = (sigCounts[r.signal] || 0) + 1; });
+  const sigSummary = ['attention', 'surprise', 'best', 'improving', 'dead']
+    .filter(s => sigCounts[s])
+    .map(s => `${sigCounts[s]} ${SIGNAL_ICONS[s]}`)
+    .join(' ');
+
+  return `
+    <div class="project" id="proj-${pi}">
+      <div class="project-header" onclick="toggleProject(${pi})">
+        <div class="project-title">
+          <span class="chevron">\u25B6</span>
+          <h2>${escapeHtml(p.project)}</h2>
+          <span class="entity">${escapeHtml(p.entity)}</span>
+          ${badgeHtml}
+        </div>
+        <div class="project-meta">
+          ${sigSummary ? `<span>${sigSummary}</span>` : ''}
+          ${p.active_count > 0 ? `<span class="active-badge">${p.active_count} running</span>` : ''}
+          <span>${p.run_count} runs</span>
+        </div>
+      </div>
+      <div class="project-body">
+        ${p.project_insight ? `
+          <div class="project-insight">
+            <div class="label">Project Analysis</div>
+            ${escapeHtml(p.project_insight)}
+          </div>` : ''}
+        ${runRows}
+      </div>
+    </div>`;
+}
+
+function renderRun(r, pi, ri) {
+  const id = `run-${pi}-${ri}`;
+  const safeId = sanitizeId(r.id);
+  const ann = getRunAnnotation(safeId);
+
+  // Apply filters
+  if (filters.hideResolved && ann.status === 'resolved') return '';
+  if (filters.hideDead && r.signal === 'dead') return '';
+  const annClass = ann.status === 'resolved' ? ' user-resolved' : (ann.status === 'flagged' ? ' user-flagged' : (ann.note ? ' user-noted' : ''));
+
+  // Top metrics
+  const importantKeys = Object.keys(r.summary || {})
+    .filter(k => typeof r.summary[k] === 'number')
+    .sort((a, b) => {
+      const priority = k => {
+        const kl = k.toLowerCase();
+        if (kl.includes('fid')) return 0;
+        if (kl.includes('loss') && !kl.includes('norm')) return 1;
+        if (kl.includes('ppl') || kl.includes('perplexity')) return 2;
+        if (kl.includes('accuracy') || kl.includes('acc')) return 3;
+        if (kl.startsWith('is') || kl.includes('inception')) return 4;
+        return 10;
+      };
+      return priority(a) - priority(b);
+    })
+    .slice(0, 8);
+
+  const metricsHtml = importantKeys.map(k => {
+    const histData = (r.metric_history || {})[k] || [];
+    const canvasId = `chart-${pi}-${ri}-${k.replace(/[^a-zA-Z0-9]/g, '_')}`;
+    return `<div class="metric-card">
+      <div class="name" title="${escapeHtml(k)}">${escapeHtml(k)}</div>
+      <div class="value">${formatNum(r.summary[k])}</div>
+      ${histData.length > 2 ? `<canvas id="${canvasId}" data-key="${escapeHtml(k)}" data-pi="${pi}" data-ri="${ri}"></canvas>` : ''}
+    </div>`;
+  }).join('');
+
+  const configEntries = Object.entries(r.config || {})
+    .filter(([k, v]) => typeof v !== 'object' || v === null)
+    .slice(0, 15);
+  const configHtml = configEntries.length > 0
+    ? `<table class="config-table">${configEntries.map(([k, v]) =>
+        `<tr><td>${escapeHtml(k)}</td><td>${escapeHtml(String(v))}</td></tr>`
+      ).join('')}</table>` : '';
+
+  const wandbUrl = r.url ? (r.url.startsWith('http') ? r.url : `https://wandb.ai${r.url}`) : '';
+
+  // Annotation buttons
+  const resolvedActive = ann.status === 'resolved' ? ' active-resolved' : '';
+  const flaggedActive = ann.status === 'flagged' ? ' active-flagged' : '';
+  const notedActive = ann.note ? ' active-noted' : '';
+
+  return `
+    <div class="run${annClass}" id="${id}" data-run-id="${safeId}">
+      <div class="run-header" onclick="toggleRun('${id}')">
+        <div class="run-signal ${r.signal}"></div>
+        <div>
+          <div class="run-name">${escapeHtml(r.name)}</div>
+          <div class="run-signal-text">${SIGNAL_ICONS[r.signal] || ''} ${escapeHtml(r.signal_reason)}</div>
+        </div>
+        <span class="run-state ${r.state}">${r.state}</span>
+        <span class="run-runtime">${r.runtime_hours}h</span>
+      </div>
+      <div class="run-details">
+        <div class="run-actions">
+          <button class="run-action-btn${resolvedActive}" data-action="resolved" onclick="event.stopPropagation(); toggleRunStatus('${safeId}', 'resolved')">Resolved</button>
+          <button class="run-action-btn${flaggedActive}" data-action="flagged" onclick="event.stopPropagation(); toggleRunStatus('${safeId}', 'flagged')">Flagged</button>
+          <textarea class="run-note-input" rows="1" placeholder="Add a note..."
+            onblur="saveRunNote('${safeId}', this)"
+            onclick="event.stopPropagation()">${escapeHtml(ann.note || '')}</textarea>
+        </div>
+        <div class="detail-tabs">
+          <div class="detail-tab active" data-tab="insights" onclick="switchTab('${id}', 'insights')">Insights</div>
+          <div class="detail-tab" data-tab="metrics" onclick="switchTab('${id}', 'metrics')">Metrics</div>
+          <div class="detail-tab" data-tab="config" onclick="switchTab('${id}', 'config')">Config</div>
+          ${r.console_logs ? `<div class="detail-tab" data-tab="logs" onclick="switchTab('${id}', 'logs')">Logs</div>` : ''}
+        </div>
+        <div class="detail-pane active" data-tab="insights">
+          ${r.run_insight ? `<div class="insight-block"><div class="label">Run Assessment</div><div class="text">${escapeHtml(r.run_insight)}</div></div>` : ''}
+          ${r.viz_insight ? `<div class="insight-block"><div class="label">Metric Trends</div><div class="text">${escapeHtml(r.viz_insight)}</div></div>` : ''}
+          ${r.log_insight ? `<div class="insight-block"><div class="label">Log Analysis</div><div class="text">${escapeHtml(r.log_insight)}</div></div>` : ''}
+          ${!r.run_insight && !r.viz_insight && !r.log_insight ? '<div style="color:var(--text-dim);font-size:12px">No analysis available yet</div>' : ''}
+        </div>
+        <div class="detail-pane" data-tab="metrics">
+          <div class="metrics-grid">${metricsHtml}</div>
+        </div>
+        <div class="detail-pane" data-tab="config">
+          ${configHtml || '<div style="color:var(--text-dim);font-size:12px">No config data</div>'}
+        </div>
+        ${r.console_logs ? `
+          <div class="detail-pane" data-tab="logs">
+            <div class="console-logs">${escapeHtml(r.console_logs)}</div>
+          </div>` : ''}
+        ${wandbUrl ? `<a class="wandb-link" href="${escapeHtml(wandbUrl)}" target="_blank" rel="noopener">\u2192 Open in W&B</a>` : ''}
+      </div>
+    </div>`;
+}
+
+// --- Interactions ---
+function toggleProject(idx) {
+  document.getElementById(`proj-${idx}`).classList.toggle('open');
+}
+
+function toggleRun(id) {
+  const el = document.getElementById(id);
+  const wasOpen = el.classList.contains('open');
+  el.classList.toggle('open');
+  if (!wasOpen) {
+    setTimeout(() => drawSparklines(el), 50);
+  }
+}
+
+function switchTab(runId, tab) {
+  const run = document.getElementById(runId);
+  run.querySelectorAll('.detail-tab').forEach(t => t.classList.toggle('active', (t.dataset.tab || t.textContent.toLowerCase()) === tab));
+  run.querySelectorAll('.detail-pane').forEach(p => p.classList.toggle('active', p.dataset.tab === tab));
+  if (tab === 'metrics') {
+    setTimeout(() => drawSparklines(run), 50);
+  }
+}
+
+function drawSparklines(container) {
+  container.querySelectorAll('canvas').forEach(canvas => {
+    if (canvas.dataset.drawn) return;
+    const pi = parseInt(canvas.dataset.pi);
+    const ri = parseInt(canvas.dataset.ri);
+    const key = canvas.dataset.key;
+    const run = dashboardData.projects[pi]?.runs[ri];
+    if (!run) return;
+    const points = (run.metric_history || {})[key] || [];
+    if (points.length < 2) return;
+
+    const values = points.map(p => p.value);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const range = max - min || 1;
+
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const w = canvas.offsetWidth;
+    const h = 40;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.scale(dpr, dpr);
+
+    // Fill area under curve
+    ctx.fillStyle = 'rgba(88,166,255,0.08)';
+    ctx.beginPath();
+    ctx.moveTo(0, h);
+    values.forEach((v, i) => {
+      const x = (i / (values.length - 1)) * w;
+      const y = h - ((v - min) / range) * (h - 6) - 3;
+      ctx.lineTo(x, y);
+    });
+    ctx.lineTo(w, h);
+    ctx.closePath();
+    ctx.fill();
+
+    // Line
+    ctx.strokeStyle = '#58a6ff';
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
+    ctx.beginPath();
+    values.forEach((v, i) => {
+      const x = (i / (values.length - 1)) * w;
+      const y = h - ((v - min) / range) * (h - 6) - 3;
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Endpoint dot
+    const lastX = w;
+    const lastY = h - ((values[values.length - 1] - min) / range) * (h - 6) - 3;
+    ctx.fillStyle = '#58a6ff';
+    ctx.beginPath();
+    ctx.arc(lastX, lastY, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Min/max labels
+    ctx.fillStyle = 'rgba(139,148,158,0.7)';
+    ctx.font = '9px system-ui';
+    ctx.textAlign = 'right';
+    ctx.fillText(formatNum(max), w - 2, 10);
+    ctx.fillText(formatNum(min), w - 2, h - 2);
+
+    canvas.dataset.drawn = '1';
+  });
+}
+
+function toggleFilter(key) {
+  filters[key] = !filters[key];
+  render();
+}
+
+async function refreshData() {
+  const btn = document.querySelector('.refresh-btn');
+  btn.classList.add('loading');
+  btn.textContent = 'Loading...';
+  await loadData();
+  btn.classList.remove('loading');
+  btn.textContent = 'Refresh';
+}
+
+// Initial load
+loadData();
+
+// Auto-refresh every 20 min
+setInterval(loadData, 20 * 60 * 1000);
+</script>
+</body>
+</html>

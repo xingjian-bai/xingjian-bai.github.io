@@ -1,0 +1,14 @@
+{
+  "generated_at": "2026-03-29T07:03:27Z",
+  "status": "ok",
+  "message": null,
+  "latest_hour": "2026-03-29T07:00:00Z",
+  "latest_captured_at": "2026-03-29T07:03:27Z",
+  "snapshot_count": 1018,
+  "is_stale": false,
+  "quality": {
+    "observed_hours": 759,
+    "estimated_hours": 259,
+    "coverage_pct": 74.56
+  }
+}

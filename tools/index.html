@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    <title>Tools | Xingjian Bai</title>
+    <meta name="description" content="A small index of utility pages, monitors, and demos hosted inside Xingjian Bai's personal website repository." />
+
+    <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+    <link href="../css/site.css" rel="stylesheet" />
+
+    <style>
+        .tools-hero {
+            padding: 70px 0 42px;
+        }
+        .tools-hero h1 {
+            margin: 0 0 10px;
+            font-size: clamp(44px, 7vw, 76px);
+            letter-spacing: -0.035em;
+        }
+        .tools-hero .lede {
+            max-width: 720px;
+            color: var(--muted);
+            font-size: 18px;
+        }
+        .tool-section {
+            padding: 38px 0;
+            border-top: 1px solid var(--rule);
+        }
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+        .tool-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 18px;
+            min-height: 156px;
+            padding: 22px;
+            border: 1px solid var(--rule);
+            border-radius: var(--radius);
+            background:
+                linear-gradient(135deg, color-mix(in srgb, var(--card) 92%, transparent), color-mix(in srgb, var(--accent) 5%, var(--card))),
+                var(--card);
+            color: var(--ink);
+            text-decoration: none;
+            transition: border-color .18s ease, transform .18s ease, background .18s ease;
+        }
+        .tool-card:hover {
+            border-color: var(--accent-weak);
+            color: var(--ink);
+            transform: translateY(-2px);
+        }
+        .tool-card h3 {
+            margin: 0 0 8px;
+            font-size: 23px;
+            letter-spacing: -0.018em;
+        }
+        .tool-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14.5px;
+            line-height: 1.55;
+        }
+        .tool-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 16px;
+        }
+        .tool-token {
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid var(--rule);
+            border-radius: 999px;
+            padding: 4px 10px;
+            color: var(--muted);
+            background: color-mix(in srgb, var(--ink) 4%, transparent);
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .tool-arrow {
+            color: var(--accent);
+            font-family: var(--font-serif);
+            font-size: 30px;
+            line-height: 1;
+        }
+        .quiet-note {
+            max-width: 760px;
+            margin-top: 22px;
+            color: var(--subtle);
+            font-size: 14px;
+        }
+        @media (max-width: 760px) {
+            .tools-hero { padding: 44px 0 28px; }
+            .tool-grid { grid-template-columns: 1fr; }
+            .tool-card { min-height: 0; }
+        }
+    </style>
+</head>
+
+<body id="top">
+
+<nav class="nav" aria-label="Primary">
+    <div class="inner">
+        <a class="brand" href="/">Xingjian Bai</a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list" aria-label="Toggle navigation">☰</button>
+        <ul id="nav-list">
+            <li><a class="navlink" href="/">Home</a></li>
+            <li><a class="navlink active" href="#tools">Tools</a></li>
+            <li>
+                <button class="theme-btn" type="button" data-theme-toggle aria-label="Toggle dark mode">☾</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<main class="wrap">
+    <section id="tools" class="tools-hero">
+        <p class="section-label">Tools</p>
+        <h1>Small Pages, Dashboards, and Demos</h1>
+        <p class="lede">A quiet index for the utility pages hosted in this repository: monitors, admin panels, research demos, and pages that are useful but do not belong on the main homepage.</p>
+    </section>
+
+    <section class="tool-section" aria-labelledby="research-title">
+        <h2 id="research-title" class="section-label">Research</h2>
+        <div class="tool-grid">
+            <a class="tool-card" href="/sheets/">
+                <span>
+                    <h3>Research Sheets</h3>
+                    <p>Permanent interactive experiment-report sheets by project (results, ablations, reconstructed-video benchmarks, math). Hosted statically — links never expire.</p>
+                    <span class="tool-meta"><span class="tool-token">research</span><span class="tool-token">reports</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="tool-section" aria-labelledby="monitors-title">
+        <h2 id="monitors-title" class="section-label">Monitors And Admin</h2>
+        <div class="tool-grid">
+            <a class="tool-card" href="/gpu-cluster-monitor/">
+                <span>
+                    <h3>GPU Cluster Monitor</h3>
+                    <p>Cluster utilization dashboard with GPU memory, allocation, and cost-oriented views.</p>
+                    <span class="tool-meta"><span class="tool-token">monitor</span><span class="tool-token">cluster</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="tool-card" href="/gpu-monitor.html">
+                <span>
+                    <h3>GPU Monitor Redirect</h3>
+                    <p>Legacy GPU monitor entry point kept for compatibility with older links.</p>
+                    <span class="tool-meta"><span class="tool-token">redirect</span><span class="tool-token">gpu</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="tool-card" href="/experiment-monitor/">
+                <span>
+                    <h3>Experiment Monitor</h3>
+                    <p>Training dashboard for active experiment status, metrics, and per-epoch tracking.</p>
+                    <span class="tool-meta"><span class="tool-token">monitor</span><span class="tool-token">training</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="tool-card" href="/active-wandb-platform/">
+                <span>
+                    <h3>Active W&amp;B Platform</h3>
+                    <p>Compact Weights &amp; Biases run dashboard for quickly checking live experiments.</p>
+                    <span class="tool-meta"><span class="tool-token">wandb</span><span class="tool-token">metrics</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="tool-card" href="/tennis-admin/">
+                <span>
+                    <h3>Tennis Admin</h3>
+                    <p>MIT tennis court booking status, controls, and automation state in one place.</p>
+                    <span class="tool-meta"><span class="tool-token">admin</span><span class="tool-token">automation</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+        </div>
+    </section>
+
+    <section class="tool-section" aria-labelledby="demos-title">
+        <h2 id="demos-title" class="section-label">Demos And Explorers</h2>
+        <div class="tool-grid">
+            <a class="tool-card" href="/map-explorer/">
+                <span>
+                    <h3>Map Explorer</h3>
+                    <p>An interactive city-map explorer built around AI-generated tiles and zoom levels.</p>
+                    <span class="tool-meta"><span class="tool-token">demo</span><span class="tool-token">map</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="tool-card" href="/tools/vjam/">
+                <span>
+                    <h3>VJAM Page</h3>
+                    <p>Standalone research/demo page for video-model robot policy results.</p>
+                    <span class="tool-meta"><span class="tool-token">research</span><span class="tool-token">video</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+            <a class="tool-card" href="/tools/vjam/preview.html">
+                <span>
+                    <h3>VJAM Video Preview</h3>
+                    <p>Filename-bucketed preview page for quickly scanning VJAM video assets.</p>
+                    <span class="tool-meta"><span class="tool-token">preview</span><span class="tool-token">video</span></span>
+                </span>
+                <span class="tool-arrow" aria-hidden="true">→</span>
+            </a>
+        </div>
+        <p class="quiet-note">This page intentionally stays separate from the main research homepage. It is a lightweight directory for repository-hosted utilities and experimental pages.</p>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="inner">
+        <div class="mark">
+            <span>&copy; 2026 Xingjian Bai &middot; <a href="/">home</a> &middot; <a href="https://github.com/xingjian-bai/xingjian-bai.github.io">source</a></span>
+        </div>
+    </div>
+</footer>
+
+<script src="../js/site.js"></script>
+
+</body>
+</html>

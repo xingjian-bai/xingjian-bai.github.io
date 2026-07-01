@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Real-time GPU cluster utilization monitoring with cost analytics for H100, A100, and A100-40GB instances">
+  <title>GPU Cluster Monitor</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Internal GPU Operations</p>
+        <h1>Adobe Cluster Utilization Observatory</h1>
+        <p class="subtitle">
+          Hourly snapshots, long-horizon accumulators, and cost analytics for H100, A100, and A100-40GB.
+        </p>
+      </div>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <span class="meta-label">Last Hour</span>
+          <strong id="meta-last-hour">-</strong>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Updated</span>
+          <strong id="meta-updated-at">-</strong>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Data Quality</span>
+          <strong id="meta-quality">-</strong>
+        </div>
+      </div>
+    </header>
+
+    <section class="status-strip">
+      <div id="health-pill" class="health-pill health-neutral">Loading</div>
+      <p id="health-message">Reading monitor data...</p>
+      <div class="refresh-group">
+        <span id="last-refreshed" class="last-refreshed"></span>
+        <button id="refresh-now" class="refresh-btn" type="button" title="Refresh data (R)">
+          <svg class="refresh-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+          <span class="refresh-label">Refresh</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="control-group">
+        <span class="control-label">Hourly Range</span>
+        <div id="range-controls" class="button-group">
+          <button type="button" data-hours="24" class="is-active">24H</button>
+          <button type="button" data-hours="168">7D</button>
+          <button type="button" data-hours="720">30D</button>
+          <button type="button" data-hours="2160">90D</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <span class="control-label">Accumulator Period</span>
+        <div id="period-controls" class="button-group">
+          <button type="button" data-period="daily" class="is-active">Daily</button>
+          <button type="button" data-period="weekly">Weekly</button>
+          <button type="button" data-period="monthly">Monthly</button>
+        </div>
+      </div>
+      <div class="control-group metric-picker">
+        <label for="period-metric" class="control-label">Accumulator Metric</label>
+        <select id="period-metric">
+          <option value="cost">Total Cost (USD)</option>
+          <option value="gpu_hours">GPU-Hours</option>
+          <option value="node_hours">Node-Hours</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="kpi-grid" class="kpi-grid"></section>
+
+    <section class="panel pricing-panel">
+      <header class="panel-header">
+        <h2>Market Price Model</h2>
+        <p id="pricing-definition">Loading pricing basis...</p>
+      </header>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>GPU Type</th>
+              <th>Instance</th>
+              <th>GPUs/Node</th>
+              <th>Node $/h</th>
+              <th>GPU $/h</th>
+              <th>Basis</th>
+            </tr>
+          </thead>
+          <tbody id="pricing-table-body">
+            <tr><td colspan="6" class="muted-cell">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="pricing-sources" id="pricing-source-links">Loading sources...</p>
+    </section>
+
+    <section id="top-projects" class="panel top-projects-panel" style="display:none">
+      <header class="panel-header">
+        <h2>Active Projects</h2>
+        <p>Current hour top resource consumers</p>
+      </header>
+      <div class="top-projects-grid" id="top-projects-grid"></div>
+    </section>
+
+    <section class="chart-grid">
+      <article class="panel panel-wide">
+        <header class="panel-header">
+          <h2>GPU Footprint</h2>
+          <p id="gpu-usage-subtitle">Stacked by GPU type over selected window</p>
+        </header>
+        <div class="chart-wrap">
+          <canvas id="gpu-usage-chart"></canvas>
+        </div>
+      </article>
+
+      <article class="panel">
+        <header class="panel-header">
+          <h2>Hourly Rental Cost</h2>
+          <p id="hourly-cost-subtitle">Stacked by GPU type</p>
+        </header>
+        <div class="chart-wrap">
+          <canvas id="hourly-cost-chart"></canvas>
+        </div>
+      </article>
+
+      <article class="panel">
+        <header class="panel-header">
+          <div class="panel-header-row">
+            <div>
+              <h2>Cumulative Cost</h2>
+              <p id="cumulative-subtitle">Accumulated cost over selected window</p>
+            </div>
+            <div id="cumulative-range-controls" class="button-group button-group-sm">
+              <button type="button" data-cum-range="window" class="is-active">Window</button>
+              <button type="button" data-cum-range="all">All Data</button>
+            </div>
+          </div>
+        </header>
+        <div class="chart-wrap">
+          <canvas id="cumulative-cost-chart"></canvas>
+        </div>
+      </article>
+
+      <article class="panel panel-wide">
+        <header class="panel-header">
+          <h2>Period Accumulator</h2>
+          <p id="period-chart-subtitle">Daily totals by GPU type</p>
+        </header>
+        <div class="chart-wrap">
+          <canvas id="period-chart"></canvas>
+        </div>
+      </article>
+
+      <article class="panel">
+        <header class="panel-header">
+          <h2>All-Time Cost Share</h2>
+          <p id="cost-share-subtitle">How spending distributes by GPU type</p>
+        </header>
+        <div class="chart-wrap chart-wrap-donut">
+          <canvas id="cost-share-chart"></canvas>
+        </div>
+        <div id="cost-share-breakdown" class="cost-breakdown"></div>
+      </article>
+
+      <article class="panel">
+        <header class="panel-header">
+          <h2>Rolling Cost Windows</h2>
+          <p>24h, 7d, and 30d snapshots</p>
+        </header>
+        <div id="rolling-cards" class="rolling-cards"></div>
+      </article>
+    </section>
+
+    <section class="panel table-panel">
+      <header class="panel-header">
+        <div class="panel-header-row">
+          <div>
+            <h2>Recent Hourly Snapshots</h2>
+            <p id="recent-table-subtitle">Latest 48 hours with status and totals</p>
+          </div>
+          <div id="table-row-controls" class="button-group button-group-sm">
+            <button type="button" data-rows="24" class="is-active">24H</button>
+            <button type="button" data-rows="48">48H</button>
+            <button type="button" data-rows="168">7D</button>
+          </div>
+        </div>
+      </header>
+      <div class="table-wrap table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Hour (UTC)</th>
+              <th>Status</th>
+              <th>Nodes</th>
+              <th>GPUs</th>
+              <th>H100</th>
+              <th>A100</th>
+              <th>A100-40GB</th>
+              <th>Hourly Cost</th>
+            </tr>
+          </thead>
+          <tbody id="recent-hours-body">
+            <tr><td colspan="8" class="muted-cell">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel notes">
+      <h2>Methodology</h2>
+      <ul>
+        <li>Each UTC hour has a single canonical snapshot.</li>
+        <li>Cost is node-based and uses a documented market-price reference model shown above.</li>
+        <li>Estimated snapshots are explicitly marked when live collection fails.</li>
+        <li>Daily/weekly/monthly accumulators are computed from hourly snapshots and exposed as static JSON.</li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      <p>GPU Cluster Monitor &middot; Auto-refresh every 20 min &middot; <span id="footer-snapshot-count">-</span> snapshots &middot; Press <kbd>R</kbd> to refresh</p>
+    </footer>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>
