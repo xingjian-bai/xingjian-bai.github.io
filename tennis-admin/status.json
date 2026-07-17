@@ -1,5 +1,5 @@
 {
-  "last_sync": "2026-07-16T05:32:38.648982",
+  "last_sync": "2026-07-16T22:44:08.258978",
   "script_status": {
     "xbai02b": {
       "running": false,
@@ -1235,50 +1235,50 @@
     }
   ],
   "next_booking": {
-    "next_window": "2026-07-16T06:00:00-04:00",
-    "next_window_display": "2026-07-16 06:00 EDT",
-    "target_date": "2026-07-18",
-    "target_weekday": "Saturday",
+    "next_window": "2026-07-17T06:00:00-04:00",
+    "next_window_display": "2026-07-17 06:00 EDT",
+    "target_date": "2026-07-19",
+    "target_weekday": "Sunday",
     "planned_attempts": [
       {
         "user": "xbai02b",
-        "date": "2026-07-18",
-        "weekday": "Saturday",
+        "date": "2026-07-19",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-07-18",
-        "weekday": "Saturday",
+        "date": "2026-07-19",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "xbai02b",
-        "date": "2026-07-18",
-        "weekday": "Saturday",
+        "date": "2026-07-19",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-07-18",
-        "weekday": "Saturday",
+        "date": "2026-07-19",
+        "weekday": "Sunday",
         "hour": 15,
         "time": "15:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-07-18",
-        "weekday": "Saturday",
+        "date": "2026-07-19",
+        "weekday": "Sunday",
         "hour": 14,
         "time": "14:00"
       },
       {
         "user": "zwang43b",
-        "date": "2026-07-18",
-        "weekday": "Saturday",
+        "date": "2026-07-19",
+        "weekday": "Sunday",
         "hour": 17,
         "time": "17:00"
       }
