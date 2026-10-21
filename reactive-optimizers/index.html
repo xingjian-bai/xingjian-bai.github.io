@@ -1954,6 +1954,23 @@ main details > ul > li b {
   line-height: 1.8;
 }
 
+main > a.home-link {
+  display: block;
+  margin-top: 40px;
+  font: 400 0.95rem/1.4 var(--sans);
+  color: var(--prose-muted);
+  text-decoration: none;
+}
+main > a.home-link:hover { color: var(--ink); }
+main > a.home-link + h1 { margin-top: 20px; }
+main > p.home-foot { margin-top: 48px; font: 400 0.95rem/1.4 var(--sans); text-align: left; }
+main > p.home-foot a { color: var(--prose-muted); text-decoration: none; }
+main > p.home-foot a:hover { color: var(--ink); }
+@media (max-width: 520px) {
+  main > a.home-link { margin-top: 28px; }
+  main > a.home-link + h1 { margin-top: 14px; }
+}
+
 main > h1 {
   font: 600 2.4rem/1.15 var(--display);
   letter-spacing: -0.01em;
@@ -2352,7 +2369,7 @@ main .sn {
 <body>
 <main>
 
-<h1>Reactive Optimizers</h1>
+<a class="home-link" href="https://xingjianbai.com/">&larr; Xingjian Bai</a><h1>Reactive Optimizers</h1>
 
 
 
@@ -5380,6 +5397,7 @@ for step in range(steps):
 <li id="r-pilab" value="37">Prime Intellect. Getting Started (Hosted Training). <a href="https://docs.primeintellect.ai/hosted-training/getting-started">Documentation</a>, accessed October 21, 2026.</li>
 <li id="r-dust" value="38">Dahal, Mandal, Gülbahar and Vegesna. Dust: Pretraining Transformers Without Backpropagation. <a href="https://qlabs.sh/research/dust">Q Labs</a>, 2026.</li>
 </ol>
+<p class="home-foot"><a href="https://xingjianbai.com/">&larr; Back to the homepage</a></p>
 
 
 
