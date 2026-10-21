@@ -2984,7 +2984,7 @@ main .sn {
 
 <p>We also try the reactive optimizer on image generation, a direction where the literature usually does not sweep optimization hyperparameters, since diffusion-model design and optimizer design are viewed as mostly orthogonal<sup class="fn"><a href="#n-diffopt">1</a></sup>. It ends ahead of the official recipe on LightningDiT-XL/1 (FID-50K 1.83 against 2.18 with guidance, 4.33 against 5.15 without), whose official recipe trains with AdamW, and on RAEv2-B (3.19 against 3.39), whose recipe trains with a Muon variant.</p>
 
-<p>Figure 1 shows these runs, each with Claude Opus 5.5 powering the agent; we name our reactive optimizer OPAL (Optimizer with an Agent in the Loop). Together, these results show that in one-shot settings, a reactive optimizer can lead to a better solution than adhering to a predetermined recipe.</p>
+<p>Figure 1 shows these runs, each with Claude Opus 5.5 powering the agent; we name our reactive optimizer OPAL (OPtimizer with an Agent in the Loop). Together, these results show that in one-shot settings, a reactive optimizer can lead to a better solution than adhering to a predetermined recipe.</p>
 
 
 <figure class="wide" id="fig-reel">
@@ -3518,7 +3518,7 @@ main .sn {
       
       
       
-      <b>Figure 1.</b> OPAL (Optimizer with an Agent in the Loop), our reactive optimizer, across different settings. In most settings where optimization hyperparameters are not heavily tuned for, reactive optimizers improve the training loss and test performance upon the canonical choices. In modded-nanogpt, #2 is AdamW, #21 is Shampoo, #36 is a tuned Muon, and #30 and #46 are later records that add further techniques to Muon.
+      <b>Figure 1.</b> OPAL (OPtimizer with an Agent in the Loop), our reactive optimizer, across different settings. In most settings where optimization hyperparameters are not heavily tuned for, reactive optimizers improve the training loss and test performance upon the canonical choices. In modded-nanogpt, #2 is AdamW, #21 is Shampoo, #36 is a tuned Muon, and #30 and #46 are later records that add further techniques to Muon.
     </p>
     
   </figcaption>
