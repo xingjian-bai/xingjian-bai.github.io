@@ -4812,9 +4812,9 @@ main .sn {
 
 
 
-<p data-i18n="9a20e2120f65">Suppose a PhD student has a new idea: a model of their own design, or a new dataset to try a transformer on. They have one GPU for a day, some LLM tokens, so one shot for training. What would they do? I guess they would pick the most standard training recipe, or one from a recent paper, and live with the chance that it is unsuitable for their scenario, with spiking/stalling loss, etc.</p>
-<p data-i18n="9f3ae7fcc2c5">The question behind this is broader: <span class="key-q">when bounded by GPU time, researcher time or wall-clock time, how can a deep learning model be trained to its best without knowing the optimal recipe in advance?</span> New architectures, new modalities, new languages and new scientific data all fall into this setting, where few people can afford a sweep at scale.</p>
-<p data-i18n="da19f9876c47">A reactive optimizer offers another way to use that budget: it spends LLM tokens in place of GPU time and the researcher's own time, a second currency that buys a better model. Much of what traditionally requires a sweep can now happen within a single training run, with an agent making optimization decisions along the way.</p>
+<p data-i18n="7c5042d753aa">Suppose a PhD student has a new idea: a model of their own design, or a new dataset on which to train a transformer. They have one GPU for a single day only and a modest allotment of LLM API tokens, allowing for just one serious training run. What should the student do? The obvious course of action would be to pick the most standard training recipe, or one from a recent paper, and cope with the possibility that it might be unsuitable for their scenario, with spiking/stalling loss, etc.</p>
+<p data-i18n="387e1bb30243">The underlying question is broader: <span class="key-q">when bounded by GPU time, researcher time, or wall-clock time, how can a deep learning model be trained to its best performance without knowing the optimal optimization recipe in advance?</span> New architectures, modalities, languages, and scientific data all fall into this setting, where few people can afford a sweep at scale.</p>
+<p data-i18n="ae17bef08b89">A reactive optimizer offers another way to use that budget: it spends LLM tokens in place of GPU/human hours. With optimizers reacting to training incidents and adjusting themselves, much of the burden of recipe tuning can be reduced.</p>
 
 
 <h3 id="brief" data-i18n="1a5a95cbc47e">Results in brief</h3>
