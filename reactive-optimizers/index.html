@@ -6185,6 +6185,10 @@ main .sn {
           nice = [5, 2, 1].map((f) => f * e).find((v) => v <= inside);
         if (nice > x0 && nice < s.x_max) x0 = nice;
       }
+      // REV 2026-10-21 PI (a reader: "Why are the axes truncated in some cases but not others? This is especially weird on the
+      // x axis"; PI: "x-axis 都不要做 truncation…都是从 0 开始"): every line panel's step axis starts at 0 (was: at its first
+      // logged point, so the loss and metric panels of one setting started at different steps)
+      if (xs === "lin") x0 = 0;
       // not clamped: logged steps before x0 fall left of the panel and are cut off by the clip
       const x = (xs === "log" ? d3.scaleLog() : d3.scaleLinear())
         .domain([x0, s.x_max])
