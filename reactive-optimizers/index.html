@@ -4818,7 +4818,7 @@ main .sn {
 
 
 <h3 id="brief" data-i18n="1a5a95cbc47e">Results in brief</h3>
-<p data-i18n="345acfb5b245">We start from the optimization track (Track 3) of modded-nanogpt <a href="#r-mng" class="cite">[16]</a>, a language-model pre-training task (training a 162M GPT on FineWeb) with many recipes tuned specifically for this one setting. From this task, we create two slightly differing natural settings: (1) the same model trained on an alternate language dataset (we select Chinese, Thai, and Kyrgyz), and (2) the original setup with a quarter of the batch size. Neither comes with a recipe tuned for that setting, so we compare the reactive optimizer with the natural options one would have if they wanted to one-shot the new training: adopting five leaderboard recipes with natural adjustments. Recipes include AdamW (#2), Muon (#36), Shampoo (#21), and two top-performing recipes from the leaderboard (#30 and #46). In all these new settings, the reactive optimizer ranks first among all baselines (<a class="xref" href="#fig-reel">Figure 1</a>).</p>
+<p data-i18n="79d2e1d57da4">We start from the optimization track (Track 3) of modded-nanogpt <a href="#r-mng" class="cite">[16]</a>, a language-model pre-training task (training a 162M GPT on FineWeb) with many recipes tuned specifically for this one setting. From this task, we create two slightly differing natural settings: (1) the same model trained on an alternate language dataset (we select Chinese, Thai, and Kyrgyz), and (2) the original setup with a quarter of the batch size. Neither comes with a recipe tuned for that setting, so we compare the reactive optimizer with the natural options one would have if they wanted to one-shot the new training: adopting five leaderboard recipes with natural adjustments. We experiment with five exemplary and top-performing recipes from the leaderboard. In all these new settings, the reactive optimizer ranks first among all baselines (<a class="xref" href="#fig-reel">Figure 1</a>).</p>
 
 <p data-i18n="c6636b42a7e6">We also apply the reactive optimizer directly to Goldfish [<a href="#r-goldfish" class="cite">17</a>], which proposes a dataset of 350 languages and trains one small GPT per dataset with an untuned standard recipe. This makes it an ideal ground to test the optimizer's adaptiveness in one shot. On the Amharic dataset, the official recipe ends at 83.48 bits per sentence on held-out FLORES-200 text (lower is better); the reactive optimizer, initialized with this same recipe, ends at 81.11 in one shot (on Swahili, we obtain a similar gain). Sweeping the learning rate of the standard recipe finds a static recipe that ends ahead of the reactive optimizer, at 80.89, but the reactive optimizer initialized from that swept recipe ends ahead again, at 80.73.</p>
 
@@ -5361,13 +5361,13 @@ main .sn {
   <div class="rl-tip" role="status" aria-live="polite"></div>
   
   <figcaption>
-    <p data-i18n="017988910e1f">
+    <p data-i18n="7236b347f3fd">
       
       
       
       
       
-      <b>Figure 1.</b> OPAL (Optimizer with an Agent in the Loop), our reactive optimizer, across different settings. In most settings where optimization hyperparameters are not heavily tuned for, reactive optimizers improve the training loss and test performance upon the canonical choices.
+      <b>Figure 1.</b> OPAL (Optimizer with an Agent in the Loop), our reactive optimizer, across different settings. In most settings where optimization hyperparameters are not heavily tuned for, reactive optimizers improve the training loss and test performance upon the canonical choices. In modded-nanogpt, #2 is AdamW, #21 is Shampoo, #36 is a tuned Muon, and #30 and #46 are later records that add further techniques to Muon.
     </p>
     
   </figcaption>
