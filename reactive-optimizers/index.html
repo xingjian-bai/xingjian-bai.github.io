@@ -2342,7 +2342,7 @@ main .sn {
 
 <div class="byline"><span class="who">Xingjian Bai, Jia-Hao Liang, Jayden Teoh, Vincent Sitzmann</span><br>October 2026</div>
 
-<div class="tldr"><p><b>TL;DR</b> We put an agent at the heart of the optimizer. It watches the training dynamics, reacts to them, and rewrites the optimizer's source code as training goes. When there is no optimal recipe, it matches or beats the best recipe one can one-shot, and it spontaneously comes up with intricate strategies to prevent loss spikes and escape overfitting. Try it on your own training run with <a href="https://github.com/xingjian-bai/opal">OPAL</a>.</p>
+<div class="tldr"><p><b>TL;DR</b> We put an agent at the heart of the optimizer. It watches the training dynamics, reacts to them, and rewrites the optimizer’s source code as training goes. When there is no optimal recipe, it matches or beats the best recipe one can one-shot across image and language tasks. Further, we demonstrate that it spontaneously comes up with sophisticated schedules and intricate strategies to prevent loss spikes and escape overfitting. Try it on your own training run with <a href="https://github.com/xingjian-bai/opal">OPAL</a>!</p>
 </div>
 
 
@@ -4571,7 +4571,7 @@ main .sn {
 
 
 
-<p>Frontier training runs come with elaborate hyperparameter schedules, such as the five stages of DeepSeek-V3's learning rate (<a href="#r-dsv3" class="cite">[24]</a>; Figure 4, left), with such schedules sometimes being written by humans during the training process [<a href="#r-opt" class="cite">23</a>]. Engineers can make only so many decisions, each weighing only so many signals. A reactive optimizer can take over this work and has no such limit: it decides frequently, and at each decision, it can access the entire history of the run. As <a class="xref" href="#fig-lrmulti">Figure 4</a> shows, the schedules our agents built are intricate, with separate multi-stage schedules for each parameter group, and differ from run to run. Several of them raise a learning rate mid-run, a move rarely seen in modern schedulers, yet naturally helpful in many scenarios [<a href="#r-sgdr" class="cite">6</a>, <a href="#r-clr" class="cite">25</a>]. Moreover, <a class="xref" href="#lr-how">the four examples below</a> show the evidence they cited for their decisions.</p>
+<p>Frontier training runs come with elaborate hyperparameter schedules, such as the five stages of DeepSeek-V3's learning rate (<a href="#r-dsv3" class="cite">[23]</a>; Figure 4, left), with such schedules sometimes being written by humans during the training process [<a href="#r-opt" class="cite">24</a>]. Engineers can make only so many decisions, each weighing only so many signals. A reactive optimizer can take over this work and has no such limit: it decides frequently, and at each decision, it can access the entire history of the run. As <a class="xref" href="#fig-lrmulti">Figure 4</a> shows, the schedules our agents built are intricate, with separate multi-stage schedules for each parameter group, and differ from run to run. Several of them raise a learning rate mid-run, a move rarely seen in modern schedulers, yet naturally helpful in many scenarios [<a href="#r-sgdr" class="cite">6</a>, <a href="#r-clr" class="cite">25</a>]. Moreover, <a class="xref" href="#lr-how">the four examples below</a> show the evidence they cited for their decisions.</p>
 <p>We observe that the agents base these decisions on the diagnostics from <code>analysis.py</code>. Some examples are: the cosine between a module's consecutive gradients as a sign of overshooting (see <a class="xref" href="#lr-how" data-lrh-open="clues">“Deduced from clues”</a> below); A/B testing between two learning rates every few hundred updates, comparing how fast the loss falls under each (<a class="xref" href="#lr-how" data-lrh-open="aba">“A-B-A test”</a>); trial and error, with the learning rate raised, lowered, and raised again (<a class="xref" href="#lr-how" data-lrh-open="trial">“Trial and error”</a>); and the trend of the loss, which makes agents start their cooldown earlier than planned (<a class="xref" href="#lr-how" data-lrh-open="cool">“Re-planned cooldown”</a>). Each of these changes of schedule involves observation of the training dynamics and reasoning upon said observations.</p>
 
 
@@ -4588,7 +4588,7 @@ main .sn {
 </div>
 <div data-lrh="aba">
 <p data-lrh-title>A-B-A test</p>
-<p>The RAEv2 agent alternated two learning rates over consecutive stretches of a few hundred updates (A-B-A) and compared the training loss under each. After one such test, it changed the rate it had chosen at update 2,750:</p>
+<p>The RAEv2 agent alternated two learning rates over consecutive stretches of a few hundred updates (A-B-A) and compared the training loss under each. After one such test, it switched to 2× from update 3,100, with this stated reason:</p>
 <div class="note-agent"><span class="when">Update 3,000, Decision 12</span>The A-B-A test points the other way from my provisional read at update 2750: 2× gives faster real progress than 1.5×.</div>
 </div>
 <div data-lrh="trial">
@@ -5343,8 +5343,8 @@ for step in range(steps):
 <li id="r-muondit" value="20">Li et al. Scaling Muon for Diffusion Transformers. <a href="https://arxiv.org/abs/2608.20818">arXiv:2608.20818</a>, 2026.</li>
 <li id="r-rae" value="21">Singh, Zheng, Wu, Zhang, Shechtman and Xie. Improved Baselines with Representation Autoencoders (RAEv2). <a href="https://arxiv.org/abs/2605.18324">arXiv:2605.18324</a>, 2026.</li>
 <li id="r-diffbench" value="22">Bolatov et al. Optimizers for Diffusion Models: A Controlled Benchmark. <a href="https://arxiv.org/abs/2609.23055">arXiv:2609.23055</a>, 2026.</li>
-<li id="r-opt" value="23">Zhang et al. OPT: Open Pre-trained Transformer Language Models. <a href="https://arxiv.org/abs/2205.01068">arXiv:2205.01068</a>, 2022.</li>
-<li id="r-dsv3" value="24">DeepSeek-AI. DeepSeek-V3 Technical Report. <a href="https://arxiv.org/abs/2412.19437">arXiv:2412.19437</a>, 2024.</li>
+<li id="r-dsv3" value="23">DeepSeek-AI. DeepSeek-V3 Technical Report. <a href="https://arxiv.org/abs/2412.19437">arXiv:2412.19437</a>, 2024.</li>
+<li id="r-opt" value="24">Zhang et al. OPT: Open Pre-trained Transformer Language Models. <a href="https://arxiv.org/abs/2205.01068">arXiv:2205.01068</a>, 2022.</li>
 <li id="r-clr" value="25">Smith. Cyclical Learning Rates for Training Neural Networks. WACV 2017. <a href="https://arxiv.org/abs/1506.01186">arXiv:1506.01186</a>.</li>
 <li id="r-d2z" value="26">Bergsma, Dey, Gosal, Gray, Soboleva and Hestness. Straight to Zero: Why Linearly Decaying the Learning Rate to Zero Works Best for LLMs. ICLR 2025. <a href="https://arxiv.org/abs/2502.15938">arXiv:2502.15938</a>.</li>
 <li id="r-adagc" value="27">Wang et al. AdaGC: Enhancing LLM Pretraining Stability via Adaptive Gradient Clipping. ICML 2026. <a href="https://arxiv.org/abs/2502.11034">arXiv:2502.11034</a>.</li>
@@ -5358,8 +5358,6 @@ for step in range(steps):
 <li id="r-tinker" value="35">Thinking Machines Lab. Announcing Tinker. <a href="https://thinkingmachines.ai/blog/announcing-tinker/">Blog post</a>, 2025.</li>
 <li id="r-pilab" value="36">Prime Intellect. Lab: Hosted Training. <a href="https://docs.primeintellect.ai/hosted-training/what-is-lab">Documentation</a>, 2026.</li>
 <li id="r-dust" value="37">Dahal, Mandal, Gülbahar and Vegesna. Dust: Pretraining Transformers Without Backpropagation. <a href="https://qlabs.sh/research/dust">Q Labs</a>, 2026.</li>
-<li id="r-alp" value="38">Mitzenmacher and Vassilvitskii. Algorithms with Predictions. <a href="https://arxiv.org/abs/2006.09123">arXiv:2006.09123</a>, 2020; in Beyond the Worst-Case Analysis of Algorithms (ed. Roughgarden), Cambridge University Press, 2021.</li>
-<li id="r-alps" value="39">Lindermayr and Megow (leads), with community contributors. ALPS: Algorithms with Predictions, an actively maintained overview of the field's papers and materials. <a href="https://algorithms-with-predictions.github.io/">algorithms-with-predictions.github.io</a>, accessed October 2026.</li>
 </ol>
 
 
