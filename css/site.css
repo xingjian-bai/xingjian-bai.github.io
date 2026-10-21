@@ -202,6 +202,24 @@ section.section + section.section { border-top: 1px solid var(--rule); }
 .hero .prose { max-width: none; }
 .hero .prose p { font-size: 17.25px; color: var(--ink); }
 
+/* featured post card under the name (2026-10-21) */
+.featured {
+    display: flow-root;
+    margin: 0 0 26px;
+    padding: 16px 20px 15px;
+    border: 1px solid var(--accent-weak);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    background: var(--badge-bg);
+    color: var(--ink);
+    text-decoration: none;
+}
+.featured:hover { border-color: var(--accent); }
+.featured .kicker { font-size: 11.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.featured .title { display: block; font-family: var(--font-serif); font-size: 23px; font-weight: 500; margin: 4px 0 3px; color: var(--ink); }
+.featured .line { display: block; font-size: 15px; color: var(--muted); line-height: 1.5; }
+.featured .cta { display: inline-block; margin-top: 8px; font-size: 14px; color: var(--accent); font-weight: 500; }
+
 .pill-row {
     display: flex; flex-wrap: wrap; gap: 9px;
     margin-top: 22px;
