@@ -1,3 +1,13 @@
+/* Chinese name: LXGW WenKai TC, subset to 白行健 (SIL OFL 1.1). */
+@font-face {
+    font-family: "LXGW WenKai TC";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("../fonts/lxgw-wenkai-tc-name.ttf") format("truetype");
+    unicode-range: U+5065, U+767D, U+884C;
+}
+
 /* ============================================================
    Xingjian Bai — Homepage stylesheet
    Self-contained minimal CSS. No Bootstrap needed.
@@ -192,7 +202,16 @@ section.section + section.section { border-top: 1px solid var(--rule); }
     font-weight: 500;
     letter-spacing: -0.025em;
 }
-.hero h1 .cn { color: var(--muted); font-weight: 400; }
+.hero h1 .cn {
+    display: inline-block;
+    margin-inline-start: 0.35em;
+    color: var(--muted);
+    font-family: "LXGW WenKai TC", "Kaiti SC", "STKaiti", serif;
+    font-size: 0.72em;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+}
 .hero .role {
     margin: 0 0 24px;
     color: var(--muted);
