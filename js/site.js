@@ -76,7 +76,18 @@
     var newsList = document.getElementById('news-list');
     var newsToggle = document.querySelector('.news-toggle');
     if (newsList && newsToggle) {
-        var olderNews = Array.from(newsList.children).slice(4);
+        // News is newest first. Keep four distinct objects in the collapsed view.
+        // Reuse data-news-object when adding another update about the same work.
+        var seenNewsObjects = new Set();
+        var visibleNewsCount = 0;
+        var olderNews = Array.from(newsList.children).filter(function (item) {
+            var object = item.dataset.newsObject;
+            var isOlderUpdate = object && seenNewsObjects.has(object);
+            if (object) seenNewsObjects.add(object);
+            if (isOlderUpdate || visibleNewsCount >= 4) return true;
+            visibleNewsCount += 1;
+            return false;
+        });
         if (olderNews.length) {
             var newsLabel = newsToggle.querySelector('.news-toggle-label');
             newsToggle.querySelector('.news-count').textContent = olderNews.length;
