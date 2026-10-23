@@ -413,6 +413,7 @@ section.section + section.section { border-top: 1px solid var(--rule); }
     column-gap: 28px;
 }
 .news li { display: contents; }
+.news li[hidden] { display: none; }
 .news .date {
     color: var(--muted);
     font-size: 13.5px;
@@ -420,6 +421,49 @@ section.section + section.section { border-top: 1px solid var(--rule); }
     padding-top: 2px;
 }
 .news .body { font-size: 15.25px; color: var(--ink); }
+
+.news-footer {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 22px;
+}
+.news-footer[hidden] { display: none; }
+.news-footer::before, .news-footer::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+}
+.news-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: 500 13px/1.4 var(--font-sans);
+    cursor: pointer;
+    transition: color .15s ease, background .15s ease;
+}
+.news-toggle:hover { color: var(--accent); background: var(--badge-bg); }
+.news-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.news-count {
+    min-width: 22px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: var(--badge-bg);
+    color: var(--accent);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+.news-chevron { transition: transform .2s ease; }
+.news-toggle[aria-expanded="true"] .news-chevron { transform: rotate(180deg); }
+.news-toggle[aria-expanded="true"] .news-count { display: none; }
 
 @media (max-width: 520px) {
     .news { grid-template-columns: 1fr; row-gap: 4px; }
@@ -462,6 +506,8 @@ section.section + section.section { border-top: 1px solid var(--rule); }
 
 /* ---------- Print ---------- */
 @media print {
+    .news li[hidden] { display: contents !important; }
+    .news-footer { display: none !important; }
     .nav, .theme-btn, .pub-toggle, .contact, .calendly-embed, .site-footer { display: none !important; }
     .pub-list[data-view="selected"] .pub:not(.selected) { display: grid !important; }
     body { background: #fff; color: #000; font-size: 11pt; }

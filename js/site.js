@@ -4,6 +4,7 @@
  *  - theme (dark/light) toggle with localStorage + dark default
  *  - bibtex toggle for each paper
  *  - publications filter toggle (Selected / All)
+ *  - news disclosure (latest four entries by default)
  *  - mobile nav toggle
  *  - scroll-spy to highlight active nav link
  */
@@ -69,6 +70,29 @@
                 b.setAttribute('aria-selected', String(on));
             });
         });
+    }
+
+    // ---------- News disclosure ----------
+    var newsList = document.getElementById('news-list');
+    var newsToggle = document.querySelector('.news-toggle');
+    if (newsList && newsToggle) {
+        var olderNews = Array.from(newsList.children).slice(4);
+        if (olderNews.length) {
+            var newsLabel = newsToggle.querySelector('.news-toggle-label');
+            newsToggle.querySelector('.news-count').textContent = olderNews.length;
+            olderNews.forEach(function (item) { item.hidden = true; });
+            newsToggle.parentElement.hidden = false;
+            newsToggle.addEventListener('click', function () {
+                var expanded = newsToggle.getAttribute('aria-expanded') !== 'true';
+                olderNews.forEach(function (item) { item.hidden = !expanded; });
+                newsToggle.setAttribute('aria-expanded', String(expanded));
+                newsLabel.textContent = expanded ? 'Show less' : 'Show older news';
+                // Keep the control in view when a long archive collapses on mobile.
+                if (!expanded && newsToggle.getBoundingClientRect().top < 80) {
+                    newsToggle.scrollIntoView({ block: 'center', behavior: 'instant' });
+                }
+            });
+        }
     }
 
     // ---------- Mobile nav ----------

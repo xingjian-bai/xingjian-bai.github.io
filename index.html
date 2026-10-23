@@ -34,7 +34,7 @@
 
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="css/academicons.css" rel="stylesheet" />
-    <link href="css/site.css?v=20261022-name2" rel="stylesheet" />
+    <link href="css/site.css?v=20261023-news" rel="stylesheet" />
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-715QQ7T5Z9"></script>
     <script>
@@ -101,8 +101,8 @@
 
         <hr />
 
-        <h2 class="section-label">News</h2>
-        <ul class="news" aria-label="Recent news">
+        <h2 class="section-label" id="news">News</h2>
+        <ul class="news" id="news-list" aria-label="Recent news">
             <li>
                 <span class="date">Oct 2026</span>
                 <span class="body">Our paper, <a href="https://arxiv.org/abs/2603.22283">End-to-End Training for Unified Tokenization and Latent Denoising (UNITE)</a>, is accepted at <a href="https://neurips.cc/virtual/2026/poster/155881">NeurIPS 2026</a>!</span>
@@ -140,6 +140,13 @@
                 <span class="body">Our paper, <a href="https://lukemelas.github.io/fixed-point-diffusion-models/">Fixed Point Diffusion Models</a>, is accepted at <a href="https://cvpr.thecvf.com/">CVPR 2024</a>!</span>
             </li>
         </ul>
+        <div class="news-footer" hidden>
+            <button class="news-toggle" type="button" aria-expanded="false" aria-controls="news-list">
+                <span class="news-toggle-label">Show older news</span>
+                <span class="news-count"></span>
+                <svg class="news-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </button>
+        </div>
     </section>
 
     <!-- ==================== PUBLICATIONS ==================== -->
@@ -458,7 +465,7 @@
     </div>
 </footer>
 
-<script src="js/site.js"></script>
+<script src="js/site.js?v=20261023-news"></script>
 
 </body>
 </html>
