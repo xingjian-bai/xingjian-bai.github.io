@@ -1,0 +1,102 @@
+<!doctype html><html lang="en"><head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script><meta charset="utf-8"><title>Recorded experiment</title><style>*{box-sizing:border-box}html,body{margin:0;overflow:hidden;background:white}body{color:#191918;font-family:'Avenir Next',Arial}svg{display:block;width:100%;height:100vh}text{font:42px 'Avenir Next',Arial;fill:#191918}.small{font-size:35px}.title{font-size:46px;font-weight:600}</style></head><body>
+<!-- Round 4 (2026-10-30), slide 40. Data, layout, colours and words as ../bw-web/repeat.html; only the pacing changed:
+on arriving the three OPAL runs grow one after another and stop; one click (deckwerk.onStep) brings in record #46.
+No player controls. renderAt(step, t) draws step s, t seconds into its part. -->
+<svg viewBox="0 0 1680 400" id="fig"></svg><script>
+(() => {
+'use strict';
+const D={"setting": "modded-nanogpt, Thai", "max": 0, "panels": [{"type": "bars", "base": 4.5, "top": 4.7, "unit": "Validation cross-entropy", "rows": [{"label": "OPAL run 1", "value": 4.609652042388916, "agent": true, "text": "4.60965"}, {"label": "OPAL run 2", "value": 4.644715785980225, "agent": true, "text": "4.64472"}, {"label": "OPAL run 3", "value": 4.6334404945373535, "agent": true, "text": "4.63344"}]}], "source": "Three runs used by the blog mean. Different package versions; not a controlled variance decomposition."};
+const svg=document.getElementById('fig'),NS='http://www.w3.org/2000/svg',blue='#245a89',gray='#81878d';
+const fmt=x=>Math.abs(x)>=1000?(x/1000).toFixed(x%1000?1:0)+'k':Math.abs(x)<.001&&x!==0?x.toExponential(1):(+x.toFixed(Math.abs(x)<10?3:1)).toString();
+const mk=(tag,a,txt)=>{const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;svg.appendChild(e);return e};
+const c01=x=>x<0?0:x>1?1:x, smooth=u=>{u=c01(u);return u*u*(3-2*u)}, easeOut=u=>{u=c01(u);return 1-Math.pow(1-u,3)};
+
+// ---- static parts, drawn once (same positions as the original bars())
+mk('rect',{width:1680,height:400,fill:'white'});
+if(D.setting)mk('text',{x:45,y:42,class:'title'},D.setting);
+// Round 6 (PI 2026-10-30): only the setting above the bars, rows 66 px apart (were 140)
+const p=D.panels[0],[bx,bw]=[30,1620];
+const l=bx+230,t=95,w=bw-365,h=198,base=p.base||0,top=p.top;
+const X=v=>l+w*(v-base)/(top-base);
+const rows=p.rows.map((r,i)=>{const y=t+i*h/p.rows.length,c=r.agent?blue:gray;
+ return {lab:mk('text',{x:bx+15,y:y+31,class:'small',opacity:0},r.label),
+  bar:mk('rect',{x:l,y:y,width:0,height:36,fill:c}),
+  val:mk('text',{x:l+10,y:y+30,class:'small',style:'fill:'+c,opacity:0},r.text||fmt(r.value)),
+  full:w*(r.value-base)/(top-base)}});
+const ay=t+h+4;
+mk('line',{x1:l,y1:ay,x2:l+w,y2:ay,stroke:'#666','stroke-width':1.5});
+for(const v of [base,(base+top)/2,top]){const x=X(v);mk('line',{x1:x,y1:ay,x2:x,y2:ay+8,stroke:'#666','stroke-width':1.5});mk('text',{x:x,y:ay+40,class:'small','text-anchor':'middle'},fmt(v))}
+mk('text',{x:l,y:ay+84,class:'small'},p.unit);
+
+// ---- steps: 0 on arriving, the three OPAL runs one after another; 1 on click, record #46
+const STEP=[0,0,0,1], START=[0.15,0.45,0.75,0.1], GROW=0.9, FAST=0.35;
+const DUR=[START[2]+GROW+0.3, START[3]+GROW+0.3], K=DUR.length-1;
+function draw(step,tt){
+ rows.forEach((r,i)=>{
+  const lt=step>STEP[i]?1e9:step<STEP[i]?-1e9:tt-START[i]; // seconds into this row's entrance
+  const g=easeOut(lt/GROW);
+  r.lab.setAttribute('opacity',smooth(lt/0.35).toFixed(3));
+  r.bar.setAttribute('width',(r.full*g).toFixed(2));
+  r.val.setAttribute('x',(l+r.full*g+10).toFixed(2));
+  r.val.setAttribute('opacity',smooth((lt-0.5*GROW)/0.4).toFixed(3));
+ });
+}
+
+// ---- playback: entry, then one part per click; a click during a part finishes it quickly
+let active=false,cur=0,tau=0,target=0,rate=1,raf=0,last=0;
+function frame(now){raf=0;if(!active)return;
+ const dt=last?Math.min(0.1,(now-last)/1000):0;last=now;
+ if(tau<DUR[cur])tau=Math.min(DUR[cur],tau+dt*rate);
+ if(tau>=DUR[cur]&&cur<target){cur++;tau=0;rate=cur<target?DUR[cur]/FAST:1}
+ draw(cur,tau);
+ if(tau<DUR[cur]||cur<target)raf=requestAnimationFrame(frame)}
+function go(){if(!raf&&active){last=0;raf=requestAnimationFrame(frame)}}
+function stop(){active=false;if(raf)cancelAnimationFrame(raf);raf=0}
+function activate(s){active=true;cur=Math.min(Math.max(s|0,0),K);tau=cur>0?DUR[cur]:0;target=cur;rate=1;draw(cur,tau);go()}
+function toStep(j){j=Math.max(0,j|0);
+ if(!active){active=true;cur=Math.min(Math.max(j-1,0),K);tau=DUR[cur];target=Math.min(j,K);rate=1;draw(cur,tau);go();return}
+ j=Math.min(j,K);
+ if(j>target){target=j;if(tau<DUR[cur])rate=Math.max(rate,(DUR[cur]-tau)/FAST);go()}
+ else if(j<cur){cur=target=j;tau=DUR[j];rate=1;draw(cur,tau)}}
+window.renderAt=function(step,tt){if(arguments.length<2){tt=step;step=0}stop();
+ cur=target=Math.min(Math.max(step|0,0),K);tau=Math.min(DUR[cur],Math.max(0,+tt||0));draw(cur,tau);
+ window.chartState={step:cur,t:tau,steps:K,duration:DUR[cur],source:D.source,observedOnly:true};return window.chartState};
+window.repeatSteps={steps:K,durations:DUR.slice()};
+draw(0,0); // the poster: axes and titles, no bars yet
+if(window.deckwerk){
+ deckwerk.onActive(e=>activate(e&&e.step));
+ deckwerk.onStep(e=>toStep(e&&e.step));
+ deckwerk.onInactive(stop);
+ document.addEventListener('click',()=>deckwerk.next()); // a click on the page advances the deck
+}else{activate(0);document.addEventListener('click',()=>toStep(target+1))}
+})();
+</script></body></html>

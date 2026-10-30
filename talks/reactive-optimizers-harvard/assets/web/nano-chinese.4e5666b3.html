@@ -1,0 +1,132 @@
+<!doctype html><html lang="en">
+<head><script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script></head><meta charset="utf-8"><title>Recorded experiment</title><style>*{box-sizing:border-box}body{margin:0;color:#191918;background:white;font-family:'Avenir Next',Arial}svg{display:block;width:100%;height:calc(100vh - 55px)}text{font:30px 'Avenir Next',Arial;fill:#191918}.small{font-size:25px}.title{font-size:36px;font-weight:600}.ctrl{height:55px;display:flex;gap:14px;align-items:center;padding:0 55px}button,select{font:23px 'Avenir Next',Arial;background:white;border:1px solid #888;border-radius:0;padding:4px 15px}input{flex:1;accent-color:#245a89}.note{font-size:22px;color:#666}.ctrl,.controls,.bar,.nb-ctl,.decision{display:none!important}svg#fig{height:100vh!important}</style><svg viewBox="0 0 1680 695" id="fig"></svg><div class="ctrl"><button id="play">Play</button><button id="reset">Reset</button><input id="seek" type="range" min="0" max="1000" value="1000" aria-label="Training progress"><span class="note" id="readout"></span></div><script>
+const D={"setting": "", "max": 0, "panels": [{"type": "bars", "title": "Validation loss after 3K steps \u2193", "base": 4.0, "top": 4.3, "unit": "Validation cross-entropy", "rows": [{"label": "#46", "value": 4.0992, "agent": false}, {"label": "#30", "value": 4.165, "agent": false}, {"label": "#21", "value": 4.2977, "agent": false}, {"label": "#36", "value": 4.1845, "agent": false}, {"label": "#2", "value": 4.257, "agent": false}, {"label": "OPAL (from #36)", "value": 4.0957, "agent": true}], "comparison": ""}], "source": "Current blog reel; #2 original-setting value is the leaderboard record, not an attained target in our rerun. Chinese/Thai means use 3 runs and Tail-EMA; other records retain blog readouts."},svg=document.getElementById('fig'),blue='#245a89',red='#b44c32',gray='#81878d';
+// ---- Click-paced builds for the DeckWerk web bridge (round 4). The data D above and every drawing
+// rule below are the bw-web page's own; only what moves, and when, is new.
+//   onActive({step})  step 0: play the entry build (if any) from its first frame, which is also the
+//                     poster; any other step: its settled state at once
+//   onStep({step})    animate from the settled state of step-1 to that of step; a click mid-animation
+//                     finishes the running build within 0.3 s, then plays the new one (a step beyond
+//                     the last just finishes the running build)
+//   onInactive        stop
+//   renderAt(step,t)  frame t seconds into the build of step (t omitted: its settled state)
+// BASE is the first frame (also the poster). STEPS[0] is the entry build onActive(step 0) plays (empty:
+// none); STEPS[s] lists the tweens a click to step s runs: channel, target value, start and duration in
+// seconds, easing. Channels: g<i> panel opacity,
+// p<i>_<j> how far series j of panel i has been drawn (0..1), f<i> final-value block, b/l/v<i>_<r> bar,
+// label and value of bar row r, c<i> the comparison line.
+// Round 6 (PI 2026-10-30): OPAL's bar glides with the records' bars (row, length, value cross-fade) instead of
+// retracting and growing again; the o / ov / b / l / v channels of its old entry are gone. 1.5 s in all.
+// Round 5: slides 36-38 open on the previous slide's final chart and morph into their own, so the four
+// modded-nanogpt slides read as one chart changing setting. FROM is that previous chart as its page draws
+// it settled (same data, labels, axis and panel box): the first frame here, which is also the poster, is
+// the last frame there. Rows are matched by record (#46, #30, #21, #36, #2, OPAL; "#46 ×1/4" is #46).
+// Morph channels, each 0 -> 1:  m  panel box, row order and bar lengths glide (eased);  x  what changes in
+// place cross-fades: title, axis tick labels, axis unit, value labels riding the bar tips (the old text
+// fades out over the first 60%, the new one in over the last 60%);  s  the " ×1/4" label suffix comes
+// or goes;  o / ov  OPAL's previous bar retracts and its previous value fades, while its label dims.
+// Words an old and a new text share stay put (prefix) or glide (suffix); only the differing part
+// cross-fades. Then OPAL's own entry plays exactly as before and is the last thing to move.
+// Without a bridge the entry plays on load; window.deckSteps = K (0 here: no clicks).
+// This page (slide 37):
+//   poster / first frame: slide 36's final chart (validation loss after 13K steps, ×1/4 records)
+//   step 0 (slide enters): 0-0.8 s OPAL's old bar retracts, its value fades and its label dims; 0.15-1.65 s
+//   the rows glide down 75 px into this panel box, bars tween to the Chinese losses, "13K" becomes "3K"
+//   (the rest of the title glides), tick labels and values cross-fade, " ×1/4" fades out; then (1.9 s)
+//   the OPAL label turns solid and its bar grows (1.1 s) with its value riding the tip; 3.15 s in all.
+const BASE={"g0":1,"m":0,"x":0,"s":0,"l0_5":1,"b0_5":1,"v0_5":1},STEPS=[[{"ch":"m","to":1,"at":0,"dur":1.5,"e":"cubic"},{"ch":"x","to":1,"at":0,"dur":1.5,"e":"linear"},{"ch":"s","to":1,"at":0.3,"dur":0.9}]],PANEL_BOX=null;
+// slide 36's chart as it settles (nano-quarter.html)
+const FROM={"box":[30,10,1620,545],"title":"Validation loss after 13K steps \u2193","base":3.25,"top":3.45,"unit":"Validation cross-entropy","rows":[{"label":"#46 \u00d71/4","value":3.2712,"agent":false},{"label":"#30 \u00d71/4","value":3.2763,"agent":false},{"label":"#21 \u00d71/4","value":3.3822,"agent":false},{"label":"#36 \u00d71/4","value":3.3006,"agent":false},{"label":"#2 \u00d71/4","value":3.4085,"agent":false},{"label":"OPAL (from #36)","value":3.2683,"agent":true}],"comparison":""};
+const clip=(x,a,b)=>Math.max(a,Math.min(b,x));const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));const fmt=x=>Math.abs(x)>=1000?(x/1000).toFixed(x%1000?1:0)+'k':Math.abs(x)<.001&&x!==0?x.toExponential(1):(+x.toFixed(Math.abs(x)<10?3:1)).toString();
+const op3=v=>v<.999?' opacity="'+Math.max(0,v).toFixed(3)+'"':'';
+const text=(x,y,t,c='',fill='',o=1)=>`<text x="${x}" y="${y}" class="${c}" ${fill?'style="fill:'+fill+'"':''}${op3(o)}>${esc(t)}</text>`;const textA=(x,y,t,c,anchor,fill='',o=1)=>text(x,y,t,c,fill,o).replace('<text ','<text text-anchor="'+anchor+'" ');const line=(x1,y1,x2,y2,c='#d7d7d7')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="1.5"/>`;function path(a,X,Y){return a.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(2)+','+Y(p[1]).toFixed(2)).join(' ')}
+const EASE={sine:u=>.5-.5*Math.cos(Math.PI*u),smooth:u=>u*u*(3-2*u),cubic:u=>u<.5?4*u*u*u:1-Math.pow(2-2*u,3)/2,linear:u=>u},POP=.03;
+const XS0=Math.min(...D.panels.filter(p=>p.type!=='bars').flatMap(p=>p.series.map(r=>r.data[0][0])));
+// The native slide title is gone, so the setting line is the slide's title: Avenir Next 600, ink, a bit
+// larger than the 36 px panel titles. Words unchanged.
+const SETTING_PX=40;
+const K=STEPS.length-1,END=STEPS.map(ts=>ts.reduce((m,w)=>Math.max(m,w.at+w.dur),0));
+// a channel may be tweened more than once in a step (OPAL's label dims, later turns solid): each tween
+// starts where the earlier ones on that channel leave it, so they are listed in time order
+function stateAt(s,t){const st=Object.assign({},BASE);for(let j=0;j<=s;j++){for(const w of STEPS[j]){const u=j<s?1:clip(w.dur>0?(t-w.at)/w.dur:(t>=w.at?1:0),0,1),f=st[w.ch];st[w.ch]=f+(w.to-f)*EASE[w.e||'smooth'](u)}}return st}
+function plot(p,box,i,st){let [bx,by,bw,bh]=box;let l=bx+88,t=by+65,w=bw-130,h=bh-145;const xx=p.x||[0,D.max],yy=p.y||[0,1],log=p.log;const Y=v=>t+h-h*((log?Math.log(v):v)-(log?Math.log(yy[0]):yy[0]))/((log?Math.log(yy[1]):yy[1])-(log?Math.log(yy[0]):yy[0]));const X=v=>l+w*(v-xx[0])/(xx[1]-xx[0]);let o=text(l,by+25,p.title+(log?', log scale':''),'title');o+=`<defs><clipPath id="c${i}"><rect x="${l}" y="${t}" width="${w}" height="${h}"/></clipPath></defs>`;
+let ticks=p.ticks||(log?(()=>{const c=[];for(let e=Math.floor(Math.log10(yy[0]));e<=Math.ceil(Math.log10(yy[1]));e++)for(const m of [1,2,5]){const v=m*10**e;if(v>=yy[0]*0.999&&v<=yy[1]*1.001)c.push(+v.toPrecision(6))}return c.length>5?c.filter(v=>/^1/.test(String(v))):c.length>=2?c:[yy[0],yy[1]]})():(()=>{const span=yy[1]-yy[0],mag=10**Math.floor(Math.log10(span/3)),step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>span/s<=4.2);const c=[];for(let v=Math.ceil(yy[0]/step-1e-9)*step;v<=yy[1]+1e-9;v+=step)c.push(+v.toPrecision(6));return c})());for(let a of ticks){o+=line(l,Y(a),l+w,Y(a));o+=text(l-76,Y(a)+10,fmt(a),'small')}for(let a of [xx[0],(xx[0]+xx[1])/2,xx[1]]){o+=line(X(a),t+h,X(a),t+h+8,'#333');o+=text(X(a)-22,t+h+42,fmt(a),'small')}o+=text(l+w/2-(p.xlabel||'Training steps').length*6.4,t+h+78,p.xlabel||'Training steps','small');
+// every panel sweeps the same training step at the same moment (XS0 = first logged step of the page);
+// the end readouts (legend values, or the final-value block) fade in once the sweep is done
+const span=POP*D.max,R=st['r'+i]??1;
+for(let [j,r] of p.series.entries()){const P=st['p'+i+'_'+j]??1;if(!(P>0))continue;const cut=XS0+P*(D.max+span-XS0),d=r.data;let n=0;while(n<d.length&&d[n][0]<=cut)n++;if(!n)continue;const a=d.slice(0,n),c=r.color||(r.role==='agent'?blue:gray);let pd=path(a,X,Y);if(n<d.length){const A=d[n-1],B=d[n],s=(cut-A[0])/(B[0]-A[0]),xa=X(A[0]),ya=Y(A[1]);pd+=' L'+(xa+(X(B[0])-xa)*s).toFixed(2)+','+(ya+(Y(B[1])-ya)*s).toFixed(2)}
+o+=`<path d="${pd}" fill="none" stroke="${c}" stroke-width="${r.role==='agent'?4:3}" ${r.dash?'stroke-dasharray="9 7"':''} clip-path="url(#c${i})"/>`;if(r.points)for(let q of a)o+=`<circle cx="${X(q[0])}" cy="${Y(q[1])}" r="6" fill="${c}" clip-path="url(#c${i})"${op3(P>=1?1:EASE.smooth(clip((cut-q[0])/span,0,1)))}><title>${esc(r.name)}: ${q[0]}, ${q[1]}</title></circle>`;
+if(!p.finalValues&&R>.001){let q=a[a.length-1];o+=text(p.legendPosition==='right'?l+w-335:l+15,t+33+j*39,r.name+'  '+fmt(q[1]),'small',c,R)}}
+if(p.finalValues&&R>.001){const agent=p.series.find(r=>r.role==='agent'),base=p.series.find(r=>r.role!=='agent');if(agent&&base){const av=agent.data.at(-1)[1],bv=base.data.at(-1)[1],x=l+w-340,y=t+42;o+=text(x,y,'Final FID-50K','small','',R);o+=text(x,y+44,'OPAL '+fmt(av),'title',blue,R);o+=text(x,y+85,'Recipe '+fmt(bv),'small',gray,R);o+=text(x,y+126,'Difference '+(av-bv).toFixed(3),'small',blue,R)}}
+return o}
+function bars(p,box,i,st){let [bx,by,bw,bh]=box,l=bx+230,t=by+72,w=bw-365,h=bh-125;let base=p.base||0,top=p.top;const X=v=>l+w*(v-base)/(top-base);let o=text(bx+30,by+25,p.title,'title');const C=st['c'+i]??1;if(p.comparison&&C>.001)o+=text(bx+bw-565,by+25,p.comparison,'small',blue,C);for(let [k,r]of p.rows.entries()){let y=t+k*h/p.rows.length,c=r.agent?blue:gray,G=st['b'+i+'_'+k]??1,L=st['l'+i+'_'+k]??1,V=st['v'+i+'_'+k]??1,bw2=w*(r.value-base)/(top-base)*G;o+=text(bx+15,y+31,r.label,'small','',L);o+=`<rect x="${l}" y="${y}" width="${Math.max(0,bw2)}" height="36" fill="${c}"/>`;if(V>.001)o+=text(l+bw2+10,y+30,r.text||fmt(r.value),'small',c,V)}const ay=t+h+4,tl=v=>base?v.toFixed(2):fmt(v);o+=line(l,ay,l+w,ay,'#666');for(const v of [base,(base+top)/2,top]){const x=X(v);o+=line(x,ay,x,ay+8,'#666');o+=textA(x,ay+35,tl(v),'small','middle')}o+=text(l,ay+72,p.unit,'small');return o}
+// ---- Round 5 morph (see the note at the top). charX: where each character of a text starts, measured once
+// per text in a hidden svg (cleared when the fonts are ready), so a shared prefix or suffix lines up with
+// the plain text it continues.
+const lerp=(a,b,u)=>a+(b-a)*u;let MSV=null;const MC=new Map();
+function charX(str,cls){const key=cls+'|'+str;let r=MC.get(key);if(r)return r;if(!MSV){MSV=document.createElementNS('http://www.w3.org/2000/svg','svg');MSV.setAttribute('aria-hidden','true');MSV.style.cssText='position:absolute;left:0;top:0;width:0;height:0;overflow:hidden;visibility:hidden';document.body.appendChild(MSV)}MSV.innerHTML=`<text x="0" y="0" class="${cls}">${esc(str)}</text>`;const el=MSV.firstChild,n=el.getNumberOfChars();r=[];for(let q=0;q<n;q++)r.push(el.getStartPositionOfChar(q).x);r.push(el.getComputedTextLength());MC.set(key,r);return r}
+// a text going from A to B: the shared prefix stays, the shared suffix glides by g, the differing middle of A
+// fades out (fo) while B's fades in (fi); at either end it is the plain text itself
+function mtext(x,y,A,B,cls,fill,g,fo,fi){if(A===B||(g<=0&&fo>=.999&&fi<=.001))return text(x,y,A,cls,fill);if(g>=1&&fo<=.001&&fi>=.999)return text(x,y,B,cls,fill);const ca=charX(A,cls),cb=charX(B,cls);if(ca.length!==A.length+1||cb.length!==B.length+1)return (fo>.001?text(x,y,A,cls+' piece',fill,fo):'')+(fi>.001?text(x,y,B,cls+' piece',fill,fi):'');let p=0;while(p<A.length&&p<B.length&&A[p]===B[p])p++;let s=0;while(s<A.length-p&&s<B.length-p&&A[A.length-1-s]===B[B.length-1-s])s++;let o='';const piece=(S,i,j,X,op)=>{while(i<j&&S[i]===' ')i++;while(j>i&&S[j-1]===' ')j--;if(j>i&&op>.001)o+=text(x+X(i),y,S.slice(i,j),cls+' piece',fill,op)};piece(A,0,p,i=>ca[i],1);piece(A,p,A.length-s,i=>ca[i],fo);piece(B,p,B.length-s,i=>cb[i],fi);piece(A,A.length-s,A.length,i=>lerp(ca[i],cb[i-A.length+B.length],g),1);return o}
+const rkey=r=>r.agent?'OPAL':r.label.replace(/ ×1\/4$/,''),fadeOut=u=>1-EASE.smooth(clip(u/.6,0,1)),fadeIn=u=>EASE.smooth(clip((u-.4)/.6,0,1));
+// the geometry bars() uses, for a panel p in box
+function geo(p,box){const [bx,by,bw,bh]=box,base=p.base||0,top=p.top,l=bx+230,t=by+72,w=bw-365,h=bh-125;return {bx,by,l,w,ay:t+h+4,len:v=>w*(v-base)/(top-base),y:k=>t+k*h/p.rows.length,ticks:[base,(base+top)/2,top].map(v=>({x:l+w*(v-base)/(top-base),s:base?v.toFixed(2):fmt(v)}))}}
+// the chart between FROM (F, settled) and this page's panel p: drawn by bars() itself at both ends
+function morphBars(F,p,box,i,st){const m=st.m??1,xf=st.x??1,sf=st.s??1;if(m<=0&&xf<=0&&sf<=0)return bars(F,F.box,i,{});if(m>=1&&xf>=1&&sf>=1)return bars(p,box,i,st);
+const a=geo(F,F.box),b=geo(p,box),M=(u,v)=>lerp(u,v,m),fo=fadeOut(xf),fi=fadeIn(xf),bx=M(a.bx,b.bx),by=M(a.by,b.by),l=M(a.l,b.l),w=M(a.w,b.w);let out=mtext(bx+30,by+25,F.title,p.title,'title','',m,fo,fi);
+for(let [k,r] of p.rows.entries()){const kf=F.rows.findIndex(q=>rkey(q)===rkey(r));if(kf<0)continue;const rf=F.rows[kf],y=M(a.y(kf),b.y(k)),c=r.agent?blue:gray,so=rf.text||fmt(rf.value),sn=r.text||fmt(r.value);let len,vo,vn;
+len=M(a.len(rf.value),b.len(r.value));vo=fo;vn=fi;out+=mtext(bx+15,y+31,rf.label,r.label,'small','',sf,1-sf,sf);
+out+=`<rect x="${l}" y="${y}" width="${Math.max(0,len)}" height="36" fill="${c}"/>`;if(so===sn)out+=text(l+len+10,y+30,sn,'small',c);else{if(vo>.001)out+=text(l+len+10,y+30,so,'small',c,vo);if(vn>.001)out+=text(l+len+10,y+30,sn,'small',c,vn)}}
+const ay=M(a.ay,b.ay);out+=line(l,ay,l+w,ay,'#666');for(let q=0;q<3;q++){const ta=a.ticks[q],tb=b.ticks[q],x=M(ta.x,tb.x);out+=line(x,ay,x,ay+8,'#666');if(ta.s===tb.s)out+=textA(x,ay+35,ta.s,'small','middle');else{if(fo>.001)out+=textA(x,ay+35,ta.s,'small','middle','',fo);if(fi>.001)out+=textA(x,ay+35,tb.s,'small','middle','',fi)}}
+// the old axis unit fades 2.4x faster: on slide 36 the native sentence covers its old spot, and it must be
+// gone before the glide lifts it out from behind that sentence
+out+=mtext(l,ay+72,F.unit,p.unit,'small','',m,fadeOut(2.4*xf),fi);return out}
+// A panel title wider than the frame is drawn smaller rather than cut off (words unchanged).
+const fitCache=new Map();function fitTitles(){for(const el of svg.querySelectorAll('text.title:not(.piece)')){const key=el.getAttribute('x')+'|'+el.textContent;let sz=fitCache.get(key);if(sz===undefined){const x=+el.getAttribute('x'),len=el.getComputedTextLength(),room=1680-10-x;sz=len>room&&len>0?Math.floor(360*room/len)/10:0;fitCache.set(key,sz)}if(sz)el.style.fontSize=sz+'px'}}
+let cur=0,ct=0,target=0,raf=0,last=0;
+function draw(st){let a='<rect width="1680" height="695" fill="white"/>';if(D.setting)a+=`<text x="45" y="44" class="setting" style="font:600 ${SETTING_PX}px 'Avenir Next',Arial;fill:#191918">${esc(D.setting)}</text>`;let ps=D.panels;for(let [i,p]of ps.entries()){let box=PANEL_BOX||(ps.length===1?[30,85,1620,545]:ps.length===2?[i*830+15,85,820,545]:[(i%2)*830+15,80+Math.floor(i/2)*290,820,280]);const g=st['g'+i]??1,inner=p.type==='bars'?(FROM?morphBars(FROM,p,box,i,st):bars(p,box,i,st)):plot(p,box,i,st);a+=g<.999?`<g opacity="${g.toFixed(3)}">${inner}</g>`:inner}svg.innerHTML=a;fitTitles();document.getElementById('seek').value=Math.round(1000*(cur+(END[cur]?ct/END[cur]:1))/(K+1));document.getElementById('readout').textContent='Step '+cur+' of '+K;window.chartState={step:cur,t:ct,target,steps:K,playing:!!raf,source:D.source,observedOnly:true}}
+const CATCH=.3;let rush=false,guard=0;function speed(s){return s<target||rush?Math.max(3,END[s]/CATCH):1}
+function show(){draw(stateAt(cur,ct))}
+function halt(){if(raf)cancelAnimationFrame(raf);raf=0;last=0;rush=false;clearTimeout(guard)}
+function settle(s){halt();cur=target=clip(s|0,0,K);ct=END[cur];show()}
+function tick(ts){raf=0;const dt=last?Math.min((ts-last)/1000,.25):0;last=ts;let r=dt;for(;;){if(ct>=END[cur]){if(cur<target){cur++;ct=0;continue}break}const sp=speed(cur),need=(END[cur]-ct)/sp;if(r>=need){r-=need;ct=END[cur];continue}ct+=r*sp;break}if(cur<target||ct<END[cur])raf=requestAnimationFrame(tick);else{last=0;rush=false;clearTimeout(guard)}show()}
+function go(s){s=s|0;if(s>K){if(raf)rush=true;s=K}s=clip(s,0,K);if(s<cur){settle(s);return}target=s;if(!raf&&(cur<target||ct<END[cur])){last=0;raf=requestAnimationFrame(tick)}}
+window.renderAt=(step,t)=>{halt();cur=target=clip(step|0,0,K);ct=t==null?END[cur]:clip(+t||0,0,END[cur]);show();return window.chartState};
+// the entry build also settles on a timer, so a PDF stage is drawn even if animation frames are throttled
+function enter(){halt();cur=target=0;ct=0;show();if(END[0]>0){raf=requestAnimationFrame(tick);guard=setTimeout(()=>{if(cur<target||ct<END[cur])settle(cur)},(END[0]+.4)*1000)}}
+function advance(){if(cur===target&&ct<END[cur]){if(!raf){last=0;raf=requestAnimationFrame(tick)}}else go(Math.max(cur,target)+1)}
+document.getElementById('play').onclick=advance;document.getElementById('reset').onclick=()=>{halt();cur=target=0;ct=0;show()};document.getElementById('seek').oninput=e=>settle(Math.round(+e.target.value/1000*K));
+const fontsReady=document.fonts&&document.fonts.ready?document.fonts.ready.then(()=>{fitCache.clear();MC.clear();show()}):null;
+window.deckSteps=K;
+if(window.deckwerk){deckwerk.onActive(e=>{const s=(e&&e.step)|0;if(s<=0)enter();else settle(s)});deckwerk.onStep(e=>go(e&&e.step));deckwerk.onInactive(halt);if(fontsReady&&deckwerk.ready)deckwerk.ready(fontsReady)}
+else{document.addEventListener('click',advance);document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')advance();else if(e.key==='ArrowLeft'||e.key==='PageUp')settle(Math.max(cur,target)-1)});(fontsReady||Promise.resolve()).then(enter)}
+halt();cur=target=0;ct=0;show();
+</script></html>

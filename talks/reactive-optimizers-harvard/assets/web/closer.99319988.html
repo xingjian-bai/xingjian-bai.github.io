@@ -1,0 +1,249 @@
+<!doctype html><html lang="en"><head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A closer look</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
+svg{display:block;width:100%;height:100%}
+text{font-family:"Avenir Next",Arial,sans-serif;fill:#191918}
+.ax{font-size:26px;fill:#6b6b68}.blk{font-size:26px;font-weight:600}
+.st{font-size:25px;font-weight:500}.spk{font-weight:600}
+.lg{font-size:22px;fill:#6b6b68}.hd{font-size:24px;font-weight:600}
+.mono{font-family:Menlo,Monaco,"Courier New",monospace;font-size:20px}.num{fill:#8d8d8a}
+</style></head><body>
+<svg id="s" viewBox="0 0 1680 860" aria-label="The model card splits into its layers, the token embedding, eight transformer blocks and the LM head. Zoomed training loss from step 450 to 610: the run pauses at one step, where a small box labelled data batch opens into the sequences of that batch and closes again; the run goes on, then each layer is marked with a possible fit state">
+<defs>
+<filter id="spiky" x="-40%" y="-60%" width="180%" height="220%"><feDropShadow dx="0" dy="0" stdDeviation="9" flood-color="#191918" flood-opacity=".6"/></filter>
+<clipPath id="clip"><rect id="clipR" x="144" y="290" width="0" height="480"/></clipPath>
+<linearGradient id="fitG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f6db5"/><stop offset=".5" stop-color="#d8d4cc"/><stop offset="1" stop-color="#c23b30"/></linearGradient>
+</defs>
+<g id="arch"></g><g id="legend" opacity="0"></g><g id="plot"></g><g id="card" opacity="0"></g>
+</svg>
+<script>
+(()=>{'use strict';
+// The batch shown at the pause: real FineWeb rows of the run's batch at step 514 (flag: "ok" | "warn" | "bad"). Keep this a single line.
+const BATCH = {"step": 514, "rows": [{"text": "four hundred statistics of interested book in daily systems while comparing localization to the Middle East as we are it summer. A server later, the conceptions of linear lay-ups and Time-delays during those comparative ", "flag": "bad"}, {"text": "Optionally, plan for Network Access Quarantine Control. Optionally, enhance security by using remote access account lockout. You can increase the security and manageability of your remote access server solution by using", "flag": "ok"}, {"text": "leaves and stems, Descripción: Una familia de bejucos con hojas alternas (simples a. A família Passifloraceae contém cerca de 18 gêneros e espécies, de ocorrência pantropical, com distribuição descontínua nos trópicos e ", "flag": "warn"}, {"text": "Through the BabyCentre forums I got to know a wonderful mum and began to follow the plight she faced and fought everyday to help her son with Autism. She faced waiting list after waiting list, some up to 2 years long bef", "flag": "ok"}, {"text": "Email him at firstname.lastname@example.org", "flag": "warn"}, {"text": "June 15, 2012 Town of Chester landfill and recycling attendant Lou Lashomb walks past an array of solar panels, one of two installations 150 feet long, that will soon power the town transfer station, town garage complex,", "flag": "ok"}, {"text": "submit to a drug screen before you complete the program, two bottles of Vale's Solution 4x our most potent detoxification beverage. Each bottle provides fast, reliable results exactly when you need them. Two packs of Val", "flag": "bad"}, {"text": "Here you can play free Online Games and FunnyGames , meet new people, chat with old friends and loads more! The more funny games you play, the more you get rewarded! We are the only online gaming website that rewards you", "flag": "bad"}]};
+const P=[[1, 8.3189], [2, 7.98673], [4, 7.20809], [6, 7.02304], [8, 6.87357], [10, 6.68928], [12, 6.54251], [14, 6.3294], [16, 6.19527], [18, 6.05415], [20, 5.90166], [22, 5.93009], [24, 5.84663], [26, 5.6574], [28, 5.68498], [30, 5.59784], [32, 5.69149], [34, 5.59519], [36, 5.66907], [38, 5.5734], [40, 5.47367], [42, 5.48321], [44, 5.44553], [46, 5.53425], [48, 5.52624], [50, 5.46092], [52, 5.40958], [54, 5.40638], [56, 5.40807], [58, 5.3224], [60, 5.25336], [62, 5.2707], [64, 5.2833], [66, 5.34284], [68, 5.30898], [70, 5.29085], [72, 5.29293], [74, 5.2305], [76, 5.25291], [78, 5.18502], [80, 5.30533], [82, 5.259], [84, 5.31622], [86, 5.24963], [88, 5.07663], [90, 5.28148], [92, 5.29032], [94, 5.20793], [96, 5.19987], [98, 5.17449], [100, 5.14413], [102, 5.06943], [104, 5.06428], [106, 5.12967], [108, 5.22548], [110, 5.18524], [112, 5.10738], [114, 5.19649], [116, 5.21498], [118, 5.07279], [120, 5.0567], [122, 5.13907], [124, 5.14513], [126, 5.0722], [128, 5.09712], [130, 5.11496], [132, 4.99096], [134, 4.99783], [136, 5.25827], [138, 4.93809], [140, 4.96098], [142, 4.97769], [144, 5.01483], [146, 5.01675], [148, 4.98346], [150, 4.9417], [152, 4.95841], [154, 5.03757], [156, 4.98485], [158, 4.93433], [160, 4.84752], [162, 5.00288], [164, 4.88553], [166, 4.83316], [168, 4.94092], [170, 4.93531], [172, 5.00708], [174, 4.8694], [176, 4.78662], [178, 4.91308], [180, 5.01721], [182, 4.86361], [184, 4.82125], [186, 4.78331], [188, 4.78612], [190, 4.82327], [192, 4.73732], [194, 4.78973], [196, 4.81928], [198, 4.77775], [200, 4.81413], [202, 4.7402], [204, 4.76859], [206, 4.89195], [208, 4.62809], [210, 4.6961], [212, 4.51756], [214, 4.6801], [216, 4.64227], [218, 4.62945], [220, 4.69223], [222, 4.72848], [224, 4.55823], [226, 4.70892], [228, 4.6636], [230, 4.66082], [232, 4.74067], [234, 4.48734], [236, 4.57883], [238, 4.60448], [240, 4.66733], [242, 4.73839], [244, 4.63041], [246, 4.59556], [248, 4.60405], [250, 4.56308], [252, 4.57032], [254, 4.59242], [256, 4.61428], [258, 4.53246], [260, 4.47786], [262, 4.51767], [264, 4.47277], [266, 4.52827], [268, 4.5771], [270, 4.51726], [272, 4.41354], [274, 4.45382], [276, 4.47454], [278, 4.70409], [280, 4.62839], [282, 4.47736], [284, 4.46448], [286, 4.4175], [288, 4.45917], [290, 4.41838], [292, 4.41979], [294, 4.37302], [296, 4.52717], [298, 4.45553], [300, 4.383], [302, 4.40312], [304, 4.43158], [306, 4.45432], [308, 4.44204], [310, 4.39781], [312, 4.37632], [314, 4.42463], [316, 4.36244], [318, 4.43804], [320, 4.37979], [322, 4.41339], [324, 4.33852], [326, 4.23719], [328, 4.24559], [330, 4.41545], [332, 4.40019], [334, 4.3676], [336, 4.29395], [338, 4.30149], [340, 4.22012], [342, 4.36587], [344, 4.26353], [346, 4.33736], [348, 4.22506], [350, 4.21467], [352, 4.24191], [354, 4.22618], [356, 4.47216], [358, 4.24416], [360, 4.31121], [362, 4.28179], [364, 4.21572], [366, 4.24796], [368, 4.19052], [370, 4.0672], [372, 4.39815], [374, 4.22656], [376, 4.24258], [378, 4.28844], [380, 4.25313], [382, 4.30491], [384, 4.1975], [386, 4.10323], [388, 4.23552], [390, 4.33849], [392, 4.20291], [394, 4.0893], [396, 4.17337], [398, 4.2193], [400, 4.2341], [402, 4.01966], [404, 4.13316], [406, 4.14005], [408, 4.11857], [410, 4.10474], [412, 4.12327], [414, 4.18851], [416, 4.16231], [418, 4.04064], [420, 3.92522], [422, 4.10885], [424, 4.02052], [426, 4.15142], [428, 4.04293], [430, 4.06177], [432, 4.01935], [434, 4.07881], [436, 4.0583], [438, 4.05327], [440, 4.13373], [442, 3.99645], [444, 3.94623], [446, 4.10904], [448, 3.9597], [450, 4.06342], [452, 4.18564], [454, 4.05069], [456, 4.13375], [458, 4.18613], [460, 4.11472], [462, 4.15197], [464, 4.0684], [466, 3.98079], [468, 4.0591], [470, 4.09585], [472, 4.04528], [474, 4.04211], [476, 3.98996], [478, 3.91243], [480, 4.07682], [482, 4.06306], [484, 4.18836], [486, 4.05479], [488, 3.99702], [490, 4.02291], [492, 3.97408], [494, 4.02358], [496, 4.04502], [498, 4.02135], [500, 3.97711], [502, 3.98863], [504, 3.91715], [506, 4.00569], [508, 4.00789], [510, 3.81614], [512, 3.982], [514, 4.17737], [516, 3.9826], [518, 3.961], [520, 3.84551], [522, 4.07856], [524, 4.00955], [526, 3.90621], [528, 3.87816], [530, 3.90101], [532, 3.84], [534, 3.97287], [536, 4.00107], [538, 3.91063], [540, 3.83556], [542, 3.90367], [544, 3.99313], [546, 3.71942], [548, 3.88252], [550, 3.96906], [552, 3.82022], [554, 3.86172], [556, 3.95228], [558, 3.8466], [560, 3.9198], [562, 3.82861], [564, 3.89953], [566, 3.8168], [568, 3.97171], [570, 3.77024], [572, 3.91901], [574, 3.96051], [576, 3.95495], [578, 3.91577], [580, 3.80306], [582, 3.91912], [584, 3.89777], [586, 3.99809], [588, 3.93814], [590, 3.87546], [592, 3.89852], [594, 3.90401], [596, 3.99224], [598, 4.0579], [600, 3.84714], [602, 3.66642], [604, 3.76512], [606, 3.91041], [608, 3.85124], [610, 3.99205]];
+const NS='http://www.w3.org/2000/svg',$=id=>document.getElementById(id);
+const el=(tag,a,parent)=>{const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);parent.appendChild(e);return e};
+const tx=(s,a,parent)=>{const e=el('text',a,parent);e.textContent=s;return e};
+const clamp01=x=>x<0?0:x>1?1:x,ramp=(t,a,d)=>clamp01((t-a)/d),ease=x=>x*x*(3-2*x);
+const INK='#191918',GREY='#8d8d8a';
+
+// ---- architecture row (shared with slide 5) ----
+const AY=70,BH=86,CY=AY+BH/2,arch=$('arch');
+const ORANGE={stroke:'#e07b18',fill:'#fdebd6'};
+const FIT={under:{stroke:'#2f6db5',fill:'#dbe7f6'},well:{stroke:'#8b867c',fill:'#f2f0eb'},over:{stroke:'#c23b30',fill:'#f8dcd8'},spiky:{stroke:'#2b2b2a',fill:'#f2f0eb'}};
+const STATES=[['well','well fit?'],['under','underfit?'],['over','overfit?'],['spiky','spiky?'],['well','well fit?'],['over','overfit?'],['under','underfit?'],['well','well fit?']];
+// the token embedding and the LM head are trained too (AdamW in this run), so each gets its own word, in its own colour
+const boxes=[{x:59,w:170,label:['Token','embedding'],aux:1,word:'rare tokens?'}];
+for(let i=0;i<8;i++)boxes.push({x:269+i*148,w:126,label:['Block '+(i+1)],i});
+boxes.push({x:1471,w:150,label:['LM head'],aux:1,word:'overconfident?'});
+const HG=17; // the spiky block's hatching: a thin diagonal every HG px along its edge (12 px apart)
+// ---- the model card (v2, as drawn on the training-loop slides 3 and 42): on arriving it splits into this row
+const MC={x:840,y:400,w:232,h:244,r:30,sw:22,sg:18,sh:156},STONE={card:'#f5f3f0',cardS:'#cbc5bd',slab:'#a39c93',ink:'#3d3934'};
+const mdl=el('g',{},arch);
+const mcard=el('rect',{x:MC.x-MC.w/2,y:MC.y-MC.h/2,width:MC.w,height:MC.h,rx:MC.r,fill:STONE.card,stroke:STONE.cardS,'stroke-width':3},mdl);
+const mlab=tx('model',{x:MC.x,y:MC.y+MC.h/2+50,'text-anchor':'middle',style:'font-size:30px;font-weight:500;fill:'+STONE.ink},mdl);
+const conn=el('g',{},arch);
+tx('Transformer blocks',{x:850,y:AY-26,'text-anchor':'middle',class:'blk'},conn);
+el('path',{d:`M269 ${AY-6}V${AY-14}H1431V${AY-6}`,fill:'none',stroke:GREY,'stroke-width':2},conn);
+for(let k=0;k<boxes.length-1;k++){const a=boxes[k].x+boxes[k].w,b=boxes[k+1].x;
+ el('line',{x1:a+4,y1:CY,x2:b-11,y2:CY,stroke:GREY,'stroke-width':3},conn);
+ el('path',{d:`M${b-12} ${CY-5}L${b-4} ${CY}L${b-12} ${CY+5}Z`,fill:GREY},conn)}
+const FITS=[]; // what takes a fit state, left to right: token embedding, Blocks 1-8, LM head
+for(const b of boxes){const g=el('g',{},arch),st=b.i!=null?STATES[b.i]:null,r={x:b.x,y:AY,width:b.w,height:BH,rx:10};
+ const glow=st&&st[0]==='spiky'?el('rect',{...r,fill:FIT.spiky.fill,filter:'url(#spiky)',opacity:0},g):null;
+ b.fill=b.aux?ORANGE.fill:'#fff';b.stroke=b.aux?ORANGE.stroke:'#2b2b2a';
+ b.base=el('rect',{...r,fill:b.fill,stroke:b.stroke,'stroke-width':3},g);
+ let over=null,lab=null,hatch=null;
+ if(st){const c=FIT[st[0]];
+  over=el('rect',{...r,fill:c.fill,stroke:c.stroke,'stroke-width':3,opacity:0},g);
+  if(st[0]==='spiky'){ // thin straight black diagonals at a regular gap, clipped to the block, shown at half opacity
+   el('rect',r,el('clipPath',{id:'spikyClip'},document.querySelector('#s defs')));
+   hatch=el('g',{'clip-path':'url(#spikyClip)',opacity:0},g);
+   const span=b.w+BH,nl=Math.floor(span/HG),off=(span-(nl-1)*HG)/2;
+   for(let k=0;k<nl;k++){const x=b.x-BH+off+k*HG;el('line',{x1:+x.toFixed(2),y1:AY+BH,x2:+(x+BH).toFixed(2),y2:AY,stroke:INK,'stroke-width':2},hatch)}}
+  lab=tx(st[1],{x:b.x+b.w/2,y:AY+BH+38,'text-anchor':'middle',class:st[0]==='spiky'?'st spk':'st',style:'fill:'+(st[0]==='spiky'?INK:c.stroke),opacity:0},g)}
+ else if(b.word)lab=tx(b.word,{x:b.x+b.w/2,y:AY+BH+38,'text-anchor':'middle',class:'st',style:'fill:'+b.stroke,opacity:0},g);
+ const n=b.label.length;b.texts=b.label.map((s,j)=>tx(s,{x:b.x+b.w/2,y:CY+9+(j-(n-1)/2)*30,'text-anchor':'middle',class:'blk'},g));
+ // under the hatching the block's name keeps a halo in the block's own fill, so the lines stop short of its letters
+ if(hatch)for(const e of b.texts)for(const [k,v] of Object.entries({stroke:FIT.spiky.fill,'stroke-width':7,'stroke-linejoin':'round','paint-order':'stroke','stroke-opacity':0}))e.setAttribute(k,v);
+ FITS.push({glow,over,lab,hatch,halo:hatch?b.texts:null})}
+// fit-state legend
+const leg=$('legend'),LY=AY+BH+62;
+el('rect',{x:700,y:LY,width:300,height:12,rx:6,fill:'url(#fitG)'},leg);
+[['underfit',700],['well fit',850],['overfit',1000]].forEach(([s,x])=>tx(s,{x,y:LY+38,'text-anchor':'middle',class:'lg'},leg));
+
+// ---- zoomed loss chart ----
+const L=150,R=1610,T=330,B=740,X0=450,X1=610,Y0=3.6,Y1=4.3;
+const X=u=>L+(R-L)*(u-X0)/(X1-X0),Y=v=>B-(B-T)*(v-Y0)/(Y1-Y0),plot=$('plot');
+el('line',{x1:L,y1:B,x2:R,y2:B,stroke:GREY,'stroke-width':2},plot);
+for(const v of [3.6,3.8,4.0,4.2])tx(v.toFixed(1),{x:L-22,y:Y(v)+9,'text-anchor':'end',class:'ax'},plot);
+for(const u of [450,490,530,570,610])tx(String(u),{x:X(u),y:B+38,'text-anchor':'middle',class:'ax'},plot);
+tx('Training steps',{x:(L+R)/2,y:B+80,'text-anchor':'middle',class:'ax'},plot);
+tx('Training loss (nats per token) ↓',{x:44,y:(T+B)/2,'text-anchor':'middle',class:'ax',transform:`rotate(-90 44 ${(T+B)/2})`},plot);
+const D=P.filter(p=>p[0]>=X0&&p[0]<=X1);
+el('path',{d:D.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(''),fill:'none',stroke:'#245a89','stroke-width':3.2,'stroke-linejoin':'round','stroke-linecap':'round','clip-path':'url(#clip)'},plot);
+const S=Math.max(X0,Math.min(X1,BATCH.step));
+const lossAt=s=>{const k=D.findIndex(p=>p[0]>=s);if(k<=0)return D[Math.max(k,0)][1];const a=D[k-1],b=D[k];return a[1]+(b[1]-a[1])*(s-a[0])/(b[0]-a[0])};
+const mark=el('line',{x1:X(S),y1:300,x2:X(S),y2:B,stroke:INK,'stroke-width':2,'stroke-dasharray':'7 7',opacity:0},plot);
+const dot=el('circle',{cx:X(S),cy:Y(lossAt(S)),r:8,fill:INK,stroke:'#fff','stroke-width':2.5,opacity:0},plot);
+
+// ---- batch card (r5): a small "data batch" box comes out from under the token embedding as the curve reaches the
+// batch step, holds, slowly opens into the card, stays open, then closes back into the box. Rows are short snippets
+// (cut at a word near 44 characters).
+const card=$('card'),rows=BATCH.rows||[],SNIP=44,FS=22,CHW=.6021*FS,RH=40,HL={bad:'#f8c4bc',warn:'#fde68a'};
+const snip=s=>{s=String(s||'').replace(/\s+/g,' ').trim();if(s.length<=SNIP)return s;let c=s.lastIndexOf(' ',SNIP);if(c<SNIP*.6)c=SNIP;return s.slice(0,c).replace(/[\s,.;:]+$/,'')+'…'};
+const texts=rows.map(r=>snip(r.text));
+const CW=Math.round(56+Math.max(...texts.map(s=>s.length))*CHW+30),CHH=62+rows.length*RH+56,cy0=276;
+let cx0=X(S)+40,cx1=cx0+CW;if(cx1>1650){cx1=X(S)-40;cx0=Math.max(L,cx1-CW)}
+const cbox=el('rect',{x:cx0,y:cy0,width:CW,height:CHH,rx:12,fill:'#fff',stroke:'#d9d6cf','stroke-width':1},card);
+const cclipR=el('rect',{x:cx0,y:cy0,width:CW,height:CHH,rx:12},el('clipPath',{id:'cardClip'},document.querySelector('#s defs')));
+const inner=el('g',{'clip-path':'url(#cardClip)'},card);
+// the header: its words "data batch" are drawn by the small box's own label, which slides into this place as the card opens
+const hdr=el('text',{x:cx0+24,y:cy0+42,class:'hd'},inner),HW=['Training ','data batch',` at step ${BATCH.step}`].map(s=>{const e=el('tspan',{},hdr);e.textContent=s;return e});
+HW[1].setAttribute('fill-opacity',0);
+const rowG=rows.map((r,i)=>{const top=cy0+62+i*RH,g=el('g',{},inner);
+ if(r.flag==='warn'||r.flag==='bad')el('rect',{x:cx0+12,y:top,width:CW-24,height:RH-6,rx:4,fill:HL[r.flag]},g);
+ tx(String(i+1),{x:cx0+26,y:top+24,class:'mono num'},g);
+ return {g,top,e:tx(texts[i],{x:cx0+56,y:top+24,class:'mono',style:`font-size:${FS}px`},g),s:texts[i]}});
+// legend, bottom right inside the card, in the rows' highlight colours
+const lgY=cy0+62+rows.length*RH+36,lg=el('g',{},inner);
+const lgItems=[['junk',HL.bad],['noisy',HL.warn]].map(([s,c])=>({sw:el('rect',{y:lgY-17,width:26,height:18,rx:4,fill:c},lg),t:tx(s,{y:lgY,class:'lg'},lg)}));
+function layoutLegend(){let x=cx1-24;for(const it of lgItems.slice().reverse()){const w=it.t.getComputedTextLength()||50;it.t.setAttribute('x',+(x-w).toFixed(1));it.sw.setAttribute('x',+(x-w-34).toFixed(1));x-=w+34+26}}
+// the small box the card starts as
+const BX={w:196,h:54},bx=el('g',{},card);
+const bxR=el('rect',{x:0,y:0,width:BX.w,height:BX.h,rx:12,fill:'#fff',stroke:'#b9b3a9','stroke-width':2},bx);
+const bxT=tx('data batch',{x:BX.w/2,y:BX.h/2+8.5,'text-anchor':'middle',class:'hd'},bx);
+const MV={dx:0,dy:42-(BX.h/2+8.5)}; // how far the label moves to sit in the header (dx is measured once the font is in)
+const width=e=>{const w=e.getComputedTextLength();return w>0?w:e.textContent.length*CHW};
+function fitRows(){const maxW=cx1-24-(cx0+56);
+ for(const r of rowG){const s=r.s;r.e.textContent=s;if(width(r.e)<=maxW)continue;let lo=0,hi=s.length;
+  while(lo<hi){const m=(lo+hi+1)>>1;r.e.textContent=s.slice(0,m).trimEnd()+'…';if(width(r.e)<=maxW)lo=m;else hi=m-1}
+  r.e.textContent=s.slice(0,lo).trimEnd()+'…'}
+ layoutLegend();placeHeader()}
+function placeHeader(){let p=NaN,w=0;
+ try{p=hdr.getStartPositionOfChar(HW[0].textContent.length).x;w=HW[1].getComputedTextLength()}catch(e){}
+ if(!(w>0)||!isFinite(p)){w=width(bxT);p=cx0+24+HW[0].textContent.length*13}
+ MV.dx=+(p+w/2-cx0-BX.w/2).toFixed(2)}
+fitRows();
+
+// ---- timeline (r5): one continuous entry, no clicks (window.deckSteps = 0). Seconds from the start:
+//   0.0- 0.5  the model card holds; 0.5-3.3 it splits into its layers (SD = 2.8 s, half the r4 speed)
+//   3.0- 5.6  the loss runs from step 450 to 514 and eases into the pause; the dashed mark and the dot come at 514
+//   5.1- 5.8  the small "data batch" box glides out from under the token embedding to its place, and holds
+//   6.6- 8.2  it opens into the batch card (outline grows, its label slides into the header, rows cascade down)
+//   8.2-11.2  open; 11.2-12.6 it closes back into the box (the same motion, reversed); 12.6-14.1 the box holds
+//  14.1-17.5  the loss runs on to 610, easing out of the pause; the box fades, the mark dims, the dot goes
+//  17.0-18.9  the layers take their fit states left to right (word and "?", colour, the spiky block's hatching)
+// PDF export waits 5 s after onActive, so a printed copy shows the frame 5 s in (the loss near step 504).
+const clipR=$('clipR'),CL=L-6,C0=3,D0=2.6,T514=C0+D0,BOX0=T514-.5,BOXD=.7,EX0=BOX0+BOXD+.8,EXD=1.6,
+ CO0=EX0+EXD+3,COD=1.4,C1=CO0+COD+1.5,D1=3.4,CF=.6,FS0=C1+D1-.5,STG=.14,SF=.55,FF=.35;
+const END=FS0+(FITS.length-1)*STG+SF+.05;
+// ---- the split (v2): the card holds for SH s, then over SD s each box leaves the layer it sits on
+// (Token embedding and Block 1 from the first, ... Block 8 and LM head from the last) for its place in the row,
+// turning from a layer into a block; the card opens out around the row and dissolves; the words, arrows and
+// the chart's axes fade in as the blocks land. The curve starts at C0, as the last blocks land.
+const SH=.5,SD=2.8,PILL=[0,0,1,1,1,2,2,2,3,3],PX0=MC.x-(4*MC.sw+3*MC.sg)/2;
+const lerp=(a,b,u)=>a+(b-a)*u,io=u=>u<.5?4*u*u*u:1-Math.pow(2-2*u,3)/2;
+const hx=c=>{c=c.length===4?'#'+[...c.slice(1)].map(d=>d+d).join(''):c;return [1,3,5].map(i=>parseInt(c.slice(i,i+2),16))};
+const mix=(a,b,u)=>{if(u<=0)return a;if(u>=1)return b;const A=hx(a),B=hx(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*u).toString(16).padStart(2,'0')).join('')};
+const setA=(e,a)=>{for(const k in a)e.setAttribute(k,typeof a[k]==='number'?+a[k].toFixed(2):a[k])};
+const plotG=$('plot');
+function split(t){const s=clamp01((t-SH)/SD);
+ const ux=io(ramp(s,.1,.8)),uy=io(ramp(s,0,.75)),uw=io(ramp(s,.12,.76)),uc=ease(ramp(s,.35,.5)),uw1=s>=1?1:uw;
+ boxes.forEach((b,j)=>{const x0=PX0+PILL[j]*(MC.sw+MC.sg),w=lerp(MC.sw,b.w,uw1),h=lerp(MC.sh,BH,uw1);
+  const cx=lerp(x0+MC.sw/2,b.x+b.w/2,ux),cy=lerp(MC.y,CY,uy);
+  setA(b.base,s>=1?{x:b.x,y:AY,width:b.w,height:BH,rx:10,fill:b.fill,stroke:b.stroke,'stroke-width':3}:
+   {x:cx-w/2,y:cy-h/2,width:w,height:h,rx:lerp(MC.sw/2,10,uw),fill:mix(STONE.slab,b.fill,uc),stroke:mix(STONE.slab,b.stroke,uc),'stroke-width':3*uc});
+  for(const e of b.texts)op(e,ease(ramp(s,.78,.22)))});
+ // the card travels with the blocks (same centre) and opens out to frame the row
+ const fw=lerp(MC.w,1621-59+36,ux),fh=lerp(MC.h,BH+36,uw),fy=lerp(MC.y,CY,uy);
+ setA(mcard,{x:MC.x-fw/2,y:fy-fh/2,width:fw,height:fh,rx:lerp(MC.r,22,uw)});
+ mcard.setAttribute('fill-opacity',+(1-ease(ramp(s,.05,.4))).toFixed(3));op(mcard,1-ease(ramp(s,.3,.5)));
+ op(mlab,1-ease(ramp(s,0,.22)));op(conn,ease(ramp(s,.8,.2)));op(plotG,ease(ramp(s,.64,.36)));
+ mdl.style.visibility=s>=1?'hidden':''}
+const op=(e,v)=>e.setAttribute('opacity',v<.001?0:v>.999?1:+v.toFixed(3));
+// the batch (r5): the box glides from just under the token embedding to the card's corner (growing a little, BOXD s)
+// as the curve reaches the batch step and holds; then it slowly opens into the card (EXD s): the outline grows, the
+// box's label slides into its place in the header while the header's other words fade in, the rows cascade down one
+// after another (each dropping in from just above its slot), legend last. After 3 s open it closes by the same motion reversed (COD s).
+const TE={x:boxes[0].x+boxes[0].w/2,y:AY+BH+40};
+const openness=t=>t<CO0?ramp(t,EX0,EXD):1-ramp(t,CO0,COD);
+function batch(t){const shown=t>=BOX0&&t<C1+CF;
+ card.style.visibility=shown?'':'hidden';if(!shown)return;
+ const a=ramp(t,BOX0,BOXD),landed=a>=1,p=openness(t),uo=io(ramp(p,0,.85)),um=io(ramp(p,.02,.4));
+ if(landed)bx.setAttribute('transform',`translate(${+(cx0+MV.dx*um).toFixed(2)} ${+(cy0+MV.dy*um).toFixed(2)})`);
+ else{const ax=io(a),sc=lerp(.7,1,ease(a)),bxX=lerp(TE.x,cx0+BX.w/2,ax)-BX.w/2*sc,bxY=lerp(TE.y,cy0+BX.h/2,ax)-BX.h/2*sc;
+  bx.setAttribute('transform',`translate(${+bxX.toFixed(2)} ${+bxY.toFixed(2)}) scale(${+sc.toFixed(4)})`)}
+ op(bx,ease(ramp(t,BOX0,.25)));op(bxR,landed?0:1);op(cbox,landed?1:0); // once landed, the card's outline (same place, same look) takes over
+ const w=lerp(BX.w,CW,uo),h=lerp(BX.h,CHH,uo);
+ setA(cbox,{width:w,height:h,stroke:mix('#b9b3a9','#d9d6cf',uo),'stroke-width':lerp(2,1,uo)});setA(cclipR,{width:w,height:h});
+ const hf=ease(ramp(p,.18,.3));for(const e of [HW[0],HW[2]])e.setAttribute('fill-opacity',hf<.001?0:+hf.toFixed(3));
+ rowG.forEach((r,i)=>{const p0=.14+.065*i,v=io(ramp(p,p0,.34)),dy=-.45*RH*(1-v);
+  r.g.setAttribute('transform',Math.abs(dy)>.005?`translate(0 ${+dy.toFixed(2)})`:'');op(r.g,ease(ramp(p,p0,.27)))});
+ op(lg,ease(ramp(p,.72,.28)));op(card,1-ease(ramp(t,C1,CF)))}
+const curve=u=>clipR.setAttribute('width',u<=X0?0:X(u)-CL+1.6);
+// a run's progress over D s: it speeds up over the first a s, runs steadily, and slows down over the last b s
+const glide=(t,t0,D,a,b)=>{const x=t-t0;if(x<=0)return 0;if(x>=D)return 1;const v=1/(D-(a+b)/2);
+ return x<a?v*x*x/(2*a):x>D-b?1-v*(D-x)*(D-x)/(2*b):v*(x-a/2)};
+function frame(t){split(t);
+ curve(t<C1?X0+(S-X0)*glide(t,C0,D0,.3,.5):S+(X1-S)*glide(t,C1,D1,.5,.4));
+ const m=ease(ramp(t,T514-.1,.3)),r=ease(ramp(t,C1,CF));op(mark,m*(1-.75*r));op(dot,m*(1-r));
+ batch(t);
+ FITS.forEach((b,j)=>{const v=ease(ramp(t,FS0+j*STG,SF));op(b.lab,v);if(b.over)op(b.over,v);if(b.glow)op(b.glow,v);if(b.hatch)op(b.hatch,.5*v);if(b.halo)for(const e of b.halo)e.setAttribute('stroke-opacity',v<.001?0:+v.toFixed(3))});
+ op(leg,ease(ramp(t,FS0+4.5*STG,SF)))}
+// ---- playing: onActive(0) plays the entry; a step past it (the page has no click parts) plays the rest sped up
+// over FF s and then holds the end. window.closerState reports where it is.
+let raf=0,t0=null,tNow=0,ffFrom=null,ffAt=null;
+const state=()=>{window.closerState={t:+tNow.toFixed(3),end:+END.toFixed(3),playing:!!raf,fastForward:ffFrom!==null}};
+function show(t){tNow=Math.max(0,Math.min(END,t));frame(tNow);state()}
+function tick(now){let t;
+ if(ffFrom!==null){if(ffAt===null)ffAt=now;const x=clamp01((now-ffAt)/1000/FF);t=x>=1?END:ffFrom+(END-ffFrom)*(1-(1-x)*(1-x))}
+ else{if(t0===null)t0=now-tNow*1000;t=(now-t0)/1000}
+ raf=t<END?requestAnimationFrame(tick):0;if(!raf)ffFrom=null;show(t)}
+function stop(){if(raf)cancelAnimationFrame(raf);raf=0;ffFrom=null;state()}
+function play(){stop();t0=null;show(0);raf=requestAnimationFrame(tick);state()}
+function settle(){stop();show(END)}
+function finish(){if(ffFrom!==null)return;if(tNow>=END){settle();return}
+ if(raf)cancelAnimationFrame(raf);ffFrom=tNow;ffAt=null;raf=requestAnimationFrame(tick);state()}
+show(0);
+window.deckSteps=0;
+window.renderAt=(step,t)=>{stop();show((step|0)>=1||t==null?END:+t||0)};
+const dw=window.deckwerk;
+if(document.fonts&&document.fonts.ready){const p=document.fonts.ready.then(()=>{fitRows();frame(tNow)});if(dw&&dw.ready)dw.ready(p)}
+document.addEventListener('click',()=>{if(dw)dw.next();else if(tNow<END)finish();else play()});
+if(dw){
+ deckwerk.onActive(e=>{const s=(e&&e.step)||0;if(s>=1)settle();else play()});
+ deckwerk.onStep(e=>{const s=(e&&e.step)||0;if(s>=1)finish();else settle()});
+ deckwerk.onInactive(stop);
+}else play();
+})();
+</script></body></html>

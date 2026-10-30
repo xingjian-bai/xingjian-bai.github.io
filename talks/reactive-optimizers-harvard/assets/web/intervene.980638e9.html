@@ -1,0 +1,200 @@
+<!doctype html><html lang="en"><head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>What would you change mid-run?</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
+svg{display:block;width:100%;height:100%}
+text{font-family:"Avenir Next",Arial,sans-serif;fill:#191918}
+.ax{font-size:26px;fill:#6b6b68}.blk{font-size:26px;font-weight:600}
+.st{font-size:25px;font-weight:500}.spk{font-weight:600}.lg{font-size:22px;fill:#6b6b68}
+.q{font-size:46px;font-weight:700;font-family:Charter,Georgia,serif}.opt{font-size:32px;fill:#3a3a38}
+</style></head><body>
+<svg id="s" viewBox="0 0 1680 860" aria-label="Training loss over the whole run: the run up to step 354, then a loss spike at step 356 in red; the hatched region after it is the future. Above, the model's layers, each marked with a possible fit state; Block 4, marked spiky, lights up. Then the question: what would you change? The learning rate of block 4? Skip this batch? Add a special clipping rule?">
+<defs>
+<filter id="spiky" x="-40%" y="-60%" width="180%" height="220%"><feDropShadow dx="0" dy="0" stdDeviation="9" flood-color="#191918" flood-opacity=".6"/></filter>
+<filter id="spikyLit" x="-60%" y="-90%" width="220%" height="280%"><feDropShadow dx="0" dy="0" stdDeviation="13" flood-color="#c23b30" flood-opacity=".95"/></filter>
+<clipPath id="clip"><rect id="clipR" x="144" y="290" width="1467.6" height="480"/></clipPath>
+<linearGradient id="fitG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2f6db5"/><stop offset=".5" stop-color="#d8d4cc"/><stop offset="1" stop-color="#c23b30"/></linearGradient>
+<pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#fff"/><line x1="0" y1="0" x2="0" y2="14" stroke="#ecebe8" stroke-width="6"/></pattern>
+</defs>
+<g id="arch"></g><g id="legend"></g><g id="plot"></g><g id="ask"></g>
+</svg>
+<script>
+(()=>{'use strict';
+// "If you could intervene…" (r5, 2026-10-30). The page opens on the settled look of the slide before it ("A closer look",
+// v2/closer.html: the layers with their fit states, the fit legend, the loss zoomed on steps 450-610), so the slide change
+// is invisible. Entry (no click): the closer-only parts fade (fit legend, the faint step-514 mark); the chart zooms out to
+// the whole run while the curve's right end rewinds to step 354, so the run is already drawn, never regrown; then only
+// the last step grows, into the spike at 356, with its dot, "now" and the hatched future. Click 1: Block 4 (the closer's
+// "spiky?") lights up. Click 2: the question and its options. A third click is the slide's own native line: the page
+// keeps its last look. No data batch on this slide.
+// the run's logged training loss, step by step (the same data as v2/closer.html)
+const P=[[1, 8.3189], [2, 7.98673], [4, 7.20809], [6, 7.02304], [8, 6.87357], [10, 6.68928], [12, 6.54251], [14, 6.3294], [16, 6.19527], [18, 6.05415], [20, 5.90166], [22, 5.93009], [24, 5.84663], [26, 5.6574], [28, 5.68498], [30, 5.59784], [32, 5.69149], [34, 5.59519], [36, 5.66907], [38, 5.5734], [40, 5.47367], [42, 5.48321], [44, 5.44553], [46, 5.53425], [48, 5.52624], [50, 5.46092], [52, 5.40958], [54, 5.40638], [56, 5.40807], [58, 5.3224], [60, 5.25336], [62, 5.2707], [64, 5.2833], [66, 5.34284], [68, 5.30898], [70, 5.29085], [72, 5.29293], [74, 5.2305], [76, 5.25291], [78, 5.18502], [80, 5.30533], [82, 5.259], [84, 5.31622], [86, 5.24963], [88, 5.07663], [90, 5.28148], [92, 5.29032], [94, 5.20793], [96, 5.19987], [98, 5.17449], [100, 5.14413], [102, 5.06943], [104, 5.06428], [106, 5.12967], [108, 5.22548], [110, 5.18524], [112, 5.10738], [114, 5.19649], [116, 5.21498], [118, 5.07279], [120, 5.0567], [122, 5.13907], [124, 5.14513], [126, 5.0722], [128, 5.09712], [130, 5.11496], [132, 4.99096], [134, 4.99783], [136, 5.25827], [138, 4.93809], [140, 4.96098], [142, 4.97769], [144, 5.01483], [146, 5.01675], [148, 4.98346], [150, 4.9417], [152, 4.95841], [154, 5.03757], [156, 4.98485], [158, 4.93433], [160, 4.84752], [162, 5.00288], [164, 4.88553], [166, 4.83316], [168, 4.94092], [170, 4.93531], [172, 5.00708], [174, 4.8694], [176, 4.78662], [178, 4.91308], [180, 5.01721], [182, 4.86361], [184, 4.82125], [186, 4.78331], [188, 4.78612], [190, 4.82327], [192, 4.73732], [194, 4.78973], [196, 4.81928], [198, 4.77775], [200, 4.81413], [202, 4.7402], [204, 4.76859], [206, 4.89195], [208, 4.62809], [210, 4.6961], [212, 4.51756], [214, 4.6801], [216, 4.64227], [218, 4.62945], [220, 4.69223], [222, 4.72848], [224, 4.55823], [226, 4.70892], [228, 4.6636], [230, 4.66082], [232, 4.74067], [234, 4.48734], [236, 4.57883], [238, 4.60448], [240, 4.66733], [242, 4.73839], [244, 4.63041], [246, 4.59556], [248, 4.60405], [250, 4.56308], [252, 4.57032], [254, 4.59242], [256, 4.61428], [258, 4.53246], [260, 4.47786], [262, 4.51767], [264, 4.47277], [266, 4.52827], [268, 4.5771], [270, 4.51726], [272, 4.41354], [274, 4.45382], [276, 4.47454], [278, 4.70409], [280, 4.62839], [282, 4.47736], [284, 4.46448], [286, 4.4175], [288, 4.45917], [290, 4.41838], [292, 4.41979], [294, 4.37302], [296, 4.52717], [298, 4.45553], [300, 4.383], [302, 4.40312], [304, 4.43158], [306, 4.45432], [308, 4.44204], [310, 4.39781], [312, 4.37632], [314, 4.42463], [316, 4.36244], [318, 4.43804], [320, 4.37979], [322, 4.41339], [324, 4.33852], [326, 4.23719], [328, 4.24559], [330, 4.41545], [332, 4.40019], [334, 4.3676], [336, 4.29395], [338, 4.30149], [340, 4.22012], [342, 4.36587], [344, 4.26353], [346, 4.33736], [348, 4.22506], [350, 4.21467], [352, 4.24191], [354, 4.22618], [356, 4.47216], [358, 4.24416], [360, 4.31121], [362, 4.28179], [364, 4.21572], [366, 4.24796], [368, 4.19052], [370, 4.0672], [372, 4.39815], [374, 4.22656], [376, 4.24258], [378, 4.28844], [380, 4.25313], [382, 4.30491], [384, 4.1975], [386, 4.10323], [388, 4.23552], [390, 4.33849], [392, 4.20291], [394, 4.0893], [396, 4.17337], [398, 4.2193], [400, 4.2341], [402, 4.01966], [404, 4.13316], [406, 4.14005], [408, 4.11857], [410, 4.10474], [412, 4.12327], [414, 4.18851], [416, 4.16231], [418, 4.04064], [420, 3.92522], [422, 4.10885], [424, 4.02052], [426, 4.15142], [428, 4.04293], [430, 4.06177], [432, 4.01935], [434, 4.07881], [436, 4.0583], [438, 4.05327], [440, 4.13373], [442, 3.99645], [444, 3.94623], [446, 4.10904], [448, 3.9597], [450, 4.06342], [452, 4.18564], [454, 4.05069], [456, 4.13375], [458, 4.18613], [460, 4.11472], [462, 4.15197], [464, 4.0684], [466, 3.98079], [468, 4.0591], [470, 4.09585], [472, 4.04528], [474, 4.04211], [476, 3.98996], [478, 3.91243], [480, 4.07682], [482, 4.06306], [484, 4.18836], [486, 4.05479], [488, 3.99702], [490, 4.02291], [492, 3.97408], [494, 4.02358], [496, 4.04502], [498, 4.02135], [500, 3.97711], [502, 3.98863], [504, 3.91715], [506, 4.00569], [508, 4.00789], [510, 3.81614], [512, 3.982], [514, 4.17737], [516, 3.9826], [518, 3.961], [520, 3.84551], [522, 4.07856], [524, 4.00955], [526, 3.90621], [528, 3.87816], [530, 3.90101], [532, 3.84], [534, 3.97287], [536, 4.00107], [538, 3.91063], [540, 3.83556], [542, 3.90367], [544, 3.99313], [546, 3.71942], [548, 3.88252], [550, 3.96906], [552, 3.82022], [554, 3.86172], [556, 3.95228], [558, 3.8466], [560, 3.9198], [562, 3.82861], [564, 3.89953], [566, 3.8168], [568, 3.97171], [570, 3.77024], [572, 3.91901], [574, 3.96051], [576, 3.95495], [578, 3.91577], [580, 3.80306], [582, 3.91912], [584, 3.89777], [586, 3.99809], [588, 3.93814], [590, 3.87546], [592, 3.89852], [594, 3.90401], [596, 3.99224], [598, 4.0579], [600, 3.84714], [602, 3.66642], [604, 3.76512], [606, 3.91041], [608, 3.85124], [610, 3.99205]];
+const SPIKE=[356,5.15]; // the step drawn as the spike, at the height this slide has always shown (the logged loss there is 4.47)
+const NS='http://www.w3.org/2000/svg',$=id=>document.getElementById(id);
+const el=(tag,a,parent)=>{const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);parent.appendChild(e);return e};
+const tx=(s,a,parent)=>{const e=el('text',a,parent);e.textContent=s;return e};
+const clamp01=x=>x<0?0:x>1?1:x,ramp=(t,a,d)=>clamp01((t-a)/d),ease=x=>x*x*(3-2*x);
+const lerp=(a,b,u)=>a+(b-a)*u,io=u=>u<.5?4*u*u*u:1-Math.pow(2-2*u,3)/2;
+const hx=c=>{c=c.length===4?'#'+[...c.slice(1)].map(d=>d+d).join(''):c;return [1,3,5].map(i=>parseInt(c.slice(i,i+2),16))};
+const mix=(a,b,u)=>{if(u<=0)return a;if(u>=1)return b;const A=hx(a),B=hx(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*u).toString(16).padStart(2,'0')).join('')};
+const op=(e,v)=>e.setAttribute('opacity',v<.001?0:v>.999?1:+v.toFixed(3));
+const setN=(e,a)=>{for(const k in a)e.setAttribute(k,a[k])};
+const INK='#191918',GREY='#8d8d8a',DARK='#2b2b2a',RED='#c23b30',BLUE='#245a89';
+
+// ---- architecture row, exactly as the closer page leaves it (same geometry, colours, words, hatching)
+const AY=70,BH=86,CY=AY+BH/2,arch=$('arch');
+const ORANGE={stroke:'#e07b18',fill:'#fdebd6'};
+const FIT={under:{stroke:'#2f6db5',fill:'#dbe7f6'},well:{stroke:'#8b867c',fill:'#f2f0eb'},over:{stroke:'#c23b30',fill:'#f8dcd8'},spiky:{stroke:'#2b2b2a',fill:'#f2f0eb'}};
+const STATES=[['well','well fit?'],['under','underfit?'],['over','overfit?'],['spiky','spiky?'],['well','well fit?'],['over','overfit?'],['under','underfit?'],['well','well fit?']];
+const boxes=[{x:59,w:170,label:['Token','embedding'],aux:1,word:'rare tokens?'}];
+for(let i=0;i<8;i++)boxes.push({x:269+i*148,w:126,label:['Block '+(i+1)],i});
+boxes.push({x:1471,w:150,label:['LM head'],aux:1,word:'overconfident?'});
+const HG=17; // the spiky block's hatching: a thin diagonal every HG px along its edge
+const conn=el('g',{},arch);
+tx('Transformer blocks',{x:850,y:AY-26,'text-anchor':'middle',class:'blk'},conn);
+el('path',{d:`M269 ${AY-6}V${AY-14}H1431V${AY-6}`,fill:'none',stroke:GREY,'stroke-width':2},conn);
+for(let k=0;k<boxes.length-1;k++){const a=boxes[k].x+boxes[k].w,b=boxes[k+1].x;
+ el('line',{x1:a+4,y1:CY,x2:b-11,y2:CY,stroke:GREY,'stroke-width':3},conn);
+ el('path',{d:`M${b-12} ${CY-5}L${b-4} ${CY}L${b-12} ${CY+5}Z`,fill:GREY},conn)}
+let SPK=null; // the spiky block (Block 4, as on the closer page): on click 1 its shadow turns into a red glow, outline and word turn red
+for(const b of boxes){const g=el('g',{},arch),st=b.i!=null?STATES[b.i]:null,r={x:b.x,y:AY,width:b.w,height:BH,rx:10},spiky=!!st&&st[0]==='spiky';
+ const lit=spiky?el('rect',{...r,fill:FIT.spiky.fill,filter:'url(#spikyLit)',opacity:0},g):null;
+ const glow=spiky?el('rect',{...r,fill:FIT.spiky.fill,filter:'url(#spiky)',opacity:1},g):null;
+ el('rect',{...r,fill:b.aux?ORANGE.fill:'#fff',stroke:b.aux?ORANGE.stroke:DARK,'stroke-width':3},g);
+ let over=null,lab=null;
+ if(st){const c=FIT[st[0]];
+  over=el('rect',{...r,fill:c.fill,stroke:c.stroke,'stroke-width':3,opacity:1},g);
+  if(spiky){el('rect',r,el('clipPath',{id:'spikyClip'},document.querySelector('#s defs')));
+   const h=el('g',{'clip-path':'url(#spikyClip)',opacity:.5},g),span=b.w+BH,nl=Math.floor(span/HG),off=(span-(nl-1)*HG)/2;
+   for(let k=0;k<nl;k++){const x=b.x-BH+off+k*HG;el('line',{x1:+x.toFixed(2),y1:AY+BH,x2:+(x+BH).toFixed(2),y2:AY,stroke:INK,'stroke-width':2},h)}}
+  lab=tx(st[1],{x:b.x+b.w/2,y:AY+BH+38,'text-anchor':'middle',class:spiky?'st spk':'st',style:'fill:'+(spiky?INK:c.stroke),opacity:1},g)}
+ else if(b.word)lab=tx(b.word,{x:b.x+b.w/2,y:AY+BH+38,'text-anchor':'middle',class:'st',style:'fill:'+ORANGE.stroke,opacity:1},g);
+ const n=b.label.length,texts=b.label.map((s,j)=>tx(s,{x:b.x+b.w/2,y:CY+9+(j-(n-1)/2)*30,'text-anchor':'middle',class:'blk'},g));
+ if(spiky){for(const e of texts)setN(e,{stroke:FIT.spiky.fill,'stroke-width':7,'stroke-linejoin':'round','paint-order':'stroke','stroke-opacity':1});SPK={lit,glow,over,lab}}}
+// fit-state legend (closer page only: fades out on arrival)
+const leg=$('legend'),LY=AY+BH+62;
+el('rect',{x:700,y:LY,width:300,height:12,rx:6,fill:'url(#fitG)'},leg);
+[['underfit',700],['well fit',850],['overfit',1000]].forEach(([s,x])=>tx(s,{x,y:LY+38,'text-anchor':'middle',class:'lg'},leg));
+
+// ---- the loss chart: it opens on the closer's view (steps 450-610, loss 3.6-4.3) and zooms out to the whole run.
+// The spans change geometrically (a steady zoom, anchored at step 610 and loss 3.6); the frame's top and bottom move linearly.
+const L=150,R=1610,V0={x0:450,x1:610,y0:3.6,y1:4.3,T:330,B:740},V1={x0:1,x1:610,y0:3.6,y1:8.4,T:250,B:760};
+const view=g=>{if(g<=0)return V0;if(g>=1)return V1;const sx=(V0.x1-V0.x0)*Math.pow((V1.x1-V1.x0)/(V0.x1-V0.x0),g),sy=(V0.y1-V0.y0)*Math.pow((V1.y1-V1.y0)/(V0.y1-V0.y0),g);
+ return {x0:V0.x1-sx,x1:V0.x1,y0:V0.y0,y1:V0.y0+sy,T:lerp(V0.T,V1.T,g),B:lerp(V0.B,V1.B,g)}};
+const Xv=(v,u)=>L+(R-L)*(u-v.x0)/(v.x1-v.x0),Yv=(v,w)=>v.B-(v.B-v.T)*(w-v.y0)/(v.y1-v.y0);
+const plot=$('plot');
+const axis=el('line',{x1:L,y1:V0.B,x2:R,y2:V0.B,stroke:GREY,'stroke-width':2},plot);
+// tick labels: the closer's (k 0) give way to this page's (k 1); 610 is on both (k 2)
+const yT=[3.6,3.8,4.0,4.2].map(v=>({v,k:0,e:tx(v.toFixed(1),{x:L-22,y:Yv(V0,v)+9,'text-anchor':'end',class:'ax'},plot)}))
+ .concat([4,5,6,7,8].map(v=>({v,k:1,e:tx(String(v),{x:L-22,y:Yv(V0,v)+9,'text-anchor':'end',class:'ax',opacity:0},plot)})));
+const xT=[450,490,530,570,610].map(u=>({u,k:u===610?2:0,e:tx(String(u),{x:Xv(V0,u),y:V0.B+38,'text-anchor':'middle',class:'ax'},plot)}))
+ .concat([1,100,200,300,400,500].map(u=>({u,k:1,e:tx(String(u),{x:Xv(V0,u),y:V0.B+38,'text-anchor':'middle',class:'ax',opacity:0},plot)})));
+const stepsT=tx('Training steps',{x:(L+R)/2,y:V0.B+80,'text-anchor':'middle',class:'ax'},plot);
+const lossT=tx('Training loss (nats per token) ↓',{x:44,y:(V0.T+V0.B)/2,'text-anchor':'middle',class:'ax',transform:`rotate(-90 44 ${(V0.T+V0.B)/2})`},plot);
+const SX=Xv(V1,SPIKE[0]);
+const future=el('rect',{x:SX,y:V1.T,width:R-SX,height:V1.B-V1.T,fill:'url(#hatch)',opacity:0},plot);
+const now=el('line',{x1:SX,y1:V1.T-10,x2:SX,y2:V1.B,stroke:INK,'stroke-width':2.5,'stroke-dasharray':'7 7',opacity:0},plot);
+const nowT=tx('now',{x:SX,y:V1.T-22,'text-anchor':'middle',class:'blk',opacity:0},plot);
+const curve=el('path',{fill:'none',stroke:BLUE,'stroke-width':3.2,'stroke-linejoin':'round','stroke-linecap':'round','clip-path':'url(#clip)'},plot);
+const spike=el('path',{fill:'none',stroke:RED,'stroke-width':4,'stroke-linecap':'round',opacity:0},plot);
+const mark=el('line',{x1:Xv(V0,514),y1:300,x2:Xv(V0,514),y2:V0.B,stroke:INK,'stroke-width':2,'stroke-dasharray':'7 7',opacity:.25},plot);
+const dot=el('circle',{cx:SX,cy:Yv(V1,SPIKE[1]),r:8,fill:RED,opacity:0},plot);
+const PRE=P.filter(p=>p[0]<SPIKE[0]).pop(); // step 354: the run rests here before the spike
+const lossAt=s=>{const k=P.findIndex(p=>p[0]>=s);if(k<0)return P[P.length-1][1];if(k===0||P[k][0]===s)return P[k][1];const a=P[k-1],b=P[k];return a[1]+(b[1]-a[1])*(s-a[0])/(b[0]-a[0])};
+const RW=(V0.x1-PRE[0])/(V1.x1-V1.x0); // the right end rewinds by this share of the axis, from step 610 to step 354
+function runPath(v,lo,hi){const pts=[[lo,lossAt(lo)]];for(const p of P)if(p[0]>lo&&p[0]<hi)pts.push(p);pts.push([hi,lossAt(hi)]);
+ return pts.map((p,i)=>(i?'L':'M')+Xv(v,p[0]).toFixed(1)+','+Yv(v,p[1]).toFixed(1)).join('')}
+
+// ---- the question
+const ask=$('ask');
+const q=tx('What would you change?',{x:SX+60,y:V1.T+90,class:'q',opacity:0},ask);
+const opts=['the learning rate of block 4?','skip this batch?','add a special clipping rule?'].map((s,i)=>tx(s,{x:SX+64,y:V1.T+170+i*58,class:'opt',opacity:0},ask));
+
+// ---- timeline. Part 0, the entry (no click), seconds from arrival:
+//   0.0-0.4  the fit legend and the faint step-514 mark fade
+//   0.15-2.75 the view zooms out to the whole run (old tick labels gather to the right and fade, new ones slide in), while
+//            the curve's right end rewinds from step 610 to step 354; the earlier run is already there as it comes into view
+//   3.05-3.55 the last step grows, into the red spike at step 356; 3.55-3.75 its dot; 3.75-4.35 "now", its line, the hatched future
+// Part 1 (click 1, 0.95 s): Block 4's outline and word turn red; its dark shadow gives way to a red glow that flares, then settles.
+// Part 2 (click 2, 2.1 s): the question, then the options at 0.5, 1.0 and 1.5 s.
+const Z0=.15,ZD=2.6,SP0=Z0+ZD+.3,SPD=.5,DT=SP0+SPD,NOW0=DT+.2,FADE=.6,E0=NOW0+FADE,E1=.95,T_OPT=[.5,1,1.5],E2=T_OPT[2]+FADE;
+const PART=[[0,E0],[E0,E0+E1],[E0+E1,E0+E1+E2]],LAST=PART.length-1;
+function frame(tau){const t0=Math.min(tau,E0),t1=tau-E0,t2=tau-E0-E1;
+ const f=1-ease(ramp(t0,0,.4));op(leg,f);
+ const g=io(ramp(t0,Z0,ZD)),v=view(g),yo=1-ease(ramp(g,.1,.4)),yn=ease(ramp(g,.38,.4));
+ setN(axis,{y1:v.B,y2:v.B});
+ for(const k of yT){const y=Yv(v,k.v);setN(k.e,{y:y+9});op(k.e,(k.k?yn:yo)*clamp01(1-Math.max(v.T-y,y-v.B,0)/50))}
+ for(const k of xT){const x=Xv(v,k.u);setN(k.e,{x,y:v.B+lerp(38,40,g)});op(k.e,(k.k===2?1:k.k?yn:yo)*clamp01(1-(L-x)/50))}
+ const c=(v.T+v.B)/2;setN(stepsT,{y:v.B+lerp(80,82,g)});setN(lossT,{y:c,transform:`rotate(-90 44 ${c})`});
+ curve.setAttribute('d',runPath(v,v.x0,g>=1?PRE[0]:V0.x1-RW*g*(v.x1-v.x0)));setN($('clipR'),{y:lerp(290,200,g),height:lerp(480,600,g)}); // the closer's clip, grown with the view
+ const mx=Xv(v,514);setN(mark,{x1:mx,x2:mx,y2:v.B});op(mark,.25*f);
+ const sg=io(ramp(t0,SP0,SPD)),ax=Xv(V1,PRE[0]),ay=Yv(V1,PRE[1]);
+ spike.setAttribute('d',`M${ax.toFixed(1)},${ay.toFixed(1)}L${lerp(ax,SX,sg).toFixed(1)},${lerp(ay,Yv(V1,SPIKE[1]),sg).toFixed(1)}`);op(spike,sg>0?1:0);
+ op(dot,ease(ramp(t0,DT,.2)));
+ const n=ease(ramp(t0,NOW0,FADE));op(now,n);op(nowT,n);op(future,n);
+ const u=ease(ramp(t1,0,.6));SPK.over.setAttribute('stroke',mix(DARK,RED,u));SPK.lab.style.fill=mix(INK,RED,u);
+ op(SPK.glow,1-u);op(SPK.lit,ease(ramp(t1,0,.3))*(1-.3*ease(ramp(t1,.35,.55))));
+ op(q,ease(ramp(t2,0,FADE)));opts.forEach((o,i)=>op(o,ease(ramp(t2,T_OPT[i],FADE))))}
+
+// ---- playing. onActive(0) plays the entry; onActive(k > 0) shows part k settled. A click plays the next part; one that
+// comes while a part plays first finishes that part sped up over FF s. Past the last part (the native line) the page
+// finishes what is playing the same way and holds. window.interveneState reports where it is.
+let tau=0,cur=0,raf=0,seg=null;
+const FF=.35,eo=x=>1-(1-x)*(1-x);
+const state=()=>{let k=cur;while(k>0&&tau<PART[k][0])k--;window.interveneState={step:cur,part:k,t:+(tau-PART[k][0]).toFixed(3),tau:+tau.toFixed(3),playing:!!seg,fastForward:!!(seg&&seg.ff),ends:PART.map(p=>+p[1].toFixed(3))}};
+function show(t){tau=t;frame(tau);state()}
+function tick(now){const s=seg;if(!s){raf=0;return}
+ if(s.at===null)s.at=now;const x=s.dur>0?clamp01((now-s.at)/1000/s.dur):1;
+ show(s.from+(s.to-s.from)*(s.ff?eo(x):x));
+ if(x>=1){seg=null;raf=0;if(s.then)s.then();state()}else raf=requestAnimationFrame(tick)}
+function run(to,dur,ff,then){seg={from:tau,to,dur,ff,then,at:null};if(!raf)raf=requestAnimationFrame(tick);state()}
+function stop(){if(raf)cancelAnimationFrame(raf);raf=0;seg=null;state()}
+function playPart(k){cur=k;show(PART[k][0]);run(PART[k][1],PART[k][1]-PART[k][0],false,null)}
+function settle(k){stop();cur=k;show(PART[k][1])}
+function toStep(k){k=Math.max(0,k|0);
+ if(k<cur){settle(k);return}
+ if(k===cur)return;
+ if(k>LAST){cur=LAST;if(tau<PART[LAST][1]&&!(seg&&seg.ff&&seg.to===PART[LAST][1]))run(PART[LAST][1],FF,true,null);return}
+ cur=k;if(tau<PART[k][0])run(PART[k][0],FF,true,()=>playPart(k));else playPart(k)}
+show(0);
+window.deckSteps=LAST;
+window.renderAt=(step,t)=>{stop();const s=Math.max(0,step|0),k=Math.min(s,LAST);cur=k;
+ show(t==null||s>LAST?PART[k][1]:PART[k][0]+Math.max(0,Math.min(PART[k][1]-PART[k][0],+t||0)))};
+const dw=window.deckwerk;
+if(dw&&dw.ready&&document.fonts&&document.fonts.ready)dw.ready(document.fonts.ready);
+document.addEventListener('click',()=>{if(dw)dw.next();else toStep(cur+1)});
+if(dw){
+ deckwerk.onActive(e=>{const s=(e&&e.step)|0;if(s>=1)settle(Math.min(s,LAST));else{stop();playPart(0)}});
+ deckwerk.onStep(e=>toStep(e&&e.step));
+ deckwerk.onInactive(stop);
+}else playPart(0);
+})();
+</script></body></html>

@@ -1,0 +1,1055 @@
+<!doctype html>
+<html lang="en">
+  <head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script>
+    <meta charset="utf-8" />
+    <title>Training loop</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #fff;
+      }
+      svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      text {
+        font-family: "Avenir Next", Arial, sans-serif;
+      }
+      .mono {
+        font-family: Menlo, Monaco, monospace;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      v2 round 6 (2026-10-30), template for slides 45-50 and, with OPENING = true, the opening pipeline slide (slide 5)
+      (gen_closing.py writes stage0..5.html and opening.html). The opening: the loop builds; click 1 the picture
+      glides small and faded into the loss chart's upper right while the chart draws; click 2 its optimizer lights up.
+      - Opening: the loop builds in the order data flows; each label arrives with the part it names (forward,
+        backward, updater.py).
+      - Stage 0: no click. The opening has already shown the loop growing, so here the whole picture, labels
+        included, fades in at once (0.5 s); the tokens then run as before.
+      - Stage 1, auto research: no click; experiments 1 to 4 run back to back (3.6 s each) and stop on experiment 4.
+        No dot runs round the loop: its dotted line draws in during experiment 1, and four arrowheads, one at the
+        middle of each side, show which way it turns; each nudges forward as the turn passes it (once per
+        experiment) and all rest once experiment 4 ends. Each time a part turns blue, "improved" rises next to it
+        and fades. Nothing in the bottom 60 px.
+      - Stage 2, reactive optimization: no click. The optimizer becomes the agentic optimizer (it stays still);
+        only the updates it sends into the model are coloured, in rounds of 2.4 s, and updater.py (now a coloured
+        chip) pulses with every round; the inner loop is the right-hand loop again, 62 px inside it (three purple
+        arrows; once per round the turn hands from arrow to arrow, down, right, up the arc: the lit arrow full purple
+        and thicker, the other two faint, 0.8 s each). Data, forward and backward tokens stay as in stage 0.
+      - Future ideas, each starting from the stage-2 look and adding only its own idea (each page still opens on
+        the settled look of the page before, then first removes the previous idea):
+        3 data: a solid coloured arrow from the agent to the data, selector.py (pulses with the rounds), every
+          token flow coloured; no tokens on the agent's arrow.
+        4 the model: the data idea leaves; a solid coloured arc from the agent into the model's left side, reshape.py; the
+          model gains and loses a layer at the front, then at the back, one change per round, half a round after
+          each update round; reshape.py pulses at each change; tokens downstream of the reshaped model (forward,
+          backward) are coloured.
+        5 direct weight updates: the model idea leaves; updater.py becomes delta.py on a thicker arrow; then the
+          data gains its own arrow up into the agent (the mirror of the loss's arc: neutral, its tokens uncoloured,
+          no label) and "backward" becomes "no backward" ("backward" glides right, "no" fades in); tokens as in
+          stage 2.
+      Every page opens on the exact settled look of the previous page and morphs (eased); the gentle loops
+      (tokens, rounds, pulses, layer changes) run on the wall clock, so they continue across pages.
+    -->
+    <svg id="s" viewBox="0 0 1680 860" aria-label="Training data goes through the model to the loss; the backward pass sends gradients to the optimizer, whose update goes back into the model">
+      <defs id="defs"></defs>
+    </svg>
+    <script>
+      (() => {
+        "use strict";
+        const STAGE = 3; // 0 supervised, 1 auto research, 2 reactive, 3 + data, 4 + model, 5 direct updates
+        const OPENING = false; // opening.html: the stage-0 loop on arriving; click: the loss chart
+        const LOSS = []; // opening.html only: the 38M GPT's training loss, [[step, loss], ...]
+        const NS = "http://www.w3.org/2000/svg",
+          $ = (id) => document.getElementById(id);
+
+        // ------------------------------------------------------------ colours
+        // the supervised picture in warm stone greys; colour is kept for what changes later
+        const PAL = { box: "#5c5751", line: "#7a746d", ink: "#3d3934", soft: "#857e76", card: "#f5f3f0", cardS: "#cbc5bd", slab: "#a39c93", sheet: "#ddd8d1", tok: "#5c5751" }; // palette
+        const VIVID = ["#1e6bff", "#8c2bff", "#ff2f6e", "#ffb000", "#00b894"];
+        const BLUES = ["", "#9dbbf5", "#5b8ff0", "#1f5fd6"]; // auto research: the recipe revisions
+        const BLUE = "#1f5fd6",
+          PURPLE = "#8c2bff",
+          PINK = "#ff2f6e",
+          FLASH = "#efe4ff";
+
+        // ------------------------------------------------------------ easing and colour helpers
+        const c01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+        const smooth = (u) => {
+          u = c01(u);
+          return u * u * (3 - 2 * u);
+        };
+        const inout = (u) => {
+          u = c01(u);
+          return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(2 - 2 * u, 3) / 2;
+        };
+        const linear = (u) => c01(u);
+        // trapezoidal speed: accelerate over the first r, cruise, decelerate over the last r
+        const trap = (r) => (u) => {
+          u = c01(u);
+          const v = 1 / (1 - r);
+          if (u < r) return (0.5 * v * u * u) / r;
+          if (u > 1 - r) return 1 - (0.5 * v * (1 - u) * (1 - u)) / r;
+          return v * (u - r / 2);
+        };
+        const lerp = (a, b, u) => a + (b - a) * u;
+        const frac = (x) => x - Math.floor(x);
+        const n2 = (v) => (Math.round(v * 100) / 100).toString();
+        const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+        const mix = (a, b, u) => {
+          u = c01(u);
+          if (u <= 0) return a;
+          if (u >= 1) return b;
+          const A = hex(a),
+            B = hex(b);
+          return "#" + A.map((v, i) => Math.round(v + (B[i] - v) * u).toString(16).padStart(2, "0")).join("");
+        };
+        // the outer loop's recipe revisions (experiment 1 = rev 0 ... experiment 4 = rev 3); auto research leaves the
+        // data alone: experiment 2 improves the optimizer, 3 the model's layers, 4 both again
+        const revOpt = (r) => (r <= 1 ? mix(PAL.box, BLUES[1], r) : r <= 2 ? BLUES[1] : mix(BLUES[1], BLUES[3], r - 2));
+        const revBar = (r) => (r <= 1 ? PAL.slab : r <= 2 ? mix(PAL.slab, BLUES[1], r - 1) : mix(BLUES[1], BLUES[2], r - 2));
+
+        // ------------------------------------------------------------ geometry (viewBox units = slide pixels)
+        const G = {
+          y: 540, // the main line: training data -> model -> loss
+          mx: 840, // model (and optimizer) centre
+          dx: 300, // data card centre
+          lx: 1380, // loss centre
+          oy: 200, // optimizer centre
+          mw: 232, mh: 244, mr: 30, // model card
+          sw: 22, sg: 18, sh: 156, // its layers
+          cw: 116, ch: 92, cr: 14, off: 14, // data card, back sheet offset
+          lw: 148, lh: 76, lr: 18, // loss box
+          ow0: 252, ow1: 318, oh: 80, or: 18, // optimizer box, plain and agentic widths
+          gap: 14, // between an arrow tip and its box
+          k: 0.56, // handle length of the quarter-ellipse arcs (0.552 is an exact ellipse)
+        };
+        const half = (w) => lerp(G.ow0, G.ow1, w) / 2;
+        const DATA_TOP = { x: G.dx + G.off / 2, y: G.y - G.ch / 2 - G.off - 12 };
+        const LOSS_TOP = { x: G.lx, y: G.y - G.lh / 2 - 12 };
+        const DOWN = { y0: G.oy + G.oh / 2 + 12, y1: G.y - G.mh / 2 - G.gap };
+        const D = {
+          trainIn: `M${G.dx + G.cw / 2 + G.off + 16} ${G.y} H${G.mx - G.mw / 2 - G.gap}`,
+          trainOut: `M${G.mx + G.mw / 2 + G.gap} ${G.y} H${G.lx - G.lw / 2 - G.gap}`,
+          optDown: `M${G.mx} ${DOWN.y0} V${DOWN.y1}`,
+        };
+        // arcs that follow the optimizer's width (w = 0 plain box, 1 agentic box)
+        const arc = (x0, y0, x1, y1, vFirst) =>
+          vFirst
+            ? `M${n2(x0)} ${n2(y0)} C${n2(x0)} ${n2(y0 + G.k * (y1 - y0))}, ${n2(x1 + G.k * (x0 - x1))} ${n2(y1)}, ${n2(x1)} ${n2(y1)}`
+            : `M${n2(x0)} ${n2(y0)} C${n2(x0 + G.k * (x1 - x0))} ${n2(y0)}, ${n2(x1)} ${n2(y1 + G.k * (y0 - y1))}, ${n2(x1)} ${n2(y1)}`;
+        const loopD = (w) => arc(LOSS_TOP.x, LOSS_TOP.y, G.mx + half(w) + G.gap, G.oy, true);
+        const selD = (w) => arc(G.mx - half(w) - G.gap, G.oy, DATA_TOP.x, DATA_TOP.y, false);
+        // direct weight updates (stage 5): the data's own arrow up into the agent, the mirror of the loop's arc
+        const upD = (w) => arc(DATA_TOP.x, DATA_TOP.y, G.mx - half(w) - G.gap, G.oy, true);
+        // reshape.py (stage 4): the agent's arc into the model's left side, leaving the agent where selector.py's did
+        const RS = { x0: G.mx - half(1) - G.gap, y0: G.oy, x1: G.mx - G.mw / 2 - G.gap, y1: G.y - 80, bulge: 150 };
+        const RESHAPE_D = `M${RS.x0} ${RS.y0} C${RS.x0 - RS.bulge} ${RS.y0}, ${RS.x0 - RS.bulge} ${RS.y1}, ${RS.x1} ${RS.y1}`;
+        // the inner loop (stages 2-5): the right-hand loop again, smaller: three arrows, each IN.d from the loop's
+        // own arrow (the update arrow, the forward arrow, the backward arc at its agentic width: the arc is its exact
+        // parallel), with IN.gap between them at the corners and clear of the boxes and labels
+        const IN = { d: 62, gap: 18, lo: 0.3, w1: 5, xf: 0.3 }; // its turn: the faint arrows' opacity, the lit width, the hand-off (s)
+        const INNER = (() => {
+          const x3 = G.mx + half(1) + G.gap,
+            P = [
+              [LOSS_TOP.x, LOSS_TOP.y],
+              [LOSS_TOP.x, LOSS_TOP.y + G.k * (G.oy - LOSS_TOP.y)],
+              [x3 + G.k * (LOSS_TOP.x - x3), G.oy],
+              [x3, G.oy],
+            ];
+          const B = (t, i) => {
+            const u = 1 - t;
+            return u * u * u * P[0][i] + 3 * u * u * t * P[1][i] + 3 * u * t * t * P[2][i] + t * t * t * P[3][i];
+          };
+          const dB = (t, i) => {
+            const u = 1 - t;
+            return 3 * u * u * (P[1][i] - P[0][i]) + 6 * u * t * (P[2][i] - P[1][i]) + 3 * t * t * (P[3][i] - P[2][i]);
+          };
+          // the offset point: d along the normal that points into the loop
+          const Q = (t) => {
+            const tx = dB(t, 0),
+              ty = dB(t, 1),
+              h = Math.hypot(tx, ty) || 1;
+            return [B(t, 0) + (IN.d * ty) / h, B(t, 1) - (IN.d * tx) / h];
+          };
+          const xV = G.mx + IN.d, // the inner down arrow
+            yH = G.y - IN.d; // the inner rightward arrow
+          // the arc starts IN.gap above the rightward arrow's level
+          let lo = 0,
+            hi = 1;
+          for (let i = 0; i < 40; i++) {
+            const m = (lo + hi) / 2;
+            if (Q(m)[1] > yH - IN.gap) lo = m;
+            else hi = m;
+          }
+          const pts = [];
+          for (let i = 0; i <= 48; i++) pts.push(Q(lo + ((1 - lo) * i) / 48));
+          const top = pts[pts.length - 1];
+          const arcD = "M" + pts.map((q) => n2(q[0]) + " " + n2(q[1])).join(" L") + ` L${n2(xV + IN.gap)} ${n2(top[1])}`;
+          return {
+            down: `M${xV} ${n2(top[1] + IN.gap)} V${G.y - G.mh / 2 - G.gap}`,
+            right: `M${G.mx + G.mw / 2 + G.gap} ${yH} H${n2(pts[0][0] - IN.gap)}`,
+            arc: arcD,
+            xV,
+            yH,
+            top: top[1],
+            arcStart: pts[0],
+          };
+        })();
+        // the auto research loop: a rounded rectangle, drawn from just right of its label; both its labels sit on
+        // the top edge, so the bottom 60 px of the frame stay free (a citation sits under the frame)
+        const OL = { x: 56, y: 30, w: 1568, h: 752, r: 130, lx: 214, start: 484, cx: 1458 }; // lx label start, cx counter end
+        const OUTER_D = (() => {
+          const { x, y, w, h, r, start } = OL;
+          return `M${start} ${y} H${x + w - r} A${r} ${r} 0 0 1 ${x + w} ${y + r} V${y + h - r} A${r} ${r} 0 0 1 ${x + w - r} ${y + h} H${x + r} A${r} ${r} 0 0 1 ${x} ${y + h - r} V${y + r} A${r} ${r} 0 0 1 ${x + r} ${y} H${start}`;
+        })();
+        // its arrowheads, one at the middle of each side, pointing the way it turns (clear of both labels): s the
+        // distance along OUTER_D, (x, y) the place, a the direction in degrees; the arrow markers' slim head, AS
+        // times its 10-unit box (about 24 px long)
+        const OA = (() => {
+          const { x, y, w, h, r, start } = OL,
+            q = (Math.PI * r) / 2, // a rounded corner
+            s0 = x + w - r - start, // from the start to the top right corner
+            sv = h - 2 * r, // a straight side
+            sh = w - 2 * r; // the straight bottom
+          return [
+            { s: x + w / 2 - start, x: x + w / 2, y, a: 0 },
+            { s: s0 + q + sv / 2, x: x + w, y: y + h / 2, a: 90 },
+            { s: s0 + 2 * q + sv + sh / 2, x: x + w / 2, y: y + h, a: 180 },
+            { s: s0 + 3 * q + 1.5 * sv + sh, x, y: y + h / 2, a: 270 },
+          ];
+        })();
+        const AS = 2.6,
+          OA_D = `M${n2(-4.6 * AS)} ${n2(-4.2 * AS)} L${n2(4.6 * AS)} 0 L${n2(-4.6 * AS)} ${n2(4.2 * AS)} Q${n2(-2.4 * AS)} 0 ${n2(-4.6 * AS)} ${n2(-4.2 * AS)} Z`;
+
+        // ------------------------------------------------------------ elements
+        const svg = $("s"),
+          defs = $("defs");
+        const mk = (tag, attrs, parent) => {
+          const e = document.createElementNS(NS, tag);
+          for (const k in attrs) e.setAttribute(k, attrs[k]);
+          (parent || svg).appendChild(e);
+          return e;
+        };
+        const txt = (s, attrs, parent) => {
+          const e = mk("text", attrs, parent);
+          e.textContent = s;
+          return e;
+        };
+        // arrowheads: a slim head with a slightly hollow back, sized in stroke widths; the line ends well inside
+        // the head (refX 6), so a thick line's round cap never pokes out beside the tip
+        const marker = (id, fill, size) => {
+          const m = mk("marker", { id, viewBox: "0 0 10 10", refX: 6, refY: 5, markerWidth: size, markerHeight: size, orient: "auto-start-reverse" }, defs);
+          mk("path", { d: "M0.4 0.8 L9.6 5 L0.4 9.2 Q2.6 5 0.4 0.8 Z", fill }, m);
+          return `url(#${id})`;
+        };
+        const AH = marker("ah", PAL.line, 4.6),
+          AHV = marker("ahv", PURPLE, 4.2),
+          AHD = marker("ahd", PURPLE, 3.4),
+          AHP = marker("ahp", PINK, 3.6);
+        const grad = (id, stops, a) => {
+          const g = mk("linearGradient", { id, ...a }, defs);
+          for (const [o, c] of stops) mk("stop", { offset: o, "stop-color": c }, g);
+        };
+        grad("agent", [[0, "#1e6bff"], [0.5, "#8c2bff"], [1, "#ff2f6e"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+        grad("agentX", [[0, "#1e6bff"], [0.5, "#8c2bff"], [1, "#ff2f6e"]], { x1: 0, y1: 0, x2: 1, y2: 0 });
+        grad("dataG", [[0, "#ffb000"], [1, "#ff2f6e"]], { x1: 0, y1: 0, x2: 1, y2: 1 });
+        // the agent's control arrows: violet at the agent, pink at the part it controls
+        grad("selG", [[0, PINK], [1, PURPLE]], { gradientUnits: "userSpaceOnUse", x1: DATA_TOP.x, y1: 0, x2: G.mx - half(1) - G.gap, y2: 0 });
+        grad("rsG", [[0, PURPLE], [1, PINK]], { gradientUnits: "userSpaceOnUse", x1: 0, y1: RS.y0, x2: 0, y2: RS.y1 });
+
+        const gPipe = mk("g", { id: "pipe" });
+        // gBack: everything but the optimizer and the tokens (the opening fades it; its optimizer then lights up)
+        const gBack = mk("g", {}, gPipe);
+        // outer loop: auto research (a dotted line and its four arrowheads, under its labels)
+        const gOuter = mk("g", { id: "outerG" }, gBack);
+        mk("path", { id: "outerLine", d: OUTER_D, fill: "none", stroke: BLUE, "stroke-width": 5, "stroke-dasharray": "2 16", "stroke-linecap": "round" }, gOuter);
+        const outerPath = mk("path", { d: OUTER_D, fill: "none", stroke: "none" }, gOuter);
+        for (const c of OA) c.el = mk("path", { d: OA_D, fill: BLUE, opacity: 0 }, gOuter);
+        const olBg = mk("rect", { x: OL.lx - 16, y: OL.y - 24, width: 0, height: 48, fill: "#fff" }, gOuter);
+        const olLbl = txt("Auto research", { x: OL.lx, y: OL.y + 11, style: `font-size:32px;font-weight:700;fill:${BLUE}`, opacity: 0 }, gOuter);
+        const exBg = mk("rect", { x: OL.cx, y: OL.y - 20, width: 0, height: 40, fill: "#fff" }, gOuter);
+        const EX = `font-size:26px;font-weight:500;fill:${BLUE}`;
+        const exA = txt("experiment 1", { x: OL.cx, y: OL.y + 9, "text-anchor": "end", style: EX, opacity: 0 }, gOuter);
+        const exB = txt("", { x: OL.cx, y: OL.y + 9, "text-anchor": "end", style: EX, opacity: 0 }, gOuter);
+
+        // arrows
+        const gLanes = mk("g", {}, gBack);
+        const laneAttrs = { fill: "none", stroke: PAL.line, "stroke-width": 3.5, "stroke-linecap": "round", "stroke-linejoin": "round", "marker-end": AH };
+        const lane = (id, d, extra) => mk("path", { id, d, ...laneAttrs, ...(extra || {}) }, gLanes);
+        lane("trainIn", D.trainIn);
+        lane("trainOut", D.trainOut);
+        lane("loop", loopD(0));
+        lane("optDown", D.optDown);
+        lane("optDownA", D.optDown, { stroke: PURPLE, "stroke-width": 5, "marker-end": AHD, opacity: 0 });
+        lane("selR", selD(0), { stroke: "url(#selG)", "stroke-width": 5, "marker-end": AHP });
+        lane("rsR", RESHAPE_D, { stroke: "url(#rsG)", "stroke-width": 5, "marker-end": AHP });
+        lane("dUp", upD(0));
+        const INL = ["inDown", "inRight", "inArc"];
+        lane("inDown", INNER.down, { stroke: PURPLE, "stroke-width": 3.5, "marker-end": AHV });
+        lane("inRight", INNER.right, { stroke: PURPLE, "stroke-width": 3.5, "marker-end": AHV });
+        lane("inArc", INNER.arc, { stroke: PURPLE, "stroke-width": 3.5, "marker-end": AHV });
+
+        // quiet labels along the arrows
+        const gLabels = mk("g", {}, gBack);
+        const LAB = `font-size:24px;font-weight:500;fill:${PAL.soft}`;
+        const fwdX = (G.mx + G.mw / 2 + G.gap + G.lx - G.lw / 2 - G.gap) / 2;
+        const labF = txt("forward", { x: fwdX, y: G.y - 22, "text-anchor": "middle", style: LAB, opacity: 0 }, gLabels);
+        const labB = txt("backward", { x: 0, y: 0, style: LAB, opacity: 0 }, gLabels);
+        const labNo = txt("no", { x: 0, y: 0, style: LAB, opacity: 0 }, gLabels); // stage 5: "no backward"
+        const LB = { x0: 0, shift: 0 }; // where "backward" starts, and how far it glides right to make room for "no"
+        const updY = (DOWN.y0 + DOWN.y1) / 2 + 8;
+        // program chips: a quiet label that can become a coloured chip and pulse (updater.py, selector.py, reshape.py)
+        const CHIP = { h: 38, pad: 12, fs: 23 };
+        function chip(id, words, x, y, anchor) {
+          const g = mk("g", { id }, gLabels);
+          const box = mk("rect", { x: 0, y: y - 26, width: 0, height: CHIP.h, rx: 12, fill: "#fff", stroke: "url(#agentX)", "stroke-width": 2, opacity: 0 }, g);
+          const plain = txt(words[0], { x, y, "text-anchor": anchor, class: "mono", style: `font-size:${CHIP.fs}px;fill:${PAL.soft}` }, g);
+          const col = words.map((w) => txt(w, { x, y, "text-anchor": anchor, class: "mono", style: `font-size:${CHIP.fs}px;font-weight:600;fill:url(#agentX)`, opacity: 0 }, g));
+          return { g, box, plain, col, x, y, anchor, w: words.map(() => 0) };
+        }
+        const upd = chip("upd", ["updater.py", "delta.py"], G.mx - 38, updY, "end");
+        const sel = chip("sel", ["selector.py"], 0, 0, "end");
+        const rsh = chip("rsh", ["reshape.py"], 0, 0, "end");
+        // "improved": rises next to a part as it turns blue (auto research), then fades
+        const IMP = `font-size:26px;font-weight:600;fill:${BLUE}`;
+        const impAt = {
+          O: [G.mx + G.ow0 / 2 + 20, G.oy - G.oh / 2 + 6],
+          M: [G.mx + G.mw / 2 + 20, G.y - G.mh / 2 + 36],
+        };
+        const imp = Object.fromEntries(Object.entries(impAt).map(([k, [x, y]]) => [k, txt("improved", { x, y, style: IMP, opacity: 0 }, gLabels)]));
+
+        // training data: two sheets, three lines of text
+        const gData = mk("g", { id: "trainData" }, gBack);
+        const cardXY = { x: G.dx - G.cw / 2, y: G.y - G.ch / 2, width: G.cw, height: G.ch, rx: G.cr };
+        mk("rect", { ...cardXY, x: cardXY.x + G.off, y: cardXY.y - G.off, fill: PAL.sheet }, gData);
+        const card = mk("rect", { ...cardXY, fill: PAL.box }, gData);
+        const cardG = mk("rect", { ...cardXY, fill: "url(#dataG)", opacity: 0 }, gData);
+        const tx0 = cardXY.x + 22;
+        mk("path", { d: `M${tx0} ${G.y - 20}h72M${tx0} ${G.y}h72M${tx0} ${G.y + 20}h44`, stroke: "#fff", "stroke-width": 6, "stroke-linecap": "round" }, gData);
+        txt("training data", { x: G.dx + G.off / 2, y: G.y + G.ch / 2 + 50, "text-anchor": "middle", style: `font-size:30px;font-weight:500;fill:${PAL.ink}` }, gData);
+
+        // model: a rounded card with four layers (stage 4 adds and removes one at the front, then at the back)
+        const gModel = mk("g", { id: "model" }, gBack);
+        const mCard = mk("rect", { x: G.mx - G.mw / 2, y: G.y - G.mh / 2, width: G.mw, height: G.mh, rx: G.mr, fill: PAL.card, stroke: PAL.cardS, "stroke-width": 3 }, gModel);
+        const bars = [0, 1, 2, 3].map(() => mk("rect", { x: G.mx, y: G.y - G.sh / 2, width: G.sw, height: G.sh, rx: G.sw / 2, fill: PAL.slab }, gModel));
+        const extra = [0, 1].map(() => mk("rect", { x: G.mx, y: G.y, width: G.sw, height: 0, rx: G.sw / 2, fill: VIVID[4], opacity: 0 }, gModel));
+        txt("model", { x: G.mx, y: G.y + G.mh / 2 + 50, "text-anchor": "middle", style: `font-size:30px;font-weight:500;fill:${PAL.ink}` }, gModel);
+
+        // loss
+        const gLoss = mk("g", { id: "lossG" }, gBack);
+        mk("rect", { x: G.lx - G.lw / 2, y: G.y - G.lh / 2, width: G.lw, height: G.lh, rx: G.lr, fill: PAL.box }, gLoss);
+        const BW = "font-size:30px;font-weight:600;fill:#fff";
+        txt("loss", { x: G.lx, y: G.y + 10.5, "text-anchor": "middle", style: BW }, gLoss);
+
+        // optimizer (the agentic optimizer stays still: its program, not the box, is what changes)
+        const gFront = mk("g", {}, gPipe);
+        const gOpt = mk("g", { id: "optG" }, gFront);
+        const optBox = mk("rect", { x: G.mx - G.ow0 / 2, y: G.oy - G.oh / 2, width: G.ow0, height: G.oh, rx: G.or, fill: PAL.box }, gOpt);
+        const optBoxA = mk("rect", { x: G.mx - G.ow0 / 2, y: G.oy - G.oh / 2, width: G.ow0, height: G.oh, rx: G.or, fill: "url(#agent)", opacity: 0 }, gOpt);
+        // "optimizer" glides right while "agentic" fades in, so the words never overlap
+        const optW1 = txt("agentic", { x: G.mx, y: G.oy + 10.5, style: BW, opacity: 0 }, gOpt);
+        const optW2 = txt("optimizer", { x: G.mx, y: G.oy + 10.5, "text-anchor": "middle", style: BW }, gOpt);
+        const gTokW = mk("g", {}, gPipe);
+        const gTok = mk("g", { id: "tokens" }, gTokW);
+
+        // ------------------------------------------------------------ opening only: the training loss chart
+        const CH = { L: 150, R: 1610, T: 60, B: 720, X0: 1, X1: 610, Y0: 3.6, Y1: 8.4 };
+        // click 1 shrinks the whole picture into the chart's empty upper right (right edge on the chart's, top at
+        // y 70: the top 50 px stay free) and fades it a little; click 2 lights up its optimizer in the deck blue
+        const BB = { x0: G.dx + G.off / 2 - 95, x1: G.lx + G.lw / 2, y0: G.oy - G.oh / 2, y1: G.y + G.mh / 2 + 58 };
+        const MINI = { s: 0.72, o: 0.88, hi: "#1f5fd6" }; // three quarters of full size, a little quieter than the curve
+        MINI.tx = CH.R - MINI.s * BB.x1;
+        MINI.ty = 70 - MINI.s * BB.y0;
+        const CX = (u) => CH.L + ((CH.R - CH.L) * (u - CH.X0)) / (CH.X1 - CH.X0),
+          CY = (v) => CH.B - ((CH.B - CH.T) * (v - CH.Y0)) / (CH.Y1 - CH.Y0);
+        let gChart = null,
+          clipR = null,
+          head = null;
+        const lossAt = (u) => {
+          let k = 1;
+          while (k < LOSS.length - 1 && LOSS[k][0] < u) k++;
+          const a = LOSS[k - 1],
+            b = LOSS[k],
+            f = c01((u - a[0]) / (b[0] - a[0]));
+          return a[1] + (b[1] - a[1]) * f;
+        };
+        if (OPENING) {
+          svg.setAttribute("aria-label", "Training data goes through the model to the loss; the backward pass sends gradients to the optimizer, whose update goes back into the model. On click: the training loss of a 38M-parameter GPT over 610 steps");
+          const cp = mk("clipPath", { id: "clip" }, defs);
+          clipR = mk("rect", { x: CH.L - 8, y: 0, width: 0, height: 860 }, cp);
+          gChart = mk("g", { id: "chart", opacity: 0 });
+          const AX = "font-size:26px;fill:#6b6b68";
+          mk("line", { x1: CH.L, y1: CH.B, x2: CH.R, y2: CH.B, stroke: "#8d8d8a", "stroke-width": 2 }, gChart);
+          for (const v of [4, 5, 6, 7, 8]) txt(String(v), { x: CH.L - 22, y: CY(v) + 9, "text-anchor": "end", style: AX }, gChart);
+          for (const u of [1, 100, 200, 300, 400, 500, 610]) txt(String(u), { x: CX(u), y: CH.B + 40, "text-anchor": "middle", style: AX }, gChart);
+          txt("Training steps", { x: (CH.L + CH.R) / 2, y: CH.B + 82, "text-anchor": "middle", style: AX }, gChart);
+          txt("Training loss (nats per token) ↓", { x: 44, y: (CH.T + CH.B) / 2, "text-anchor": "middle", style: AX, transform: `rotate(-90 44 ${(CH.T + CH.B) / 2})` }, gChart);
+          mk("path", { d: LOSS.map((p, i) => (i ? "L" : "M") + CX(p[0]).toFixed(1) + "," + CY(p[1]).toFixed(1)).join(""), fill: "none", stroke: "#245a89", "stroke-width": 3.2, "stroke-linejoin": "round", "clip-path": "url(#clip)" }, gChart);
+          head = mk("circle", { r: 7, fill: "#245a89", opacity: 0 }, gChart);
+        }
+
+        // ------------------------------------------------------------ drawing a path along its length (through a mask)
+        // The mask is the path itself, stretched a little past both ends along its tangents (so the
+        // arrowhead is covered), stroked wide with butt ends: the drawn length grows from exactly zero.
+        const REV = {};
+        const E0 = 6,
+          E1 = 24;
+        function maskD(id, d) {
+          const r = REV[id];
+          const q = mk("path", { d, fill: "none", stroke: "none" });
+          const L = q.getTotalLength(),
+            a = q.getPointAtLength(0),
+            a1 = q.getPointAtLength(Math.min(1, L)),
+            b = q.getPointAtLength(L),
+            b1 = q.getPointAtLength(Math.max(0, L - 1));
+          q.remove();
+          const unit = (x, y) => {
+            const h = Math.hypot(x, y) || 1;
+            return [x / h, y / h];
+          };
+          const [ux0, uy0] = unit(a1.x - a.x, a1.y - a.y),
+            [ux1, uy1] = unit(b.x - b1.x, b.y - b1.y);
+          const body = d.replace(/^\s*M\s*[-\d.]+[\s,]+[-\d.]+/, "");
+          r.mp.setAttribute("d", `M${n2(a.x - ux0 * E0)} ${n2(a.y - uy0 * E0)} L${n2(a.x)} ${n2(a.y)}${body} L${n2(b.x + ux1 * E1)} ${n2(b.y + uy1 * E1)}`);
+          r.len = L;
+          r.p = -1;
+        }
+        function revealable(id, width, d) {
+          const target = $(id);
+          const m = mk("mask", { id: "m-" + id, maskUnits: "userSpaceOnUse", x: -200, y: -200, width: 2100, height: 1300 }, defs);
+          const mp = mk("path", { fill: "none", stroke: "#fff", "stroke-width": width, "stroke-linecap": "butt", "stroke-linejoin": "round" }, m);
+          target.setAttribute("mask", "url(#m-" + id + ")");
+          REV[id] = { el: target, mp, len: 0, p: -1 };
+          maskD(id, d || target.getAttribute("d"));
+        }
+        function setReveal(id, p) {
+          const r = REV[id];
+          p = c01(p);
+          if (p <= 0.0005) {
+            r.el.style.visibility = "hidden";
+            r.p = p;
+            return;
+          }
+          r.el.style.visibility = "";
+          if (Math.abs(p - r.p) < 1e-6) return;
+          const shown = E0 + (r.len + E1) * p;
+          r.mp.setAttribute("stroke-dasharray", shown.toFixed(2) + " " + (r.len + E0 + E1 + 20).toFixed(2));
+          r.p = p;
+        }
+        function setD(id, d) {
+          const e = $(id);
+          if (e.getAttribute("d") === d) return;
+          e.setAttribute("d", d);
+          if (REV[id]) maskD(id, d);
+        }
+        for (const [id, w] of [["trainIn", 44], ["trainOut", 44], ["loop", 44], ["optDown", 44], ["optDownA", 56], ["selR", 44], ["rsR", 44], ["dUp", 44], ["inDown", 34], ["inRight", 34], ["inArc", 34]]) revealable(id, w);
+        revealable("outerLine", 30);
+        const OUTER_LEN = outerPath.getTotalLength();
+
+        // ------------------------------------------------------------ tokens
+        // a token's place is a function of the wall clock, so pages that show the same route agree on where every
+        // token is at any moment. The loop's tokens run data -> model -> loss -> optimizer -> model; from stage 2
+        // on, the stretch from the agent into the model belongs to the agent's rounds of updates instead.
+        const tok = (r, fill) => mk("circle", { r, fill, opacity: 0, cx: -100, cy: -100 }, gTok);
+        const trainTok = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(() => tok(8.5, PAL.tok));
+        const roundTok = [0, 1, 2].map(() => tok(8.5, VIVID[0]));
+        const upTok = [0, 1, 2, 3].map(() => tok(8.5, PAL.tok)); // stage 5: the data's tokens up into the agent
+        const UP = { len: 1 }; // the length of that arrow (it follows the optimizer's width)
+        const chain = (ids) => ({ segs: ids.map((id) => $(id)), lens: [], total: 1 });
+        const measure = (ch) => {
+          ch.lens = ch.segs.map((p) => p.getTotalLength());
+          ch.total = ch.lens.reduce((a, b) => a + b, 0);
+        };
+        function at(ch, d) {
+          for (let i = 0; i < ch.segs.length; i++) {
+            if (d <= ch.lens[i] || i === ch.segs.length - 1) {
+              const dd = Math.max(0, Math.min(d, ch.lens[i]));
+              const p = ch.segs[i].getPointAtLength(dd);
+              return { x: p.x, y: p.y, seg: i, edge: Math.min(dd, ch.lens[i] - dd) };
+            }
+            d -= ch.lens[i];
+          }
+        }
+        const trainCh = chain(["trainIn", "trainOut", "loop", "optDown"]);
+        const SPEED = 230; // px per second
+        const REF = { tr: lenOf(D.trainIn) + lenOf(D.trainOut) + lenOf(loopD(0)) + lenOf(D.optDown) };
+        function lenOf(d) {
+          const p = mk("path", { d, fill: "none", stroke: "none" });
+          const L = p.getTotalLength();
+          p.remove();
+          return L;
+        }
+        // the agent's rounds: every ROUND seconds three coloured updates leave the agent for the model, and the
+        // program that wrote them pulses (updater.py; selector.py too while it is on screen). 2.4 s (it was 1.6 s),
+        // so the inner loop's turn rests 0.8 s on each of its three arrows
+        const ROUND = 2.4,
+          RSPEED = 200,
+          RGAP = 0.13;
+        const roundS = (L) => frac(L / ROUND) * ROUND; // seconds since the last round left the agent
+        const bump = (s, d) => (s >= 0 && s < d ? Math.sin((Math.PI * s) / d) : 0);
+        // the model's layer changes (stage 4): add at the front, remove it, add at the back, remove it; one change
+        // per round (2.4 s; it was every 3.2 s, two 1.6 s rounds), half a round after an update round, so the
+        // updater.py and reshape.py pulses alternate
+        const ARCH = { period: 4 * ROUND, at: [0.5, 1.5, 2.5, 3.5].map((k) => k * ROUND), ease: 0.55 };
+        function arch(L) {
+          const s = frac(L / ARCH.period) * ARCH.period,
+            e = ARCH.ease,
+            [a, b, c, d] = ARCH.at;
+          const up = (t0) => smooth((s - t0) / e);
+          const front = s < a ? 0 : s < b ? up(a) : 1 - up(b);
+          const back = s < c ? 0 : s < d ? up(c) : 1 - up(d);
+          return { front, back, pulse: bump(frac((L - a) / (ARCH.period / 4)) * (ARCH.period / 4), 0.5) };
+        }
+        function place(L, alpha, P) {
+          const n = trainTok.length,
+            cps = SPEED / REF.tr;
+          trainTok.forEach((c, i) => {
+            if (alpha <= 0.001) {
+              c.setAttribute("opacity", 0);
+              return;
+            }
+            const q = at(trainCh, frac(L * cps + i / n) * trainCh.total);
+            c.setAttribute("cx", q.x.toFixed(1));
+            c.setAttribute("cy", q.y.toFixed(1));
+            // tokens slip into and out of the boxes instead of jumping across them
+            const own = q.seg === 3 ? 1 - P.own : 1; // the agent's own stretch belongs to its rounds
+            c.setAttribute("opacity", (alpha * own * smooth(q.edge / 16)).toFixed(3));
+            const v = [P.vivIn, P.vivOut, P.vivBk, 0][q.seg];
+            c.setAttribute("fill", mix(PAL.tok, VIVID[i % 5], v));
+          });
+          const s = roundS(L),
+            k = Math.floor(L / ROUND),
+            Ld = lenOf.cache || (lenOf.cache = $("optDown").getTotalLength());
+          roundTok.forEach((c, j) => {
+            const d = (s - j * RGAP) * RSPEED;
+            const a = alpha * P.own * (d >= 0 && d <= Ld ? smooth(Math.min(d, Ld - d) / 16) : 0);
+            c.setAttribute("opacity", a.toFixed(3));
+            if (a <= 0.001) return;
+            c.setAttribute("cx", G.mx);
+            c.setAttribute("cy", (DOWN.y0 + d).toFixed(1));
+            c.setAttribute("fill", VIVID[(((k + j) % 5) + 5) % 5]);
+          });
+          // stage 5: the data's tokens also flow up into the agent, uncoloured, spaced and timed like the loop's (one
+          // leaves the data for the agent whenever one leaves it for the model)
+          const sp = trainCh.total / n,
+            ph = frac(L * cps * n),
+            up = $("dUp");
+          upTok.forEach((c, j) => {
+            const d = (ph + j) * sp;
+            const a = alpha * P.upTk * (d <= UP.len ? smooth(Math.min(d, UP.len - d) / 16) : 0);
+            c.setAttribute("opacity", a.toFixed(3));
+            if (a <= 0.001) return;
+            const q = up.getPointAtLength(d);
+            c.setAttribute("cx", q.x.toFixed(1));
+            c.setAttribute("cy", q.y.toFixed(1));
+          });
+        }
+        function fadeG(e, a, cx, cy, scaleFrom) {
+          a = c01(a);
+          e.setAttribute("opacity", a.toFixed(3));
+          e.style.visibility = a <= 0.001 ? "hidden" : "";
+          if (cx != null) {
+            const s = lerp(scaleFrom, 1, smooth(a));
+            e.setAttribute("transform", s >= 0.9999 ? "" : "translate(" + cx + " " + cy + ") scale(" + s.toFixed(4) + ") translate(" + -cx + " " + -cy + ")");
+          }
+        }
+        const op = (e, a) => {
+          a = c01(a);
+          e.setAttribute("opacity", a.toFixed(3));
+          e.style.visibility = a <= 0.001 ? "hidden" : "";
+        };
+        // "improved" over its life p (0..1): rises in, holds, fades out over 1.3 s, drifting up a little
+        function popAt(e, p, x, y) {
+          const ph = p - Math.floor(p);
+          if (ph <= 0 || p <= 0) {
+            op(e, 0);
+            return;
+          }
+          const a = ph < 0.1 ? smooth(ph / 0.1) : ph < 0.38 ? 1 : 1 - smooth((ph - 0.38) / 0.62);
+          op(e, a);
+          const s = 0.86 + 0.14 * smooth(ph / 0.12),
+            dy = -14 * (1 - (1 - ph) * (1 - ph));
+          e.setAttribute("transform", `translate(${x} ${(y + dy).toFixed(2)}) scale(${s.toFixed(4)}) translate(${-x} ${-y})`);
+        }
+        // a chip's look: plain label (c = 0) or coloured chip (c = 1); word w crossfades its words; z = pulse
+        function drawChip(ch, show, c, w, z) {
+          op(ch.g, show);
+          if (show <= 0.001) return;
+          op(ch.plain, 1 - c);
+          ch.col.forEach((e, i) => op(e, c * (ch.col.length > 1 ? (i === 0 ? 1 - w : w) : 1)));
+          const tw = ch.col.length > 1 ? lerp(ch.w[0], ch.w[1], smooth(w)) : ch.w[0];
+          const x0 = ch.anchor === "end" ? ch.x - tw - CHIP.pad : ch.x - CHIP.pad;
+          ch.box.setAttribute("x", x0.toFixed(2));
+          ch.box.setAttribute("width", (tw + 2 * CHIP.pad).toFixed(2));
+          op(ch.box, c);
+          ch.box.setAttribute("fill", mix("#ffffff", FLASH, z));
+          ch.box.setAttribute("stroke-width", (2 + 1.2 * z).toFixed(2));
+          const cx = x0 + tw / 2 + CHIP.pad,
+            cy = ch.y - 26 + CHIP.h / 2,
+            sc = 1 + 0.12 * z;
+          ch.g.setAttribute("transform", sc === 1 ? "" : `translate(${cx.toFixed(2)} ${cy}) scale(${sc.toFixed(4)}) translate(${(-cx).toFixed(2)} ${-cy})`);
+        }
+
+        // ------------------------------------------------------------ text that depends on the font's metrics
+        const WORDS = {};
+        function layoutText() {
+          const w = (e) => e.getComputedTextLength();
+          const all = mk("text", { x: 0, y: -500, style: BW });
+          all.textContent = "agentic optimizer";
+          const wAll = w(all);
+          all.remove();
+          const wOpt = w(optW2) || 140;
+          WORDS.x2old = G.mx - wOpt / 2;
+          WORDS.x1 = G.mx - wAll / 2;
+          WORDS.x2new = G.mx + wAll / 2 - wOpt;
+          optW2.setAttribute("text-anchor", "start");
+          optW1.setAttribute("x", WORDS.x1.toFixed(2));
+          olBg.setAttribute("width", (w(olLbl) + 32).toFixed(1));
+          const wEx = w(exA) || 150;
+          exBg.setAttribute("x", (OL.cx - wEx - 14).toFixed(1));
+          exBg.setAttribute("width", (wEx + 28).toFixed(1));
+          for (const ch of [upd, sel, rsh]) ch.w = ch.col.map((e) => w(e) || e.textContent.length * 0.62 * CHIP.fs);
+          const nb = mk("text", { x: 0, y: -500, style: LAB });
+          nb.textContent = "no backward";
+          LB.shift = w(nb) - w(labB) || 38;
+          nb.remove();
+          placeArcLabels();
+        }
+        // "backward" sits just outside the middle of the loop's arc, selector.py just outside the middle of the
+        // agent's arc to the data (both arcs follow the optimizer's width)
+        function placeArcLabels() {
+          const mid = (id) => {
+            const p = $(id);
+            return p.getPointAtLength(p.getTotalLength() / 2);
+          };
+          const m = mid("loop");
+          LB.x0 = m.x + 22;
+          labB.setAttribute("x", LB.x0.toFixed(1));
+          labB.setAttribute("y", (m.y - 16).toFixed(1));
+          labNo.setAttribute("x", LB.x0.toFixed(1));
+          labNo.setAttribute("y", (m.y - 16).toFixed(1));
+          const s = mid("selR");
+          sel.x = s.x - 34;
+          sel.y = s.y - 22;
+          for (const e of [sel.plain, ...sel.col]) {
+            e.setAttribute("x", sel.x.toFixed(1));
+            e.setAttribute("y", sel.y.toFixed(1));
+          }
+          sel.box.setAttribute("y", (sel.y - 26).toFixed(1));
+          const r = mid("rsR");
+          rsh.x = r.x - 30;
+          rsh.y = r.y + 8;
+          for (const e of [rsh.plain, ...rsh.col]) {
+            e.setAttribute("x", rsh.x.toFixed(1));
+            e.setAttribute("y", rsh.y.toFixed(1));
+          }
+          rsh.box.setAttribute("y", (rsh.y - 26).toFixed(1));
+        }
+        layoutText();
+
+        // ------------------------------------------------------------ one frame from the parameters
+        let lastWide = -1;
+        function draw(P, L, act) {
+          if (P.wide !== lastWide) {
+            lastWide = P.wide;
+            const w = P.wide,
+              hw = half(w);
+            for (const e of [optBox, optBoxA]) {
+              e.setAttribute("x", (G.mx - hw).toFixed(2));
+              e.setAttribute("width", (2 * hw).toFixed(2));
+            }
+            setD("loop", loopD(w));
+            setD("selR", selD(w));
+            setD("dUp", upD(w));
+            UP.len = $("dUp").getTotalLength();
+            placeArcLabels();
+            measure(trainCh);
+          }
+          // the supervised loop
+          op(gPipe, P.pipe);
+          fadeG(gModel, P.mdl);
+          fadeG(gData, P.trData, G.dx, G.y, 0.92);
+          fadeG(gLoss, P.loss, G.lx, G.y, 0.9);
+          fadeG(gOpt, P.opt, G.mx, G.oy, 0.92);
+          setReveal("trainIn", P.trIn);
+          setReveal("trainOut", P.trOut);
+          setReveal("loop", P.loopP);
+          setReveal("optDown", P.optDn);
+          setReveal("optDownA", P.optDn);
+          setReveal("dUp", P.up); // stage 5: the data's arrow up into the agent
+          op(labF, P.labF);
+          op(labB, P.labB);
+          // stage 5: "backward" glides right and "no" fades in before it
+          labB.setAttribute("x", (LB.x0 + LB.shift * P.noT).toFixed(1));
+          op(labNo, P.labB * P.noW);
+          // the agentic optimizer
+          optBox.setAttribute("fill", mix(revOpt(P.rev), MINI.hi, P.optHi));
+          optBoxA.setAttribute("opacity", P.agF.toFixed(3));
+          optBox.style.visibility = P.agF >= 0.999 ? "hidden" : ""; // no dark rim under the gradient
+          optW2.setAttribute("x", lerp(WORDS.x2old, WORDS.x2new, P.agT).toFixed(2));
+          optW1.setAttribute("opacity", P.agW.toFixed(3));
+          $("optDown").setAttribute("opacity", (1 - P.dnC).toFixed(3));
+          $("optDownA").setAttribute("opacity", P.dnC.toFixed(3));
+          $("optDownA").setAttribute("stroke-width", (5 + 3 * P.dnW).toFixed(2));
+          // the inner loop: drawn in arrow by arrow; then, once per round, the turn hands from arrow to arrow (down
+          // with the round of updates, right, back up the arc), so it turns with the updater.py pulse. The lit arrow is
+          // full purple and thicker (its head grows with it), the other two faint; each holds the turn for a third of
+          // a round (0.8 s) and hands it on in a crossfade (IN.xf) centred on the hand-off, the first at the round's start
+          const rsec = roundS(L),
+            slot = ROUND / 3;
+          INL.forEach((id, i) => {
+            setReveal(id, c01((P.inner - i / 3) * 3));
+            const dt = Math.abs(frac((rsec - (i + 0.5) * slot) / ROUND + 0.5) - 0.5) * ROUND, // from the middle of its turn
+              g = 1 - smooth((dt - slot / 2 + IN.xf / 2) / IN.xf);
+            $(id).setAttribute("opacity", lerp(0.62, IN.lo + (1 - IN.lo) * g, P.pls).toFixed(3));
+            $(id).setAttribute("stroke-width", (3.5 + (IN.w1 - 3.5) * g * P.pls).toFixed(2));
+          });
+          // programs: updater.py (delta.py on stage 5), selector.py (stage 3), reshape.py (stage 4)
+          const zr = bump(roundS(L), 0.5),
+            A = arch(L);
+          drawChip(upd, P.labU, P.chip, P.dlt, P.pls * zr);
+          setReveal("selR", P.sel);
+          $("selR").setAttribute("opacity", P.selG.toFixed(3));
+          drawChip(sel, P.selL * P.selG, 1, 0, P.pls * zr);
+          setReveal("rsR", P.rs);
+          $("rsR").setAttribute("opacity", P.rsG.toFixed(3));
+          drawChip(rsh, P.rsL * P.rsG, 1, 0, P.flp * A.pulse);
+          // data
+          card.setAttribute("fill", PAL.box);
+          cardG.setAttribute("opacity", P.dCard.toFixed(3));
+          card.style.visibility = P.dCard >= 0.999 ? "hidden" : "";
+          // model: the four layers, plus a layer coming and going at the front, then at the back (stage 4)
+          mCard.setAttribute("stroke", mix(PAL.cardS, PURPLE, P.mC));
+          const ff = P.flp * A.front,
+            fb = P.flp * A.back,
+            pitch = G.sw + G.sg,
+            x0 = G.mx - (4 * G.sw + 3 * G.sg + pitch * (ff + fb)) / 2,
+            rb = revBar(P.rev);
+          bars.forEach((r, i) => {
+            r.setAttribute("x", (x0 + pitch * ff + i * pitch).toFixed(2));
+            r.setAttribute("fill", mix(rb, VIVID[i], smooth(P.bC * 1.45 - 0.15 * i)));
+          });
+          [
+            [extra[0], ff, x0],
+            [extra[1], fb, x0 + pitch * ff + 4 * pitch],
+          ].forEach(([r, f, x]) => {
+            const h = G.sh * f;
+            r.setAttribute("x", x.toFixed(2));
+            r.setAttribute("height", h.toFixed(2));
+            r.setAttribute("y", (G.y - h / 2).toFixed(2));
+            r.setAttribute("rx", Math.min(G.sw / 2, h / 2).toFixed(2));
+            op(r, f);
+          });
+          // auto research loop (olPos: laps run): the line draws in during experiment 1; each arrowhead appears as the
+          // line reaches it, then nudges 10 px forward and swells a little as the turn passes it, once per experiment
+          op(gOuter, P.olG);
+          setReveal("outerLine", Math.min(1, P.olPos));
+          olLbl.setAttribute("opacity", P.olLbl.toFixed(3));
+          for (const c of OA) {
+            const f = c.s / OUTER_LEN,
+              a = smooth((P.olPos - f) / 0.04),
+              z = a > 0 ? bump(frac(P.olPos - f), 0.16) : 0,
+              d = 10 * z,
+              r = (c.a * Math.PI) / 180;
+            op(c.el, a);
+            if (a > 0) c.el.setAttribute("transform", `translate(${n2(c.x + d * Math.cos(r))} ${n2(c.y + d * Math.sin(r))}) rotate(${c.a}) scale(${(1 + 0.18 * z).toFixed(4)})`);
+          }
+          const n = Math.floor(P.expN + 1e-6),
+            fr = c01(P.expN - n);
+          exA.textContent = "experiment " + n;
+          exA.setAttribute("opacity", (P.olCnt * (1 - fr)).toFixed(3));
+          exB.textContent = fr > 0.001 ? "experiment " + (n + 1) : "";
+          exB.setAttribute("opacity", (P.olCnt * fr).toFixed(3));
+          popAt(imp.O, P.impO, ...impAt.O);
+          popAt(imp.M, P.impM, ...impAt.M);
+          // tokens
+          place(L, act * c01(P.pipe) * P.tkTr, P);
+          // the opening: the picture shrinks into the chart's corner and fades; then its optimizer lights up
+          if (OPENING) {
+            const u = P.mini,
+              sc = lerp(1, MINI.s, u),
+              fo = lerp(1, MINI.o, u);
+            gPipe.setAttribute("transform", u <= 0 ? "" : `translate(${(MINI.tx * u).toFixed(2)} ${(MINI.ty * u).toFixed(2)}) scale(${sc.toFixed(4)})`);
+            gBack.setAttribute("opacity", fo.toFixed(3));
+            gTokW.setAttribute("opacity", fo.toFixed(3));
+            gFront.setAttribute("opacity", lerp(fo, 1, P.optHi).toFixed(3));
+            const z = 1 + 0.12 * bump(P.optP, 1);
+            if (P.opt >= 0.999) gOpt.setAttribute("transform", z === 1 ? "" : `translate(${G.mx} ${G.oy}) scale(${z.toFixed(4)}) translate(${-G.mx} ${-G.oy})`);
+          }
+          // the opening's loss chart
+          if (gChart) {
+            op(gChart, P.chart);
+            const u = CH.X0 + (CH.X1 - CH.X0) * P.cdraw;
+            clipR.setAttribute("width", P.cdraw <= 0 ? 0 : P.cdraw >= 1 ? CH.R + 20 - (CH.L - 8) : (CX(u) - (CH.L - 8)).toFixed(2));
+            head.setAttribute("cx", CX(u).toFixed(1));
+            head.setAttribute("cy", CY(lossAt(u)).toFixed(1));
+            head.setAttribute("opacity", (P.cdraw > 0 ? P.head : 0).toFixed(3));
+          }
+        }
+
+        // ------------------------------------------------------------ the stages
+        // part 0 plays on arriving at the slide; further parts are clicks (deckwerk.onStep). Times in seconds.
+        const T = (k, to, t0, t1, ease) => ({ k, to, t0, t1, ease: ease || smooth });
+        // the opening: the training loop builds in the order data flows; each label arrives with the part it names
+        const BUILD = [
+          T("trData", 1, 0, 0.45),
+          T("trIn", 1, 0.25, 0.85, inout),
+          T("trOut", 1, 0.75, 1.3, inout),
+          T("labF", 1, 0.9, 1.3),
+          T("loss", 1, 1.1, 1.5),
+          T("loopP", 1, 1.35, 2.0, inout),
+          T("labB", 1, 1.6, 2.0),
+          T("opt", 1, 1.85, 2.25),
+          T("optDn", 1, 2.1, 2.55, inout),
+          T("labU", 1, 2.25, 2.65),
+          T("tkTr", 1, 2.45, 2.9),
+        ];
+        // stage 1: experiments 1 to 4 in one run of the turn (3.6 s a lap, eased start and stop; nothing runs round
+        // the loop: its arrowheads show the turn). Each new experiment begins as the turn passes the start: the
+        // counter changes, the recipe's revision eases in, and "improved" rises next to each part that turns blue
+        const LAP = { t0: 0.25, T: 14.4, ramp: 0.6 };
+        LAP.r = LAP.ramp / LAP.T;
+        const lapAt = (k) => LAP.t0 + LAP.T * ((k / 4) * (1 - LAP.r) + LAP.r / 2); // the turn passes the start
+        const POP = 2.1; // seconds an "improved" lives
+        const AUTO = [T("olLbl", 1, 0, 0.5), T("olCnt", 1, 0.15, 0.6), T("olPos", 4, LAP.t0, LAP.t0 + LAP.T, trap(LAP.r))];
+        for (const k of [1, 2, 3]) {
+          const t = lapAt(k);
+          AUTO.push(T("expN", k + 1, t, t + 0.4), T("rev", k, t, t + 0.6));
+          if (k === 1) AUTO.push(T("impO", 1, t + 0.1, t + 0.1 + POP, linear));
+          if (k === 2) AUTO.push(T("impM", 1, t + 0.1, t + 0.1 + POP, linear));
+          if (k === 3) AUTO.push(T("impO", 2, t + 0.1, t + 0.1 + POP, linear), T("impM", 2, t + 0.25, t + 0.25 + POP, linear));
+        }
+        const STEPS = [
+          // 0 supervised learning: the whole picture, labels included, fades in at once (every part is already in
+          // place: see START0). No click.
+          [{ dur: 0.5, tracks: [T("pipe", 1, 0, 0.5)] }],
+          // 1 auto research: experiments 1 to 4, then the loop's arrowheads rest. No click.
+          [{ dur: LAP.t0 + LAP.T + 0.05, tracks: AUTO }],
+          // 2 reactive optimization: the outer loop fades, the optimizer becomes the agentic optimizer, its updates
+          // turn into coloured rounds, updater.py becomes a coloured chip that pulses with every round, and a
+          // circulating arrow marks the inner loop. No click.
+          [{ dur: 1.95, tracks: [T("olG", 0, 0, 0.6), T("rev", 0, 0, 0.8), T("wide", 1, 0.2, 1.0, inout), T("agF", 1, 0.25, 1.05), T("agT", 1, 0.3, 0.9), T("agW", 1, 0.8, 1.25), T("dnC", 1, 0.55, 1.15), T("own", 1, 0.6, 1.3), T("chip", 1, 0.8, 1.3), T("inner", 1, 1.0, 1.85, inout), T("pls", 1, 1.3, 1.7)] }],
+          // 3 + data: the agent's arrow to the data (selector.py, no tokens on it), the data card recolours, every
+          // token flow turns coloured. No click.
+          [{ dur: 1.6, tracks: [T("dCard", 1, 0, 0.7), T("sel", 1, 0.2, 1.0, inout), T("selL", 1, 0.7, 1.1), T("vivIn", 1, 0.3, 1.1), T("vivOut", 1, 0.45, 1.25), T("vivBk", 1, 0.6, 1.4)] }],
+          // 4 + model: the data idea leaves (arrow, selector.py, data colours); the agent's arrow into the model
+          // (reshape.py) draws in, the model recolours and starts changing at both ends. No click.
+          [{ dur: 2.0, tracks: [T("selG", 0, 0, 0.6), T("dCard", 0, 0, 0.7), T("vivIn", 0, 0, 0.6), T("rs", 1, 0.3, 1.0, inout), T("rsL", 1, 0.7, 1.1), T("mC", 1, 0.2, 0.9), T("bC", 1, 0.3, 1.3, linear), T("flp", 1, 1.3, 2.0)] }],
+          // 5 direct weight updates: the model idea leaves (arrow, reshape.py, colours, layer changes); updater.py
+          // becomes delta.py on a thicker arrow; then the data's arrow up into the agent draws in (its tokens follow)
+          // and "backward" becomes "no backward". No click.
+          [{ dur: 2.1, tracks: [T("rsG", 0, 0, 0.6), T("flp", 0, 0, 0.6), T("mC", 0, 0.1, 0.8), T("bC", 0, 0.1, 0.9, linear), T("vivOut", 0, 0, 0.6), T("vivBk", 0, 0, 0.6), T("dlt", 1, 0.5, 1.1), T("dnW", 1, 0.6, 1.3), T("up", 1, 0.9, 1.7, inout), T("upTk", 1, 1.5, 1.9), T("noT", 1, 1.2, 1.7), T("noW", 1, 1.6, 2.05)] }],
+        ];
+        // the opening slide: the same entry as stage 0. Click 1: the picture glides into the chart's upper right,
+        // small and faded, while the training loss chart comes in and its curve draws (2.8 s, starting and ending at
+        // rest). Click 2: the optimizer in the small picture lights up, with one gentle pulse.
+        const OPEN_STEPS = [
+          { dur: 2.9, tracks: BUILD },
+          { dur: 3.6, tracks: [T("mini", 1, 0, 0.95, inout), T("chart", 1, 0.3, 0.7), T("cdraw", 1, 0.55, 3.35, trap(0.15)), T("head", 1, 0.55, 0.585), T("head", 0, 3.35, 3.55)] },
+          { dur: 1.0, tracks: [T("optHi", 1, 0, 0.45), T("optP", 1, 0.1, 0.8, linear)] },
+        ];
+        const KEYS = "pipe mdl trData trIn trOut loss loopP opt optDn tkTr labF labB labU olG olLbl olCnt olPos expN rev impO impM wide agF agT agW dnC own chip inner pls dCard sel selL selG vivIn vivOut vivBk rs rsL rsG mC bC flp dlt dnW up upTk noT noW chart cdraw head mini optHi optP".split(" ");
+        const START0 = Object.fromEntries(KEYS.map((k) => [k, 0]));
+        Object.assign(START0, { pipe: 1, mdl: 1, olG: OPENING ? 0 : 1, expN: 1, selG: 1, rsG: 1 }); // the opening opens on the model alone
+        // stage 0 opens with every part of the loop in place (labels and tokens too) and the whole picture faded out
+        if (!OPENING) Object.assign(START0, Object.fromEntries(BUILD.map((tr) => [tr.k, 1])), { pipe: 0 });
+
+        function compile(base, step) {
+          const run = { ...base },
+            per = {};
+          for (const tr of step.tracks) {
+            (per[tr.k] = per[tr.k] || []).push({ ...tr, from: run[tr.k] });
+            run[tr.k] = tr.to;
+          }
+          return { per, end: run, dur: step.dur };
+        }
+        function evalAt(base, cs, t) {
+          const P = { ...base };
+          for (const k in cs.per) {
+            const list = cs.per[k];
+            let v = list[0].from;
+            for (const tr of list) {
+              if (t < tr.t0) break;
+              v = lerp(tr.from, tr.to, tr.ease((t - tr.t0) / (tr.t1 - tr.t0)));
+            }
+            P[k] = v;
+          }
+          return P;
+        }
+        // this page opens on the settled end of every earlier stage, computed from the same table
+        let base = START0;
+        const MINE = OPENING ? OPEN_STEPS : STEPS[STAGE];
+        if (!OPENING) for (let s = 0; s < STAGE; s++) for (const st of STEPS[s]) base = compile(base, st).end;
+        const BASES = [],
+          CS = [];
+        for (const st of MINE) {
+          BASES.push(base);
+          const c = compile(base, st);
+          CS.push(c);
+          base = c.end;
+        }
+        const K = CS.length - 1, // click steps on this slide
+          DUR = CS.map((c) => c.dur);
+        const paramsAt = (s, t) => evalAt(BASES[s], CS[s], t);
+
+        // ------------------------------------------------------------ playback: entry, then one part per click
+        const L0 = 2.0, // loop time of the poster and of renderAt
+          FAST = 0.35, // a click during an animation finishes it in this many seconds
+          FADE = 0.25; // tokens fade in when the page becomes live (the poster has none)
+        let active = false,
+          cur = 0,
+          tau = 0,
+          target = 0,
+          rate = 1,
+          raf = 0,
+          last = 0,
+          act0 = null,
+          shown = null;
+        const wall = (now) => (performance.timeOrigin + now) / 1000;
+        function paint(P, L, a) {
+          shown = [P, L, a];
+          draw(P, L, a);
+        }
+        function frame(now) {
+          raf = 0;
+          if (!active) return;
+          const dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
+          last = now;
+          if (act0 === null) act0 = now;
+          if (tau < DUR[cur]) tau = Math.min(DUR[cur], tau + dt * rate);
+          if (tau >= DUR[cur] && cur < target) {
+            cur++;
+            tau = 0;
+            rate = cur < target ? DUR[cur] / FAST : 1;
+          }
+          const P = paramsAt(cur, tau);
+          paint(P, wall(now), smooth((now - act0) / 1000 / FADE));
+          raf = requestAnimationFrame(frame);
+        }
+        function kick() {
+          if (!raf && active) {
+            last = 0;
+            raf = requestAnimationFrame(frame);
+          }
+        }
+        function stop() {
+          active = false;
+          if (raf) cancelAnimationFrame(raf);
+          raf = 0;
+        }
+        // shown at step s: earlier parts settled at once; step 0 then plays the entry
+        function activate(s) {
+          active = true;
+          act0 = null;
+          cur = Math.min(Math.max(s | 0, 0), K);
+          tau = cur > 0 ? DUR[cur] : 0;
+          target = cur;
+          rate = 1;
+          kick();
+        }
+        function toStep(j) {
+          j = Math.max(0, j | 0);
+          if (!active) {
+            // a step message without an active one: settle the part before it, then play it
+            active = true;
+            act0 = null;
+            cur = Math.min(Math.max(j - 1, 0), K);
+            tau = DUR[cur];
+            target = Math.min(j, K);
+            rate = 1;
+            kick();
+            return;
+          }
+          j = Math.min(j, K);
+          if (j > target) {
+            target = j;
+            if (tau < DUR[cur]) rate = Math.max(rate, (DUR[cur] - tau) / FAST);
+            kick();
+          } else if (j < cur) {
+            cur = target = j;
+            tau = DUR[j];
+            rate = 1;
+            kick();
+          }
+        }
+        // deterministic frames: step s, t seconds into its part; loops at loop time L (default L0 + t);
+        // act (optional, 0..1) sets the tokens' visibility
+        window.renderAt = function (step, t, L, act) {
+          if (arguments.length < 2) {
+            t = step;
+            step = 0;
+          }
+          stop();
+          const s = Math.min(Math.max(step | 0, 0), K);
+          t = Math.max(0, +t || 0);
+          cur = target = s;
+          tau = Math.min(DUR[s], t);
+          paint(paramsAt(s, tau), L == null ? L0 + t : +L, act != null ? +act : s > 0 ? 1 : smooth(t / FADE));
+          return { stage: OPENING ? "opening" : STAGE, step: s, t: tau, steps: K, duration: DUR[s] };
+        };
+        window.landscapeSteps = { stage: OPENING ? "opening" : STAGE, steps: K, durations: DUR.slice() };
+
+        paint(paramsAt(0, 0), L0, 0); // the poster: this slide's opening look, without tokens
+        // system fonts can settle after the first paint: measure the words again and redraw
+        if (document.fonts && document.fonts.ready) {
+          const p = document.fonts.ready.then(() => {
+            layoutText();
+            lastWide = -1;
+            if (shown) draw(...shown);
+          });
+          if (window.deckwerk && deckwerk.ready) deckwerk.ready(p);
+        }
+        if (window.deckwerk) {
+          deckwerk.onActive((e) => activate(e && e.step));
+          deckwerk.onStep((e) => toStep(e && e.step));
+          deckwerk.onInactive(stop);
+          document.addEventListener("click", () => deckwerk.next()); // a click on the page advances the deck
+        } else {
+          activate(0);
+          document.addEventListener("click", () => toStep(target + 1));
+        }
+      })();
+    </script>
+  </body>
+</html>

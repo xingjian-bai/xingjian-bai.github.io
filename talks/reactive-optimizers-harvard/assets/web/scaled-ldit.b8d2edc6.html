@@ -1,0 +1,90 @@
+<!doctype html><html lang="en">
+<head><script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script></head><meta charset="utf-8"><title>Recorded experiment</title><style>*{box-sizing:border-box}body{margin:0;color:#191918;background:white;font-family:'Avenir Next',Arial}svg{display:block;width:100%;height:calc(100vh - 55px)}text{font:30px 'Avenir Next',Arial;fill:#191918;paint-order:stroke;stroke:#fff;stroke-width:6px;stroke-linejoin:round}.small{font-size:25px}.title{font-size:36px;font-weight:600}.ctrl{height:55px;display:flex;gap:14px;align-items:center;padding:0 55px}button,select{font:23px 'Avenir Next',Arial;background:white;border:1px solid #888;border-radius:0;padding:4px 15px}input{flex:1;accent-color:#245a89}.note{font-size:22px;color:#666}.ctrl,.controls,.bar,.nb-ctl,.decision{display:none!important}svg#fig{height:100vh!important}</style><svg viewBox="0 0 1680 695" id="fig"></svg><div class="ctrl"><button id="play">Play</button><button id="reset">Reset</button><input id="seek" type="range" min="0" max="1000" value="1000" aria-label="Training progress"><span class="note" id="readout"></span></div><script>
+const D={"setting": "LightningDiT-XL/1, ImageNet 256 \u00d7 256, 64 epochs", "max": 80000, "panels": [{"title": "Training loss \u2193", "y": [0.28608, 0.52836], "log": false, "series": [{"name": "OPAL", "data": [[1000, 0.5018], [2000, 0.3598], [3000, 0.3435], [4000, 0.336], [5000, 0.3315], [6000, 0.3281], [7000, 0.3256], [8000, 0.3236], [9000, 0.3221], [10000, 0.3207], [11000, 0.3195], [12000, 0.3186], [13000, 0.3177], [14000, 0.3168], [15000, 0.316], [16000, 0.3153], [17000, 0.3147], [18000, 0.3142], [19000, 0.3134], [20000, 0.3131], [21000, 0.3125], [22000, 0.3125], [23000, 0.3119], [24000, 0.3114], [25000, 0.3112], [26000, 0.3108], [27000, 0.3105], [28000, 0.3102], [29000, 0.3097], [30000, 0.3096], [31000, 0.3091], [32000, 0.3089], [33000, 0.3087], [34000, 0.3084], [35000, 0.3083], [36000, 0.3078], [37000, 0.3078], [38000, 0.3074], [39000, 0.3075], [40000, 0.3072], [41000, 0.3067], [42000, 0.3066], [43000, 0.3064], [44000, 0.3062], [45000, 0.3063], [46000, 0.3062], [47000, 0.3059], [48000, 0.3055], [49000, 0.3054], [50000, 0.3054], [51000, 0.305], [52000, 0.3049], [53000, 0.305], [54000, 0.3047], [55000, 0.3046], [56000, 0.3044], [57000, 0.3042], [58000, 0.3041], [59000, 0.3039], [60000, 0.3039], [61000, 0.3035], [62000, 0.3031], [63000, 0.3027], [64000, 0.3027], [65000, 0.3021], [66000, 0.3018], [67000, 0.3015], [68000, 0.301], [69000, 0.3008], [70000, 0.3003], [71000, 0.2997], [72000, 0.2997], [73000, 0.2992], [74000, 0.2991], [75000, 0.2988], [76000, 0.2984], [77000, 0.2982], [78000, 0.2981], [79000, 0.2981], [80000, 0.298]], "role": "agent", "points": false}, {"name": "Starting recipe", "data": [[1000, 0.5032], [2000, 0.3695], [3000, 0.3539], [4000, 0.3454], [5000, 0.3401], [6000, 0.336], [7000, 0.3329], [8000, 0.3305], [9000, 0.3286], [10000, 0.3269], [11000, 0.3253], [12000, 0.3242], [13000, 0.3231], [14000, 0.322], [15000, 0.3211], [16000, 0.3202], [17000, 0.3195], [18000, 0.3189], [19000, 0.318], [20000, 0.3176], [21000, 0.3169], [22000, 0.3168], [23000, 0.3161], [24000, 0.3156], [25000, 0.3153], [26000, 0.3148], [27000, 0.3145], [28000, 0.3141], [29000, 0.3136], [30000, 0.3134], [31000, 0.3129], [32000, 0.3126], [33000, 0.3124], [34000, 0.3121], [35000, 0.312], [36000, 0.3115], [37000, 0.3114], [38000, 0.311], [39000, 0.3111], [40000, 0.3108], [41000, 0.3102], [42000, 0.3101], [43000, 0.3098], [44000, 0.3097], [45000, 0.3097], [46000, 0.3096], [47000, 0.3093], [48000, 0.3089], [49000, 0.3088], [50000, 0.3088], [51000, 0.3083], [52000, 0.3082], [53000, 0.3083], [54000, 0.308], [55000, 0.3078], [56000, 0.3077], [57000, 0.3074], [58000, 0.3073], [59000, 0.3072], [60000, 0.3072], [61000, 0.307], [62000, 0.3067], [63000, 0.3066], [64000, 0.3068], [65000, 0.3064], [66000, 0.3063], [67000, 0.3062], [68000, 0.306], [69000, 0.306], [70000, 0.3058], [71000, 0.3055], [72000, 0.3057], [73000, 0.3054], [74000, 0.3055], [75000, 0.3054], [76000, 0.3051], [77000, 0.305], [78000, 0.305], [79000, 0.3049], [80000, 0.3049]], "role": "base", "points": false}], "legendPosition": "right", "finalValues": false}, {"title": "FID (10K samples, final 50K), no guidance \u2193", "y": [4.1616, 325.28895], "log": true, "series": [{"name": "OPAL", "data": [[20000, 283.473], [40000, 22.462], [60000, 8.535], [80000, 4.335]], "role": "agent", "points": true}, {"name": "Starting recipe", "data": [[20000, 309.799], [40000, 26.33], [60000, 9.901], [80000, 5.151]], "role": "base", "points": true}], "legendPosition": "right", "finalValues": false}], "source": "Current blog reel; run IDs: dopt-ldit-xl64-agent-v1, dopt-ldit-xl64-official-v1"},svg=document.getElementById('fig'),blue='#245a89',red='#b44c32',gray='#81878d';
+// ---- Click-paced builds for the DeckWerk web bridge (round 4). The data D above and every drawing
+// rule below are the bw-web page's own; only what moves, and when, is new.
+//   onActive({step})  step 0: play the entry build (if any) from its first frame, which is also the
+//                     poster; any other step: its settled state at once
+//   onStep({step})    animate from the settled state of step-1 to that of step; a click mid-animation
+//                     finishes the running build within 0.3 s, then plays the new one (a step beyond
+//                     the last just finishes the running build)
+//   onInactive        stop
+//   renderAt(step,t)  frame t seconds into the build of step (t omitted: its settled state)
+// BASE is the first frame (also the poster). STEPS[0] is the entry build onActive(step 0) plays (empty:
+// none); STEPS[s] lists the tweens a click to step s runs: channel, target value, start and duration in
+// seconds, easing. Channels: g<i> panel opacity,
+// p<i>_<j> how far series j of panel i has been drawn (0..1), f<i> final-value block, b/l/v<i>_<r> bar,
+// label and value of bar row r, c<i> the comparison line.
+// This page:
+//   poster / before the deck says anything: setting line (the slide title) and empty axes
+//   step 0 (slide enters): "Training loss ↓" and "FID (10K samples, final 50K), no guidance ↓" draw together on one training-step sweep, 3.5 s (sine ease); then the end readouts fade in (0.5 s). No clicks.
+const BASE={"g0":1,"r0":0,"p0_0":0,"p0_1":0,"g1":1,"r1":0,"p1_0":0,"p1_1":0},STEPS=[[{"ch":"r0","to":1,"at":3.3,"dur":0.5},{"ch":"p0_0","to":1,"at":0,"dur":3.5,"e":"sine"},{"ch":"p0_1","to":1,"at":0,"dur":3.5,"e":"sine"},{"ch":"r1","to":1,"at":3.3,"dur":0.5},{"ch":"p1_0","to":1,"at":0,"dur":3.5,"e":"sine"},{"ch":"p1_1","to":1,"at":0,"dur":3.5,"e":"sine"}]];
+const clip=(x,a,b)=>Math.max(a,Math.min(b,x));const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));const fmt=x=>Math.abs(x)>=1000?(x/1000).toFixed(x%1000?1:0)+'k':Math.abs(x)<.001&&x!==0?x.toExponential(1):(+x.toFixed(Math.abs(x)<10?3:1)).toString();
+const op3=v=>v<.999?' opacity="'+Math.max(0,v).toFixed(3)+'"':'';
+const text=(x,y,t,c='',fill='',o=1)=>`<text x="${x}" y="${y}" class="${c}" ${fill?'style="fill:'+fill+'"':''}${op3(o)}>${esc(t)}</text>`;const textA=(x,y,t,c,anchor)=>text(x,y,t,c).replace('<text ','<text text-anchor="'+anchor+'" ');const line=(x1,y1,x2,y2,c='#d7d7d7')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="1.5"/>`;function path(a,X,Y){return a.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(2)+','+Y(p[1]).toFixed(2)).join(' ')}
+const EASE={sine:u=>.5-.5*Math.cos(Math.PI*u),smooth:u=>u*u*(3-2*u),linear:u=>u},POP=.03;
+const XS0=Math.min(...D.panels.filter(p=>p.type!=='bars').flatMap(p=>p.series.map(r=>r.data[0][0])));
+// The native slide title is gone, so the setting line is the slide's title: Avenir Next 600, ink, a bit
+// larger than the 36 px panel titles. Words unchanged.
+const SETTING_PX=40;
+const K=STEPS.length-1,END=STEPS.map(ts=>ts.reduce((m,w)=>Math.max(m,w.at+w.dur),0));
+function stateAt(s,t){const st=Object.assign({},BASE);for(let j=0;j<=s;j++){const from=Object.assign({},st);for(const w of STEPS[j]){const u=j<s?1:clip(w.dur>0?(t-w.at)/w.dur:(t>=w.at?1:0),0,1);st[w.ch]=from[w.ch]+(w.to-from[w.ch])*EASE[w.e||'smooth'](u)}}return st}
+function plot(p,box,i,st){let [bx,by,bw,bh]=box;let l=bx+88,t=by+65,w=bw-130,h=bh-145;const xx=p.x||[0,D.max],yy=p.y||[0,1],log=p.log;const Y=v=>t+h-h*((log?Math.log(v):v)-(log?Math.log(yy[0]):yy[0]))/((log?Math.log(yy[1]):yy[1])-(log?Math.log(yy[0]):yy[0]));const X=v=>l+w*(v-xx[0])/(xx[1]-xx[0]);let o=text(l,by+25,p.title+(log?', log scale':''),'title');o+=`<defs><clipPath id="c${i}"><rect x="${l}" y="${t}" width="${w}" height="${h}"/></clipPath></defs>`;
+let ticks=p.ticks||(log?(()=>{const c=[];for(let e=Math.floor(Math.log10(yy[0]));e<=Math.ceil(Math.log10(yy[1]));e++)for(const m of [1,2,5]){const v=m*10**e;if(v>=yy[0]*0.999&&v<=yy[1]*1.001)c.push(+v.toPrecision(6))}return c.length>5?c.filter(v=>/^1/.test(String(v))):c.length>=2?c:[yy[0],yy[1]]})():(()=>{const span=yy[1]-yy[0],mag=10**Math.floor(Math.log10(span/3)),step=[1,2,2.5,5,10].map(m=>m*mag).find(s=>span/s<=4.2);const c=[];for(let v=Math.ceil(yy[0]/step-1e-9)*step;v<=yy[1]+1e-9;v+=step)c.push(+v.toPrecision(6));return c})());for(let a of ticks){o+=line(l,Y(a),l+w,Y(a));o+=textA(l-16,Y(a)+10,fmt(a),'small','end')}for(let a of [xx[0],(xx[0]+xx[1])/2,xx[1]]){o+=line(X(a),t+h,X(a),t+h+8,'#333');o+=textA(X(a),t+h+42,fmt(a),'small','middle')}o+=textA(l+w/2,t+h+78,p.xlabel||'Training steps','small','middle');
+// every panel sweeps the same training step at the same moment (XS0 = first logged step of the page);
+// the end readouts (legend values, or the final-value block) fade in once the sweep is done
+const span=POP*D.max,R=st['r'+i]??1;
+for(let [j,r] of p.series.entries()){const P=st['p'+i+'_'+j]??1;if(!(P>0))continue;const cut=XS0+P*(D.max+span-XS0),d=r.data;let n=0;while(n<d.length&&d[n][0]<=cut)n++;if(!n)continue;const a=d.slice(0,n),c=r.color||(r.role==='agent'?blue:gray);let pd=path(a,X,Y);if(n<d.length){const A=d[n-1],B=d[n],s=(cut-A[0])/(B[0]-A[0]),xa=X(A[0]),ya=Y(A[1]);pd+=' L'+(xa+(X(B[0])-xa)*s).toFixed(2)+','+(ya+(Y(B[1])-ya)*s).toFixed(2)}
+o+=`<path d="${pd}" fill="none" stroke="${c}" stroke-width="${r.role==='agent'?4:3}" ${r.dash?'stroke-dasharray="9 7"':''} clip-path="url(#c${i})"/>`;if(r.points)for(let q of a)o+=`<circle cx="${X(q[0])}" cy="${Y(q[1])}" r="6" fill="${c}" clip-path="url(#c${i})"${op3(P>=1?1:EASE.smooth(clip((cut-q[0])/span,0,1)))}><title>${esc(r.name)}: ${q[0]}, ${q[1]}</title></circle>`;
+if(!p.finalValues&&R>.001){let q=a[a.length-1];o+=text(p.legendPosition==='right'?l+w-335:l+15,t+33+j*39,r.name+'  '+fmt(q[1]),'small',c,R)}}
+if(p.finalValues&&R>.001){const agent=p.series.find(r=>r.role==='agent'),base=p.series.find(r=>r.role!=='agent');if(agent&&base){const av=agent.data.at(-1)[1],bv=base.data.at(-1)[1],x=l+w-340,y=t+42;o+=text(x,y,'Final FID-50K','small','',R);o+=text(x,y+44,'OPAL '+fmt(av),'title',blue,R);o+=text(x,y+85,'Recipe '+fmt(bv),'small',gray,R);o+=text(x,y+126,'Difference '+(av-bv).toFixed(3),'small',blue,R)}}
+return o}
+function bars(p,box,i,st){let [bx,by,bw,bh]=box,l=bx+230,t=by+72,w=bw-365,h=bh-125;let base=p.base||0,top=p.top;const X=v=>l+w*(v-base)/(top-base);let o=text(bx+30,by+25,p.title,'title');const C=st['c'+i]??1;if(p.comparison&&C>.001)o+=text(bx+bw-565,by+25,p.comparison,'small',blue,C);for(let [k,r]of p.rows.entries()){let y=t+k*h/p.rows.length,c=r.agent?blue:gray,G=st['b'+i+'_'+k]??1,L=st['l'+i+'_'+k]??1,V=st['v'+i+'_'+k]??1,bw2=w*(r.value-base)/(top-base)*G;o+=text(bx+15,y+31,r.label,'small','',L);o+=`<rect x="${l}" y="${y}" width="${Math.max(0,bw2)}" height="36" fill="${c}"/>`;if(V>.001)o+=text(l+bw2+10,y+30,r.text||fmt(r.value),'small',c,V)}const ay=t+h+4;o+=line(l,ay,l+w,ay,'#666');for(const v of [base,(base+top)/2,top]){const x=X(v);o+=line(x,ay,x,ay+8,'#666');o+=text(x-20,ay+35,fmt(v),'small')}o+=text(l,ay+72,p.unit,'small');return o}
+// A panel title wider than the frame is drawn smaller rather than cut off (words unchanged).
+const fitCache=new Map();function fitTitles(){for(const el of svg.querySelectorAll('text.title')){const key=el.getAttribute('x')+'|'+el.textContent;let sz=fitCache.get(key);if(sz===undefined){const x=+el.getAttribute('x'),len=el.getComputedTextLength(),room=1680-10-x;sz=len>room&&len>0?Math.floor(360*room/len)/10:0;fitCache.set(key,sz)}if(sz)el.style.fontSize=sz+'px'}}
+let cur=0,ct=0,target=0,raf=0,last=0;
+function draw(st){let a='<rect width="1680" height="695" fill="white"/>';if(D.setting)a+=`<text x="45" y="44" class="setting" style="font:600 ${SETTING_PX}px 'Avenir Next',Arial;fill:#191918">${esc(D.setting)}</text>`;let ps=D.panels;for(let [i,p]of ps.entries()){let box=ps.length===1?[30,85,1620,545]:ps.length===2?[i*830+15,85,820,545]:[(i%2)*830+15,80+Math.floor(i/2)*290,820,280];const g=st['g'+i]??1,inner=p.type==='bars'?bars(p,box,i,st):plot(p,box,i,st);a+=g<.999?`<g opacity="${g.toFixed(3)}">${inner}</g>`:inner}svg.innerHTML=a;fitTitles();document.getElementById('seek').value=Math.round(1000*(cur+(END[cur]?ct/END[cur]:1))/(K+1));document.getElementById('readout').textContent='Step '+cur+' of '+K;window.chartState={step:cur,t:ct,target,steps:K,playing:!!raf,source:D.source,observedOnly:true}}
+const CATCH=.3;let rush=false,guard=0;function speed(s){return s<target||rush?Math.max(3,END[s]/CATCH):1}
+function show(){draw(stateAt(cur,ct))}
+function halt(){if(raf)cancelAnimationFrame(raf);raf=0;last=0;rush=false;clearTimeout(guard)}
+function settle(s){halt();cur=target=clip(s|0,0,K);ct=END[cur];show()}
+function tick(ts){raf=0;const dt=last?Math.min((ts-last)/1000,.25):0;last=ts;let r=dt;for(;;){if(ct>=END[cur]){if(cur<target){cur++;ct=0;continue}break}const sp=speed(cur),need=(END[cur]-ct)/sp;if(r>=need){r-=need;ct=END[cur];continue}ct+=r*sp;break}if(cur<target||ct<END[cur])raf=requestAnimationFrame(tick);else{last=0;rush=false;clearTimeout(guard)}show()}
+function go(s){s=s|0;if(s>K){if(raf)rush=true;s=K}s=clip(s,0,K);if(s<cur){settle(s);return}target=s;if(!raf&&(cur<target||ct<END[cur])){last=0;raf=requestAnimationFrame(tick)}}
+window.renderAt=(step,t)=>{halt();cur=target=clip(step|0,0,K);ct=t==null?END[cur]:clip(+t||0,0,END[cur]);show();return window.chartState};
+// the entry build also settles on a timer, so a PDF stage is drawn even if animation frames are throttled
+function enter(){halt();cur=target=0;ct=0;show();if(END[0]>0){raf=requestAnimationFrame(tick);guard=setTimeout(()=>{if(cur<target||ct<END[cur])settle(cur)},(END[0]+.4)*1000)}}
+function advance(){if(cur===target&&ct<END[cur]){if(!raf){last=0;raf=requestAnimationFrame(tick)}}else go(Math.max(cur,target)+1)}
+document.getElementById('play').onclick=advance;document.getElementById('reset').onclick=()=>{halt();cur=target=0;ct=0;show()};document.getElementById('seek').oninput=e=>settle(Math.round(+e.target.value/1000*K));
+const fontsReady=document.fonts&&document.fonts.ready?document.fonts.ready.then(()=>{fitCache.clear();show()}):null;
+if(window.deckwerk){deckwerk.onActive(e=>{const s=(e&&e.step)|0;if(s<=0)enter();else settle(s)});deckwerk.onStep(e=>go(e&&e.step));deckwerk.onInactive(halt);if(fontsReady&&deckwerk.ready)deckwerk.ready(fontsReady)}
+else{document.addEventListener('click',advance);document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown')advance();else if(e.key==='ArrowLeft'||e.key==='PageUp')settle(Math.max(cur,target)-1)})}
+halt();cur=target=0;ct=0;show();
+</script></html>

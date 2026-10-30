@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two loops</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
+svg{display:block;width:100%;height:100%}
+text{font-family:"Avenir Next",Arial,sans-serif}
+.hd{font-family:Charter,Georgia,serif;font-size:38px;font-weight:700;letter-spacing:-.01em}
+.bx{font-size:30px;font-weight:600}
+.io{font-size:30px;font-weight:500}
+.ar{font-size:26px;font-weight:500}
+.mx{font-family:Charter,Georgia,serif;font-size:30px}
+.it{font-style:italic}
+.close{font-family:Charter,Georgia,serif;font-size:36px}
+.cite{font-size:27px}
+</style>
+</head>
+<body>
+<!--
+  "Where this work comes from" (Harvard talk, 2026-10-30), round 2 after the PI's rehearsal notes.
+  Entry: input -> Classic algorithm -> output, then O(n log n).
+  Click 1: the learned oracle above it (query up, prediction down), the heading "Learning-augmented algorithms" and
+    the citation; then O(n log n) is struck through and O(sum log(eta_i + 2)) eases in (Bai and Coester, NeurIPS 2023).
+  Click 2: the same layout on the right: training data -> Deep learning algorithm -> a better-trained model, the agent
+    above it (training signals up, code edits down), heading "Reactive optimizers", then the closing line.
+  Input and output arrows are all the same length. Boxes are light with a warm-grey outline, identical left and right;
+  the oracle is dashed; the agent is a calm blue-violet tint. No middle dots.
+  Bridge: onActive({step}) settles that step (step 0 plays its entry); onStep({step}) plays the next part, and a
+  click during a part finishes it quickly first; a click on the page advances the deck.
+  window.renderAt(step, t) draws the frame t seconds into that part (default: settled).
+-->
+<svg id="s" viewBox="0 0 1680 860" aria-label="Left, learning-augmented algorithms: input goes into a classic algorithm and comes out as output in O(n log n) comparisons; with a learned oracle that the algorithm queries and that returns predictions, sorting takes O(sum of log(eta_i + 2)) comparisons. Right, reactive optimizers: training data goes into a deep learning algorithm and comes out as a better-trained model; an agent reads its training signals and returns code edits.">
+<g id="left"></g><g id="right"></g><g id="rest"></g>
+</svg>
+<script>
+(() => {
+  "use strict";
+  const NS = "http://www.w3.org/2000/svg", $ = (id) => document.getElementById(id);
+
+  // ------------------------------------------------------------ colours: warm neutrals; a calm blue-violet for the agent
+  const PAL = { ink: "#3d3934", soft: "#857e76", line: "#7a746d", boxF: "#faf8f5", boxS: "#a39c93", grey: "#aaa39a", strike: "#857e76" };
+  const AG = { fill: "#f3f1fb", stroke: "#958dd0", ink: "#4f4795" };
+
+  const c01 = (x) => (x < 0 ? 0 : x > 1 ? 1 : x);
+  const smooth = (u) => { u = c01(u); return u * u * (3 - 2 * u); };
+  const inout = (u) => { u = c01(u); return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(2 - 2 * u, 3) / 2; };
+  const lerp = (a, b, u) => a + (b - a) * u;
+  const f2 = (v) => (Math.round(v * 100) / 100).toString();
+  const hex = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+  const mix = (a, b, u) => { const A = hex(a), B = hex(b); return "rgb(" + A.map((v, i) => Math.round(lerp(v, B[i], c01(u)))).join(",") + ")"; };
+  const mk = (tag, attrs, parent) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e);
+    return e;
+  };
+  const tx = (s, attrs, parent) => { const e = mk("text", attrs, parent); e.textContent = s; return e; };
+  // a label of one or more lines, centred vertically on y
+  const label = (lines, attrs, parent, lh) => {
+    const t = mk("text", attrs, parent);
+    lines.forEach((s, i) => { mk("tspan", { x: attrs.x, dy: i ? lh : (-(lines.length - 1) * lh) / 2 }, t).textContent = s; });
+    return t;
+  };
+  // opacity only (an invisible label still counts as page text)
+  const op = (e, v) => { v = c01(v); e.setAttribute("opacity", v < 0.001 ? 0 : v > 0.999 ? 1 : v.toFixed(3)); };
+
+  // ------------------------------------------------------------ geometry (measured: the right half's labels set the arrow length)
+  const HALF = 840;                       // the right pipeline is the left one moved HALF to the right
+  const C = 364;                          // column of a half's two boxes
+  const HY = 64;                          // headings
+  const AY = 440, BW = 248, BH = 110;     // flow line; the algorithm box
+  const OY = 200, OW = 270, OH = 80;      // the oracle / agent box
+  const R = 18, GAP = 14, LG = 16;        // corner radius; arrow-to-box gap; arrow-to-label gap
+  const L = 80;                           // every input and output arrow is this long
+  const IN = [C - BW / 2 - GAP - L, C - BW / 2 - GAP], OUT = [C + BW / 2 + GAP, C + BW / 2 + GAP + L];
+  const INX = IN[0] - LG, OUTX = OUT[1] + LG;
+  const LX = 54, BOW = 26;                // loop arrows leave and enter at C -/+ LX and bow outwards
+  const BLY = 700, CITEY = 628;
+  // arrowheads: a slim head with a slightly hollow back (marker units, reference point 7.2,5), 4.6 stroke widths
+  const HEAD = [[0.4, 0.8], [9.6, 5], [0.4, 9.2], [2.6, 5]], HS = (4.6 * 3.5) / 10;
+  function headD(x, y, ux, uy) {
+    const P = ([a, b]) => f2(x + (a - 7.2) * HS * ux - (b - 5) * HS * uy) + " " + f2(y + (a - 7.2) * HS * uy + (b - 5) * HS * ux);
+    return `M${P(HEAD[0])}L${P(HEAD[1])}L${P(HEAD[2])}Q${P(HEAD[3])} ${P(HEAD[0])}Z`;
+  }
+  // an arrow that draws itself along its path with its head riding the front; pts: [start, end] or [start, c1, c2, end]
+  function arrow(parent, pts, dx) {
+    const p = (q) => f2(q[0] + dx) + " " + f2(q[1]);
+    const d = pts.length === 4 ? `M${p(pts[0])}C${p(pts[1])} ${p(pts[2])} ${p(pts[3])}` : `M${p(pts[0])}L${p(pts[1])}`;
+    const shaft = mk("path", { d, fill: "none", stroke: PAL.line, "stroke-width": 3.5, "stroke-linecap": "round" }, parent);
+    const len = shaft.getTotalLength();
+    shaft.setAttribute("stroke-dasharray", `${f2(len + 4)} ${f2(len + 4)}`);
+    const head = mk("path", { fill: PAL.line }, parent);
+    let last = -1;
+    return {
+      len,
+      set(v) {
+        v = c01(v);
+        if (v === last) return;
+        last = v;
+        const l = v * len;
+        shaft.setAttribute("stroke-dashoffset", f2(len + 4 - l));
+        op(shaft, v <= 0.0005 ? 0 : 1);
+        const a = shaft.getPointAtLength(Math.max(l, 1)), b = shaft.getPointAtLength(Math.max(l - 1, 0));
+        const n = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+        head.setAttribute("d", headD(a.x, a.y, (a.x - b.x) / n, (a.y - b.y) / n));
+        op(head, v / 0.12);
+      },
+    };
+  }
+  // maths in Charter: parts are [text, {it, sub, dx}]
+  function maths(parent, x, y, parts) {
+    const t = mk("text", { x, y, class: "mx" }, parent);
+    let down = 0;
+    for (const [s, o] of parts) {
+      const a = {};
+      if (o && o.it) a.class = "it";
+      if (o && o.sub) { a.dy = 7; a["font-size"] = "21px"; down = 7; }
+      else if (down) { a.dy = -down; down = 0; }
+      if (o && o.dx) a.dx = o.dx;
+      mk("tspan", a, t).textContent = s;
+    }
+    return t;
+  }
+  // the loop arrows: up on the left (query / training signals), down on the right (prediction / code edits)
+  const yA = AY - BH / 2, yO = OY + OH / 2, K = 0.36 * (yA - yO);
+  const UP = [[C - LX, yA - 12], [C - LX - BOW, yA - 12 - K], [C - LX - BOW, yO + GAP + K], [C - LX, yO + GAP]];
+  const DN = [[C + LX, yO + 12], [C + LX + BOW, yO + 12 + K], [C + LX + BOW, yA - GAP - K], [C + LX, yA - GAP]];
+
+  // one half: words differ, the layout is the same
+  function pipeline(g, W, dx, agent) {
+    const E = {};
+    const x = (v) => v + dx, ink = "fill:" + PAL.ink, soft = "fill:" + PAL.soft;
+    E.hd = tx(W.head, { x: x(C), y: HY, "text-anchor": "middle", class: "hd", style: ink }, g);
+    E.inA = arrow(g, [[IN[0], AY], [IN[1], AY]], dx);
+    E.outA = arrow(g, [[OUT[0], AY], [OUT[1], AY]], dx);
+    E.up = arrow(g, UP, dx);
+    E.dn = arrow(g, DN, dx);
+    const midY = (yA + yO) / 2 + 9, off = LX + BOW * 0.75 + 16;
+    E.upL = tx(W.up, { x: x(C - off), y: midY, "text-anchor": "end", class: "ar", style: soft }, g);
+    E.dnL = tx(W.dn, { x: x(C + off), y: midY, class: "ar", style: soft }, g);
+    E.box = mk("g", {}, g);
+    mk("rect", { x: x(C - BW / 2), y: AY - BH / 2, width: BW, height: BH, rx: R, fill: PAL.boxF, stroke: PAL.boxS, "stroke-width": 2.5 }, E.box);
+    label(W.box, { x: x(C), y: AY + 10.5, "text-anchor": "middle", class: "bx", style: ink }, E.box, 35);
+    E.orc = mk("g", {}, g);
+    if (agent) {
+      mk("rect", { x: x(C - OW / 2), y: OY - OH / 2, width: OW, height: OH, rx: R, fill: AG.fill, stroke: AG.stroke, "stroke-width": 2.5 }, E.orc);
+      tx(W.orc, { x: x(C), y: OY + 10.5, "text-anchor": "middle", class: "bx", style: "fill:" + AG.ink }, E.orc);
+    } else {
+      mk("rect", { x: x(C - OW / 2), y: OY - OH / 2, width: OW, height: OH, rx: R, fill: "#fff", stroke: PAL.line, "stroke-width": 3, "stroke-dasharray": "9 7" }, E.orc);
+      tx(W.orc, { x: x(C), y: OY + 10.5, "text-anchor": "middle", class: "bx", style: ink }, E.orc);
+    }
+    E.inL = label(W.in, { x: x(INX), y: AY + 10, "text-anchor": "end", class: "io", style: ink }, g, 35);
+    E.outL = label(W.out, { x: x(OUTX), y: AY + 10, class: "io", style: ink }, g, 35);
+    return E;
+  }
+  const A = pipeline($("left"), { head: "Learning-augmented algorithms", box: ["Classic", "algorithm"], orc: "Learned oracle", up: "query", dn: "prediction", in: ["input"], out: ["output"] }, 0, false);
+  const B = pipeline($("right"), { head: "Reactive optimizers", box: ["Deep learning", "algorithm"], orc: "Agent", up: "training signals", dn: "code edits", in: ["training", "data"], out: ["a better-trained", "model"] }, HALF, true);
+  // the left output's cost: O(n log n), then struck through and replaced (Bai and Coester, NeurIPS 2023)
+  const x0 = OUT[0] + 12, y1 = AY + 62, y2 = AY + 104;
+  A.m1g = mk("g", {}, $("left"));
+  A.m1 = maths(A.m1g, x0, y1, [["O", { it: 1 }], ["(", { dx: 1.5 }], ["n", { it: 1 }], [" log "], ["n", { it: 1 }], [")"]]);
+  A.strike = mk("line", { x1: x0 - 3, x2: x0 - 3, y1: y1 - 10, y2: y1 - 10, stroke: PAL.strike, "stroke-width": 2.4, "stroke-linecap": "round" }, $("left"));
+  A.m2g = mk("g", {}, $("left"));
+  maths(A.m2g, x0, y2, [["O", { it: 1 }], ["(", { dx: 1.5 }], ["∑", { dx: 2 }], [" log("], ["η", { it: 1 }], ["i", { it: 1, sub: 1 }], [" + 2))"]]).setAttribute("style", "fill:" + PAL.ink);
+  const rest = $("rest");
+  const closing = tx("Reactive optimizers bring the same idea to deep learning.", { x: 840, y: BLY, "text-anchor": "middle", class: "close", style: "fill:" + PAL.ink }, rest);
+  const cite = tx("Bai & Coester, Sorting with Predictions, NeurIPS 2023", { x: C, y: CITEY, "text-anchor": "middle", class: "cite", style: "fill:#5f5952" }, rest);
+  let m1w = 140;
+  function measure() {
+    const w = A.m1.getComputedTextLength();
+    if (w > 0) m1w = w;
+    const hb = A.hd.getBBox(); // the citation starts where the left heading starts
+  }
+  measure();
+
+  // ------------------------------------------------------------ one frame from the parameters
+  const grow = (g, a, cx, cy) => {
+    op(g, a);
+    const s = lerp(0.94, 1, smooth(a));
+    g.setAttribute("transform", s >= 0.9999 ? "" : `translate(${cx} ${cy}) scale(${s.toFixed(4)}) translate(${-cx} ${-cy})`);
+  };
+  const rise = (g, a, d) => { op(g, a); const y = (1 - smooth(a)) * d; g.setAttribute("transform", y < 0.01 ? "" : `translate(0 ${y.toFixed(2)})`); };
+  function draw(P) {
+    // left
+    op(A.inL, P.inL); A.inA.set(P.inA); grow(A.box, P.box, C, AY); A.outA.set(P.outA); op(A.outL, P.outL);
+    rise(A.m1g, P.m1, 6);
+    A.m1.setAttribute("style", "fill:" + mix(PAL.ink, PAL.grey, P.strike));
+    A.strike.setAttribute("x2", f2(x0 - 3 + (m1w + 6) * c01(P.strike)));
+    op(A.strike, P.strike > 0.001 ? 1 : 0);
+    rise(A.m2g, P.m2, 10);
+    grow(A.orc, P.orc, C, OY); A.up.set(P.up); op(A.upL, P.upL); A.dn.set(P.dn); op(A.dnL, P.dnL);
+    op(A.hd, P.hdL); op(cite, P.cite);
+    // right
+    op(B.hd, P.hdR); op(B.inL, P.inLR); B.inA.set(P.inAR); grow(B.box, P.boxR, C + HALF, AY); B.outA.set(P.outAR); op(B.outL, P.outLR);
+    grow(B.orc, P.ag, C + HALF, OY); B.up.set(P.upR); op(B.upL, P.upLR); B.dn.set(P.dnR); op(B.dnL, P.dnLR);
+    op(closing, P.bl);
+  }
+
+  // ------------------------------------------------------------ the parts: entry (step 0), click 1, click 2 (seconds)
+  const T = (k, to, t0, t1, ease) => ({ k, to, t0, t1, ease: ease || smooth });
+  const STEPS = [
+    // on arriving: input, the classic algorithm, output, then its cost
+    { dur: 1.9, tracks: [T("inL", 1, 0, 0.3), T("inA", 1, 0.1, 0.55, inout), T("box", 1, 0.45, 0.85), T("outA", 1, 0.8, 1.25, inout), T("outL", 1, 1.1, 1.45), T("m1", 1, 1.45, 1.9)] },
+    // click 1: the learned oracle (query up, prediction down), the heading and citation; then the cost is struck and replaced
+    { dur: 2.3, tracks: [T("orc", 1, 0, 0.4), T("up", 1, 0.25, 0.7, inout), T("upL", 1, 0.45, 0.75), T("dn", 1, 0.6, 1.05, inout), T("dnL", 1, 0.8, 1.1), T("hdL", 1, 0.7, 1.1), T("cite", 1, 0.85, 1.2), T("strike", 1, 1.3, 1.75, inout), T("m2", 1, 1.8, 2.3)] },
+    // click 2: the same layout on the right, in the same order, then the closing line
+    { dur: 2.45, tracks: [T("hdR", 1, 0, 0.35), T("inLR", 1, 0.1, 0.4), T("inAR", 1, 0.15, 0.55, inout), T("boxR", 1, 0.45, 0.85), T("outAR", 1, 0.75, 1.15, inout), T("outLR", 1, 1.0, 1.3), T("ag", 1, 1.1, 1.5), T("upR", 1, 1.35, 1.75, inout), T("upLR", 1, 1.5, 1.8), T("dnR", 1, 1.6, 2.0, inout), T("dnLR", 1, 1.75, 2.05), T("bl", 1, 2.0, 2.45)] },
+  ];
+  const START = {};
+  for (const st of STEPS) for (const tr of st.tracks) START[tr.k] = 0;
+  function compile(base, st) {
+    const run = { ...base }, per = {};
+    for (const tr of st.tracks) { (per[tr.k] = per[tr.k] || []).push({ ...tr, from: run[tr.k] }); run[tr.k] = tr.to; }
+    return { per, end: run, dur: st.dur };
+  }
+  function evalAt(base, cs, t) {
+    const P = { ...base };
+    for (const k in cs.per) {
+      let v = cs.per[k][0].from;
+      for (const tr of cs.per[k]) { if (t < tr.t0) break; v = lerp(tr.from, tr.to, tr.ease((t - tr.t0) / (tr.t1 - tr.t0))); }
+      P[k] = v;
+    }
+    return P;
+  }
+  const BASES = [], CS = [];
+  let base = START;
+  for (const st of STEPS) { BASES.push(base); const c = compile(base, st); CS.push(c); base = c.end; }
+  const KMAX = CS.length - 1, DUR = CS.map((c) => c.dur);
+  const paramsAt = (s, t) => evalAt(BASES[s], CS[s], t);
+
+  // ------------------------------------------------------------ playback
+  const FAST = 0.3; // a click during a part finishes it in this many seconds, then the next part plays
+  let active = false, cur = 0, tau = 0, target = 0, rate = 1, raf = 0, last = 0;
+  function frame(now) {
+    raf = 0;
+    if (!active) return;
+    const dt = last ? Math.min(0.1, (now - last) / 1000) : 0;
+    last = now;
+    if (tau < DUR[cur]) tau = Math.min(DUR[cur], tau + dt * rate);
+    if (tau >= DUR[cur] && cur < target) { cur++; tau = 0; rate = cur < target ? DUR[cur] / FAST : 1; }
+    draw(paramsAt(cur, tau));
+    window.twoLoopsState = { step: cur, t: tau, target, playing: tau < DUR[cur] || cur < target };
+    if (tau < DUR[cur] || cur < target) raf = requestAnimationFrame(frame);
+  }
+  function kick() { if (!raf && active) { last = 0; raf = requestAnimationFrame(frame); } }
+  function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; }
+  // shown at step s: step 0 plays the entry; a later step is drawn settled at once
+  function activate(s) {
+    stop();
+    active = true;
+    cur = Math.min(Math.max(s | 0, 0), KMAX);
+    tau = cur > 0 ? DUR[cur] : 0;
+    target = cur;
+    rate = 1;
+    draw(paramsAt(cur, tau));
+    window.twoLoopsState = { step: cur, t: tau, target, playing: tau < DUR[cur] };
+    kick();
+  }
+  function toStep(j) {
+    j = Math.min(Math.max(j | 0, 0), KMAX);
+    if (!active) { active = true; cur = Math.max(j - 1, 0); tau = DUR[cur]; target = j; rate = 1; kick(); return; }
+    if (j > target) {
+      target = j;
+      if (tau < DUR[cur]) rate = Math.max(rate, (DUR[cur] - tau) / FAST);
+    } else if (j < target) {
+      cur = target = j; // going back: that step's settled look
+      tau = DUR[j];
+      rate = 1;
+    }
+    kick();
+  }
+  // deterministic frames: step s, t seconds into its part (default: settled)
+  window.renderAt = function (s, t) {
+    stop();
+    s = Math.min(Math.max(s | 0, 0), KMAX);
+    t = t == null ? DUR[s] : Math.max(0, +t || 0);
+    cur = target = s;
+    tau = Math.min(DUR[s], t);
+    draw(paramsAt(s, tau));
+    window.twoLoopsState = { step: s, t: tau, target, playing: false };
+    return { step: s, t: tau, steps: KMAX, duration: DUR[s] };
+  };
+  window.twoLoopsSteps = { steps: KMAX, durations: DUR.slice() };
+
+  draw(paramsAt(0, 0)); // first paint = the first frame of the entry (an empty frame), so the poster and the live page agree
+  const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready.then(() => { measure(); if (!raf) draw(paramsAt(cur, tau)); }) : null;
+  if (window.deckwerk) {
+    if (fontsReady && deckwerk.ready) deckwerk.ready(fontsReady);
+    deckwerk.onActive((e) => activate(e && e.step));
+    deckwerk.onStep((e) => toStep(e && e.step));
+    deckwerk.onInactive(() => { stop(); if (active && (cur < target || tau < DUR[cur])) { cur = target; tau = DUR[cur]; draw(paramsAt(cur, tau)); } active = false; });
+    document.addEventListener("click", () => deckwerk.next()); // a click on the page advances the deck
+  } else {
+    activate(0);
+    document.addEventListener("click", () => toStep(target + 1));
+  }
+})();
+</script>
+</body>
+</html>

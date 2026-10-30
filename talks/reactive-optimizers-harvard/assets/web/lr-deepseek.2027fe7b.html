@@ -1,0 +1,93 @@
+<!doctype html><html lang="en"><head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DeepSeek-V3 learning rate</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
+svg{display:block;width:100%;height:100%}
+text{font-family:"Avenir Next",Arial,sans-serif;fill:#191918}
+.ax{font-size:28px;fill:#6b6b68}.stg{font-size:28px;fill:#8d8d8a}
+.ctrl,.controls,.bar,.nb-ctl,.decision{display:none!important}
+</style></head><body>
+<svg id="s" viewBox="0 0 1680 750" role="img" aria-label="DeepSeek-V3 pre-training learning rate in five stages, each drawn at equal width: linear warmup to 2.2e-4 over the first 2K steps (about 25B tokens), constant to 10T tokens, cosine decay to 2.2e-5 by 14.3T, constant to 14.63T, then 7.3e-6 to 14.8T">
+<defs><clipPath id="trace"><rect id="traceR" x="0" y="0" width="0" height="750"/></clipPath></defs>
+<g id="axes"></g><g id="plot"></g>
+</svg>
+<script>
+(()=>{'use strict';
+// DeepSeek-V3 pre-training learning rate; x in trillions of tokens. Keep this a single line.
+const P = {"points":[[0.0,0.0],[0.02517,0.00022],[10.0,0.00022],[10.07167,0.000219864],[10.14333,0.000219458],[10.215,0.000218781],[10.28667,0.000217837],[10.35833,0.000216627],[10.43,0.000215155],[10.50167,0.000213424],[10.57333,0.000211441],[10.645,0.00020921],[10.71667,0.000206737],[10.78833,0.000204028],[10.86,0.000201093],[10.93167,0.000197937],[11.00333,0.000194571],[11.075,0.000191004],[11.14667,0.000187244],[11.21833,0.000183303],[11.29,0.000179191],[11.36167,0.000174919],[11.43333,0.0001705],[11.505,0.000165945],[11.57667,0.000161267],[11.64833,0.000156478],[11.72,0.000151593],[11.79167,0.000146623],[11.86333,0.000141583],[11.935,0.000136487],[12.00667,0.000131348],[12.07833,0.000126181],[12.15,0.000121],[12.22167,0.000115819],[12.29333,0.000110652],[12.365,0.000105513],[12.43667,0.000100417],[12.508329999999999,9.53769e-05],[12.58,9.04073e-05],[12.65167,8.55216e-05],[12.72333,8.07331e-05],[12.795,7.60549e-05],[12.866670000000001,7.15e-05],[12.93833,6.70807e-05],[13.01,6.28093e-05],[13.08167,5.86973e-05],[13.15333,5.47561e-05],[13.225,5.09964e-05],[13.29667,4.74287e-05],[13.36833,4.40625e-05],[13.44,4.09073e-05],[13.51167,3.79716e-05],[13.58333,3.52635e-05],[13.655,3.27904e-05],[13.72667,3.0559e-05],[13.79833,2.85755e-05],[13.87,2.68454e-05],[13.94167,2.53733e-05],[14.01333,2.41634e-05],[14.085,2.32189e-05],[14.15667,2.25423e-05],[14.22833,2.21357e-05],[14.3,2.2e-05],[14.633,2.2e-05],[14.633,7.3e-06],[14.8,7.3e-06]],"stages":[0.0,0.02517,10.0,14.3,14.633,14.8],"names":["warmup","constant","cosine decay","constant","constant"],"xticks":[[0.0,"0"],[0.02517,"2K steps"],[10.0,"10T"],[14.3,"14.3T"],[14.633,"14.63T"],[14.8,"14.8T"]],"yticks":[[0.0,"0"],[2.2e-05,"2.2e-5"],[0.0001,"1e-4"],[0.00022,"2.2e-4"]],"ymax":0.00024,"source":"DeepSeek-AI, DeepSeek-V3 Technical Report, arXiv:2412.19437 (v2), Section 4.2 Hyper-Parameters, paragraph 'Training Hyper-Parameters'; https://arxiv.org/html/2412.19437v2; warmup token extent approximate"};
+const NS='http://www.w3.org/2000/svg',$=id=>document.getElementById(id);
+const el=(tag,a,parent)=>{const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);parent.appendChild(e);return e};
+const tx=(s,a,parent)=>{const e=el('text',a,parent);e.textContent=s;return e};
+const INK='#191918',GREY='#8d8d8a';
+// plot box (viewBox units = slide pixels of the 1680x750 web element)
+const L=185,R=1620,T=72,B=620,S=P.stages,N=S.length-1,SW=(R-L)/N;
+// piecewise-linear x axis: every stage gets the same width (as in the blog figure)
+const X=u=>{let k=0;while(k<N-1&&u>S[k+1])k++;return L+SW*(k+(u-S[k])/(S[k+1]-S[k]))};
+const Y=v=>B-(B-T)*v/P.ymax;
+
+// ---- drawn once ----
+const ax=$('axes'),plot=$('plot');
+for(const [v,lab] of P.yticks){
+ if(v>0)el('line',{x1:L,x2:R,y1:Y(v),y2:Y(v),stroke:'#e9e7e2','stroke-width':1.5},ax);
+ tx(lab,{x:L-18,y:Y(v)+10,'text-anchor':'end',class:'ax'},ax)}
+for(let k=1;k<N;k++)el('line',{x1:L+k*SW,x2:L+k*SW,y1:T-4,y2:B,stroke:'#d6d3cc','stroke-width':1.5,'stroke-dasharray':'6 8'},ax);
+P.names.forEach((s,k)=>tx(s,{x:L+(k+.5)*SW,y:T-22,'text-anchor':'middle',class:'stg'},ax));
+el('line',{x1:L,x2:R,y1:B,y2:B,stroke:GREY,'stroke-width':2},ax);
+P.xticks.forEach(([u,lab])=>{const x=X(u);el('line',{x1:x,x2:x,y1:B,y2:B+10,stroke:GREY,'stroke-width':2},ax);tx(lab,{x,y:B+46,'text-anchor':'middle',class:'ax'},ax)});
+tx('Training tokens, each stage drawn at equal width',{x:(L+R)/2,y:B+96,'text-anchor':'middle',class:'ax'},ax);
+tx('Learning rate',{x:44,y:(T+B)/2,'text-anchor':'middle',class:'ax',transform:`rotate(-90 44 ${(T+B)/2})`},ax);
+const d=P.points.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join('');
+// the whole schedule is fixed before training starts: shown faintly at once, then traced in ink
+el('path',{d,fill:'none',stroke:'#dedbd4','stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round'},plot);
+el('path',{d,fill:'none',stroke:INK,'stroke-width':4.5,'stroke-linejoin':'round','stroke-linecap':'round','clip-path':'url(#trace)'},plot);
+
+// ---- entry animation: one clip-rect attribute per frame ----
+const clipR=$('traceR'),X0=L-8,X1=R+8,DELAY=350,DUR=1500;
+const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+const state={fraction:1,playing:false,duration:DELAY+DUR,source:P.source};
+window.chartState=state;
+function frame(f){f=f<0?0:f>1?1:f;state.fraction=f;clipR.setAttribute('width',(X0+(X1-X0)*ease(f)).toFixed(1))}
+let raf=0,t0=null;
+function stop(){if(raf)cancelAnimationFrame(raf);raf=0;state.playing=false}
+function tick(now){if(t0===null)t0=now;const f=(now-t0-DELAY)/DUR;frame(f);if(f<1)raf=requestAnimationFrame(tick);else{raf=0;state.playing=false}}
+function play(){stop();t0=null;frame(0);state.playing=true;raf=requestAnimationFrame(tick)}
+function settle(){stop();frame(1)}
+frame(0);
+window.renderAt=v=>{stop();frame(+v||0);return state};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&raf)settle()});
+const dw=window.deckwerk;
+if(dw){
+ deckwerk.onActive(e=>{if(((e&&e.step)||0)>=1)settle();else play()});
+ deckwerk.onStep(e=>{if(((e&&e.step)||0)>=1)settle()});
+ deckwerk.onInactive(stop);
+}else play();
+})();
+</script></body></html>

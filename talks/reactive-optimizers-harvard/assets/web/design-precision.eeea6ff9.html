@@ -1,0 +1,205 @@
+<!doctype html><html lang="en"><head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Optimizer design and precision</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
+svg{display:block;width:100%;height:100%}
+text{font-family:"Avenir Next",Avenir,"Helvetica Neue",Arial,sans-serif;fill:#191918}
+.mono{font-family:Menlo,Monaco,"Courier New",monospace}
+.voice{font-family:"SF Mono",Menlo,monospace;font-weight:400;fill:#2f2c28}
+.leg{font-size:26px;fill:#6b6b68}.hd{font-size:28px;font-weight:600}.nm{font-size:30px;font-weight:600}
+.st{font-size:26px;fill:#6b6b68;font-variant-numeric:tabular-nums}.bl{font-size:26px}.b{font-weight:600}
+.lbl{font-size:22px;font-weight:600;fill:#6b6b68}
+.lab{font-size:26px;font-weight:600}.ann{font-size:26px}.annh{font-size:26px;font-weight:600;fill:#7b4fc0}
+.oth{font-size:26px;fill:#6b6b68}.rawh{font-size:24px;font-weight:600;fill:#6b6b68}.raw{font-size:24px}
+.gl{font-size:26px;font-weight:600}.aq{font-size:24px}.code{font-size:24px}.codeh{font-size:24px;font-weight:600}
+</style></head><body>
+<svg id="s" viewBox="0 0 1680 860" role="img" aria-label="Figure 5 of the blog redrawn: which optimizer and precision each tensor group used over training in four OPAL runs; then the modded-nanogpt Track 3 precision change: the bfloat16 token embedding, what analysis.py reported at step 1,040 and what the agent wrote, and the agent's change to updater.py.">
+<defs>
+<clipPath id="sweep" clipPathUnits="userSpaceOnUse"><rect id="sweepR" x="-20" y="-60" width="0" height="220"/></clipPath>
+<filter id="glow" x="-30%" y="-40%" width="160%" height="180%"><feDropShadow dx="0" dy="0" stdDeviation="7" flood-color="#7b4fc0" flood-opacity=".45"/></filter>
+</defs>
+</svg>
+<script>
+(()=>{'use strict';
+// All numbers and words below come from the run records; see design-precision-SOURCES.md. Keep D on one line.
+const D={"fig":{"legend":[{"cls":["a"],"label":"AdamW"},{"cls":["m"],"label":"Muon"},{"cls":["m1","m2"],"label":"partial Muon"},{"cls":["p0"],"label":"bfloat16 moments"},{"cls":["p1"],"label":"float32 moments"}],"heads":["Language modeling","Image generation"],"cells":[{"key":"gf","col":0,"row":0,"name":"Goldfish Amharic","steps":"64,626 steps","T":64626,"aria":"Goldfish Amharic: 48 block matrices: AdamW to Muon from update 2,300","lines":[{"cls":"a","a":0.0,"b":0.0356},{"cls":"m","a":0.0356,"b":1.0}],"labels":[{"x":0.0356,"where":"up","end":false,"parts":[["48",1],[" matrices → Muon at 2,300",0]]}]},{"key":"ldit","col":1,"row":0,"name":"LightningDiT-XL/1","steps":"80,000 steps","T":80000,"aria":"LightningDiT-XL/1: 112 attention and MLP matrices: AdamW to Muon from update 801; 28 adaLN weights: AdamW to Muon from update 4,001; 2 more matrices: AdamW to Muon from update 6,401","lines":[{"cls":"a","a":0.0,"b":0.01},{"cls":"m1","a":0.01,"b":0.05},{"cls":"m2","a":0.05,"b":0.08},{"cls":"m","a":0.08,"b":1.0}],"labels":[{"x":0.01,"where":"up","end":false,"parts":[["112",1],[" matrices → Muon at 801",0]]},{"x":0.05,"where":"dn","end":false,"parts":[["+",0],["28",1],[" adaLN at 4,001, +",0],["2",1],[" at 6,401 (all 142)",0]]}]},{"key":"t3","col":0,"row":1,"name":"modded-nanogpt Track 3","steps":"3,250 steps","T":3250,"aria":"modded-nanogpt Track 3: token embedding: bfloat16 Adam moments, then float32 moments with compensated writes from update 1,040","lines":[{"cls":"p0","a":0.0,"b":0.3197},{"cls":"p1","a":0.3197,"b":1.0}],"labels":[{"x":0.3197,"where":"up","end":false,"parts":[["embedding → float32 at 1,040",0]]}]},{"key":"rae","col":1,"row":1,"name":"RAEv2-B","steps":"25,020 steps","T":25020,"aria":"RAEv2-B: 2 input 1×1 convs: AdamW to Muon from update 6,501, then Muon to AdamW from update 7,001","lines":[{"cls":"a","a":0.0,"b":0.25980000000000003},{"cls":"m","a":0.25980000000000003,"b":0.2798},{"cls":"a","a":0.2798,"b":1.0}],"labels":[{"x":0.25980000000000003,"where":"up","end":false,"parts":[["2",1],[" input convs → Muon at 6,501",0]]},{"x":0.2798,"where":"dn","end":false,"parts":[["back to AdamW at 7,001",0]]}]}]},"rae":{"label":"Reactive reasoning:","text":"Muon on the two input convolutions: the loss fell 0.0006 per 50 steps against 0.0008 expected, no gain, possibly a small loss, so back to AdamW."},"arch":{"ann":["bfloat16 weights","23.8% of the 162M parameters"],"other":"float32 weights","blocks":"Transformer blocks × 12","last":"Block 12"},"raw":{"head":"analysis.py report at step 1,040","lines":["\"weight_norm_by_role\": {\"embed.weight\": 92641.8906, …}","\"update_to_weight_per_update_by_role\": {\"embed.weight\": 0.004446948, …}"],"gloss":["→ RMS 14.9 per entry","→ 0.4447% per step"],"who":"step 1,040, decision 16","q":["“Each update moves the embedding by about 0.44% of its norm. That's roughly the same as bfloat16's relative spacing of 0.39–0.78%, so many updates round away to nothing.”","“In the starting program the embedding would therefore mostly stop learning in the late decay…”"],"hl":"many updates round away to nothing"},"code":{"head":"updater.py, after the change at step 1,040","rows":[["self.m = [torch.zeros_like(p, dtype=torch.float32) for p in params]",["dtype=torch.float32"]],["self.v = [torch.zeros_like(p, dtype=torch.float32) for p in params]",["dtype=torch.float32"]],["self.comp = [torch.zeros_like(p) for p in params]",[]],null,["y = upd.add_(c.float())",[".float()"]],["new = (pf + y).to(p.dtype)",[]],["resid = y - (new.float() - pf)",[".float()"]],["c.copy_(resid)",[]],["p.copy_(new)",null]]}};
+const NS='http://www.w3.org/2000/svg',svg=document.getElementById('s');
+const el=(tag,a,p)=>{const e=document.createElementNS(NS,tag);if(a)for(const k in a)if(a[k]!=null)e.setAttribute(k,a[k]);(p||svg).appendChild(e);return e};
+const tx=(s,a,p)=>{const e=el('text',a,p);if(s!=null)e.textContent=s;return e};
+const C={ink:'#191918',grey:'#8d8d8a',a:'#c46f00',m:'#1f57b5',m1:'#a9bfe3',m2:'#6a8fcd',p0:'#b8b8b8',p1:'#7b4fc0',
+ orS:'#e07b18',orF:'#fdebd6',panel:'#f4f4f1',kw:'#d73a49',num:'#005cc5',str:'#032f62',arg:'#e36209',
+ hl:'#fbe9a2',add:'#e6ffec',addKey:'#abf2bc',ghBorder:'#d0d7de',ghHead:'#f6f8fa'};
+const SW={a:16,m:16,m1:16,m2:16,p0:7,p1:16};
+const clamp01=x=>x<0?0:x>1?1:x,sm=x=>x*x*(3-2*x),io=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const K=(t,a,d)=>sm(clamp01((t-a)/d)),KM=(t,a,d)=>io(clamp01((t-a)/d)),lerp=(a,b,u)=>a+(b-a)*u;
+const op=(e,v)=>{v=v<.002?0:v>.998?1:+v.toFixed(3);e.setAttribute('opacity',v);e.style.visibility=v===0?'hidden':'visible'};
+const width=e=>{let w=0;try{w=e.getComputedTextLength()}catch(_){}return w>0?w:e.textContent.length*13};
+const L={};for(const k of ['fig','t3','arch','hi','raw','agent','code'])L[k]=el('g',{id:k});
+// wrap text t (x from its attribute) into lines of at most maxW; returns [{ts,text,start,y}]
+function wrap(t,s,maxW,y0,lh){while(t.firstChild)t.removeChild(t.firstChild);const probe=el('tspan',{},t),lines=[];let line=[];
+ for(const w of s.split(' ')){probe.textContent=line.concat(w).join(' ');if(line.length&&width(probe)>maxW){lines.push(line.join(' '));line=[w]}else line.push(w)}
+ lines.push(line.join(' '));t.removeChild(probe);let start=0;
+ return lines.map((x,i)=>{const ts=el('tspan',{x:t.getAttribute('x'),y:y0+i*lh},t);ts.textContent=x;const r={ts,text:x,start,y:y0+i*lh};start+=x.length+1;return r})}
+// a highlighter rect behind characters [i, i+n) of text element e (baseline y, font size fs)
+function mark(e,i,n,y,fs,fill,g,pad,rx){try{const p=e.getStartPositionOfChar(i),w=e.getSubStringLength(i,n);
+ el('rect',{x:(p.x-pad).toFixed(1),y:(y-fs*.86-3).toFixed(1),width:(w+2*pad).toFixed(1),height:(fs*1.18+4).toFixed(1),rx,fill},g)}catch(_){}}
+
+// ===== entry: the blog's Figure 5 (share/reactive-optimizers.html), the bars growing over training
+const COLX=[40,880],CW=760,ROWY=[285,520],BAR=70,UP=46,DN=108,SC=1.15,TX=(1680-CW*SC)/2,TY=40,ENT=3;
+const grow=t=>t>=ENT?1:(1-Math.cos(Math.PI*clamp01(t/ENT)))/2;   // share of each run's training drawn
+const passT=x=>ENT*Math.acos(1-2*x)/Math.PI;                       // when grow() reaches x
+const legG=el('g',{},L.fig),legItems=D.fig.legend.map(it=>{const g=el('g',{},legG),n=it.cls.length;
+ it.cls.forEach((c,i)=>el('line',{x1:40*i/n,x2:40*(i+1)/n,y1:0,y2:0,stroke:C[c],'stroke-width':SW[c]},g));
+ return {g,t:tx(it.label,{x:52,y:9,class:'leg'},g)}});
+function layoutLegend(){let x=COLX[0];for(const it of legItems){it.g.setAttribute('transform','translate('+x.toFixed(1)+' 70)');x+=52+width(it.t)+44}}
+D.fig.heads.forEach((h,i)=>tx(h,{x:COLX[i],y:200,class:'hd'},L.fig));
+const cells={},sweepR=document.getElementById('sweepR');
+for(const c of D.fig.cells){
+ const g=c.key==='t3'?L.t3:el('g',{transform:'translate('+COLX[c.col]+' '+ROWY[c.row]+')'},L.fig);
+ tx(c.name,{x:0,y:0,class:'nm'},g);const stepsT=tx(c.steps,{x:CW,y:0,'text-anchor':'end',class:'st'},g);
+ const bars=el('g',{'clip-path':'url(#sweep)'},g);
+ for(const l of c.lines)el('line',{x1:(l.a*CW).toFixed(1),x2:(l.b*CW).toFixed(1),y1:BAR,y2:BAR,stroke:C[l.cls],'stroke-width':SW[l.cls]},bars);
+ const labs=c.labels.map(l=>{const t=tx(null,{x:(l.x*CW).toFixed(1),y:l.where==='up'?UP:DN,class:'bl','text-anchor':l.end?'end':null},g);
+  for(const [s,b] of l.parts){const ts=el('tspan',b?{class:'b'}:{},t);ts.textContent=s}return {e:t,tc:passT(l.x)}});
+ cells[c.key]={stepsT,T:c.T,labs};
+}
+// under RAEv2-B: the speaker's one-sentence summary of the agent's reasoning (a paraphrase: no quotation marks)
+const sumG=el('g',{},L.fig),SY=ROWY[1]+DN+56;
+tx(D.rae.label,{x:COLX[1],y:SY,class:'lbl'},sumG);
+const sumT=tx(null,{x:COLX[1],class:'voice',style:'font-size:23px'},sumG);
+function layoutSummary(){wrap(sumT,D.rae.text,1640-COLX[1],SY+34,31)}
+
+// ===== click 1: the run's 162M GPT (the deck's architecture row, slides 4 and 6)
+const AY=228,BH=86,CY=AY+BH/2;
+const boxes=[{x:60,w:230,lab:['Token','embedding'],aux:1},{x:384,w:190,lab:['Block 1']},{x:668,w:190,lab:['Block 2']},{x:952,w:90,dots:1},
+ {x:1136,w:190,lab:[D.arch.last]},{x:1420,w:200,lab:['LM head'],aux:1}];
+const B0=boxes[1],B1=boxes[4],BC=(B0.x+B1.x+B1.w)/2;
+tx(D.arch.blocks,{x:BC,y:AY-28,'text-anchor':'middle',class:'lab'},L.arch);
+el('path',{d:'M'+B0.x+' '+(AY-6)+'V'+(AY-14)+'H'+(B1.x+B1.w)+'V'+(AY-6),fill:'none',stroke:C.grey,'stroke-width':2},L.arch);
+for(let i=0;i+1<boxes.length;i++){const a=boxes[i],b=boxes[i+1],x1=a.x+a.w+(a.dots?0:(i===0?15:4)),x2=b.x-(b.dots?0:4);
+ el('line',{x1:x1,y1:CY,x2:x2-8,y2:CY,stroke:C.grey,'stroke-width':3},L.arch);
+ el('path',{d:'M'+(x2-11)+' '+(CY-6)+'L'+x2+' '+CY+'L'+(x2-11)+' '+(CY+6)+'Z',fill:C.grey},L.arch)}
+for(const b of boxes){
+ if(b.dots){tx('⋯',{x:b.x+b.w/2,y:CY+13,'text-anchor':'middle',style:'font-size:46px;fill:#8d8d8a'},L.arch);continue}
+ el('rect',{x:b.x,y:AY,width:b.w,height:BH,rx:10,fill:b.aux?C.orF:'#fff',stroke:b.aux?C.orS:'#2b2b2a','stroke-width':3},L.arch);
+ const n=b.lab.length;b.lab.forEach((s,j)=>tx(s,{x:b.x+b.w/2,y:CY+9+(j-(n-1)/2)*30,'text-anchor':'middle',class:'lab'},L.arch))}
+tx(D.arch.other,{x:BC,y:AY+BH+44,'text-anchor':'middle',class:'oth'},L.arch);
+tx(D.arch.other,{x:boxes[5].x+boxes[5].w/2,y:AY+BH+44,'text-anchor':'middle',class:'oth'},L.arch);
+const E=boxes[0];
+el('rect',{x:E.x-9,y:AY-9,width:E.w+18,height:BH+18,rx:15,fill:'none',stroke:C.p1,'stroke-width':4,filter:'url(#glow)'},L.hi);
+D.arch.ann.forEach((s,i)=>tx(s,{x:E.x,y:AY+BH+44+i*36,class:i?'ann':'annh'},L.hi));
+
+// ===== click 2: what analysis.py reported at step 1,040, and what the agent wrote (verbatim, so in quotation marks)
+const RY=462;
+el('rect',{x:60,y:RY,width:1560,height:146,rx:12,fill:C.panel},L.raw);
+tx(D.raw.head,{x:88,y:RY+38,class:'rawh'},L.raw);
+D.raw.lines.forEach((s,i)=>{const t=tx(null,{x:88,y:RY+84+i*40,class:'mono raw'},L.raw);
+ for(const m of s.matchAll(/("[^"]*")|(-?\d+\.\d+)|([^"\d]+|\d)/g)){const ts=el('tspan',{},t);ts.textContent=m[0];if(m[1])ts.setAttribute('fill',C.str);else if(m[2])ts.setAttribute('fill',C.num)}
+ tx(D.raw.gloss[i],{x:1592,y:RY+84+i*40,'text-anchor':'end',class:'gl'},L.raw)});
+const hlG=el('g',{},L.agent);
+tx(D.raw.who,{x:60,y:664,class:'lbl'},L.agent);
+const aq=D.raw.q.map(()=>tx(null,{x:60,class:'voice aq'},L.agent));
+function layoutQuotes(){while(hlG.firstChild)hlG.removeChild(hlG.firstChild);let y=706;const H=D.raw.hl;
+ aq.forEach((t,i)=>{const s=D.raw.q[i],lines=wrap(t,s,1560,y,36),k=s.indexOf(H);
+  if(k>=0)for(const ln of lines){const a=Math.max(k,ln.start),b=Math.min(k+H.length,ln.start+ln.text.length);
+   if(b>a)mark(ln.ts,a-ln.start,b-a,ln.y,24,C.hl,hlG,3,3)}
+  y+=lines.length*36+14})}
+
+// ===== click 3: updater.py after the change at step 1,040 (programs/v005, lines verbatim); green = what this change is about
+const PY=450,PITCH=36,GAP=28,CG=L.code,ghG=el('g',{},CG),bandG=el('g',{},CG),keyG=el('g',{},CG);
+const headT=tx(D.code.head,{y:PY+31,class:'codeh'},CG);
+const rows=[];let cy=PY+46+36;
+for(const r of D.code.rows){
+ if(!r){rows.push({dots:tx('…',{y:cy-8,class:'mono code',style:'fill:#8d8d8a'},CG)});cy+=GAP;continue}
+ const t=tx(null,{y:cy,class:'mono code'},CG),toks=[...r[0].matchAll(/\s+|[A-Za-z_]\w*|\d+(?:\.\d+)?|./g)].map(m=>m[0]);
+ toks.forEach((s,i)=>{const ts=el('tspan',{},t);ts.textContent=s;let c=null;
+  if(/^(for|in|def|class|return|if|else|and|or|not|is|None|True|False)$/.test(s)||/^[=+\-*\/]$/.test(s))c=C.kw;
+  else if(/^\d/.test(s))c=C.num;else if(/^[A-Za-z_]/.test(s)&&toks[i+1]==='='&&toks[i-1]!==' '&&toks[i+2]!==' ')c=C.arg;
+  if(c)ts.setAttribute('fill',c)});
+ rows.push({t,y:cy,line:r[0],keys:r[1]});cy+=PITCH}
+const PB=cy-PITCH+20;
+function layoutCode(){
+ const W=Math.max(...rows.filter(r=>r.t).map(r=>width(r.t))),X=Math.round((1680-W)/2),x0=X-26,w0=W+52;
+ headT.setAttribute('x',X);for(const r of rows){const e=r.t||r.dots;e.setAttribute('x',X);if(r.t)for(const ts of r.t.childNodes)ts.removeAttribute('x')}
+ for(const g of [ghG,bandG,keyG])while(g.firstChild)g.removeChild(g.firstChild);
+ el('rect',{x:x0,y:PY,width:w0,height:PB-PY,rx:8,fill:'#fff',stroke:C.ghBorder,'stroke-width':1.5},ghG);
+ el('path',{d:'M'+(x0+.75)+' '+(PY+46)+'V'+(PY+8)+'Q'+(x0+.75)+' '+(PY+.75)+' '+(x0+8)+' '+(PY+.75)+'H'+(x0+w0-8)+'Q'+(x0+w0-.75)+' '+(PY+.75)+' '+(x0+w0-.75)+' '+(PY+8)+'V'+(PY+46)+'Z',fill:C.ghHead},ghG);
+ el('line',{x1:x0,x2:x0+w0,y1:PY+46,y2:PY+46,stroke:C.ghBorder,'stroke-width':1.5},ghG);
+ for(const r of rows){if(!r.t||!r.keys)continue;
+  el('rect',{x:x0+1,y:r.y-25,width:w0-2,height:PITCH,fill:C.add},bandG);
+  for(const f of r.keys){const i=r.line.indexOf(f);if(i>=0)mark(r.t,i,f.length,r.y,24,C.addKey,keyG,2,3)}}}
+
+// ===== timeline: render(s,t) draws state s at t seconds into the move from state s-1 (t >= END[s]: settled)
+const END=[3.5,2,.95,1],MAX=END.length-1;
+function render(s,t){
+ const ent=s===0?t:99,p=grow(ent);
+ sweepR.setAttribute('width',(20+CW*p+(p>=1?20:0)).toFixed(1));
+ for(const k in cells){const c=cells[k];c.stepsT.textContent=Math.round(p*c.T).toLocaleString('en-US')+' steps';for(const l of c.labs)op(l.e,K(ent,l.tc,.3))}
+ op(sumG,K(ent,ENT,.45));
+ op(L.fig,s===0?1:s===1?1-K(t,0,.5):0);
+ const u=s===0?0:s===1?KM(t,.25,1):1,sc=lerp(1,SC,u);
+ L.t3.setAttribute('transform','translate('+lerp(COLX[0],TX,u).toFixed(2)+' '+lerp(ROWY[1],TY,u).toFixed(2)+') scale('+sc.toFixed(4)+')');
+ op(L.arch,s===1?K(t,.9,.6):s>1?1:0);op(L.hi,s===1?K(t,1.4,.5):s>1?1:0);
+ op(L.raw,s===2?K(t,0,.5):s===3?1-K(t,0,.4):0);op(L.agent,s===2?K(t,.4,.5):s===3?1-K(t,0,.4):0);
+ op(L.code,s===3?K(t,.35,.6):0);L.code.setAttribute('transform','translate(0 '+(s===3?14*(1-KM(t,.35,.6)):0).toFixed(2)+')');
+}
+
+// ===== driving it: onActive({step}) plays the entry at step 0 and settles any later step at once; onStep animates step-1 -> step
+let cur=0,raf=0,t0=null,playing=false,lastS=0,lastT=0,gotActive=false;
+const clampS=s=>Math.max(0,Math.min(MAX,s|0));
+function draw(s,t){lastS=s;lastT=t;render(s,t)}
+function stop(){playing=false;if(raf)cancelAnimationFrame(raf);raf=0}
+function loop(ts){if(!playing)return;if(t0===null)t0=ts;const t=(ts-t0)/1000;
+ if(t>=END[cur]){draw(cur,END[cur]);playing=false;raf=0;return}draw(cur,t);raf=requestAnimationFrame(loop)}
+function play(s){stop();cur=clampS(s);t0=null;draw(cur,0);playing=true;raf=requestAnimationFrame(loop)}
+function settle(s){stop();cur=clampS(s);draw(cur,END[cur])}
+function toStep(s){s=Math.max(0,s|0);if(s>MAX){settle(MAX);return}if(s===cur+1)play(s);else if(s!==cur)settle(s)}
+function layout(){layoutLegend();layoutSummary();layoutQuotes();layoutCode();render(lastS,lastT)}
+layout();
+window.renderAt=function(step,t){stop();cur=clampS(step);draw(cur,t==null?END[cur]:Math.max(0,Math.min(END[cur],+t)))};
+window.deckSteps=MAX;
+const fontsReady=document.fonts&&document.fonts.ready?document.fonts.ready.then(layout):Promise.resolve();
+if(window.deckwerk){
+ if(deckwerk.ready)deckwerk.ready(fontsReady);
+ deckwerk.onActive(e=>{gotActive=true;const s=(e&&e.step)|0;if(s>0)settle(s);else play(0)});
+ deckwerk.onStep(e=>toStep(e&&e.step));
+ deckwerk.onInactive(stop);
+ // a host that never says "active" (the editor's live view) still gets the figure
+ fontsReady.then(()=>setTimeout(()=>{if(!gotActive)play(0)},1500));
+}else{
+ fontsReady.then(()=>play(0));
+ const next=()=>{if(cur<MAX)play(cur+1)};
+ document.addEventListener('click',next);
+ document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')next();else if(e.key==='ArrowLeft')settle(cur-1)});
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&playing){stop();draw(cur,END[cur])}});
+})();
+</script></body></html>

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spikes and three decisions</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
+#stage{position:absolute;left:0;top:0;width:1680px;height:860px;transform-origin:0 0;font-family:"Avenir Next","Avenir",Arial,sans-serif;color:#191918}
+svg text{font-family:"Avenir Next","Avenir",Arial,sans-serif}
+.tk{fill:#6b7280;font-size:22px}
+.lab{fill:#6b7280;font-size:22px;font-weight:500}
+.set{fill:#6b6b68;font-size:26px;font-weight:500}
+.lg{fill:#6b7280;font-size:25px}
+.cards{position:absolute;left:0;top:396px;width:1680px;height:464px}
+.card{position:absolute;top:0;width:505px;height:448px;opacity:0}
+.hd{display:flex;align-items:center;gap:14px;height:44px;margin-bottom:10px}
+.num{width:38px;height:38px;border-radius:50%;background:#5c5751;color:#fff;font-size:23px;font-weight:600;display:flex;align-items:center;justify-content:center;line-height:1}
+.step{font-size:27px;font-weight:600;letter-spacing:-0.2px}
+.part{margin:0 0 11px 0}
+.k{display:block;font-size:22px;font-weight:500;color:#6b7280;line-height:1.25;margin-bottom:2px}
+.v{font-size:24px;line-height:1.3}
+.q{font-family:"SF Mono",Menlo,monospace;font-weight:400;color:#2f2c28;font-size:22px;line-height:1.38}
+.q mark{background:#fbe9a2;color:inherit;padding:1px 4px;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+</style>
+</head>
+<body>
+<div id="stage">
+<svg id="chart" width="1680" height="380" viewBox="0 0 1680 380" role="img" aria-label="Gradient-norm spikes of a SiT-B/2 training run between steps 12,500 and 21,250, with three optimizer decisions">
+<defs><clipPath id="sweep"><rect id="sweepR" x="0" y="0" width="0" height="380"/></clipPath></defs>
+<g id="axes"></g>
+<g id="ghost"></g>
+<g id="live" clip-path="url(#sweep)"></g>
+<g id="marks"></g>
+</svg>
+<div class="cards" id="cards"><div class="card" id="card1" style="left:0px"><div class="hd"><div class="num">1</div><div class="step">step 13,761</div></div><div class="part"><span class="k">analysis.py found</span><span class="v">21 spikes in 1,250 steps; the timestep-embedder MLP led 20 of them, at 3.2–5.5× its own running norm.</span></div><div class="part"><span class="k">agent</span><span class="q">“The global clip handled each of these spikes by <mark>scaling down every parameter’s update</mark>.”</span></div><div class="part"><span class="k">updater.py</span><span class="v">Clip each tensor at 2× its own running norm; keep the global clip (2.5× → 3×) as a backstop.</span></div></div><div class="card" id="card2" style="left:580px"><div class="hd"><div class="num">2</div><div class="step">step 15,012</div></div><div class="part"><span class="k">analysis.py found</span><span class="v">Global clips: 15 → 2 per 1,250 steps. Per-tensor clips: 1,085, with 452 on the four timestep-embedder tensors.</span></div><div class="part"><span class="k">agent</span><span class="q">“Per-tensor clipping is <mark>doing what I intended</mark>, and the loss has started moving again.”</span></div><div class="part"><span class="k">updater.py</span><span class="v">No change.</span></div></div><div class="card" id="card3" style="left:1160px"><div class="hd"><div class="num">3</div><div class="step">step 17,514</div></div><div class="part"><span class="k">analysis.py found</span><span class="v">A burst: 6 spikes within 12 steps (17,320 to 17,332), each led by the timestep-embedder MLP.</span></div><div class="part"><span class="k">agent</span><span class="q">“Per-tensor clipping caps each spike, but <mark>it can’t stop the underlying swing</mark>.”</span></div><div class="part"><span class="k">updater.py</span><span class="v">Half the learning rate for the timestep embedder: 7.5e-5 instead of 1.5e-4.</span></div></div></div>
+</div>
+<script>
+(()=>{'use strict';
+const NS='http://www.w3.org/2000/svg',$=id=>document.getElementById(id);
+const el=(tag,a,parent)=>{const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(parent)parent.appendChild(e);return e};
+// [step, global gradient norm / its running mean, 1 if the top tensor is in the timestep-embedder MLP]
+// every spike event recorded by the run's analysis program, steps 12,518 to 21,221 (see sit-spikes-SOURCES.md)
+const E=[[12518,2.96,1],[12519,2.54,1],[12586,2.76,1],[12589,2.64,1],[12619,2.57,1],[12773,2.54,1],[12907,2.59,1],[13083,2.52,1],[13161,2.75,1],[13214,3.67,1],[13216,2.69,1],[13242,2.74,1],[13267,2.57,0],[13399,2.56,1],[13400,2.85,1],[13402,3.14,1],[13434,2.78,1],[13437,3.45,1],[13446,2.68,1],[13649,2.74,1],[13746,2.62,1],[13757,2.8,1],[13817,2.69,1],[13820,3.17,1],[14033,2.56,1],[14073,2.61,1],[14104,2.8,1],[14182,2.62,1],[14350,2.67,1],[14361,2.74,1],[14530,2.74,1],[14533,2.58,1],[14571,2.54,1],[14573,2.79,1],[14597,3.09,1],[14610,2.55,1],[14676,3.36,1],[14680,2.66,1],[14841,2.59,1],[14933,2.89,1],[15006,2.6,1],[15030,2.9,1],[15071,3.01,1],[15270,2.64,1],[15473,2.6,1],[15475,3.13,1],[15487,2.56,0],[15574,2.58,1],[15626,2.65,1],[15628,3.35,1],[15630,3.12,1],[15634,2.88,1],[15636,2.52,1],[15644,3.0,1],[15914,2.83,1],[15932,2.55,1],[15934,2.74,1],[15935,2.96,1],[15938,2.62,1],[16028,2.56,1],[16119,2.72,1],[16198,2.99,1],[16205,2.67,0],[16297,3.71,1],[16299,2.57,0],[16311,2.68,1],[16313,3.54,1],[16563,3.07,1],[16580,2.88,1],[16586,3.06,1],[16789,2.56,1],[16893,2.7,1],[16914,2.67,0],[16915,2.51,1],[16916,2.57,1],[16928,2.69,1],[17107,2.9,1],[17150,2.74,1],[17320,3.0,1],[17322,2.78,1],[17324,2.88,1],[17325,3.43,1],[17328,2.87,1],[17332,2.51,1],[17503,2.79,1],[17666,2.54,1],[17799,2.7,1],[18150,3.01,1],[18166,3.01,1],[18244,2.54,1],[18314,3.52,1],[18325,2.66,1],[18372,2.88,1],[18506,2.68,1],[18617,2.62,0],[18834,2.55,1],[18893,2.72,1],[18895,2.52,1],[18920,2.71,1],[19012,2.55,1],[19054,2.64,1],[19670,2.54,1],[19674,2.59,0],[19797,2.58,1],[19952,2.76,1],[20098,2.56,1],[20136,2.81,1],[20300,2.94,1],[20493,2.58,1],[20571,2.97,1],[20669,2.72,1],[20711,2.61,1],[20812,2.8,0],[20865,2.51,1],[21012,2.99,1],[21101,2.56,1],[21182,2.61,1],[21221,2.89,0]];
+const BLUE='#245a89',GREY='#a7a7a2',GHOST='#e6e6e3',RED='#c8102e',INK='#5c5751'; // INK: warm dark grey, no pure black
+const L=128,R=1640,T=124,B=300,X0=12300,X1=21400,Y0=2.5,Y1=3.85;
+const BW=5; // spike bar width
+const X=u=>L+(R-L)*(u-X0)/(X1-X0),Y=v=>B-(B-T)*(v-Y0)/(Y1-Y0);
+const axes=$('axes'),ghost=$('ghost'),live=$('live'),marks=$('marks');
+const txt=(s,a,p)=>{const t=el('text',a,p);t.textContent=s;return t};
+
+// axes
+for(const v of [2.5,3,3.5]){
+ el('line',{x1:L,x2:R,y1:Y(v),y2:Y(v),stroke:v===2.5?'#9a9a95':'#eceae6','stroke-width':v===2.5?1.6:1},axes);
+ txt((v===3?'3':String(v))+'×',{x:L-14,y:Y(v)+8,'text-anchor':'end',class:'tk'},axes);
+}
+for(let k=13000;k<=21000;k+=1000)txt((k/1000)+'k',{x:X(k),y:B+34,'text-anchor':'middle',class:'tk'},axes);
+txt('Training steps',{x:(L+R)/2,y:B+68,'text-anchor':'middle',class:'tk'},axes);
+// the setting: which run this is (SiT-B/2 on ImageNet 256x256 for 400K updates; sit-spikes-SOURCES.md, RUN)
+txt('SiT-B/2, ImageNet 256 × 256',{x:L-60,y:30,class:'set'},axes);
+txt('Global gradient norm ÷ its running mean, at every recorded spike',{x:L-60,y:100,class:'lab'},axes);
+// legend: one row per colour, swatches in one column, right edge at R
+{const lg=el('g',{},axes),items=[['led by the timestep-embedder MLP',BLUE],['led by another tensor',GREY]];
+ const ts=items.map(([s],i)=>txt(s,{y:30+36*i,class:'lg'},lg)),x0=R-Math.max(...ts.map(t=>t.getComputedTextLength()));
+ ts.forEach((t,i)=>{t.setAttribute('x',x0);el('rect',{x:x0-20,y:30+36*i-21,width:BW+2,height:25,rx:1.2,fill:items[i][1]},lg)})}
+
+// spikes: one bar per recorded spike, rising from the 2.5x line to its height; a grey ghost (first paint) and the
+// coloured bars revealed by the sweep
+const bar=(u,r,fill,p)=>el('rect',{x:(X(u)-BW/2).toFixed(2),y:Y(r).toFixed(2),width:BW,height:(Y(2.5)-Y(r)).toFixed(2),rx:1.2,fill},p);
+for(const [u,r,t] of E)bar(u,r,GHOST,ghost);
+for(const [u,r,t] of E.filter(e=>!e[2]).concat(E.filter(e=>e[2]))){
+ const d=bar(u,r,t?BLUE:GREY,live);el('title',{},d).textContent='step '+u+': '+r+'×';
+}
+
+// decision marks
+const DEC=[{n:1,u:13761},{n:2,u:15012},{n:3,u:17514}];
+DEC.forEach(d=>{
+ const g=d.g=el('g',{opacity:0},marks),x=X(d.u);
+ d.line=el('line',{x1:x,x2:x,y1:T+29,y2:B,stroke:INK,'stroke-width':1.6,'stroke-dasharray':'5 5'},g);
+ d.c=el('circle',{cx:x,cy:T+10,r:19,fill:INK},g);
+ d.t=txt(String(d.n),{x,y:T+18,'text-anchor':'middle','font-size':23,'font-weight':600,fill:'#fff'},g);
+});
+// red circles: the spikes decision 1 read (steps 12,511 to 13,750) and the burst decision 3 read (17,320 to 17,332)
+const ring=(cx,cy,rx,ry)=>{const e=el('ellipse',{cx,cy,rx,ry,fill:'none',stroke:RED,'stroke-width':2.4},marks);
+ const len=Math.PI*(3*(rx+ry)-Math.sqrt((3*rx+ry)*(rx+3*ry)));e.setAttribute('stroke-dasharray',len);e.setAttribute('stroke-dashoffset',len);e.len=len;return e};
+const ring1=ring((X(12511)+X(13750))/2,(Y(2.5)+Y(3.67))/2,(X(13750)-X(12511))/2+16,(Y(2.5)-Y(3.67))/2+16);
+const ring3=ring(X(17326),(Y(2.5)+Y(3.43))/2,22,(Y(2.5)-Y(3.43))/2+16);
+const note3=txt('then 10 spikes in the next 1,250 steps, 22 before',{x:X(17514)+30,y:T+18,class:'tk',opacity:0},marks);
+
+// stage scaling
+const stage=$('stage');
+function fit(){const s=Math.min(innerWidth/1680,innerHeight/860);stage.style.transform='translate('+((innerWidth-1680*s)/2)+'px,'+((innerHeight-860*s)/2)+'px) scale('+s+')'}
+addEventListener('resize',fit);fit();
+
+// ---- state
+const cards=[...document.querySelectorAll('.card')];
+const DRAW=2.0,ADD=0.6,LAST=3;
+const clamp=v=>v<0?0:v>1?1:v,ramp=(t,a,b)=>clamp((t-a)/(b-a)),ease=r=>r<0.5?4*r*r*r:1-Math.pow(-2*r+2,3)/2;
+const sweepR=$('sweepR');
+function sweep(f){sweepR.setAttribute('width',(X1>0?(L-10+(R-L+20)*f):0).toFixed(1))}
+function decision(i,p,dim){ // i: 0..2, p: 0..1 appearance, dim: 0..1 already discussed
+ const d=DEC[i],a=ease(p);
+ d.g.setAttribute('opacity',a);
+ d.line.setAttribute('y1',(B-(B-T+14)*a).toFixed(1));
+ const grey=dim>0;d.c.setAttribute('fill',grey?'#fff':INK);d.c.setAttribute('stroke',grey?'#8d8d88':'none');d.c.setAttribute('stroke-width',2);
+ d.t.setAttribute('fill',grey?'#6b6b68':'#fff');d.line.setAttribute('stroke',grey?'#b9b9b4':INK);
+ const c=cards[i];c.style.opacity=(a*(1-0.55*dim)).toFixed(3);c.style.transform='translateY('+(12*(1-a)).toFixed(1)+'px)';
+ if(i===0){ring1.setAttribute('stroke-dashoffset',(ring1.len*(1-ease(ramp(p,0.2,1)))).toFixed(1));ring1.setAttribute('stroke',dim>0?'#d6b3b8':RED)}
+ if(i===2){ring3.setAttribute('stroke-dashoffset',(ring3.len*(1-ease(ramp(p,0.2,1)))).toFixed(1));note3.setAttribute('opacity',ease(ramp(p,0.4,1)))}
+}
+function frame(step,t){ // t seconds after entering `step`
+ sweep(step<=0?ease(clamp(t/DRAW)):1);
+ for(let i=0;i<3;i++){
+  const n=i+1;
+  if(n<step)decision(i,1,1);
+  else if(n===step)decision(i,clamp(t/ADD),0);
+  else decision(i,0,0);
+ }
+}
+
+// ---- playback
+let raf=0,anim=null,cur=0;
+const cl=s=>Math.max(0,Math.min(LAST,s|0));
+function halt(){cancelAnimationFrame(raf);raf=0;anim=null}
+function tick(now){
+ if(!anim)return;
+ if(anim.t0===null)anim.t0=now;
+ const t=(now-anim.t0)/1000;
+ frame(anim.step,Math.min(t,anim.dur));
+ if(t>=anim.dur){anim=null;return}
+ raf=requestAnimationFrame(tick);
+}
+function play(s){halt();cur=cl(s);anim={step:cur,t0:null,dur:cur===0?DRAW:ADD};frame(cur,0);raf=requestAnimationFrame(tick)}
+function settle(s){halt();cur=cl(s);frame(cur,99)}
+frame(0,0); // first paint: axes and the grey trace; the coloured trace draws on entry
+window.renderAt=(s,t)=>{halt();cur=cl(s);frame(cur,Math.max(0,+t||0))};
+if(window.deckwerk){
+ deckwerk.onActive(e=>{const s=cl(e&&e.step);if(s===0)play(0);else settle(s)});
+ deckwerk.onStep(e=>{const s=cl(e&&e.step);if(s===cur+1)play(s);else settle(s)});
+ deckwerk.onInactive(halt);
+}else{
+ play(0);
+ document.addEventListener('click',()=>{if(cur<LAST)play(cur+1);else play(0)});
+}
+})();
+</script>
+</body>
+</html>

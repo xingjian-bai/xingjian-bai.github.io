@@ -1,0 +1,330 @@
+<!doctype html><html lang="en"><head>
+<script data-deckwerk-bridge>(function(){
+if(window.deckwerk)return;
+var SRC="deckwerk";
+var KEYS=["ArrowRight","ArrowLeft","ArrowDown","ArrowUp","PageDown","PageUp"," ","Enter","Backspace","Home","Escape","b","B","o","O"];
+var handlers={active:[],inactive:[],step:[]};
+function post(m){m.source=SRC;if(window.parent&&window.parent!==window)window.parent.postMessage(m,'*');}
+window.deckwerk={
+  onActive:function(f){handlers.active.push(f);},
+  onInactive:function(f){handlers.inactive.push(f);},
+  onStep:function(f){handlers.step.push(f);},
+  next:function(){post({action:'next'});},
+  prev:function(){post({action:'prev'});},
+  ready:function(p){
+    if(!p||typeof p.then!=='function'){post({action:'ready'});return;}
+    post({action:'hold-ready'});
+    var done=function(){post({action:'ready'});};
+    p.then(done,done);
+  }
+};
+window.addEventListener('message',function(e){
+  var d=e.data;if(!d||d.source!==SRC||!d.event)return;
+  (handlers[d.event]||[]).forEach(function(f){try{f({step:d.step,steps:d.steps});}catch(err){console.error(err);}});
+});
+window.addEventListener('keydown',function(e){
+  if(e.defaultPrevented||KEYS.indexOf(e.key)<0)return;
+  var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
+  e.preventDefault();post({action:'key',key:e.key});
+});
+})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Learning-rate schedule</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
+svg{display:block;width:100%;height:100%}
+text{font-family:"Avenir Next",Avenir,"Helvetica Neue",Arial,sans-serif;fill:#191918;white-space:pre}
+.mono{font-family:Menlo,Monaco,"SF Mono",monospace}
+.voice{font-family:"SF Mono",Menlo,monospace;font-weight:400}
+</style></head><body>
+<svg id="s" viewBox="0 0 1680 860" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Learning-rate multipliers OPAL set in one SiT-B/2 run, two of its decisions, then the blog's Figure 4: DeepSeek-V3's schedule and the schedules OPAL set in four runs"></svg>
+<script>
+(()=>{'use strict';
+const D={"T":400000,"official":[[1,1.0],[400000,1.0]],"groups":[[[1,1.0],[1251,1.0],[1252,1.252],[2000,2.0],[7506,2.0],[9506,3.0],[20016,3.0],[22016,4.0],[280000,4.0],[400000,0.2]],[[1,1.0],[18765,1.0],[19765,1.5],[40032,1.5],[42032,2.0],[280000,2.0],[400000,0.1]],[[1,1.0],[6255,1.0],[6256,0.3],[7506,0.3],[7507,0.15],[280000,0.15],[400000,0.0075]],[[1,1.0],[280000,1.0],[400000,0.05]]],"events":[{"num":1,"title":"slowing down the timestep embedder","x":6255,"win":[4000,7900],"rs":4000,"re":7900,"slow":[5800,7000],"DA":1.65,"resultAt":7520,"label":"step 6,255","rows":[["analysis.py found:","the timestep embedder’s consecutive gradients point opposite ways in all 12 windows (cosine −0.36 to −0.58); the Muon matrices stay near zero (−0.06 to +0.04)",0],["agent:","“Its output drives the adaLN modulation in every block, so this back-and-forth probably also explains part of adaLN’s negative cosine.”",3],["updater.py:","TEMB_SWITCH = 6255\nTEMB_MULT = 0.3",1],["result:","at step 7,506 its cosine is −0.14 to −0.33 and adaLN’s is back near zero; still overshooting, so it cuts to 0.15×, where it stays",0]],"guides":[[1.0,4000,2,"1.0×"],[0.3,6256,2,"0.3×"],[0.15,7507,2,"0.15×"]]},{"num":2,"title":"speeding up adaLN","x":18765,"win":[15000,20100],"rs":15000,"re":20100,"slow":[18300,19950],"DA":1.8,"resultAt":20016,"label":"step 18,765","rows":[["analysis.py found:","adaLN’s consecutive gradients now point the same way (cosine up to +0.08; it was −0.06 to −0.16 around step 6,000) while its relative step shrinks, 2.3e-3 → 1.9e-3",0],["agent:","“Both suggest its steps are now smaller than it can take.”",3],["updater.py:","ADALN_RAMP_START = 18765\nADALN_MULT = 1.5",1],["result:","at step 20,016: \u0001“adaLN at 1.5× did what I predicted”\u0002 (cosine +0.02 to +0.04, relative step 2.6e-3); later raised again to 2×",0]],"guides":[[1.0,15000,1,"1.0×"],[1.5,19765,1,"1.5×"]]}],"fid":"FID-50K ↓: 35.7 (official recipe) → 23.6","panels":[{"key":"hand","name":"DeepSeek-V3","head":"Designed by hand","legend":[["hum","learning rate"],["tk","a new stage"]],"note":"From the paper’s Section 4.2 (DeepSeek-AI, 2024).","row":0,"col":0,"kind":"hand","T":5,"points":[[0,0],[1,0.00022],[2,0.00022],[2.021,0.0002198],[2.042,0.0002192],[2.062,0.0002181],[2.083,0.0002166],[2.104,0.0002147],[2.125,0.0002125],[2.146,0.0002098],[2.167,0.0002067],[2.188,0.0002033],[2.208,0.0001995],[2.229,0.0001954],[2.25,0.000191],[2.271,0.0001863],[2.292,0.0001813],[2.312,0.000176],[2.333,0.0001705],[2.354,0.0001648],[2.375,0.0001589],[2.396,0.0001528],[2.417,0.0001466],[2.438,0.0001403],[2.458,0.0001339],[2.479,0.0001275],[2.5,0.000121],[2.521,0.0001145],[2.542,0.0001081],[2.562,0.0001017],[2.583,9.538e-05],[2.604,8.918e-05],[2.625,8.311e-05],[2.646,7.721e-05],[2.667,7.15e-05],[2.688,6.6e-05],[2.708,6.073e-05],[2.729,5.572e-05],[2.75,5.1e-05],[2.771,4.657e-05],[2.792,4.246e-05],[2.812,3.868e-05],[2.833,3.526e-05],[2.854,3.221e-05],[2.875,2.954e-05],[2.896,2.725e-05],[2.917,2.537e-05],[2.938,2.39e-05],[2.958,2.285e-05],[2.979,2.221e-05],[3,2.2e-05],[4,2.2e-05],[4,7.3e-06],[5,7.3e-06]],"changes":[1,2,3,4],"xticks":[[0,"0"],[1,"2K steps"],[2,"10T"],[3,"14.3T"],[4,"14.63T"],[5,"14.8T"]],"xtitle":"Training tokens","ymax":0.00024,"yticks":[[0,"0"],[2.2e-05,"2.2e-5"],[0.0001,"1e-4"],[0.00022,"2.2e-4"]]},{"key":"sit","name":"SiT-B/2","head":"Set by OPAL","legend":[["0","block matrices"],["1","adaLN modulation"],["2","timestep embedder"],["3","patch and class embedders"]],"row":0,"col":1,"kind":"big","T":400000,"groups":[[[1,1],[1251,1],[1252,1.252],[2000,2],[7506,2],[9506,3],[20016,3],[22016,4],[280000,4],[400000,0.2]],[[1,1],[18765,1],[19765,1.5],[40032,1.5],[42032,2],[280000,2],[400000,0.1]],[[1,1],[6255,1],[6256,0.3],[7506,0.3],[7507,0.15],[280000,0.15],[400000,0.0075]],[[1,1],[280000,1],[400000,0.05]]],"ticks":[1252,6256,7507,18766,20017,40033,190153],"yd":[0.01,4],"yt":[0.01,0.1,1,4]},{"key":"rae","name":"RAEv2-B","head":null,"legend":[["0","backbone attention"],["1","head attention"],["2","vectors and timestep embedder"]],"row":1,"col":0,"kind":"small","T":25020,"groups":[[[1,1],[500,1],[750,1.3],[751,1],[1000,1],[1250,1.5],[1575,1.5],[1576,0.45],[1650,0.45],[1651,1.5],[1750,1.5],[1850,2],[2500,2],[2501,1.5],[3000,1.5],[3100,2],[4000,2],[4100,2.5],[4750,2.5],[4751,2],[8575,2],[8576,0.6],[8650,0.6],[8651,2],[9000,2],[9100,2.75],[9750,2.75],[9751,2],[11251,2],[25020,0.1]],[[1,1],[500,1],[750,1.3],[1000,1.3],[1250,1.5],[1575,1.5],[1576,0.45],[1650,0.45],[1651,1.5],[1750,1.5],[1850,2],[2500,2],[2501,1.5],[3000,1.5],[3100,2],[4000,2],[4100,2.5],[4750,2.5],[4751,2],[8575,2],[8576,0.6],[8650,0.6],[8651,2],[9000,2],[9100,2.75],[9750,2.75],[9751,2],[11251,2],[25020,0.1]],[[1,1],[500,1],[750,1.3],[751,1],[1000,1],[1250,1.5],[1575,1.5],[1576,0.45],[1650,0.45],[1651,1.5],[1750,1.5],[1850,2],[2500,2],[2501,1.5],[3000,1.5],[3100,2],[4000,2],[4100,2.5],[4750,2.5],[4751,2],[7500,2],[7550,1],[8250,1],[8251,2],[8575,2],[8576,0.6],[8650,0.6],[8651,2],[9000,2],[9100,2.75],[9750,2.75],[9751,2],[11251,2],[25020,0.1]]],"ticks":[501,751,1001,1501,1751,3001,3501,7251,8501,8751,11251],"yd":[0.4,3],"yt":[0.5,1,2]},{"key":"ldit_open","name":"LightningDiT-XL/1","head":null,"legend":[["0","attention and MLP matrices"],["1","adaLN matrices"],["2","timestep embedder, final adaLN"],["3","everything else"]],"row":1,"col":1,"kind":"small","T":80000,"groups":[[[1,1],[1600,1],[2000,1.25],[4800,1.25],[5600,1.5],[50000,1.5],[50001,1.491],[50002,1.487],[50003,1.484],[50005,1.48],[50008,1.474],[50012,1.469],[50017,1.463],[50023,1.457],[50031,1.45],[50041,1.442],[50053,1.434],[50068,1.426],[50086,1.416],[50107,1.407],[50132,1.396],[50161,1.385],[50195,1.374],[50233,1.362],[50277,1.35],[50326,1.337],[50381,1.324],[50443,1.31],[50512,1.296],[50588,1.281],[50672,1.266],[50764,1.251],[50865,1.235],[50975,1.218],[51094,1.202],[51223,1.184],[51362,1.167],[51511,1.149],[51671,1.131],[51842,1.113],[52024,1.094],[52217,1.075],[52422,1.056],[52639,1.036],[52868,1.017],[53109,0.9969],[53362,0.9768],[53628,0.9565],[53906,0.936],[54196,0.9155],[54499,0.8948],[54814,0.8739],[55141,0.853],[55480,0.832],[55831,0.811],[56194,0.7898],[56569,0.7686],[56955,0.7475],[57352,0.7263],[57760,0.7051],[58178,0.684],[58606,0.6629],[59043,0.6419],[59489,0.621],[59944,0.6002],[60407,0.5795],[60877,0.5589],[61354,0.5385],[61837,0.5183],[62326,0.4982],[62820,0.4783],[63318,0.4587],[63819,0.4392],[64323,0.4201],[64829,0.4012],[65336,0.3825],[65843,0.3642],[66350,0.3462],[66855,0.3285],[67358,0.3112],[67858,0.2942],[68354,0.2775],[68846,0.2612],[69332,0.2454],[69812,0.2299],[70285,0.2148],[70749,0.2002],[71205,0.186],[71651,0.1723],[72086,0.159],[72510,0.1462],[72922,0.1338],[73321,0.122],[73706,0.1107],[74077,0.09984],[74433,0.08953],[74773,0.07975],[75096,0.07052],[75402,0.06183],[75690,0.0537],[75960,0.04612],[76000,0.045],[80000,0.045]],[[1,1],[4800,1],[5600,1.25],[50000,1.25],[50001,1.242],[50002,1.239],[50003,1.237],[50005,1.233],[50008,1.229],[50012,1.224],[50017,1.219],[50023,1.214],[50031,1.208],[50041,1.202],[50053,1.195],[50068,1.188],[50086,1.18],[50107,1.172],[50132,1.164],[50161,1.155],[50195,1.145],[50233,1.135],[50277,1.125],[50326,1.114],[50381,1.103],[50443,1.092],[50512,1.08],[50588,1.068],[50672,1.055],[50764,1.042],[50865,1.029],[50975,1.015],[51094,1.001],[51223,0.987],[51362,0.9725],[51511,0.9577],[51671,0.9426],[51842,0.9273],[52024,0.9117],[52217,0.8959],[52422,0.8799],[52639,0.8637],[52868,0.8473],[53109,0.8307],[53362,0.814],[53628,0.7971],[53906,0.78],[54196,0.7629],[54499,0.7456],[54814,0.7283],[55141,0.7108],[55480,0.6933],[55831,0.6758],[56194,0.6582],[56569,0.6405],[56955,0.6229],[57352,0.6052],[57760,0.5876],[58178,0.57],[58606,0.5524],[59043,0.5349],[59489,0.5175],[59944,0.5001],[60407,0.4829],[60877,0.4658],[61354,0.4487],[61837,0.4319],[62326,0.4152],[62820,0.3986],[63318,0.3822],[63819,0.366],[64323,0.3501],[64829,0.3343],[65336,0.3188],[65843,0.3035],[66350,0.2885],[66855,0.2738],[67358,0.2593],[67858,0.2451],[68354,0.2313],[68846,0.2177],[69332,0.2045],[69812,0.1916],[70285,0.179],[70749,0.1668],[71205,0.155],[71651,0.1435],[72086,0.1325],[72510,0.1218],[72922,0.1115],[73321,0.1017],[73706,0.09222],[74077,0.0832],[74433,0.07461],[74773,0.06646],[75096,0.05877],[75402,0.05152],[75690,0.04475],[75960,0.03843],[76000,0.0375],[80000,0.0375]],[[1,1],[50000,1],[50001,0.994],[50002,0.9915],[50003,0.9896],[50005,0.9865],[50008,0.983],[50012,0.9792],[50017,0.9752],[50023,0.9711],[50031,0.9665],[50041,0.9615],[50053,0.9562],[50068,0.9504],[50086,0.9442],[50107,0.9378],[50132,0.9309],[50161,0.9237],[50195,0.916],[50233,0.9082],[50277,0.8999],[50326,0.8914],[50381,0.8826],[50443,0.8734],[50512,0.8639],[50588,0.8541],[50672,0.8441],[50764,0.8337],[50865,0.8231],[50975,0.8122],[51094,0.801],[51223,0.7896],[51362,0.778],[51511,0.7662],[51671,0.7541],[51842,0.7418],[52024,0.7294],[52217,0.7168],[52422,0.7039],[52639,0.691],[52868,0.6778],[53109,0.6646],[53362,0.6512],[53628,0.6377],[53906,0.624],[54196,0.6103],[54499,0.5965],[54814,0.5826],[55141,0.5687],[55480,0.5547],[55831,0.5406],[56194,0.5266],[56569,0.5124],[56955,0.4983],[57352,0.4842],[57760,0.4701],[58178,0.456],[58606,0.4419],[59043,0.4279],[59489,0.414],[59944,0.4001],[60407,0.3863],[60877,0.3726],[61354,0.359],[61837,0.3455],[62326,0.3321],[62820,0.3189],[63318,0.3058],[63819,0.2928],[64323,0.2801],[64829,0.2674],[65336,0.255],[65843,0.2428],[66350,0.2308],[66855,0.219],[67358,0.2074],[67858,0.1961],[68354,0.185],[68846,0.1742],[69332,0.1636],[69812,0.1533],[70285,0.1432],[70749,0.1335],[71205,0.124],[71651,0.1148],[72086,0.106],[72510,0.09745],[72922,0.08922],[73321,0.08133],[73706,0.07378],[74077,0.06656],[74433,0.05968],[74773,0.05316],[75096,0.04701],[75402,0.04122],[75690,0.0358],[75960,0.03075],[76000,0.03],[80000,0.03]],[[1,1],[50000,1],[50001,0.994],[50002,0.9915],[50003,0.9896],[50005,0.9865],[50008,0.983],[50012,0.9792],[50017,0.9752],[50023,0.9711],[50031,0.9665],[50041,0.9615],[50053,0.9562],[50068,0.9504],[50086,0.9442],[50107,0.9378],[50132,0.9309],[50161,0.9237],[50195,0.916],[50233,0.9082],[50277,0.8999],[50326,0.8914],[50381,0.8826],[50443,0.8734],[50512,0.8639],[50588,0.8541],[50672,0.8441],[50764,0.8337],[50865,0.8231],[50975,0.8122],[51094,0.801],[51223,0.7896],[51362,0.778],[51511,0.7662],[51671,0.7541],[51842,0.7418],[52024,0.7294],[52217,0.7168],[52422,0.7039],[52639,0.691],[52868,0.6778],[53109,0.6646],[53362,0.6512],[53628,0.6377],[53906,0.624],[54196,0.6103],[54499,0.5965],[54814,0.5826],[55141,0.5687],[55480,0.5547],[55831,0.5406],[56194,0.5266],[56569,0.5124],[56955,0.4983],[57352,0.4842],[57760,0.4701],[58178,0.456],[58606,0.4419],[59043,0.4279],[59489,0.414],[59944,0.4001],[60407,0.3863],[60877,0.3726],[61354,0.359],[61837,0.3455],[62326,0.3321],[62820,0.3189],[63318,0.3058],[63819,0.2928],[64323,0.2801],[64829,0.2674],[65336,0.255],[65843,0.2428],[66350,0.2308],[66855,0.219],[67358,0.2074],[67858,0.1961],[68354,0.185],[68846,0.1742],[69332,0.1636],[69812,0.1533],[70285,0.1432],[70749,0.1335],[71205,0.124],[71651,0.1148],[72086,0.106],[72510,0.09745],[72922,0.08922],[73321,0.08133],[73706,0.07378],[74077,0.06656],[74433,0.05968],[74773,0.05316],[75096,0.04701],[75402,0.04122],[75690,0.0358],[75960,0.03075],[76000,0.03],[80000,0.03]]],"ticks":[1601,4801,39201],"yd":[0.4,2],"yt":[0.5,1,2]},{"key":"gpt_2e","name":"NanoGPT, ¼ batch","head":null,"legend":[["0","q, k, projection and MLP matrices"],["1","value matrices"],["2","embedding"],["3","final norm gain"]],"row":1,"col":2,"kind":"small","T":13000,"groups":[[[1,1],[260,1],[261,0.8],[3901,0.8],[13000,8.791e-05]],[[1,1],[260,1],[261,0.8],[2080,0.8],[2081,0.6],[3901,0.6],[13000,6.593e-05]],[[1,1],[260,1],[261,0.6429],[3901,0.6429],[13000,7.064e-05]],[[1,1],[260,1],[261,0.6],[1560,0.6],[1561,0.2],[1820,0.2],[1821,0.6],[3901,0.6],[13000,6.593e-05]]],"ticks":[261,1561,1821,2081],"yd":[0.1,1.15],"yt":[0.1,0.2,0.5,1]}],"legend":["block matrices","adaLN modulation","timestep embedder","patch and class embedders","official recipe"],"below":[[2,364211]],"floor":0.05,"example":"Example: OPAL on SiT-B/2, ImageNet"};
+const svg=document.getElementById('s');
+const INK='#191918',TXT='#3a3a38',MUTED='#6b6b68',GRID='#ececea',GRID1='#dededb',AXIS='#c4c4c0',RED='#c62d1f',OFFC='#767676',VOICE='#2f2c28';
+const COL=['#1f57b5','#c46f00','#23845f','#8a55bd'];
+const FS='"Avenir Next",Avenir,"Helvetica Neue",Arial,sans-serif',FM='Menlo,Monaco,"SF Mono",monospace',FV='"SF Mono",Menlo,monospace';
+const lg=Math.log10,P10=v=>Math.pow(10,v);
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x)),lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const ramp=(t,a,d)=>clamp((t-a)/d,0,1);
+const sm=x=>x*x*(3-2*x);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const f1=v=>(Math.round(v*10)/10).toFixed(1);
+const fmtC=v=>Math.round(v).toLocaleString('en-US');
+const fmtK=v=>v===0?'0':v>=1e6?`${+(v/1e6).toFixed(1)}M`:v>=1e3?`${+(v/1e3).toFixed(v%1e3?1:0)}K`:String(v);
+const fmtY=v=>String(v)+'×';
+
+// ---------------- geometry ----------------
+const MAIN=[128,110,1640,736],EVR=[128,110,900,736],BX0=940,BW=720,BY0=124;
+const T=D.T,OVX=[lg(100),lg(T)],YM=[lg(D.floor),lg(5.5)];
+// overview axis: steps 100-1,000 compressed into the first C_OV of the width (log inside each part); C_LIN = plain log axis
+const Q0=lg(100),QB=lg(1000),Q1=lg(T),C_OV=0.06,C_LIN=(QB-Q0)/(Q1-Q0);
+const warp=(q,c)=>q<=QB?c*(q-Q0)/(QB-Q0):c+(1-c)*(q-QB)/(Q1-QB);
+const brkOf=c=>clamp((C_LIN-c)/(C_LIN-C_OV),0,1);
+const YT_MAIN=[0.05,0.1,0.2,0.5,1,2,4];
+// the last stage = the blog's Figure 4 (fig-lrmulti), its CSS px scaled by K: two panels on top, three below
+const BF="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif";
+// its text sizes in CSS px: FT tick labels, FL legend and note, FN panel names, FH heads; LP legend line pitch; XLB, XTB baselines of the x tick labels and the x title below the axis
+const FT=13,FL=14,FN=16.5,FH=15.5,LP=19.5,XLB=16,XTB=31;
+// the bottom row starts 18 below the end of the SiT-B/2 legend (it starts at 272.1); FIGH = where the bottom row's legends end
+const TOPC=[0,424],TOPW=396,BOTC=[0,280.667,561.333],BOTW=258.667,ROW2=272.1+4*LP+18,FIGH=ROW2+166.1+4*LP;
+const K=1.39,FIGW=820,OX=(1680-FIGW*K)/2,OY=(860-FIGH*K)/2,bx=x=>OX+K*x,by=y=>OY+K*y;
+function blogBox(P){const top=P.row===0,x0=top?TOPC[P.col]:BOTC[P.col],w=top?TOPW:BOTW,y0=top?30:ROW2,
+ ml=P.kind==='hand'?44:38,mb=top?37.5:33.5,ih=top?168:96,svgTop=y0+22.6;
+ return{x0,w,big:top,headBase:14.6,headRule:21.6,nameBase:y0+16.4,plot:[bx(x0+ml),by(svgTop+10),bx(x0+w-8),by(svgTop+10+ih)],legTop:svgTop+10+ih+mb+4}}
+const SITP=D.panels.find(p=>p.key==='sit'),OTHERS=D.panels.filter(p=>p.key!=='sit');
+const SIT_CELL=blogBox(SITP).plot;
+const EV=D.events.map(e=>Object.assign({},e,{lx:lg(e.x),wl:lg(e.win[0]),wr:lg(e.win[1]),lrs:lg(e.rs),lre:lg(e.re),lres:lg(e.resultAt)}));
+const NE=EV.length,NST=NE+3;
+const WBIG=[4.5,4.5,4.5,4.5],WSMALL=[2*K,1.5*K,1.5*K,1.5*K],OFFW=6;
+
+// ---------------- text: measuring, wrapping, agent voice ----------------
+const ctx=document.createElement('canvas').getContext('2d');
+const tw=(s,font)=>{ctx.font=font;return ctx.measureText(s).width};
+const F24=`400 24px ${FS}`;
+// event boxes: title, body, agent voice (0.9 of the body) and row label sizes in px; BLH line pitch, BG gap between rows
+const BT=31,BB=28,BV=25.2,BL=24,BLH=36,BG=35,FB=`400 ${BB}px ${FS}`,FBV=`400 ${BV}px ${FV}`;
+// a row's text as tokens {t, v}: v = agent voice (U+0001 ... U+0002 marks a voiced span; kind 3 voices the whole row)
+function tokens(text,allVoice){const out=[];let v=false,buf='';const push=()=>{buf.split(' ').forEach((w,i,a)=>{if(w)out.push({t:w,v:allVoice||v})});buf=''};
+ for(const ch of text){if(ch==='\u0001'||ch==='\u0002'){push();v=ch==='\u0001'}else buf+=ch}push();return out}
+function wrapTok(toks,w){const lines=[];let cur=[],cw=0;const wid=o=>tw(o.t,o.v?FBV:FB),sp=o=>tw(' ',o.v?FBV:FB);
+ for(const o of toks){const add=(cur.length?sp(cur[cur.length-1]):0)+wid(o);if(cur.length&&cw+add>w){lines.push(cur);cur=[o];cw=wid(o)}else{cur.push(o);cw+=add}}
+ if(cur.length)lines.push(cur);return lines}
+let BOXES=[];
+function layoutBoxes(){BOXES=EV.map(ev=>ev.rows.map(([lab,txt,kind])=>({lab,kind,lines:kind===1?txt.split('\n').map(t=>[{t,v:false,code:true}]):wrapTok(tokens(txt,kind===3),BW)})))}
+layoutBoxes();
+function lineTxt(x,y,toks){let h='',i=0;while(i<toks.length){const v=!!toks[i].v,code=!!toks[i].code;let s='';while(i<toks.length&&!!toks[i].v===v&&!!toks[i].code===code){s+=(s?' ':'')+toks[i].t;i++}
+  if(i<toks.length)s+=' ';
+  h+=code?`<tspan class="mono" style="font-size:${BB}px;fill:${INK}">${esc(s)}</tspan>`:v?`<tspan class="voice" style="font-size:${BV}px;fill:${VOICE}">${esc(s)}</tspan>`:`<tspan style="font-size:${BB}px;fill:${INK}">${esc(s)}</tspan>`}
+ return `<text x="${f1(x)}" y="${f1(y)}">${h}</text>`}
+
+// ---------------- scales and paths ----------------
+function scale(rect,lx,ly,c){const [l,t,r,b]=rect,ky=(b-t)/(ly[1]-ly[0]),lo=ly[0]-lg(2);
+ const w=c==null?(q=>q):(q=>warp(q,c)),w0=w(lx[0]),k=(r-l)/(w(lx[1])-w0),XL=q=>l+(w(q)-w0)*k;
+ return{rect,lx,ly,c,X:u=>XL(lg(u)),XL,Y:v=>t+(ly[1]-(v>0?Math.max(lg(v),lo):lo))*ky}}
+function pts(P,sc,qa,qb){qa=Math.max(qa,sc.lx[0]-0.02);qb=Math.min(qb,sc.lx[1]+0.02);if(qb<=qa)return[];
+ const xa=P10(qa),xb=P10(qb),out=[];
+ for(let i=1;i<P.length;i++){const [x0,v0]=P[i-1],[x1,v1]=P[i];if(x1<xa||x0>xb)continue;
+  const s0=Math.max(x0,xa),s1=Math.min(x1,xb);if(s1<s0)continue;
+  const val=u=>x1===x0?v1:v0+(v1-v0)*(u-x0)/(x1-x0);
+  if(!out.length)out.push([s0,val(s0)]);
+  let n=1;if(v0!==v1&&x1-x0>1)n=Math.min(500,Math.max(1,Math.ceil(Math.abs(sc.X(s1)-sc.X(Math.max(s0,1e-9)))/3)));
+  for(let j=1;j<=n;j++){const u=n===1?s1:s0*Math.pow(s1/s0,j/n);out.push([u,val(u)])}}
+ return out}
+const dPath=(A,sc)=>A.length?'M'+A.map(p=>sc.X(p[0]).toFixed(1)+','+sc.Y(p[1]).toFixed(1)).join('L'):'';
+const valAt=(P,u)=>{for(let i=1;i<P.length;i++){const [x0,v0]=P[i-1],[x1,v1]=P[i];if(u>=x0&&u<=x1)return x1===x0?v1:v0+(v1-v0)*(u-x0)/(x1-x0)}return P[P.length-1][1]};
+
+// ---------------- x ticks of the big chart ----------------
+function xTicks(sc,minGap){const [l,,r]=sc.rect,span=sc.lx[1]-sc.lx[0],x0=P10(sc.lx[0]),x1=P10(sc.lx[1])*1.0001;let out=[];
+ if(sc.c!=null&&brkOf(sc.c)>0.5)for(const v of [100,1000,T])if(v>=x0*0.9999&&v<=x1)out.push(v);
+ if(span>0.8){const cand=[];for(let e=Math.floor(sc.lx[0])-1;e<=Math.ceil(sc.lx[1]);e++)for(const [m,p] of [[1,0],[5,1],[2,2]]){const v=m*P10(e);if(v>=x0*0.9999&&v<=x1)cand.push([v,p,e])}
+  const pri=[...cand].sort((a,b)=>a[1]-b[1]||b[2]-a[2]);
+  for(const [v] of pri){const X=sc.X(v);if(!out.includes(v)&&out.every(w=>Math.abs(sc.X(w)-X)>=minGap))out.push(v)}
+ }else{for(const st of [10,20,25,50,100,200,250,500,1000,2000,2500,5000,10000,20000]){const a=Math.ceil(x0/st)*st,arr=[];for(let v=a;v<=x1;v+=st)arr.push(v);
+   let ok=arr.length>=2;for(let i=1;i<arr.length&&ok;i++)if(sc.X(arr[i])-sc.X(arr[i-1])<minGap)ok=false;if(ok){out=arr;break}}}
+ return out.filter(v=>{const X=sc.X(v);return X>=l-0.5&&X<=r+0.5}).sort((a,b)=>a-b)}
+let tickA=new Map();
+function tickAlphas(sel,dt,snap){if(snap){tickA=new Map(sel.map(v=>[v,1]));return}
+ const s=new Set(sel);for(const v of sel)tickA.set(v,Math.min(1,(tickA.get(v)||0)+dt/0.2));
+ for(const [v,a] of [...tickA])if(!s.has(v)){const b=a-dt/0.2;if(b<=0)tickA.delete(v);else tickA.set(v,b)}}
+
+// ---------------- states ----------------
+const base=()=>({rect:MAIN.slice(),lx:OVX.slice(),ly:YM.slice(),c:C_OV,s:0,reveal:OVX[1],fade:null,ghost:0,tips:0,
+ legend:1,ylab:1,xlab:1,mainTicks:1,smallTicks:0,mk:EV.map(()=>0),hd:EV.map(()=>0),box:EV.map(()=>[0,0,0,0]),gd:EV.map(ev=>ev.guides.map(()=>0)),
+ mkAll:0,fid:0,mainTitle:0,mainDec:0,off:0.35,offTo:9,panels:OTHERS.map(()=>({op:0,sc:1}))});
+function settled(k){const st=base();
+ if(k>=1&&k<=NE){const i=k-1,ev=EV[i];st.rect=EVR.slice();st.lx=[ev.wl,ev.wr];st.c=C_LIN;st.reveal=ev.lre;st.ghost=0.12;st.mk[i]=1;st.hd[i]=1;st.box[i]=[1,1,1,1];st.gd[i]=ev.guides.map(()=>1)}
+ if(k===NE+1){st.mkAll=1;st.fid=1}
+ if(k===NE+2){st.c=C_LIN;st.rect=SIT_CELL.slice();st.ly=[lg(SITP.yd[0]),lg(SITP.yd[1])];st.s=1;st.legend=0;st.ylab=0;st.xlab=0;st.mainTicks=0;st.smallTicks=1;
+  st.mainTitle=1;st.mainDec=1;st.off=0;st.panels.forEach(p=>{p.op=1;p.sc=1})}
+ return st}
+const clone=st=>JSON.parse(JSON.stringify(st));
+// x-range path between two views: zoom about the fixed point when one range holds the other, else pull back while panning
+function fly(A,B,e){const wa=A[1]-A[0],wb=B[1]-B[0],nested=(A[0]<=B[0]+1e-9&&A[1]>=B[1]-1e-9)||(B[0]<=A[0]+1e-9&&B[1]>=A[1]-1e-9);
+ if(nested&&Math.abs(wa-wb)>1e-6){const p=(A[0]*wb-B[0]*wa)/(wb-wa),rho=(p-A[0])/wa,w=Math.exp(lerp(Math.log(wa),Math.log(wb),e));return[p-rho*w,p-rho*w+w]}
+ const ca=(A[0]+A[1])/2,ha=wa/2,cb=(B[0]+B[1])/2,hb=wb/2;
+ const U=Math.max(A[1],B[1])-Math.min(A[0],B[0]),bump=Math.max(0,U/2-Math.max(ha,hb));
+ const c=lerp(ca,cb,e),h=Math.exp(lerp(Math.log(ha),Math.log(hb),e))+bump*Math.sin(Math.PI*e);return[c-h,c+h]}
+// replay of [lrs, lre] at the base speed of the window, one third of it across ev.slow (eased over 35% of that span each side)
+function replay(ev,base){const N=800,a=ev.lrs,z=ev.lre,s0=(ev.wr-ev.wl)/base,ka=lg(ev.slow[0]),kb=lg(ev.slow[1]),m=(kb-ka)*0.35;
+ const w=q=>q<ka-m||q>kb+m?0:q>=ka&&q<=kb?1:sm(clamp(q<ka?(q-(ka-m))/m:((kb+m)-q)/m,0,1));
+ const qs=[a],ts=[0];let tt=0;for(let i=1;i<=N;i++){const qm=a+(z-a)*(i-0.5)/N;tt+=((z-a)/N)/(s0*(1-2/3*w(qm)));qs.push(a+(z-a)*i/N);ts.push(tt)}
+ return{dur:tt,at(x){if(x<=0)return a;if(x>=tt)return z;let lo=0,hi=N;while(hi-lo>1){const md=(lo+hi)>>1;if(ts[md]<=x)lo=md;else hi=md}return qs[lo]+(qs[hi]-qs[lo])*(x-ts[lo])/(ts[hi]-ts[lo])},
+  tOf(q){if(q<=a)return 0;if(q>=z)return tt;const i=(q-a)/(z-a)*N,i0=Math.floor(i);return ts[i0]+(ts[Math.min(N,i0+1)]-ts[i0])*(i-i0)}}}
+function evTrans(k){const A=settled(k-1),B=settled(k),e=k-1,ev=EV[e],RP=replay(ev,2.6),DA=ev.DA,DB=RP.dur,fadeMode=A.reveal>ev.lrs+1e-9;
+ const tX=DA+RP.tOf(ev.lx),tR=Math.min(DA+RP.tOf(ev.lres),DA+DB-0.25);
+ return{dur:DA+DB+0.45,at(t){const st=clone(A),fo=1-ramp(t,0,0.35),ez=ease(ramp(t,0,DA));
+  st.mk=A.mk.map(v=>v*fo);st.hd=A.hd.map(v=>v*fo);st.box=A.box.map(r=>r.map(v=>v*fo));st.gd=A.gd.map(r=>r.map(v=>v*fo));
+  st.rect=A.rect.map((v,j)=>lerp(v,B.rect[j],ez));st.lx=fly(A.lx,B.lx,ez);st.c=lerp(A.c,B.c,ez);
+  st.ghost=lerp(A.ghost,0.12,sm(ramp(t,0,DA*0.6)));
+  if(t<DA){if(fadeMode){st.reveal=ev.lrs;st.fade={a:ev.lrs,b:A.reveal,op:1-sm(ramp(t,0,DA))}}else{st.reveal=lerp(A.reveal,ev.lrs,ez);st.fade=null}}
+  else{st.reveal=RP.at(t-DA);st.fade=null}
+  st.tips=t<DA?0:Math.min(sm(ramp(t,DA,0.2)),1-ramp(t,DA+DB,0.3));
+  st.hd[e]=Math.max(st.hd[e],sm(ramp(t,DA*0.5,0.45)));
+  st.mk[e]=Math.max(st.mk[e],sm(ramp(t,tX,0.3)));
+  for(let r=0;r<3;r++)st.box[e][r]=Math.max(st.box[e][r],sm(ramp(t,tX+0.12+0.25*r,0.35)));
+  st.box[e][3]=Math.max(st.box[e][3],sm(ramp(t,Math.max(tR,tX+0.9),0.35)));
+  ev.guides.forEach((G,j)=>{st.gd[e][j]=Math.max(st.gd[e][j],sm(ramp(t,DA+RP.tOf(lg(G[1])),0.35)))});
+  return st}}}
+function outTrans(){const A=settled(NE),B=settled(NE+1),D1=1.25;
+ return{dur:D1+0.85,at(t){const st=clone(A),fo=1-ramp(t,0,0.35),ez=ease(ramp(t,0,D1));
+  st.mk=A.mk.map(v=>v*fo);st.hd=A.hd.map(v=>v*fo);st.box=A.box.map(r=>r.map(v=>v*fo));st.gd=A.gd.map(r=>r.map(v=>v*fo));
+  st.rect=A.rect.map((v,j)=>lerp(v,B.rect[j],ez));st.lx=fly(A.lx,B.lx,ez);st.c=lerp(A.c,B.c,ez);
+  st.reveal=lerp(A.reveal,B.reveal,ease(ramp(t,0.05,D1-0.05)));st.fade=null;st.ghost=A.ghost*(1-ramp(t,D1-0.45,0.45));st.tips=0;
+  st.mkAll=sm(ramp(t,D1,0.4));st.fid=sm(ramp(t,D1+0.35,0.45));return st}}}
+function gridTrans(){const A=settled(NE+1),B=settled(NE+2);
+ return{dur:1.6,at(t){const st=clone(A),fo=1-ramp(t,0,0.3);
+  st.mkAll=A.mkAll*fo;st.fid=A.fid*fo;st.legend=fo;st.ylab=fo;st.xlab=fo;st.mainTicks=fo;
+  const u=ramp(t,0.1,1.0),e=1-Math.pow(1-u,3);st.rect=A.rect.map((v,i)=>lerp(v,B.rect[i],e));st.ly=A.ly.map((v,i)=>lerp(v,B.ly[i],e));st.s=e;st.c=lerp(A.c,B.c,e);
+  st.off=A.off*(1-ramp(t,0.2,0.5));
+  st.smallTicks=sm(ramp(t,0.85,0.35));st.mainTitle=sm(ramp(t,0.85,0.4));st.mainDec=sm(ramp(t,0.9,0.35));
+  st.panels=OTHERS.map((p,i)=>{const v=ease(ramp(t,0.6+0.12*i,0.5));return{op:v,sc:0.93+0.07*v}});return st}}}
+function quick(A,B,dur){const fadeMode=A.reveal>B.reveal+1e-9;
+ const L=(a,b,e)=>typeof a==='number'?lerp(a,b,e):Array.isArray(a)?a.map((v,i)=>L(v,b[i],e)):Object.fromEntries(Object.keys(a).map(k=>[k,L(a[k],b[k],e)]));
+ return{dur,at(t){const e=ease(ramp(t,0,dur)),st=clone(B);
+  for(const k of ['rect','ly','c','s','ghost','legend','ylab','xlab','mainTicks','smallTicks','mk','hd','box','gd','mkAll','fid','mainTitle','mainDec','off','panels'])st[k]=L(A[k],B[k],e);
+  st.lx=fly(A.lx,B.lx,e);
+  if(fadeMode){st.reveal=B.reveal;st.fade={a:B.reveal,b:A.reveal,op:1-e}}else{st.reveal=lerp(A.reveal,B.reveal,e);st.fade=null}
+  st.tips=0;return st}}}
+// stage 0's entry: the curves and the official recipe grow left to right over ENT s, linear in time and at constant speed on the
+// screen (q undoes the overview axis's warp, so steps 100 to 1,000 pass in their C_OV of the width); dots ride the line heads, then fade
+const ENT=3.0;
+function entryTrans(){const B=settled(0),q=u=>u<=C_OV?Q0+(QB-Q0)*u/C_OV:QB+(Q1-QB)*(u-C_OV)/(1-C_OV);
+ return{dur:ENT+0.35,at(t){const st=clone(B);if(t<ENT){st.reveal=q(Math.max(t,0)/ENT);st.offTo=st.reveal}
+  st.tips=Math.min(sm(ramp(t,0,0.2)),1-ramp(t,ENT,0.3));return st}}}
+function forward(k){return k<=0?entryTrans():k<=NE?evTrans(k):k===NE+1?outTrans():gridTrans()}
+
+// ---------------- drawing helpers ----------------
+const tx=(x,y,s,o)=>`<text x="${f1(x)}" y="${f1(y)}"${o||''}>${esc(s)}</text>`;
+const circ=(x,y,n,r)=>{r=r||14;return`<circle cx="${f1(x)}" cy="${f1(y)}" r="${r}" fill="#fff" stroke="${RED}" stroke-width="2"/>`+tx(x,y+r*0.46,String(n),` text-anchor="middle" style="font-size:${(r*1.36).toFixed(1)}px;font-weight:700;fill:${RED}"`)};
+let CAP='butt';
+function lineSvg(P,sc,qa,qb,col,w,op){const d=dPath(pts(P,sc,qa,qb),sc);return d&&op>0.001?`<path d="${d}" fill="none" stroke="${col}" stroke-width="${w.toFixed(2)}" stroke-linejoin="round" stroke-linecap="${CAP}" opacity="${op.toFixed(3)}"/>`:''}
+const hx=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16));
+const mix=(a,b,t)=>{const A=hx(a),B=hx(b);return'rgb('+A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')+')'};
+const bt=(x,y,str,size,fill,extra)=>tx(x,y,str,` style="font-family:${BF};font-size:${(size*K).toFixed(2)}px;fill:${fill}${extra||''}"`);
+const tickT=(x,y,str,anchor)=>tx(x,y,str,` text-anchor="${anchor}" style="font-family:${BF};font-size:${(FT*K).toFixed(2)}px;fill:#666;font-variant-numeric:tabular-nums lining-nums"`);
+const hl=(x1,x2,y,col,w)=>`<line x1="${f1(x1)}" x2="${f1(x2)}" y1="${f1(y)}" y2="${f1(y)}" stroke="${col}" stroke-width="${w.toFixed(2)}"/>`;
+const vl=(x,y1,y2,col,w)=>`<line x1="${f1(x)}" x2="${f1(x)}" y1="${f1(y1)}" y2="${f1(y2)}" stroke="${col}" stroke-width="${w.toFixed(2)}"/>`;
+// x ticks of a blog panel: the decades whose label clears the end label by 8 px (widths at the tick font, digits as 0 for tabular figures), then the end
+function xTicksBlog(sc,TT){const f=`${(FT*K).toFixed(2)}px ${BF}`,w=v=>tw(fmtK(v).replace(/\d/g,'0'),f),out=[];for(let v=100;v<TT;v*=10)if(sc.X(TT)-sc.X(v)>=w(v)/2+w(TT)+8)out.push(v);out.push(TT);return out}
+function xTickLabels(xs,lab,X,l,b){return xs.map((v,i)=>{const x=X(v),last=i===xs.length-1;return tickT(x,b+XLB*K,lab(v,i),x-l<0.5*K?'start':last?'end':'middle')}).join('')}
+function blogPlot(P,L){const [l,t,r,b]=L.plot,cid='bc'+P.key;let g=`<clipPath id="${cid}"><rect x="${f1(l-2*K)}" y="${f1(t-6*K)}" width="${f1(r-l+4*K)}" height="${f1(b-t+6*K)}"/></clipPath>`;
+ if(P.kind==='hand'){const X=v=>l+v/P.T*(r-l),Y=v=>b-Math.max(v,0)/P.ymax*(b-t);
+  for(const [v] of P.yticks)g+=hl(l,r,Y(v),'#efefef',K);
+  for(const [v,lab] of P.yticks)g+=tickT(l-5*K,Y(v)+0.32*FT*K,lab,'end');
+  g+=hl(l,r,b,'#e6e6e6',K)+xTickLabels(P.xticks.map(p=>p[0]),(v,i)=>P.xticks[i][1],X,l,b)+tickT(r,b+XTB*K,P.xtitle,'end');
+  g+=`<g clip-path="url(#${cid})"><path d="M${P.points.map(p=>f1(X(p[0]))+','+f1(Y(p[1]))).join('L')}" fill="none" stroke="#1a1a1a" stroke-width="${(2*K).toFixed(2)}" stroke-linejoin="round" stroke-linecap="round"/></g>`;
+  for(const u of P.changes)g+=vl(X(u),t-6*K,t+1*K,RED,1.5*K);return g}
+ const sc=scale(L.plot,[lg(100),lg(P.T)],[lg(P.yd[0]),lg(P.yd[1])]);
+ for(const v of P.yt)g+=hl(l,r,sc.Y(v),v===1?'#e6e6e6':'#efefef',K);
+ for(const v of P.yt)g+=tickT(l-5*K,sc.Y(v)+0.32*FT*K,fmtY(v),'end');
+ g+=hl(l,r,b,'#e6e6e6',K)+xTickLabels(xTicksBlog(sc,P.T),v=>fmtK(v),sc.X,l,b)+tickT(r,b+XTB*K,'Training steps','end');
+ g+=`<g clip-path="url(#${cid})">`;P.groups.map((G,i)=>[G,i]).reverse().forEach(([G,i])=>{const d=dPath(pts(G,sc,-1,9),sc);if(d)g+=`<path d="${d}" fill="none" stroke="${COL[i]}" stroke-width="${((i===0?2:1.5)*K).toFixed(2)}" stroke-linejoin="round" stroke-linecap="round"/>`});g+='</g>';
+ for(const u of P.ticks)g+=vl(sc.X(u),t-6*K,t+1*K,RED,1.5*K);return g}
+function blogText(P,L){let g='';
+ if(P.head)g+=bt(bx(L.x0),by(L.headBase),P.head,FH,'#666',';font-weight:600')+hl(bx(L.x0),bx(L.x0+L.w),by(L.headRule),'#e6e6e6',K);
+ g+=bt(bx(L.x0),by(L.nameBase),P.name,FN,'#1a1a1a',';font-weight:600');
+ P.legend.forEach(([c,lab],i)=>{const top=L.legTop+LP*i,x=bx(L.x0);
+  g+=c==='tk'?vl(x+7.75*K,by(top+2.8),by(top+11.8),RED,1.5*K):hl(x,x+16*K,by(top+10.9),c==='hum'?'#1a1a1a':COL[+c],2*K);
+  g+=bt(x+22*K,by(top+14.8),lab,FL,'#333')});
+ if(P.note)g+=bt(bx(L.x0),by(L.legTop+LP*P.legend.length+4+14.8),P.note,FL,'#666');
+ return g}
+// the four-line box of an event, in the column right of the chart
+function boxCol(e,hop,rows){const ev=EV[e],B=BOXES[e];let g='';if(Math.max(hop,...rows)<=0.001)return'';
+ let y=BY0;if(hop>0.001)g+=`<g opacity="${hop.toFixed(3)}">`+circ(BX0+18.5,y+18.5,ev.num,18.5)+tx(BX0+51,y+29,ev.title,` style="font-size:${BT}px;font-weight:600;fill:${INK}"`)+'</g>';
+ y+=77;B.forEach((it,i)=>{const op=rows[i];
+  if(op>0.001){g+=`<g opacity="${op.toFixed(3)}">`+tx(BX0,y+23,it.lab,` class="mono" style="font-size:${BL}px;fill:${MUTED}"`);it.lines.forEach((ln,j)=>{g+=lineTxt(BX0,y+61+j*BLH,ln)});g+='</g>'}
+  y+=61+(it.lines.length-1)*BLH+BG});
+ return g}
+
+// ---------------- render ----------------
+let cur=0,anim=null,raf=0,last=0,poster=true;
+function render(st,dt,snap){CAP=st.s>0.5?'round':'butt';
+ const sc=scale(st.rect,st.lx,st.ly,st.c),[l,t,r,b]=st.rect,s=st.s;let g='';
+ const cg=mix(GRID,'#efefef',s),cg1=mix(GRID1,'#e6e6e6',s),ca=mix(AXIS,'#e6e6e6',s),gw=lerp(1.5,K,s);
+ const cx0=l-2*K*s,cy0=t-lerp(10,6*K,s),cx1=r+2*K*s,cy1=b;
+ g+=`<defs><clipPath id="cm"><rect x="${f1(cx0)}" y="${f1(cy0)}" width="${f1(cx1-cx0)}" height="${f1(cy1-cy0)}"/></clipPath></defs>`;
+ // grid: the big chart's ticks give way to the blog panel's
+ const YU=[...new Set([...YT_MAIN,...SITP.yt])];
+ for(const v of YU){const op=Math.max(YT_MAIN.includes(v)?1-s:0,SITP.yt.includes(v)?s:0);if(op>0.001){const y=sc.Y(v);if(y>=t-1&&y<=b+1)g+=`<g opacity="${op.toFixed(3)}">${hl(l,r,y,v===1?cg1:cg,gw)}</g>`}}
+ g+=hl(l,r,b,ca,gw);
+ // value guides of the event views: label positions (nudged apart), then the regular labels they cover fade
+ const GL=[];EV.forEach((ev,e)=>ev.guides.forEach((G,j)=>{const op=st.gd[e][j];if(op>0.001)GL.push({v:G[0],at:G[1],col:COL[G[2]],lab:G[3],op,y:sc.Y(G[0])})}));
+ GL.sort((a,b)=>a.y-b.y);const gy=GL.map(o=>o.y);for(let i=1;i<gy.length;i++)if(gy[i]-gy[i-1]<23)gy[i]=gy[i-1]+23;
+ if(st.mainTicks>0.001)for(const v of YT_MAIN){const y=sc.Y(v),hide=GL.reduce((m,o,i)=>Math.abs(gy[i]-y)<24?Math.max(m,o.op):m,0),op=st.mainTicks*(1-hide);
+  if(op>0.001&&y>=t-2&&y<=b+2)g+=tx(l-14,y+8,fmtY(v),` text-anchor="end" opacity="${op.toFixed(3)}" style="font-size:24px;fill:${MUTED}"`)}
+ GL.forEach((o,i)=>{const X=sc.X(o.at);if(X>l+3)g+=`<line x1="${f1(l)}" x2="${f1(X)}" y1="${f1(o.y)}" y2="${f1(o.y)}" stroke="${o.col}" stroke-width="2" stroke-dasharray="7 6" opacity="${(0.5*o.op).toFixed(3)}"/>`;
+  g+=tx(l-14,gy[i]+8,o.lab,` text-anchor="end" opacity="${o.op.toFixed(3)}" style="font-size:22px;fill:${o.col}"`)});
+ // the blog panel's tick labels (last stage)
+ if(st.smallTicks>0.001){let h='';for(const v of SITP.yt)h+=tickT(l-5*K,sc.Y(v)+0.32*FT*K,fmtY(v),'end');
+  h+=xTickLabels(xTicksBlog(sc,T),v=>fmtK(v),sc.X,l,b)+tickT(r,b+XTB*K,'Training steps','end');
+  g+=`<g opacity="${st.smallTicks.toFixed(3)}">${h}</g>`}
+ // x ticks of the big chart (fade in and out as the range changes; a centred label is kept within the chart's ends)
+ const sel=st.mainTicks>0.001?xTicks(sc,140):[];tickAlphas(sel,dt||0,snap);
+ if(st.mainTicks>0.001)for(const [v,a] of tickA){const X=sc.X(v);if(X<l-1||X>r+1)continue;const o=(a*st.mainTicks).toFixed(3),tl=fmtC(v),hw=tw(tl,F24)/2,an=X-l<2?'start':r-X<2?'end':'middle';
+  g+=`<line x1="${f1(X)}" x2="${f1(X)}" y1="${f1(b)}" y2="${f1(b+8)}" stroke="${AXIS}" stroke-width="1.5" opacity="${o}"/>`+tx(an==='middle'?clamp(X,l+hw,r-hw):X,b+38,tl,` text-anchor="${an}" opacity="${o}" style="font-size:24px;fill:${MUTED}"`)}
+ // axis break at step 1,000 (overview stages)
+ const bo=brkOf(st.c)*st.mainTicks;if(bo>0.001){const X=sc.X(1000);if(X>l+2&&X<r-2)
+  g+=`<g opacity="${bo.toFixed(3)}"><rect x="${f1(X-6)}" y="${f1(b-7)}" width="12" height="14" fill="#fff"/><line x1="${f1(X-9)}" x2="${f1(X-1)}" y1="${f1(b+9)}" y2="${f1(b-9)}" stroke="${MUTED}" stroke-width="2"/><line x1="${f1(X+1)}" x2="${f1(X+9)}" y1="${f1(b+9)}" y2="${f1(b-9)}" stroke="${MUTED}" stroke-width="2"/></g>`}
+ if(st.xlab>0.001)g+=tx((l+r)/2,b+84,'Training steps',` text-anchor="middle" opacity="${st.xlab.toFixed(3)}" style="font-size:24px;fill:${MUTED}"`);
+ if(st.ylab>0.001)g+=`<text transform="translate(38 ${f1((t+b)/2)}) rotate(-90)" text-anchor="middle" opacity="${st.ylab.toFixed(3)}" style="font-size:24px;fill:${MUTED}">Learning-rate multiplier</text>`;
+ // lines: official recipe, ghost of what is to come, the part fading out, the replayed part
+ const W=WBIG.map((w,i)=>lerp(w,WSMALL[i],s)),order=[3,2,1,0];
+ g+='<g clip-path="url(#cm)">';
+ if(st.off>0.001)g+=lineSvg(D.official,sc,-1,st.offTo,OFFC,OFFW,st.off);
+ if(st.ghost>0.001)for(const i of order)g+=lineSvg(D.groups[i],sc,st.reveal,9,COL[i],W[i],st.ghost);
+ if(st.fade&&st.fade.op>0.001)for(const i of order)g+=lineSvg(D.groups[i],sc,st.fade.a,st.fade.b,COL[i],W[i],st.fade.op);
+ for(const i of order)g+=lineSvg(D.groups[i],sc,-1,st.reveal,COL[i],W[i],1);
+ if(st.tips>0.001){const u=P10(st.reveal);for(const i of order){const X=sc.X(u),Y=sc.Y(valAt(D.groups[i],u));if(Y<=b)g+=`<circle cx="${f1(X)}" cy="${f1(Y)}" r="${(W[i]/2+3.5).toFixed(1)}" fill="${COL[i]}" opacity="${st.tips.toFixed(3)}"/>`}}
+ g+='</g>';
+ // curves that leave the 0.05x floor: a small arrow where they go below
+ const dn=st.mainTicks*(1-s);if(dn>0.001)for(const [gi,u] of D.below){if(lg(u)>st.reveal+1e-9)continue;const X=sc.X(u);if(X<l||X>r)continue;
+  g+=`<g opacity="${dn.toFixed(3)}"><line x1="${f1(X)}" x2="${f1(X)}" y1="${f1(b-26)}" y2="${f1(b-10)}" stroke="${COL[gi]}" stroke-width="2.5"/><path d="M${f1(X-6)},${f1(b-12)}L${f1(X+6)},${f1(b-12)}L${f1(X)},${f1(b-2)}Z" fill="${COL[gi]}"/></g>`}
+ // decision ticks of the SiT-B/2 panel (last stage)
+ if(st.mainDec>0.001){let h='';for(const u of SITP.ticks)h+=vl(sc.X(u),t-6*K,t+1*K,RED,1.5*K);g+=`<g opacity="${st.mainDec.toFixed(3)}">${h}</g>`}
+ // event markers: circled number and step
+ EV.forEach((ev,e)=>{const op=st.mk[e];if(op<=0.001)return;const X=sc.X(ev.x);if(X<l-2||X>r+2)return;
+  const w=tw(ev.label,F24),right=X+48+w<=r,cx=right?X+24:X-24;
+  g+=`<g opacity="${op.toFixed(3)}">`+vl(X,t-6,b,RED,2.5)+circ(cx,t-24,ev.num)+tx(right?X+46:X-46,t-15,ev.label,` text-anchor="${right?'start':'end'}" style="font-size:24px;fill:${RED}"`)+'</g>'});
+ if(st.mkAll>0.001)EV.forEach(ev=>{const X=sc.X(ev.x);g+=`<g opacity="${st.mkAll.toFixed(3)}"><line x1="${f1(X)}" x2="${f1(X)}" y1="${f1(t-10)}" y2="${f1(b)}" stroke="${RED}" stroke-width="2" opacity="0.85"/>`+circ(X,t-24,ev.num)+'</g>'});
+ // the boxes, the result note, the legend and the example label
+ EV.forEach((ev,e)=>{g+=boxCol(e,st.hd[e],st.box[e])});
+ if(st.fid>0.001)g+=tx(l+20,b-24,D.fid,` opacity="${st.fid.toFixed(3)}" style="font-size:22px;fill:#8a8a86"`);
+ if(st.legend>0.001){let x=l,y=38,h='';
+  D.legend.forEach((s2,i)=>{const off=i===D.legend.length-1;h+=off?`<line x1="${x}" x2="${x+40}" y1="${y-8}" y2="${y-8}" stroke="${OFFC}" stroke-width="6" opacity="0.35"/>`:`<line x1="${x}" x2="${x+40}" y1="${y-8}" y2="${y-8}" stroke="${COL[i]}" stroke-width="5"/>`;
+   h+=tx(x+50,y,s2,` style="font-size:24px;fill:${TXT}"`);x+=50+tw(s2,F24)+36});
+  h+=tx(l,66,D.example,` style="font-size:20px;fill:#8a8a86"`);
+  g+=`<g opacity="${st.legend.toFixed(3)}">${h}</g>`}
+ // last stage: the SiT-B/2 panel's head, name and legend, then the blog's other four panels
+ if(st.mainTitle>0.001)g+=`<g opacity="${st.mainTitle.toFixed(3)}">${blogText(SITP,blogBox(SITP))}</g>`;
+ st.panels.forEach((p,i)=>{if(p.op<=0.001)return;const P=OTHERS[i],L=blogBox(P),c=[bx(L.x0+L.w/2),by(L.big?175:ROW2+120)];
+  g+=`<g opacity="${p.op.toFixed(3)}" transform="translate(${f1(c[0])} ${f1(c[1])}) scale(${p.sc.toFixed(4)}) translate(${f1(-c[0])} ${f1(-c[1])})">${blogText(P,L)}${blogPlot(P,L)}</g>`});
+ svg.innerHTML=g;
+ window.lrState={stage:cur,animating:!!anim};
+}
+
+// ---------------- stage control ----------------
+function stop(){cancelAnimationFrame(raf);anim=null}
+function settle(k){stop();poster=false;cur=clamp(k|0,0,NST-1);render(settled(cur),0,true)}
+function tick(ts){if(!anim)return;if(!last)last=ts;const dt=Math.min(0.05,(ts-last)/1000);last=ts;anim.t+=dt;
+ if(anim.t>=anim.plan.dur){anim=null;render(settled(cur),0,true);return}
+ render(anim.plan.at(anim.t),dt,false);raf=requestAnimationFrame(tick)}
+function go(k){k=clamp(k|0,0,NST-1);poster=false;if(anim)settle(cur);if(k===cur){settle(k);return}
+ const plan=k===cur+1?forward(k):quick(settled(cur),settled(k),0.8);cur=k;anim={plan,t:0};last=0;
+ render(plan.at(0),0,false);raf=requestAnimationFrame(tick)}
+// stage 0's entry (onActive at step 0, or on load without a bridge); its first frame, empty axes, is also the poster
+function enter(){stop();poster=false;cur=0;const plan=forward(0);anim={plan,t:0};last=0;render(plan.at(0),0,true);raf=requestAnimationFrame(tick)}
+// deterministic frame for checks: stage k's transition at time t (k = 0: the entry), or its settled state
+window.renderAt=(k,t)=>{if(t==null){settle(k);return window.lrState}settle(k-1);cur=clamp(k,0,NST-1);const plan=forward(cur);
+ for(let x=0;x<t;x+=1/60)render(plan.at(x),1/60,false);render(plan.at(t),1/60,false);return window.lrState};
+window.lrStages=NST;
+render(forward(0).at(0),0,true);
+const fontsReady=(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{layoutBoxes();if(!anim)render(poster?forward(0).at(0):settled(cur),0,true);if(!window.deckwerk)enter()});
+if(window.deckwerk){
+ deckwerk.onActive(e=>{const k=e&&typeof e.step==='number'?e.step:0;if(k>0)settle(k);else enter()});
+ deckwerk.onStep(e=>{const k=e&&typeof e.step==='number'?e.step:cur+1;go(k)});
+ deckwerk.onInactive(()=>{if(anim)settle(cur)});
+ if(typeof deckwerk.ready==='function')deckwerk.ready(fontsReady)}
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&anim)settle(cur)});
+})();
+</script></body></html>
