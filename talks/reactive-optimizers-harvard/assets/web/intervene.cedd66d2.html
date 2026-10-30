@@ -27,7 +27,7 @@ window.addEventListener('keydown',function(e){
   var t=e.target;if(t&&(t.isContentEditable||/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName)))return;
   e.preventDefault();post({action:'key',key:e.key});
 });
-})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>What would you change mid-run?</title>
+})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>What would it change mid-run?</title>
 <style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#fff}
 svg{display:block;width:100%;height:100%}
@@ -135,7 +135,7 @@ function runPath(v,lo,hi){const pts=[[lo,lossAt(lo)]];for(const p of P)if(p[0]>l
 
 // ---- the question
 const ask=$('ask');
-const q=tx('What would you change?',{x:SX+60,y:V1.T+90,class:'q',opacity:0},ask);
+const q=tx('What would it change?',{x:SX+60,y:V1.T+90,class:'q',opacity:0},ask);
 const opts=['the learning rate of block 4?','skip this batch?','add a special clipping rule?'].map((s,i)=>tx(s,{x:SX+64,y:V1.T+170+i*58,class:'opt',opacity:0},ask));
 
 // ---- timeline. Part 0, the entry (no click), seconds from arrival:

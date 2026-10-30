@@ -43,6 +43,10 @@ const inout=x=>{x=clip(x,0,1);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
 const fadeG=(o,s)=>o>=.999?s:o<=.001?'':`<g opacity="${o.toFixed(3)}">${s}</g>`;
 // soft start and stop, constant speed in between (keeps the recorded pace readable)
 function trap(u,a=.16){u=clip(u,0,1);const v=1/(1-a);return u<a?v*u*u/(2*a):u>1-a?1-v*(1-u)*(1-u)/(2*a):v*(a/2+u-a)}
+// round 6 attention cues: badge pop scale (0.6 -> 1.55 by 0.28 s, back to 1 by 0.78 s); scale about a point; colour mix
+const pop=d=>d<=0?.6:d<.28?.6+.95*sm(d/.28):1+.55*(1-sm((d-.28)/.5));
+const popG=(x,y,s,g)=>Math.abs(s-1)<.002?g:`<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) scale(${s.toFixed(3)}) translate(${(-x).toFixed(1)} ${(-y).toFixed(1)})">${g}</g>`;
+const mixC=(a,b,f)=>`rgb(${a.map((v,j)=>Math.round(v+(b[j]-v)*clip(f,0,1))).join(',')})`;
 // playhead from x0 to x1: equal time per unit x, slower inside `slow` zones [a,b,speed,edge?] (soft edges)
 function warp(x0,x1,slow=[],edge=0){const N=900,xs=[],ts=[0];let T=0;
  const v=x=>{let s=1;for(const [a,b,f,e2] of slow){const ed=e2==null?edge:e2,d=x<a?a-x:x>b?x-b:0;const k=ed>0?1-sm(d/ed):(d>0?0:1);s=Math.min(s,1-(1-f)*k)}return s};
@@ -69,14 +73,24 @@ function upto(data,x){const a=[];let k=0;while(k<data.length&&data[k][0]<=x)a.pu
 //   make room for it; the merge glides the chart back down to its usual place.
 // AdamW (baseline) grey, OPAL blue. Callouts paraphrase the agent's own words (slide 25, no quote marks) in the
 // agent-voice mono; the result numbers are slide 26's table. No header line, no solid/dashed legend, no "Epoch".
+// Round 6 (PI 2026-10-30): (1) the draw from decision 3 (epoch 44) to decision 4 (epoch 117) runs at 3x the
+//   memorization pace with a longer soft ramp (3.65 s instead of 10.95 s; whole entry 27.95 s -> 20.65 s); the other
+//   moves and the 2.5 s pauses are unchanged. (2) The callouts are larger (mono 25 px, was 19.8) and use the full width:
+//   decisions 1-2 under the training panel, 3-4 under the validation panel, each the marker's numbered badge beside a
+//   light agent box (fill #f3f1fb, outline #958dd0). When a decision is reached its marker pops (x1.55, settled in
+//   0.8 s); 0.3 s later its callout fades in rising 16 px, its badge pops the same way and its box flashes a stronger
+//   lavender that settles to the light fill within 2 s (inside the pause). The entry chart sits 80 px higher (was 70)
+//   to make room; callouts fade out in the first fifth of the merge, before the gliding chart reaches their place.
+//   (3) The closing sentence is the PI's new text (names OPAL).
 const DL={"setting": "On the 4,500 training examples with corrupted labels", "max": 120, "panels": [{"title": "Prediction matches the wrong training label (%)", "y": [0, 100], "xlabel": "Epoch", "series": [{"name": "OPAL", "data": [[0.6296, 7.244000000000001], [1.359, 7.710999999999999], [2.037, 7.710999999999999], [3.8519, 7.710999999999999], [4.6097, 5.978], [5.0655, 5.956], [6.3476, 5.778], [7.7037, 5.822], [8.9174, 6.0440000000000005], [9.3305, 5.6000000000000005], [10.604, 5.978], [11.4103, 5.756], [12.2707, 5.756], [13.0256, 6.267], [14.1595, 6.267], [15.433, 7.356], [16.5128, 8.511000000000001], [17.5043, 9.711], [18.9687, 13.067], [19.0712, 13.533000000000001], [20.7778, 16.778000000000002], [21.5869, 24.089], [22.5527, 27.089000000000002], [23.7977, 32.667], [24.3789, 24.711], [25.2849, 27.489], [26.6011, 38.044], [27.9658, 44.578], [28.8034, 28.755999999999997], [29.3048, 34.378], [30.906, 45.022], [31.9459, 55.889], [32.0028, 49.333], [33.6781, 17.378], [34.7037, 17.511], [35.3476, 23.867], [36.5299, 30.043999999999997], [37.1909, 33.733000000000004], [38.151, 38.756], [39.7977, 46.489000000000004], [40.2422, 45.533], [41.8034, 77.35600000000001], [42.302, 84.0], [43.3932, 61.911], [44.5926, 73.26700000000001], [45.4416, 39.0], [46.755, 34.489], [47.8177, 45.6], [48.1054, 46.489000000000004], [49.1282, 54.733], [50.604, 61.733000000000004], [51.1339, 59.178], [52.7179, 74.444], [53.6695, 86.089], [54.8889, 54.489], [55.9915, 49.933], [56.7835, 20.378], [57.0313, 17.355999999999998], [58.6866, 24.778], [59.2821, 24.511], [60.5527, 29.043999999999997], [61.4103, 24.6], [62.2336, 28.666999999999998], [63.0769, 36.733], [64.416, 61.0], [65.9174, 6.866999999999999], [66.0855, 6.178], [67.4587, 6.378], [68.5584, 6.289], [69.604, 6.133], [70.6011, 6.489000000000001], [71.4074, 5.6000000000000005], [72.943, 4.622], [73.1453, 4.711], [74.9943, 7.2669999999999995], [75.9145, 7.667], [76.5413, 7.643999999999999], [77.8006, 6.267], [78.7037, 5.644], [79.4701, 5.378], [80.4217, 5.5329999999999995], [81.0741, 5.6000000000000005], [82.4815, 5.044], [83.2934, 5.422], [84.2222, 4.933], [85.4615, 3.6220000000000003], [86.4615, 3.711], [87.0969, 5.711], [88.0627, 6.2219999999999995], [89.8376, 5.778], [90.8889, 5.178], [91.4615, 5.0889999999999995], [92.8034, 4.733], [93.0712, 5.800000000000001], [94.9687, 3.6220000000000003], [95.9886, 6.2], [96.0313, 5.2], [97.6524, 6.178], [98.5185, 5.0], [99.9202, 5.667], [100.0997, 4.956], [101.8063, 5.644], [102.6097, 5.422], [103.5698, 4.7780000000000005], [104.567, 5.178], [105.8405, 5.644], [106.8632, 5.222], [107.6809, 4.8], [108.6125, 5.289], [109.2279, 4.756], [110.2251, 5.156000000000001], [111.5071, 5.289], [112.6268, 3.733], [113.6952, 4.7780000000000005], [114.7692, 5.578], [115.6296, 5.578], [116.1567, 5.178], [117.6068, 3.6670000000000003], [118.5983, 3.733], [119.9459, 3.689], [120.0, 3.733]], "role": "agent"}, {"name": "AdamW", "data": [[0.6296, 8.6], [1.359, 7.710999999999999], [2.037, 6.644], [3.8519, 6.6000000000000005], [4.6097, 7.178], [5.0655, 6.0440000000000005], [6.3476, 6.333], [7.7037, 6.089], [8.9174, 6.356000000000001], [9.3305, 5.578], [10.604, 6.311], [11.4103, 5.356000000000001], [12.2707, 5.5329999999999995], [13.0256, 5.022], [14.1595, 5.111000000000001], [15.433, 5.844], [16.5128, 5.667], [17.5043, 6.444], [18.9687, 6.0440000000000005], [19.0712, 6.511], [20.7778, 7.822], [21.5869, 8.356], [22.5527, 13.156], [23.7977, 19.356], [24.3789, 26.111], [25.2849, 35.6], [26.6011, 43.4], [27.9658, 53.888999999999996], [28.8034, 65.467], [29.3048, 74.733], [30.906, 82.556], [31.9459, 86.422], [32.0028, 88.0], [33.6781, 93.22200000000001], [34.7037, 92.97800000000001], [35.3476, 93.467], [36.5299, 94.533], [37.1909, 94.756], [38.151, 97.467], [39.7977, 97.356], [40.2422, 97.111], [41.8034, 97.02199999999999], [42.302, 98.13300000000001], [43.3932, 97.178], [44.5926, 95.622], [45.4416, 97.02199999999999], [46.755, 98.378], [47.8177, 97.51100000000001], [48.1054, 97.667], [49.1282, 97.667], [50.604, 97.622], [51.1339, 98.244], [52.7179, 99.311], [53.6695, 99.06700000000001], [54.8889, 99.244], [55.9915, 97.911], [56.7835, 99.289], [57.0313, 98.822], [58.6866, 99.378], [59.2821, 99.6], [60.5527, 99.044], [61.4103, 99.111], [62.2336, 99.578], [63.0769, 99.933], [64.416, 99.978], [65.9174, 99.467], [66.0855, 99.578], [67.4587, 99.089], [68.5584, 99.733], [69.604, 99.667], [70.6011, 99.956], [71.4074, 99.978], [72.943, 99.533], [73.1453, 99.222], [74.9943, 99.978], [75.9145, 99.978], [76.5413, 99.978], [77.8006, 99.911], [78.7037, 99.978], [79.4701, 100.0], [80.4217, 100.0], [81.0741, 99.978], [82.4815, 99.844], [83.2934, 99.889], [84.2222, 99.956], [85.4615, 100.0], [86.4615, 100.0], [87.0969, 100.0], [88.0627, 100.0], [89.8376, 100.0], [90.8889, 100.0], [91.4615, 100.0], [92.8034, 100.0], [93.0712, 100.0], [94.9687, 100.0], [95.9886, 100.0], [96.0313, 100.0], [97.6524, 100.0], [98.5185, 100.0], [99.9202, 100.0], [100.0997, 100.0], [101.8063, 100.0], [102.6097, 100.0], [103.5698, 100.0], [104.567, 100.0], [105.8405, 100.0], [106.8632, 100.0], [107.6809, 100.0], [108.6125, 100.0], [109.2279, 100.0], [110.2251, 100.0], [111.5071, 100.0], [112.6268, 100.0], [113.6952, 100.0], [114.7692, 100.0], [115.6296, 100.0], [116.1567, 100.0], [117.6068, 100.0], [118.5983, 100.0], [119.9459, 100.0], [120.0, 100.0]], "role": "base", "color": "#b44c32"}]}], "source": "overfit_label10.json, curve column 8"};
 const GREY='#8d8a85';
-const DEC=[[24,'raises the learning rate to 3e-4 to stop memorizing'],[28,'tests whether averaging the weights helps'],[44,'averaging is what lowers validation loss'],[117,'final: average of its own weights from epochs 96–117, learning rate 0']];
+const DEC=[[24,'raises the learning rate to 3e-4 to stop memorizing'],[28,'tests whether averaging the weights helps'],[44,'averaging is what lowers validation loss, so it keeps averaging'],[117,'final: average of its own weights from epochs 96–117, learning rate 0']];
 const RESULT=['Test accuracy: AdamW 73.5% → OPAL 78.6%','Test loss: AdamW 2.493 → OPAL 0.685'];
-const LEARN_S=1.8,SPE=LEARN_S/24*2,PAUSE=2.5,MINMOVE=.9,FADE=.6;
+// round 6: the draw into decision 4 (epochs 44-117) runs FAST x the memorization pace, with a longer soft ramp FRAMP
+const LEARN_S=1.8,SPE=LEARN_S/24*2,PAUSE=2.5,MINMOVE=.9,FAST=3,FRAMP=.25;
 const TL=(()=>{const tl=[];let t=0,at=0;const push=q=>{q.t0=t;t+=q.dur;tl.push(q)};
  push({move:[0,24],dur:LEARN_S});at=24;
- for(const [i,[e]] of DEC.entries()){if(e>at){push({move:[at,e],dur:Math.max(MINMOVE,(e-at)*SPE)});at=e}push({pause:i,at:e,dur:PAUSE})}
+ for(const [i,[e]] of DEC.entries()){if(e>at){const f=i===3?FAST:1;push({move:[at,e],dur:Math.max(MINMOVE,(e-at)*SPE/f),ramp:f>1?FRAMP:undefined});at=e}push({pause:i,at:e,dur:PAUSE})}
  push({move:[at,120],dur:Math.max(MINMOVE,(120-at)*SPE)});push({sentence:true,dur:1.0});return{tl,total:t}})();
 const C2={shrink:1.0,ax:[.6,1.1],draw:[1.1,6.4],ends:[6.4,6.9]};  // seconds into click 2; the wrong-label curves draw in 5.3 s
 const STEPS=[{dur:TL.total*1000},{dur:1900},{dur:C2.ends[1]*1000}];
@@ -85,19 +99,23 @@ const LF={x0:95,w:1270,y0:145,h:385,k:1,hx:40,hy:40,kx:1095,ky:180,nx:100,ny:648
 const LL={x0:62,w:520,y0:195,h:300,k:.75,hx:40,hy:125,kx:379,ky:225,nx:66,ny:583.5};
 const RC={x0:930,w:560,y0:195,h:300,k:.8};
 const X0L=DL.panels[0].series[0].data[0][0];
-const CX=930,CY0=603,CDY=24,CDL=21,DY0=-70;let FS=22;
-// the closing sentence of the entry (round 5), centred at the bottom of the frame, Avenir Next 26 px, ink
-const SENT='In effect, it combined progressively higher learning rates with a weight average chosen on the validation set, what its own analysis program calls “extended SWA” (Izmailov et al., 2018).';
-const SFS=26,SLH=32,SBOT=704;let SLINES=[SENT];
-(function fit(){const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('style','font-size:24px');svg.appendChild(t);let m=0;for(const [,s] of DEC){t.textContent=s;m=Math.max(m,t.getComputedTextLength())}t.remove();if(m>0)FS=Math.min(24,Math.floor(24*(1648-CX-32)/m*10)/10)})();
-// Callout text in the deck's agent voice: SF Mono / Menlo, weight 400, #2f2c28, 0.9x the size the callouts had in Avenir.
-// A callout wider than the space under the validation panel wraps at a word; the svg may draw a few px past its viewBox
-// bottom (inside the frame's own bottom margin) so the wrapped last callout keeps its descenders.
-const MONO="'SF Mono',Menlo,monospace",FSM=Math.round(FS*.9*10)/10;let LINES=DEC.map(([,s])=>[s]);
+const DY0=-80;
+// the closing sentence of the entry (round 5; PI text in round 6), centred at the bottom of the frame, Avenir Next 26 px, ink
+const SENT="In effect, OPAL’s final strategy combined progressively higher learning rates with a weight average chosen on the validation set, which its own analysis program calls “extended SWA” (Izmailov et al., 2018).";
+const SFS=26,SLH=31,SBOT=714;let SLINES=[SENT];
+// Callout text in the deck's agent voice: SF Mono / Menlo, weight 400, #2f2c28, 25 px (round 6; was 19.8). Two columns:
+// decisions 1-2 under the training panel, 3-4 under the validation panel (COL = badge left edge, right limit). A callout
+// is the marker's numbered badge (radius CBR beside the text, BR on the curve) and a light agent box (fill BOXF, outline
+// #958dd0); one wider than its column wraps into balanced lines at a word. The svg may draw past its viewBox bottom,
+// inside the frame's own bottom margin (the sentence does).
+// Appearance: CDEL s after its marker the callout fades in over CFADE s rising CRISE px, its badge pops like the marker and
+// its box fill flashes BOXH, settling to BOXF over CSET s (all inside the 2.5 s pause).
+const MONO="'SF Mono',Menlo,monospace",FSM=25,CLH=30,BR=11,CBR=13,CPX=12,CPY=7,CGAP=6,CTOP=508,COL=[[50,900],[930,1650]];let LINES=DEC.map(([,s])=>[s]),CO=[];
+const CDEL=.3,CFADE=.5,CRISE=16,CSET=1.2,BOXF=[243,241,251],BOXH=[208,203,236];
 svg.style.overflow='visible';
-(function wrap(){const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('style',`font-family:${MONO};font-size:${FSM}px;font-weight:400`);svg.appendChild(t);const Wd=1668-(CX+30);
- LINES=DEC.map(([,s])=>{t.textContent=s;if(!(t.getComputedTextLength()>Wd))return[s];const out=[];let cur='';for(const w of s.split(' ')){const tr=cur?cur+' '+w:w;t.textContent=tr;if(!cur||t.getComputedTextLength()<=Wd)cur=tr;else{out.push(cur);cur=w}}out.push(cur);return out});t.remove()})();
-const CYS=(()=>{const ys=[];let y=CY0;for(const L of LINES){ys.push(y);y+=CDY+(L.length-1)*CDL}return ys})();
+(function wrap(){const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('style',`font-family:${MONO};font-size:${FSM}px;font-weight:400`);svg.appendChild(t);const W=s=>{t.textContent=s;return t.getComputedTextLength()};
+ LINES=DEC.map(([,s],i)=>{const [x0,x1]=COL[i>>1],Wd=x1-x0-2*CBR-8-2*CPX,tot=W(s);if(!(tot>Wd))return[s];const n=Math.ceil(tot/Wd),fill=tg=>{const out=[];let cur='';for(const w of s.split(' ')){const tr=cur?cur+' '+w:w;if(!cur||W(tr)<=tg)cur=tr;else{out.push(cur);cur=w}}out.push(cur);return out},a=fill(Math.min(Wd,tot/n*1.05));return a.length>n?fill(Wd):a});
+ const ys=COL.map(()=>CTOP);CO=LINES.map((L,i)=>{const c=i>>1,x0=COL[c][0],y=ys[c],bh=(L.length-1)*CLH+FSM*.96+2*CPY,ty=y+CPY+FSM*.76;ys[c]+=bh+CGAP;return{bx:x0+CBR,by:ty-FSM*.36,rx:x0+2*CBR+8,ry:y,bw:Math.max(...L.map(W))+2*CPX,bh,tx:x0+2*CBR+8+CPX,ty}});t.remove()})();
 (function wrapS(){const t=document.createElementNS('http://www.w3.org/2000/svg','text');t.setAttribute('style',`font-size:${SFS}px`);svg.appendChild(t);t.textContent=SENT;const tot=t.getComputedTextLength();const n=Math.max(1,Math.ceil(tot/1560)),target=tot/n*1.05,out=[];let cur='';
  for(const w of SENT.split(' ')){const tr=cur?cur+' '+w:w;t.textContent=tr;if(!cur||t.getComputedTextLength()<=target)cur=tr;else{out.push(cur);cur=w}}out.push(cur);SLINES=out;t.remove()})();
 const drawSentence=o=>o<=.001?'':fadeG(o,SLINES.map((ln,j)=>`<text x="840" y="${SBOT-(SLINES.length-1-j)*SLH}" text-anchor="middle" style="font-size:${SFS}px;font-weight:400;fill:#191918">${esc(ln)}</text>`).join(''));
@@ -112,7 +130,7 @@ function gapPolys(r){const polys=[];let cur=null;
  if(cur&&cur.length>1)polys.push(cur);return polys}
 const T=(x,y,str,fs,fill='#191918',fw=400,extra='')=>`<text x="${(+x).toFixed(2)}" y="${(+y).toFixed(2)}" style="font-size:${(+fs).toFixed(2)}px;font-weight:${fw};fill:${fill}" ${extra}>${esc(str)}</text>`;
 const badge=(x,y,n,r)=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r}" fill="white" stroke="${blue}" stroke-width="2.5"/><text x="${x.toFixed(1)}" y="${(y+r*.45).toFixed(1)}" text-anchor="middle" style="font-size:${Math.round(r*1.35)}px;font-weight:600;fill:${blue}">${n}</text>`;
-// the train/validation loss chart; rev[i] = [marker, callout] opacity of decision i; lam = shrink into the left half
+// the train/validation loss chart; rev[i] = s since decision i was reached (-1 not yet, 99 settled); lam = shrink to the left
 function drawLoss(pr,merge,rev,lam,dy=0){
  let k=1,y=145+dy,h=385,xLeft=95,xRight=930*(1-merge)+95*merge,w=610+660*merge,hx=40,hy=40+dy,kx=435+660*merge,ky=180+dy,nx=100,ny=648+dy;
  if(lam>0){const L={};for(const q in LF)L[q]=LF[q]+(LL[q]-LF[q])*lam;k=L.k;y=L.y0;h=L.h;xLeft=xRight=L.x0;w=L.w;hx=L.hx;hy=L.hy;kx=L.kx;ky=L.ky;nx=L.nx;ny=L.ny}
@@ -124,9 +142,10 @@ function drawLoss(pr,merge,rev,lam,dy=0){
  for(let [key,c,op]of [['adamw-3e-3',GREY,.22],['agent',blue,.16]]){let r=rowsUpto(D.curves[key],pr*120);
   if(oS>0)for(const g of gapPolys(r)){const pts=g.map(q=>[X(q[0],xLeft),Y(q[1])]).concat(g.slice().reverse().map(q=>[X(q[0],xRight),Y(q[2])]));a+=`<path d="${pts.map((q,i)=>(i?'L':'M')+q[0].toFixed(2)+','+q[1].toFixed(2)).join(' ')}Z" fill="${c}" opacity="${(op*oS).toFixed(4)}"/>`}
   for(let [name,col,x]of blocks){let d=r.map((q,i)=>(i?'L':'M')+X(q[1],x).toFixed(2)+','+Y(q[col]).toFixed(2)).join(' ');a+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="${4*k}" ${name==='dev'?`stroke-dasharray="${10*k} ${7*k}"`:''}/>`;if(oL>0&&r.length){let q=r.at(-1),label=(key==='agent'?'OPAL':'AdamW')+(name==='dev'?' validation':' training');a+=fadeG(oL,`<line x1="${X(q[1],x)+4*k}" y1="${Y(q[col])}" x2="${X(q[1],x)+22*k}" y2="${Y(q[col])}" stroke="${c}" stroke-width="${3*k}" ${name==='dev'?`stroke-dasharray="${6*k} ${4*k}"`:''}/>`+T(X(q[1],x)+30*k,Y(q[col])+8*k,label,25*k,c))}}}
- const oOut=1-sm(merge/.35);let shown=0;
- for(const [i,[e]] of DEC.entries()){const o=rev[i][0]*oOut;if(o<=.001)continue;shown++;a+=fadeG(o,badge(X(e,xRight),Y(devAt(D.curves.agent,e)),i+1,11))}
- for(const [i] of DEC.entries()){const o=rev[i][1]*oOut;if(o<=.001)continue;const yy=CYS[i]+DY0;a+=fadeG(o,badge(CX+11,yy-FSM*.36,i+1,11)+LINES[i].map((ln,j)=>`<text x="${CX+30}" y="${yy+j*CDL}" style="font-family:${MONO};font-size:${FSM}px;font-weight:400;fill:#2f2c28">${esc(ln)}</text>`).join(''))}
+ const oOut=1-sm(merge/.35),oOutC=1-sm(merge/.2);let shown=0;
+ for(const [i,[e]] of DEC.entries()){const d=rev[i],o=sm(d/.2)*oOut;if(o<=.001)continue;shown++;const mx=X(e,xRight),my=Y(devAt(D.curves.agent,e));a+=fadeG(o,popG(mx,my,pop(d),badge(mx,my,i+1,BR)))}
+ for(const [i] of DEC.entries()){const d=rev[i]-CDEL,o=sm(d/CFADE)*oOutC;if(o<=.001)continue;const c=CO[i],rise=CRISE*(1-sm(d/CFADE));
+  a+=fadeG(o,`<g transform="translate(0 ${rise.toFixed(2)})"><rect x="${c.rx}" y="${c.ry}" width="${c.bw.toFixed(1)}" height="${c.bh.toFixed(1)}" fill="${mixC(BOXF,BOXH,1-sm((d-CFADE)/CSET))}" stroke="#958dd0" stroke-width="2"/>`+popG(c.bx,c.by,pop(d),badge(c.bx,c.by,i+1,CBR))+LINES[i].map((ln,j)=>`<text x="${c.tx}" y="${(c.ty+j*CLH).toFixed(1)}" style="font-family:${MONO};font-size:${FSM}px;font-weight:400;fill:#2f2c28">${esc(ln)}</text>`).join('')+'</g>')}
  const oR=sm((merge-.7)/.3);if(oR>0)a+=fadeG(oR,RESULT.map((str,j)=>T(xLeft+w/2,ny+j*42*k,str,31*k,'#191918',400,'text-anchor="middle"')).join(''));
  a+=T(kx,ky,'AdamW',30*k,GREY)+T(kx+190*k,ky,'OPAL',30*k,blue);
  return{svg:a,shown,result:oR>0,endLabels:oL>0}}
@@ -140,12 +159,12 @@ function drawLabels(oAx,xpos,oEnd){const k=RC.k,l=RC.x0,t=RC.y0,w=RC.w,h=RC.h,X=
  for(const r of DL.panels[0].series){const c=r.role==='agent'?blue:GREY,u=upto(r.data,xpos);if(u.pts.length>1)a+=`<path d="${path(u.pts,X,Y)}" fill="none" stroke="${c}" stroke-width="${(r.role==='agent'?4:3)*k}" clip-path="url(#cR)"/>`;
   if(oEnd>0){const q=r.data.at(-1);a+=fadeG(oEnd,T(l+w+12*k,Y(q[1])+8*k,r.name+' '+pct(q[1]),25*k,c))}}
  return a}
-function entryAt(t){let ep=0,sent=0;const rev=DEC.map(()=>[0,0]);
+function entryAt(t){let ep=0,sent=0;const rev=DEC.map(()=>-1);
  for(const q of TL.tl){if(t<q.t0)break;const v=clip((t-q.t0)/q.dur,0,1);
-  if(q.sentence){ep=120;sent=sm(v)}else if(q.move)ep=q.move[0]+(q.move[1]-q.move[0])*trap(v);else{ep=q.at;const d=t-q.t0;rev[q.pause]=[sm(d/FADE),sm((d-.25)/FADE)]}}
- for(const q of TL.tl)if(q.pause!=null&&t>=q.t0+q.dur)rev[q.pause]=[1,1];
+  if(q.sentence){ep=120;sent=sm(v)}else if(q.move)ep=q.move[0]+(q.move[1]-q.move[0])*trap(v,q.ramp);else{ep=q.at;rev[q.pause]=t-q.t0}}
+ for(const q of TL.tl)if(q.pause!=null&&t>=q.t0+q.dur)rev[q.pause]=99;
  return{ep,rev,sent}}
-function render(s,u){let pr=1,m=1,rev=DEC.map(()=>[1,1]),lam=0,right='',lx=null,sent=0;
+function render(s,u){let pr=1,m=1,rev=DEC.map(()=>99),lam=0,right='',lx=null,sent=0;
  if(s===0){const st=entryAt(u*TL.total);pr=st.ep/120;m=0;rev=st.rev;sent=st.sent}
  else if(s===1){m=inout(u);sent=1-sm(m/.35)}
  else{const t=u*STEPS[2].dur/1000;lam=inout(t/C2.shrink);const oAx=sm((t-C2.ax[0])/(C2.ax[1]-C2.ax[0]));lx=X0L+(120-X0L)*trap((t-C2.draw[0])/(C2.draw[1]-C2.draw[0]));

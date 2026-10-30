@@ -62,7 +62,7 @@ for(let k=1;k<N;k++)el('line',{x1:L+k*SW,x2:L+k*SW,y1:T-4,y2:B,stroke:'#d6d3cc',
 P.names.forEach((s,k)=>tx(s,{x:L+(k+.5)*SW,y:T-22,'text-anchor':'middle',class:'stg'},ax));
 el('line',{x1:L,x2:R,y1:B,y2:B,stroke:GREY,'stroke-width':2},ax);
 P.xticks.forEach(([u,lab])=>{const x=X(u);el('line',{x1:x,x2:x,y1:B,y2:B+10,stroke:GREY,'stroke-width':2},ax);tx(lab,{x,y:B+46,'text-anchor':'middle',class:'ax'},ax)});
-tx('Training tokens, each stage drawn at equal width',{x:(L+R)/2,y:B+96,'text-anchor':'middle',class:'ax'},ax);
+tx('Training tokens',{x:(L+R)/2,y:B+96,'text-anchor':'middle',class:'ax'},ax);
 tx('Learning rate',{x:44,y:(T+B)/2,'text-anchor':'middle',class:'ax',transform:`rotate(-90 44 ${(T+B)/2})`},ax);
 const d=P.points.map((p,i)=>(i?'L':'M')+X(p[0]).toFixed(1)+','+Y(p[1]).toFixed(1)).join('');
 // the whole schedule is fixed before training starts: shown faintly at once, then traced in ink
