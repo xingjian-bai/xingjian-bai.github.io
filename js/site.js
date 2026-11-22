@@ -5,7 +5,6 @@
  *  - bibtex toggle for each paper
  *  - publications filter toggle (Selected / All)
  *  - news disclosure (latest four entries by default)
- *  - mobile nav toggle
  *  - scroll-spy to highlight active nav link
  */
 (function () {
@@ -72,6 +71,47 @@
         });
     }
 
+    // ---------- Publication media ----------
+    async function updateStars(badge) {
+        try {
+            var response = await fetch('https://api.github.com/repos/' + badge.dataset.repo + '/stargazers/count', {
+                credentials: 'omit',
+                signal: AbortSignal.timeout(4000)
+            });
+            if (!response.ok) return;
+            var stats = await response.json();
+            if (!Number.isSafeInteger(stats.count) || stats.count < 0) return;
+            badge.querySelector('.repo-star-count').textContent = stats.count.toLocaleString('en-US');
+            badge.title = 'Current GitHub stars';
+            badge.hidden = false;
+        } catch (error) {
+            // Leave the existing snapshot, if any, when the public API is unavailable.
+        }
+    }
+
+    if ('IntersectionObserver' in window) {
+        var starsObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                starsObserver.unobserve(entry.target);
+                updateStars(entry.target.querySelector('[data-repo]'));
+            });
+        });
+        document.querySelectorAll('[data-repo]').forEach(function (badge) {
+            starsObserver.observe(badge.closest('a'));
+        });
+
+        var teaser = document.querySelector('[data-preview-video]');
+        if (teaser && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            var teaserObserver = new IntersectionObserver(function (entries) {
+                if (!entries[0].isIntersecting) return;
+                teaserObserver.disconnect();
+                teaser.play().catch(function () {});
+            }, { threshold: 0.25 });
+            teaserObserver.observe(teaser);
+        }
+    }
+
     // ---------- News disclosure ----------
     var newsList = document.getElementById('news-list');
     var newsToggle = document.querySelector('.news-toggle');
@@ -104,20 +144,6 @@
                 }
             });
         }
-    }
-
-    // ---------- Mobile nav ----------
-    var navToggle = document.querySelector('.nav-toggle');
-    var navList = document.getElementById('nav-list');
-    if (navToggle && navList) {
-        navToggle.addEventListener('click', function () {
-            navList.classList.toggle('open');
-            var expanded = navToggle.getAttribute('aria-expanded') === 'true';
-            navToggle.setAttribute('aria-expanded', String(!expanded));
-        });
-        navList.addEventListener('click', function (e) {
-            if (e.target.closest('a')) navList.classList.remove('open');
-        });
     }
 
     // ---------- Scroll spy ----------

@@ -34,7 +34,7 @@
 
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
     <link href="css/academicons.css" rel="stylesheet" />
-    <link href="css/site.css?v=20261023-news" rel="stylesheet" />
+    <link href="css/site.css?v=20261122-navigation" rel="stylesheet" />
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-715QQ7T5Z9"></script>
     <script>
@@ -50,11 +50,15 @@
 
 <nav class="nav" aria-label="Primary">
     <div class="inner">
-        <a class="brand" href="#top">Xingjian Bai</a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-list" aria-label="Toggle navigation">☰</button>
-        <ul id="nav-list">
+        <ul class="nav-sections" aria-label="Page sections">
             <li><a class="navlink" href="#about">About</a></li>
             <li><a class="navlink" href="#publications">Publications</a></li>
+        </ul>
+        <ul class="nav-resources" aria-label="Contact, profiles, and display">
+            <li><a class="nav-contact" href="mailto:xbai@mit.edu" aria-label="Email" title="Email"><i class="fa fa-envelope-o" aria-hidden="true"></i><span>Email</span></a></li>
+            <li><a class="nav-contact" href="https://scholar.google.com/citations?user=KCrwdnIAAAAJ&amp;hl=en" aria-label="Scholar" title="Scholar"><i class="fa fa-graduation-cap" aria-hidden="true"></i><span>Scholar</span></a></li>
+            <li><a class="nav-contact" href="https://twitter.com/SimulatedAnneal" aria-label="Twitter" title="Twitter"><i class="fa fa-twitter" aria-hidden="true"></i><span>Twitter</span></a></li>
+            <!-- <li><a class="nav-contact" href="files/XingjianBAI.pdf?v=20261116-1715"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> CV</a></li> -->
             <li>
                 <button class="theme-btn" type="button" data-theme-toggle aria-label="Toggle dark mode">☾</button>
             </li>
@@ -72,30 +76,20 @@
             </div>
             <div class="prose">
                 <h1>Xingjian Bai <span class="cn" lang="zh-Hans">白行健</span></h1>
-                <p class="role">Ph.D. Student · MIT CSAIL</p>
 
                 <!-- featured -->
                 <a class="featured" href="https://xingjianbai.com/reactive-optimizers/">
                     <span class="kicker">New · Blog post · Oct 2026</span>
                     <span class="title">Reactive Optimizers</span>
-                    <span class="line">An optimizer that a coding agent rewrites while the network trains, with its package, OPAL.</span>
+                    <span class="line">This deep learning optimizer responds to training signals by rewriting its update rules as training progresses. It can make fine-grained scheduling decisions, avoid loss spikes, and escape overfitting, outperforming static optimizers in many zero-shot settings.</span>
                     <span class="cta">Read the post &rarr;</span>
                 </a>
                 <!-- /featured -->
 
-                <p>Hello! I am a second-year Ph.D. student at MIT, where I have been fortunate to work with Professors <a href="https://web.mit.edu/phillipi/">Phillip Isola</a>, <a href="https://www.vincentsitzmann.com/">Vincent Sitzmann</a>, and <a href="https://people.csail.mit.edu/kaiming/">Kaiming He</a>. I received my master's and bachelor's degrees in Mathematics and Computer Science from the University of Oxford. My research focuses on understanding and empirically building stronger generative models &mdash; recently, flows, diffusion, and video world models. I have also explored theoretical computer science, with a focus on online algorithms and learning-augmented algorithms. More broadly, I am drawn to research that is both scientifically impactful and intellectually stimulating.</p>
+                <p>Hello! I am a third-year Ph.D. student at MIT, where I have been fortunate to work with Professors <a href="https://web.mit.edu/phillipi/">Phillip Isola</a>, <a href="https://www.vincentsitzmann.com/">Vincent Sitzmann</a>, and <a href="https://people.csail.mit.edu/kaiming/">Kaiming He</a>. I received my master's and bachelor's degrees in Mathematics and Computer Science from the University of Oxford. My research focuses on understanding and empirically building stronger generative models &mdash; recently, flows, diffusion, and video world models. I have also explored theoretical computer science, with a focus on online algorithms and learning-augmented algorithms. More broadly, I am drawn to research that is both scientifically impactful and intellectually stimulating.</p>
 
-                <p>During my time at Oxford, I had the privilege of working with Prof. <a href="https://www.maths.ox.ac.uk/people/jan.obloj/">Jan Obloj</a>, Prof. <a href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a>, Prof. <a href="https://chrirupp.github.io/">Christian Rupprecht</a>, and <a href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>. I also spent a rewarding summer at Stanford, collaborating with Prof. <a href="https://jiajunwu.com/">Jiajun Wu</a>, Dr. <a href="http://weiyuliu.com/">Weiyu Liu</a>, and <a href="https://web.stanford.edu/~joycj/">Joy Hsu</a>. Outside of my academic pursuits, I enjoy jogging and playing tennis. I also engage in algorithmic programming competitions.</p>
+                <p>During my time at Oxford, I had the privilege of working with Prof. <a href="https://www.maths.ox.ac.uk/people/jan.obloj/">Jan Obloj</a>, Prof. <a href="https://www.cs.ox.ac.uk/people/christian.coester/">Christian Coester</a>, Prof. <a href="https://chrirupp.github.io/">Christian Rupprecht</a>, and <a href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>. I also spent a rewarding summer at Stanford, collaborating with Prof. <a href="https://jiajunwu.com/">Jiajun Wu</a>, Dr. <a href="http://weiyuliu.com/">Weiyu Liu</a>, and <a href="https://web.stanford.edu/~joycj/">Joy Hsu</a>. Outside of my academic pursuits, I enjoy jogging and playing tennis.</p>
 
-                <p>If you would like to discuss research collaborations or career opportunities, please contact me by <a href="mailto:xbai@mit.edu">email</a>.</p>
-
-                <div class="pill-row">
-                    <a class="pill" href="mailto:xbai@mit.edu"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email</a>
-                    <a class="pill" href="https://github.com/xingjian-bai"><i class="fa fa-github" aria-hidden="true"></i> GitHub</a>
-                    <a class="pill" href="https://scholar.google.com/citations?user=KCrwdnIAAAAJ&amp;hl=en"><i class="ai ai-google-scholar" aria-hidden="true"></i> Scholar</a>
-                    <a class="pill" href="https://twitter.com/SimulatedAnneal"><i class="fa fa-twitter" aria-hidden="true"></i> X / Twitter</a>
-                    <a class="pill" href="files/XingjianBAI.pdf?v=20261116-1715"><i class="ai ai-cv" aria-hidden="true"></i> CV</a>
-                </div>
             </div>
         </div>
 
@@ -105,39 +99,39 @@
         <ul class="news" id="news-list" aria-label="Recent news">
             <li data-news-object="reactive-optimizers">
                 <span class="date">Oct 2026</span>
-                <span class="body">Check out our new blog post, <a href="https://xingjianbai.com/reactive-optimizers/">Reactive Optimizers</a>, on an optimizer that a coding agent rewrites while the network trains, and its package, <a href="https://github.com/xingjian-bai/opal">OPAL</a>.</span>
+                <span class="body">We propose <a href="https://xingjianbai.com/reactive-optimizers/">Reactive Optimizers</a>, which let a coding agent track training dynamics and rewrite the optimizer’s update rules mid-run. Try <a href="https://pypi.org/project/opal-optimizer/">OPAL</a>, our open-source PyPI package, on your own architecture and task!</span>
             </li>
             <li data-news-object="unite">
                 <span class="date">Sep 2026</span>
-                <span class="body">Our paper, <a href="https://arxiv.org/abs/2603.22283">End-to-End Training for Unified Tokenization and Latent Denoising (UNITE)</a>, is accepted at <a href="https://neurips.cc/virtual/2026/poster/155881">NeurIPS 2026</a>!</span>
+                <span class="body"><a href="https://arxiv.org/abs/2603.22283">UNITE</a>, a single-stage method for jointly training a visual tokenizer and generator from scratch, was accepted to <a href="https://neurips.cc/virtual/2026/poster/155881">NeurIPS 2026</a>!</span>
             </li>
             <li data-news-object="vera">
                 <span class="date">May 2026</span>
-                <span class="body">Check out our new preprint, <a href="https://arxiv.org/abs/2605.27817">VERA</a>, on turning video models into generalist robot policies via decoupled video planning and Jacobian inverse dynamics.</span>
+                <span class="body">Check out <a href="https://arxiv.org/abs/2605.27817">VERA</a>, our new paper on turning video models into generalist robot policies. The same video planner works with both a Franka arm and a dexterous robot hand.</span>
             </li>
             <li data-news-object="unite">
                 <span class="date">Mar 2026</span>
-                <span class="body">Check out our new preprint, <a href="https://arxiv.org/abs/2603.22283">UNITE</a>, on single-stage joint training of tokenization and latent diffusion.</span>
+                <span class="body">Introducing <a href="https://arxiv.org/abs/2603.22283">UNITE</a>! A shared encoder learns to tokenize images and denoise their latent representations, so the system can train in one stage without a pretrained tokenizer.</span>
             </li>
             <li data-news-object="causality-video-diffusers">
                 <span class="date">Feb 2026</span>
-                <span class="body">Our paper, <a href="https://arxiv.org/abs/2602.10095">Causality in Video Diffusers is Separable from Denoising</a>, is accepted at <a href="https://cvpr.thecvf.com/Conferences/2026">CVPR 2026</a>!</span>
+                <span class="body"><a href="https://arxiv.org/abs/2602.10095">Causality in Video Diffusers is Separable from Denoising</a> was accepted to <a href="https://cvpr.thecvf.com/Conferences/2026">CVPR 2026</a>! We show how a video model can reason across frames in a single pass, then render the next frame with a lightweight denoiser.</span>
             </li>
             <li data-news-object="mean-flows">
                 <span class="date">May 2025</span>
-                <span class="body">Our paper, <a href="https://arxiv.org/abs/2505.13447">Mean Flows for One-step Generative Modeling</a>, is accepted at <a href="https://neurips.cc/Conferences/2025">NeurIPS 2025</a> as an <a href="https://neurips.cc/virtual/2025/oral/115488">oral presentation</a>.</span>
+                <span class="body"><a href="https://arxiv.org/abs/2505.13447">Mean Flows</a> learns average velocity to generate an image in a single network evaluation. It was later selected for an <a href="https://neurips.cc/virtual/2025/oral/115488">oral at NeurIPS 2025</a>!</span>
             </li>
             <li data-news-object="layered-graph-traversal">
                 <span class="date">Oct 2024</span>
-                <span class="body">Our paper, <a href="https://arxiv.org/abs/2404.16176">Unweighted Layered Graph Traversal</a>, is accepted at <a href="https://www.siam.org/conferences-events/siam-conferences/soda25/">SODA 2025</a>!</span>
+                <span class="body"><a href="https://arxiv.org/abs/2404.16176">Unweighted Layered Graph Traversal</a> was accepted to <a href="https://www.siam.org/conferences-events/siam-conferences/soda25/">SODA 2025</a>! Maximizing entropy gives an online algorithm whose competitive ratio grows only polylogarithmically with graph width.</span>
             </li>
             <li data-news-object="masters-thesis">
                 <span class="date">Jun 2024</span>
-                <span class="body">My master's thesis, <em>Efficient and Adaptive Image Generation with Fixed Point Diffusion Models</em>, has won the <a href="https://www.cs.ox.ac.uk/currentstudents/studentprizes">Departmental Prize for the Best Computer Science Project</a>.</span>
+                <span class="body">My master’s thesis on making diffusion models smaller and faster with fixed-point layers won Oxford’s <a href="https://www.cs.ox.ac.uk/currentstudents/studentprizes">Departmental Prize for the Best Computer Science Project</a>!</span>
             </li>
             <li data-news-object="fixed-point-diffusion">
                 <span class="date">Feb 2024</span>
-                <span class="body">Our paper, <a href="https://lukemelas.github.io/fixed-point-diffusion-models/">Fixed Point Diffusion Models</a>, is accepted at <a href="https://cvpr.thecvf.com/">CVPR 2024</a>!</span>
+                <span class="body"><a href="https://lukemelas.github.io/fixed-point-diffusion-models/">Fixed Point Diffusion Models</a> was accepted to <a href="https://cvpr.thecvf.com/Conferences/2024/AcceptedPapers">CVPR 2024</a>! Reusing fixed-point solutions across denoising steps lets the model spend less compute on sampling.</span>
             </li>
         </ul>
         <div class="news-footer" hidden>
@@ -152,7 +146,10 @@
     <!-- ==================== PUBLICATIONS ==================== -->
     <section id="publications" class="section">
         <div class="pub-header">
-            <h2 class="section-label">Publications</h2>
+            <div class="pub-heading">
+                <h2 class="section-label">Publications</h2>
+                <span class="pub-legend">* equal contribution</span>
+            </div>
             <div class="pub-toggle" role="tablist" aria-label="Publication filter">
                 <button type="button" class="active" data-view="selected" role="tab" aria-selected="true">Selected</button>
                 <button type="button" data-view="all" role="tab" aria-selected="false">All</button>
@@ -163,7 +160,13 @@
 
             <!-- 2026 · Reactive Optimizers (blog post) -->
             <li class="pub selected">
-                <div class="thumb wide-figure"><img src="projects/26_ReactiveOptimizers/teaser.png" alt="A static optimizer's fixed AdamW code next to a reactive optimizer's code, rewritten by an agent during training" loading="lazy" /></div>
+                <div class="thumb wide-figure motion-figure">
+                    <video width="1574" height="1160" muted loop playsinline controls preload="none" data-preview-video
+                        poster="projects/26_ReactiveOptimizers/teaser-poster.webp"
+                        aria-label="Reactive Optimizers teaser. Compare the optimizer code and loss curves during training.">
+                        <source src="projects/26_ReactiveOptimizers/teaser.mp4" type="video/mp4" />
+                    </video>
+                </div>
                 <div class="meta">
                     <h3><a href="https://xingjianbai.com/reactive-optimizers/">Reactive Optimizers</a></h3>
                     <p class="authors">
@@ -174,12 +177,12 @@
                     </p>
                     <p class="venue"><span class="badge">Blog post · Oct 2026</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://xingjianbai.com/reactive-optimizers/">blog</a>
-                        <a class="pill" href="https://arxiv.org/abs/2610.33826">arXiv</a>
-                        <a class="pill" href="https://www.alphaxiv.org/abs/2610.33826">alphaXiv</a>
-                        <a class="pill" href="https://github.com/xingjian-bai/opal">code</a>
-                        <a class="pill" href="https://x.com/SimulatedAnneal/status/2112936831398375800">X</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-reactive" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://xingjianbai.com/reactive-optimizers/"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Blog</a>
+                        <a class="pub-action" href="https://arxiv.org/abs/2610.33826"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="https://www.alphaxiv.org/abs/2610.33826"><i class="fa fa-comments-o" aria-hidden="true"></i> alphaXiv</a>
+                        <a class="pub-action" href="https://github.com/xingjian-bai/opal"><i class="fa fa-github" aria-hidden="true"></i> GitHub<span class="repo-stars" data-repo="xingjian-bai/opal" title="Snapshot checked November 22, 2026"><i class="fa fa-star" aria-hidden="true"></i><span class="repo-star-count">480</span><span class="sr-only"> stars</span></span></a>
+                        <a class="pub-action" href="https://x.com/SimulatedAnneal/status/2112936831398375800" title="@SimulatedAnneal · 225,030 views · 1,603 likes · 79 replies (snapshot checked November 22, 2026)"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter <span class="post-stats">225K views · 1.6K likes</span></a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-reactive" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-reactive"><pre>@article{bai2026reactive,
   title={Reactive Optimizers},
@@ -187,6 +190,28 @@
   journal={arXiv preprint arXiv:2610.33826},
   year={2026}
 }</pre></div>
+                </div>
+                <div class="pub-coverage">
+                    <ul class="coverage-grid" aria-label="More on Reactive Optimizers">
+                        <li><a class="coverage-card" href="https://x.com/MIT_CSAIL/status/2117300744168608012">
+                            <span class="coverage-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></span>
+                            <span class="coverage-copy">
+                                <span class="coverage-source">MIT CSAIL · Twitter</span>
+                                <span class="coverage-title">What if an optimizer could think and react?</span>
+                                <span class="post-stats" title="Snapshot checked November 22, 2026">56.6K views · 1.1K likes · 35 replies</span>
+                            </span>
+                            <span class="coverage-arrow" aria-hidden="true">↗</span>
+                        </a></li>
+                        <li><a class="coverage-card" href="https://www.youtube.com/watch?v=0acRokoODvo">
+                            <span class="coverage-icon"><i class="fa fa-play-circle-o" aria-hidden="true"></i></span>
+                            <span class="coverage-copy">
+                                <span class="coverage-source">Better Stack · YouTube</span>
+                                <span class="coverage-title">Did Claude just fix AI overfitting?</span>
+                                <span class="post-stats" title="Snapshot checked November 22, 2026">54.7K views · 495 likes · 38 comments</span>
+                            </span>
+                            <span class="coverage-arrow" aria-hidden="true">↗</span>
+                        </a></li>
+                    </ul>
                 </div>
             </li>
 
@@ -204,14 +229,13 @@
                         <a href="https://msimchowitz.github.io/">Max Simchowitz</a>,
                         <a href="https://www.vincentsitzmann.com/">Vincent Sitzmann</a>
                     </p>
-                    <p class="note">* equal contribution</p>
                     <p class="venue"><span class="badge">arXiv preprint · May 2026</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://vera.csail.mit.edu/">project</a>
-                        <a class="pill" href="https://arxiv.org/abs/2605.27817">arXiv</a>
-                        <a class="pill" href="https://github.com/sizhe-li/VERA">code</a>
-                        <a class="pill" href="https://x.com/search?q=from%3ASimulatedAnneal%20(2605.27817%20OR%20VERA)&amp;src=typed_query&amp;f=live" title="Posts on X from @SimulatedAnneal about this paper">X</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-vera" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://vera.csail.mit.edu/"><i class="fa fa-external-link" aria-hidden="true"></i> Project</a>
+                        <a class="pub-action" href="https://arxiv.org/abs/2605.27817"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="https://github.com/sizhe-li/VERA"><i class="fa fa-github" aria-hidden="true"></i> GitHub<span class="repo-stars" data-repo="sizhe-li/VERA" hidden><i class="fa fa-star" aria-hidden="true"></i><span class="repo-star-count"></span><span class="sr-only"> stars</span></span></a>
+                        <a class="pub-action" href="https://x.com/sizhe_lester_li/status/2069459165924250039" title="@sizhe_lester_li · 173,993 views · 456 likes · 15 replies (snapshot checked November 22, 2026)"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter <span class="post-stats">174K views · 456 likes</span></a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-vera" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-vera"><pre>@article{li2026vera,
   title   = {Turning Video Models into Generalist Robot Policies},
@@ -237,15 +261,14 @@
                         <a href="https://web.mit.edu/phillipi/">Phillip Isola</a>,
                         <a href="https://billf.mit.edu/">William T. Freeman</a>
                     </p>
-                    <p class="note">* equal contribution</p>
                     <p class="venue"><span class="badge">NeurIPS 2026</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://xingjianbai.com/unite-tokenization-generation/">project</a>
-                        <a class="pill" href="https://arxiv.org/abs/2603.22283">arXiv</a>
-                        <a class="pill" href="https://github.com/ShivamDuggal4/UNITE-tokenization-generation">code</a>
-                        <a class="pill" href="https://neurips.cc/virtual/2026/poster/155881">NeurIPS</a>
-                        <a class="pill" href="https://x.com/search?q=from%3ASimulatedAnneal%20(2603.22283%20OR%20UNITE)&amp;src=typed_query&amp;f=live" title="Posts on X from @SimulatedAnneal about this paper">X</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-unite" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://xingjianbai.com/unite-tokenization-generation/"><i class="fa fa-external-link" aria-hidden="true"></i> Project</a>
+                        <a class="pub-action" href="https://arxiv.org/abs/2603.22283"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="https://github.com/ShivamDuggal4/UNITE-tokenization-generation"><i class="fa fa-github" aria-hidden="true"></i> GitHub<span class="repo-stars" data-repo="ShivamDuggal4/UNITE-tokenization-generation" title="Snapshot checked November 22, 2026"><i class="fa fa-star" aria-hidden="true"></i><span class="repo-star-count">123</span><span class="sr-only"> stars</span></span></a>
+                        <a class="pub-action" href="https://neurips.cc/virtual/2026/poster/155881"><i class="fa fa-calendar-o" aria-hidden="true"></i> NeurIPS</a>
+                        <a class="pub-action" href="https://x.com/ShivamDuggal4/status/2036455217357619603" title="@ShivamDuggal4 · 70,181 views · 421 likes · 4 replies (snapshot checked November 22, 2026)"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter <span class="post-stats">70.2K views · 421 likes</span></a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-unite" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-unite"><pre>@inproceedings{duggal2026unite,
   title     = {End-to-End Training for Unified Tokenization and Latent Denoising},
@@ -272,11 +295,12 @@
                     </p>
                     <p class="venue"><span class="badge">CVPR 2026</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://xingjianbai.com/sparse-causal-diffusion/">project</a>
-                        <a class="pill" href="https://arxiv.org/abs/2602.10095">arXiv</a>
-                        <a class="pill" href="https://github.com/xingjian-bai/sparse-causal-diffusion">code</a>
-                        <a class="pill" href="https://x.com/search?q=from%3ASimulatedAnneal%202602.10095&amp;src=typed_query&amp;f=live" title="Posts on X from @SimulatedAnneal about this paper">X</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-scd" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://xingjianbai.com/sparse-causal-diffusion/"><i class="fa fa-external-link" aria-hidden="true"></i> Project</a>
+                        <a class="pub-action" href="https://arxiv.org/abs/2602.10095"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="https://github.com/xingjian-bai/sparse-causal-diffusion"><i class="fa fa-github" aria-hidden="true"></i> GitHub<span class="repo-stars" data-repo="xingjian-bai/sparse-causal-diffusion" hidden><i class="fa fa-star" aria-hidden="true"></i><span class="repo-star-count"></span><span class="sr-only"> stars</span></span></a>
+                        <a class="pub-action" href="https://x.com/SimulatedAnneal/status/2024615127996330474" title="@SimulatedAnneal · 69,219 views · 329 likes · 4 replies (snapshot checked November 22, 2026)"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter <span class="post-stats">69.2K views · 329 likes</span></a>
+                        <a class="pub-action" href="https://guoshaoyang-pku.github.io/paper-podcast/core/video-diffuser-causality/index.html"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Paper notes <span lang="zh-Hans">中文</span></a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-scd" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-scd"><pre>@inproceedings{bai2026scd,
   title     = {Causality in Video Diffusers is Separable from Denoising},
@@ -301,11 +325,12 @@
                     </p>
                     <p class="venue"><span class="badge solid">NeurIPS 2025 · Oral</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://neurips.cc/virtual/2025/oral/115488">oral</a>
-                        <a class="pill" href="https://arxiv.org/abs/2505.13447">arXiv</a>
-                        <a class="pill" href="https://github.com/Gsunshine/meanflow">code</a>
-                        <a class="pill" href="https://x.com/search?q=from%3ASimulatedAnneal%20(2505.13447%20OR%20MeanFlow)&amp;src=typed_query&amp;f=live" title="Posts on X from @SimulatedAnneal about this paper">X</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-meanflow" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://neurips.cc/virtual/2025/oral/115488"><i class="fa fa-play-circle-o" aria-hidden="true"></i> Oral</a>
+                        <a class="pub-action" href="https://arxiv.org/abs/2505.13447"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="https://github.com/Gsunshine/meanflow"><i class="fa fa-github" aria-hidden="true"></i> GitHub<span class="repo-stars" data-repo="Gsunshine/meanflow" hidden><i class="fa fa-star" aria-hidden="true"></i><span class="repo-star-count"></span><span class="sr-only"> stars</span></span></a>
+                        <a class="pub-action" href="https://x.com/ZhengyangGeng/status/1925568294498836627" title="@ZhengyangGeng · 33,603 views · 159 likes · 5 replies (snapshot checked November 22, 2026)"><i class="fa fa-twitter" aria-hidden="true"></i> Twitter <span class="post-stats">33.6K views · 159 likes</span></a>
+                        <a class="pub-action" href="https://www.youtube.com/watch?v=swKdn-qT47Q" title="The Rise of Single-Step Generative Models, by Jia-Bin Huang (snapshot checked November 22, 2026)"><i class="fa fa-play-circle-o" aria-hidden="true"></i> Jia-Bin Huang <span class="post-stats">26.2K views</span></a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-meanflow" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-meanflow"><pre>@inproceedings{geng2025meanflow,
   title     = {Mean Flows for One-step Generative Modeling},
@@ -331,8 +356,9 @@
                     <p class="note">alphabetical order</p>
                     <p class="venue"><span class="badge">SODA 2025</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://arxiv.org/abs/2404.16176">arXiv</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-lgt" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://arxiv.org/abs/2404.16176"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="https://www.youtube.com/watch?v=AgtVcVjwXHE"><i class="fa fa-play-circle-o" aria-hidden="true"></i> SODA talk</a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-lgt" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-lgt"><pre>@inproceedings{bai2025lgt,
   title     = {Unweighted Layered Graph Traversal},
@@ -345,20 +371,20 @@
 
             <!-- 2024 · Fixed Point Diffusion Models -->
             <li class="pub selected">
-                <div class="thumb"><img src="projects/24_FPDM/architecture.png" alt="Fixed Point Diffusion Models architecture" loading="lazy" /></div>
+                <div class="thumb wide-figure"><img src="projects/24_FPDM/architecture.png?v=2" width="692" height="332" alt="Architecture comparison between Diffusion Transformer and Fixed Point Diffusion Models" loading="lazy" /></div>
                 <div class="meta">
                     <h3><a href="https://lukemelas.github.io/fixed-point-diffusion-models/">Fixed Point Diffusion Models</a></h3>
                     <p class="authors">
                         <u class="self">Xingjian Bai</u>*,
                         <a href="https://lukemelas.github.io/">Luke Melas-Kyriazi</a>*
                     </p>
-                    <p class="note">* equal contribution</p>
                     <p class="venue"><span class="badge">CVPR 2024</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://lukemelas.github.io/fixed-point-diffusion-models/">project</a>
-                        <a class="pill" href="https://arxiv.org/abs/2401.08741">arXiv</a>
-                        <a class="pill" href="https://github.com/lukemelas/fixed-point-diffusion-models">code</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-fpdm" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://lukemelas.github.io/fixed-point-diffusion-models/"><i class="fa fa-external-link" aria-hidden="true"></i> Project</a>
+                        <a class="pub-action" href="https://arxiv.org/abs/2401.08741"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="https://knightnemo.github.io/blog/posts/loops-inside-the-denoiser/" title="Nemo’s independent explanation of recurrent denoisers and Fixed Point Diffusion Models"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Loops Inside the Denoiser</a>
+                        <a class="pub-action" href="https://github.com/lukemelas/fixed-point-diffusion-models"><i class="fa fa-github" aria-hidden="true"></i> GitHub<span class="repo-stars" data-repo="lukemelas/fixed-point-diffusion-models" hidden><i class="fa fa-star" aria-hidden="true"></i><span class="repo-star-count"></span><span class="sr-only"> stars</span></span></a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-fpdm" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-fpdm"><pre>@inproceedings{bai2024fixed,
   title     = {Fixed Point Diffusion Models},
@@ -384,8 +410,9 @@
                     </p>
                     <p class="venue"><span class="badge">ICLR 2024</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://arxiv.org/abs/2310.09144">arXiv</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-goodhart" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://arxiv.org/abs/2310.09144"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="https://www.alignmentforum.org/posts/Eu6CvP7c7ivcGM3PJ/goodhart-s-law-in-reinforcement-learning"><i class="fa fa-comments-o" aria-hidden="true"></i> Alignment Forum</a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-goodhart" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-goodhart"><pre>@inproceedings{karwowski2024goodharts,
   title     = {Goodhart's Law in Reinforcement Learning},
@@ -408,10 +435,11 @@
                     <p class="note">alphabetical order</p>
                     <p class="venue"><span class="badge">NeurIPS 2023</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://arxiv.org/abs/2311.00749">arXiv</a>
-                        <a class="pill" href="projects/23_Sorting/poster.pdf">poster</a>
-                        <a class="pill" href="https://github.com/xingjian-bai/Sorting-with-Predictions">code</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-sorting" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://arxiv.org/abs/2311.00749"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="projects/23_Sorting/poster.pdf"><i class="fa fa-picture-o" aria-hidden="true"></i> Poster</a>
+                        <a class="pub-action" href="https://slideslive.com/39011546/sorting-with-predictions"><i class="fa fa-play-circle-o" aria-hidden="true"></i> NeurIPS talk</a>
+                        <a class="pub-action" href="https://github.com/xingjian-bai/Sorting-with-Predictions"><i class="fa fa-github" aria-hidden="true"></i> GitHub<span class="repo-stars" data-repo="xingjian-bai/Sorting-with-Predictions" hidden><i class="fa fa-star" aria-hidden="true"></i><span class="repo-star-count"></span><span class="sr-only"> stars</span></span></a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-sorting" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-sorting"><pre>@inproceedings{bai2023sorting,
   title     = {Sorting with Predictions},
@@ -436,10 +464,11 @@
                     <p class="note">alphabetical order</p>
                     <p class="venue"><span class="badge">NeurIPS 2023</span></p>
                     <div class="buttons">
-                        <a class="pill" href="https://arxiv.org/abs/2306.09844">arXiv</a>
-                        <a class="pill" href="projects/23_Robustness/poster.pdf">poster</a>
-                        <a class="pill" href="https://github.com/JanObloj/W-DRO-Adversarial-Methods">code</a>
-                        <button class="pill" type="button" data-bibtex-toggle="bib-wdro" aria-expanded="false">bibtex</button>
+                        <a class="pub-action" href="https://arxiv.org/abs/2306.09844"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Paper</a>
+                        <a class="pub-action" href="projects/23_Robustness/poster.pdf"><i class="fa fa-picture-o" aria-hidden="true"></i> Poster</a>
+                        <a class="pub-action" href="https://slideslive.com/39010383/wasserstein-distributional-robustness-of-neural-networks"><i class="fa fa-play-circle-o" aria-hidden="true"></i> NeurIPS talk</a>
+                        <a class="pub-action" href="https://github.com/JanObloj/W-DRO-Adversarial-Methods"><i class="fa fa-github" aria-hidden="true"></i> GitHub<span class="repo-stars" data-repo="JanObloj/W-DRO-Adversarial-Methods" hidden><i class="fa fa-star" aria-hidden="true"></i><span class="repo-star-count"></span><span class="sr-only"> stars</span></span></a>
+                        <button class="pub-action" type="button" data-bibtex-toggle="bib-wdro" aria-expanded="false"><i class="fa fa-quote-right" aria-hidden="true"></i> BibTeX</button>
                     </div>
                     <div class="bibtex" id="bib-wdro"><pre>@inproceedings{bai2023wasserstein,
   title     = {Wasserstein Distributional Robustness of Neural Networks},
@@ -459,12 +488,12 @@
     <div class="inner">
         <div class="mark">
             <img src="img/mark.png" alt="" />
-            <span>&copy; 2026 Xingjian Bai &middot; design inspired by <a href="https://elliottwu.com/">Shangzhe Wu</a> &middot; <a href="https://github.com/xingjian-bai/xingjian-bai.github.io">source</a></span>
+            <span>&copy; 2026 Xingjian Bai &middot; design inspired by <a href="https://elliottwu.com/">Shangzhe Wu</a></span>
         </div>
     </div>
 </footer>
 
-<script src="js/site.js?v=20261023-news-objects"></script>
+<script src="js/site.js?v=20261122-navigation"></script>
 
 </body>
 </html>
