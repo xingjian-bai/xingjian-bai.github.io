@@ -346,7 +346,16 @@ section.section + section.section { border-top: 1px solid var(--rule); }
 }
 .repo-stars .fa { font-size: 10px; }
 .repo-stars[hidden] { display: none; }
-.post-stats { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+.post-stats {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 9px;
+    color: var(--muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+.post-stat { display: inline-flex; align-items: center; gap: 4px; white-space: nowrap; }
 .pub-action .post-stats { padding-inline-start: 6px; border-inline-start: 1px solid var(--rule); }
 
 .pub-coverage {
@@ -364,7 +373,7 @@ section.section + section.section { border-top: 1px solid var(--rule); }
 }
 .coverage-card {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 11px;
     height: 100%;
